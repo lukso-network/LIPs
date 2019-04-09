@@ -229,31 +229,30 @@ See [the revision history for further details](https://github.com/ethereum/LIPs/
 
 ### Bibliography
 
-[EIP5]: https://github.com/ethereum/LIPs/blob/master/LIPS/eip-5.md
-[EIP101]: https://github.com/ethereum/LIPs/issues/28
-[EIP90]: https://github.com/ethereum/LIPs/issues/90
-[EIP86]: https://github.com/ethereum/LIPs/issues/86#issue-145324865
-[devp2p]: https://github.com/ethereum/wiki/wiki/%C3%90%CE%9EVp2p-Wire-Protocol
-[EIP8]: https://github.com/ethereum/LIPs/blob/master/LIPS/eip-8.md
+[EIP5]: https://github.com/ethereum/EIPs/blob/master/LIPS/eip-5.md
+[EIP101]: https://github.com/ethereum/EIPs/issues/28
+[EIP90]: https://github.com/ethereum/EIPs/issues/90
+[EIP86]: https://github.com/ethereum/EIPs/issues/86#issue-145324865
+[EIP8]: https://github.com/ethereum/EIPs/blob/master/LIPS/eip-8.md
 [Light Ethereum Subprotocol]: https://github.com/ethereum/wiki/wiki/Light-client-protocol
 [whisper]: https://github.com/ethereum/go-ethereum/wiki/Whisper-Overview
 [swarm]: https://github.com/ethereum/go-ethereum/pull/2959
 [API/RPC]: https://github.com/ethereum/wiki/wiki/JSON-RPC
-[EIP6]: https://github.com/ethereum/LIPs/blob/master/LIPS/eip-6.md
+[EIP6]: https://github.com/ethereum/EIPs/blob/master/LIPS/eip-6.md
 [contract ABIs]: https://github.com/ethereum/wiki/wiki/LUKSO-Contract-ABI
 [interfaces repo]: https://github.com/ethereum/interfaces
-[ERC20]: https://github.com/ethereum/LIPs/issues/20
-[ERC26]: https://github.com/ethereum/LIPs/issues/26
-[ERC137]: https://github.com/ethereum/LIPs/issues/137
-[ERC67]: https://github.com/ethereum/LIPs/issues/67
-[EIP82]: https://github.com/ethereum/LIPs/issues/82
-[EIP75]: https://github.com/ethereum/LIPs/issues/75
-[EIP85]: https://github.com/ethereum/LIPs/issues/85
+[ERC20]: https://github.com/ethereum/EIPs/issues/20
+[ERC26]: https://github.com/ethereum/EIPs/issues/26
+[ERC137]: https://github.com/ethereum/EIPs/issues/137
+[ERC67]: https://github.com/ethereum/EIPs/issues/67
+[EIP82]: https://github.com/ethereum/EIPs/issues/82
+[EIP75]: https://github.com/ethereum/EIPs/issues/75
+[EIP85]: https://github.com/ethereum/EIPs/issues/85
 [the LUKSO subreddit]: https://www.reddit.com/r/lukso/
 [one of the LUKSO Gitter chat rooms]: https://gitter.im/lukso/
-[pull request]: https://github.com/ethereum/LIPs/pulls
+[pull request]: https://github.com/lukso-network/LIPs/pulls
 [formal specification]: https://github.com/ethereum/yellowpaper
-[the Issues section of this repository]: https://github.com/ethereum/LIPs/issues
+[the Issues section of this repository]: https://github.com/lukso-network/LIPs/issues
 [markdown]: https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet
 [Ethereums's EIP-1]: https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1.md
 [Bitcoin's BIP-0001]: https://github.com/bitcoin/bips/
