@@ -5,7 +5,7 @@ A browsable version of all current and draft LIPs can be found on [the official 
 
 # Contributing
 
- 1. Review [LIP-1](LIPS/lip-1.md).
+ 1. Review [LIP-1](LIPs/lip-1.md).
  2. Fork the repository by clicking "Fork" in the top right.
  3. Add your LIP to your fork of the repository. There is a [template LIP here](lip-X.md).
  4. Submit a Pull Request to LUKSO's [LIPs repository](https://github.com/lukso-network/LIPs).
