@@ -27,7 +27,7 @@ There are three types of LIP:
 - A **Standard Track LIP** describes any change that affects most or all LUKSO implementations, such as a change to the the network protocol, a change in block or transaction validity rules, proposed application standards/conventions, or any change or addition that affects the interoperability of applications using LUKSO. Furthermore Standard LIPs can be broken down into the following categories. Standards Track LIPs consist of three parts, a design document, implementation, and finally if warranted an update to the [formal specification].
   - **Core** - improvements requiring a consensus fork, as well as changes that are not necessarily consensus critical but may be relevant.
   - **Interface** - includes improvements around client [API/RPC] specifications and standards, and also certain language-level standards like method names ([EIP6]) and [contract ABIs]. The label “interface” aligns with the [interfaces repo] and discussion should primarily occur in that repository before an LIP is submitted to the LIPs repository.
-  - **LRC** - application-level standards and conventions, including contract standards such as token standards ([ERC20]), name registries ([ERC26], [ERC137]), URI schemes ([ERC67]), library/package formats ([EIP82]), and wallet formats ([EIP75], [EIP85]).
+  - **LSP** - LUKSO standard proposal. Application-level standards and conventions, including smart contract standards such as token standards ([ERC20]), name registries ([ERC26], [ERC137]), URI schemes ([ERC67]), library/package formats ([EIP82]), and wallet formats ([EIP75], [EIP85]).
 - An **Informational LIP** describes an LUKSO design issue, or provides general guidelines or information to the LUKSO community, but does not propose a new feature. Informational LIPs do not necessarily represent LUKSO community consensus or a recommendation, so users and implementers are free to ignore Informational LIPs or follow their advice.
 - A **Meta LIP** describes a process surrounding LUKSO or proposes a change to (or an event in) a process. Process LIPs are like Standards Track LIPs but apply to areas other than the LUKSO protocol itself. They may propose an implementation, but not to LUKSO's codebase; they often require community consensus; unlike Informational LIPs, they are more than recommendations, and users are typically not free to ignore them. Examples include procedures, guidelines, changes to the decision-making process, and changes to the tools or environment used in LUKSO development. Any meta-LIP is also considered a Process LIP.
 
@@ -108,9 +108,9 @@ Each LIP must begin with an RFC 822 style header preamble, preceded and followed
 
 `* review-period-end:` <date review period ends>
 
-` type:` <Standards Track (Core, Interface, LRC)  | Informational | Meta>
+` type:` <Standards Track (Core, Interface, LSP)  | Informational | Meta>
 
-` * category:` <Core | Interface | LRC>
+` * category:` <Core | Interface | LSP>
 
 ` created:` <date created on>
 
