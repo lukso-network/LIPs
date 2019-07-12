@@ -1,5 +1,5 @@
 # LIPs
-LUKSO Improvement Proposals (LIPs) describe standards for the LUKSO platform, including core protocol specifications, client APIs, and contract standards.
+LUKSO Improvement Proposals (LIPs) and LUKSO standard proposal (LSPs) describe standards for the LUKSO platform, including core protocol specifications, client APIs, and smart contract standards.
 
 A browsable version of all current and draft LIPs can be found on [the official LIP site](https://github.com/ethereum/LIPs/tree/master/LIPs).
 
