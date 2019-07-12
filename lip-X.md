@@ -5,7 +5,7 @@ author: <a list of the author's or authors' name(s) and/or username(s), or name(
 discussions-to: <URL>
 status: Draft
 type: <Standards Track (Core, Networking, Interface, ERC)  | Informational | Meta>
-category (*only required for Standard Track): <Core | Interface | LRC>
+category (*only required for Standard Track): <Core | Interface | LSP>
 created: <date created on, in ISO 8601 (yyyy-mm-dd) format>
 requires (*optional): <LIP number(s)>
 replaces (*optional): <LIP number(s)>
