@@ -34,18 +34,13 @@ There're a wild range of applications beyond simple tokens that could make use o
 
 ## Specification
 <!--The technical specification should describe the syntax and semantics of any new feature. The specification should be detailed enough to allow competing, interoperable implementations for any of the current Ethereum platforms (go-ethereum, parity, cpp-ethereum, ethereumj, ethereumjs, and [others](https://github.com/ethereum/wiki/wiki/Clients)).-->
-This LIP defines a interface which all compliant contracts MUST implement:
-```solidity
-interface UniversalReciever {
-    event Received(bytes32 typeId , bytes data);
-    function universalReciever(bytes32 typeId ,bytes calldata data) external;
-}
-``` 
-The event `Received` MUST be emitted when the `universalReciever` function is succesfully executed.
+Every contract that comply to the Universal Reciever standard MUST implement:
 
-The function `universalReciever` is executed when a third party is calling the implementing contract. If the parameter `typeId` is not accepeted, this function MUST `revert`.  
+* The function `universalReciever`, which accepts two parametes: a `bytes32 typeId` and a `bytes data`. The `typeId` is used for definind which kind of information is being transmitted in the call, and the `data` is a byteArray of this arbitrary data. Reciving contracts should take the `typeId` in consideration to properly decode the `data`. The functoin MUST revert if `typeId` is not accepted or unknown. 
 
-The parameter `typeId` defines what type of information is being communicated, so implementers can properly decode the information available in the `data` parameter, which can be arbitrary. The standardization of `typeIds` is fundamental for the composability of the standard.  
+
+* The event `Received`, which accepts two parametes: a `bytes32 typeId` and a `bytes data`. This event MUST be emitted when the `universalReciever` function is succesfully executed.
+
 
 ## Rationale
 <!--The rationale fleshes out the specification by describing what motivated the design and why particular design decisions were made. It should describe alternate designs that were considered and related work, e.g. how the feature is supported in other languages. The rationale may also provide evidence of consensus within the community, and should discuss important objections or concerns raised during discussion.-->
@@ -55,7 +50,17 @@ The rationale fleshes out the specification by describing what motivated the des
 
 ## Implementation
 <!--The implementations must be completed before any LIP is given status "Final", but it need not be completed before the LIP is accepted. While there is merit to the approach of reaching consensus on the specification and rationale before writing code, the principle of "rough consensus and running code" is still useful when it comes to resolving many discussions of API details.-->
-The most basic implementations be achieved as following: 
+ 
+A solidty example of the described interface:
+```solidity
+pragma solidity 0.5.10;
+
+interface UniversalReciever {
+    event Recieved(bytes32 typeId, bytes calldata data);
+    function universalReciever(bytes32 typeId, bytes calldata data) external;
+}
+```
+The most basic implementation can be achieved as following:
 
 ```solidity
 pragma solidity 0.5.10;
