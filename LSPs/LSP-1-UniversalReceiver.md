@@ -46,9 +46,9 @@ universalReceiver(bytes32 id, bytes data) external returns (bool success)
 
 Allows to be called by any external contract to inform it about any transfers, interactions or simple information.
 
-`bytes32 id` is the hash of a standard (according to ERC165?)
+- `bytes32 id` is the hash of a standard (according to ERC165?)
 
-`bytes data` is a byteArray of arbitrary data. Reciving contracts should take the `id` in consideration to properly decode the `data`. The function MUST revert if `typeId` is not accepted or unknown. 
+- `bytes data` is a byteArray of arbitrary data. Reciving contracts should take the `id` in consideration to properly decode the `data`. The function MUST revert if `typeId` is not accepted or unknown. 
 
 
 ### Events
