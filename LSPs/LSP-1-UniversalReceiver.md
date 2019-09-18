@@ -56,7 +56,7 @@ Allows to be called by any external contract to inform it about any transfers, i
 #### Received
 
 ```js
-Received(address, from, bytes32 indexed id, bytes data)
+Received(address indexed from, bytes32 indexed id, bytes data)
 ```
 
 This event MUST be emitted when the `universalReceiver` function is succesfully executed.
