@@ -1,6 +1,6 @@
 ---
 lip: <to be assigned>
-title: Universal Reciever
+title: Universal Receiver
 author: JG Carvalho (@jgcarv), Fabian Vogelsteller <@frozeman> 
 discussions-to: <URL>
 status: Draft
@@ -11,41 +11,61 @@ requires (*optional): <LIP number(s)>
 replaces (*optional): <LIP number(s)>
 ---
 
-<!--You can leave these HTML comments in your merged LIP and delete the visible duplicate text guides, they will not appear and may be helpful to refer to if you edit it again. This is the suggested template for new LIPs. Note that an LIP number will be assigned by an editor. When opening a pull request to submit your LIP, please use an abbreviated title in the filename, `lip-draft_title_abbrev.md`. The title should be 44 characters or less.-->
-This is the suggested template for new LIPs.
-
-Note that an LIP number will be assigned by an editor. When opening a pull request to submit your LIP, please use an abbreviated title in the filename, `lip-draft_title_abbrev.md`.
-
-The title should be 44 characters or less.
 
 ## Simple Summary
 <!--"If you can't explain it simply, you don't understand it well enough." Provide a simplified and layman-accessible explanation of the LIP.-->
-A interface to allow any contract to be able to recieve an arbitrary information. 
+A interface to allow any contract to be able to receive any arbitrary information. 
 
 ## Abstract
 <!--A short (~200 word) description of the technical issue being addressed.-->
-Similar to the fallback function, which allows a contract to be notified of a incoming transaction with value, the Universal Reciever aims to allow for a contract to be informed that another entity is interacting with it. 
+Similar to a smart contracts fallback function, which allows a contract to be notified of a incoming transaction with value, the Universal Receiver allow for any contract to recevie information about any interaction. 
+This allows receiving contracts to react on incoming transfers or other interactions. 
 
-This makes possible for contracts to take necessary actions regarding the ongoing transaction. This is an abstraction of the ideas behind Ethereum ERC223 and ERC777, among others, that call contracts when they're transfering/recieving tokens. Those standards define parameters useful for token transfers, but not much else. With this proposal, we can expand the functionality defined in those ERCs.    
 
 ## Motivation
 <!--The motivation is critical for LIPs that want to change the Ethereum protocol. It should clearly explain why the existing protocol specification is inadequate to address the problem that the LIP solves. LIP submissions without sufficient motivation may be rejected outright.-->
-There're a wild range of applications beyond simple tokens that could make use of a standardized recieving functionality, which ranges from oracles, DAOS and other applications. This LIP may allow for easier integration between different systems, and if implemented with some sort of upgradability can become future proof for other kinds of yet to exists contracts. 
+There are often the need to inform other smart contracts about actions another smart contract did perform.
+A good example are token transfers, where the token smart contract should inform receiving contracts about the transfer.
+
+By creating a universal function that many smart contracts implement, receiving of asset and information can be unified.
+
+In cases where smart contracts function as a profile or wallet over a long time, an upgradable receiver can allow for future assets to be received, without that the interface needs to be changed.
+
 
 ## Specification
 <!--The technical specification should describe the syntax and semantics of any new feature. The specification should be detailed enough to allow competing, interoperable implementations for any of the current Ethereum platforms (go-ethereum, parity, cpp-ethereum, ethereumj, ethereumjs, and [others](https://github.com/ethereum/wiki/wiki/Clients)).-->
-Every contract that comply to the Universal Reciever standard MUST implement:
+Every contract that comply to the Universal Receiver standard MUST implement:
 
-* The function `universalReciever`, which accepts two parametes: a `bytes32 typeId` and a `bytes data`. The `typeId` is used for definind which kind of information is being transmitted in the call, and the `data` is a byteArray of this arbitrary data. Reciving contracts should take the `typeId` in consideration to properly decode the `data`. The functoin MUST revert if `typeId` is not accepted or unknown. 
+### Methods
+
+#### universalReceiver
+
+```js
+universalReceiver(bytes32 id, bytes data) external returns (bool success)
+```
+
+Allows to be called by any external contract to inform it about any transfers, interactions or simple information.
+
+`bytes32 id` is the hash of a standard (according to ERC165?)
+
+`bytes data` is a byteArray of arbitrary data. Reciving contracts should take the `id` in consideration to properly decode the `data`. The function MUST revert if `typeId` is not accepted or unknown. 
 
 
-* The event `Received`, which accepts two parametes: a `bytes32 typeId` and a `bytes data`. This event MUST be emitted when the `universalReciever` function is succesfully executed.
+### Events
+
+#### Received
+
+```js
+Received(address, from, bytes32 indexed id, bytes data)
+```
+
+This event MUST be emitted when the `universalReceiver` function is succesfully executed.
 
 
 ## Rationale
 <!--The rationale fleshes out the specification by describing what motivated the design and why particular design decisions were made. It should describe alternate designs that were considered and related work, e.g. how the feature is supported in other languages. The rationale may also provide evidence of consensus within the community, and should discuss important objections or concerns raised during discussion.-->
-The rationale fleshes out the specification by describing what motivated the design and why particular design decisions were made. It should describe alternate designs that were considered and related work, e.g. how the feature is supported in other languages. The rationale may also provide evidence of consensus within the community, and should discuss important objections or concerns raised during discussion.-->
-
+This is an abstraction of the ideas behind Ethereum ERC223 and ERC777, that contracts are called when they are receiving tokens. With this proposal, we can allow contracts to receive any information over a standardised interface.
+This can even be done in an upgradable way, where the receiving code can changed over time to support new standards and assets. 
 
 
 ## Implementation
@@ -55,32 +75,33 @@ A solidty example of the described interface:
 ```solidity
 pragma solidity 0.5.10;
 
-interface UniversalReciever {
-    event Recieved(bytes32 typeId, bytes calldata data);
-    function universalReciever(bytes32 typeId, bytes calldata data) external;
+interface UniversalReceiver {
+    event Recieved(address indexed from, bytes32 indexed id, bytes calldata data);
+    function universalReceiver(bytes32 id, bytes calldata data) external;
 }
 ```
+
 The most basic implementation can be achieved as following:
 
 ```solidity
 pragma solidity 0.5.10;
 
-contract BasicUniversalReciever is UniversalReciever {
+contract BasicUniversalReceiver is UniversalReceiver {
 
-    function universalReciever(bytes32 typeId, bytes calldata data) external {
-        emit Received(sender,typeId,data);
+    function universalReceiver(bytes32 id, bytes calldata data) external {
+        emit Received(msg.sender, id, data);
     }
 
 }
 ```
-But that isin't particularly useful and therefore we provide a incremented implemantion which can be used for recivieng tokens.
 
+Implementation to receive and decode a token transfer:
 ```solidity
 pragma solidity 0.5.10;
 
-contract BasicUniversalReciever is UniversalReciever {
+contract BasicUniversalReceiver is UniversalReceiver {
 
-    event TokenRecieved(address token,address from, address to, uint256 amount);
+    event TokenReceived(address tokenContract, address from, address to, uint256 amount);
     bytes32 constant internal TOKEN_RECIEVE = keccak256(abi.encodePacked("TOKEN_RECIEVE")) 
 
     function toTokenData(bytes memory _bytes) internal pure returns(address _from, address _to, uint256 _amount) {
@@ -92,12 +113,12 @@ contract BasicUniversalReciever is UniversalReciever {
         }
     }
 
-    function universalReciever(bytes32 typeId, bytes calldata data) external {
+    function universalReceiver(bytes32 id, bytes calldata data) external {
         if(typeId == TOKEN_RECIEVE){
-            (address from, address to,uint amount) = toTokenData(data);
-            emit TokenRecieved(sender, from,to, amount);
+            (address from, address to, uint256 amount) = toTokenData(data);
+            emit TokenRecieved(msg.sender, from, to, amount);
         }
-        emit Received(sender,typeId,data);
+        emit Received(msg.sender, id, data);
     }
 
 }
