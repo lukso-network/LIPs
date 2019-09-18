@@ -1,14 +1,12 @@
 ---
-lip: <to be assigned>
+lip: 1
 title: Universal Receiver
 author: JG Carvalho (@jgcarv), Fabian Vogelsteller <@frozeman> 
-discussions-to: <URL>
+discussions-to: https://discord.gg/E2rJPP4
 status: Draft
-type: <Standards Track (Core, Networking, Interface, ERC)
-category (*only required for Standard Track): <LSP>
+type: LSP
 created: 2019-09-01
-requires (*optional): <LIP number(s)>
-replaces (*optional): <LIP number(s)>
+requires: ERC165
 ---
 
 
@@ -40,7 +38,7 @@ Every contract that comply to the Universal Receiver standard MUST implement:
 
 #### universalReceiver
 
-```js
+```solidity
 universalReceiver(bytes32 id, bytes data) external returns (bool success)
 ```
 
@@ -55,7 +53,7 @@ Allows to be called by any external contract to inform it about any transfers, i
 
 #### Received
 
-```js
+```solidity
 Received(address indexed from, bytes32 indexed id, bytes data)
 ```
 
