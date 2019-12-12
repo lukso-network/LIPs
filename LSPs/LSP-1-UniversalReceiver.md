@@ -39,14 +39,17 @@ Every contract that comply to the Universal Receiver standard MUST implement:
 #### universalReceiver
 
 ```solidity
-universalReceiver(bytes32 id, bytes data) external returns (bool success)
+universalReceiver(bytes32 id, bytes data) external returns (bytes32)
 ```
 
-Allows to be called by any external contract to inform it about any transfers, interactions or simple information.
+Allows to be called by any external contract to inform the contract about any incoming transfers, interactions or simple information.
 
 - `bytes32 id` is the hash of a standard (according to ERC165?)
 
 - `bytes data` is a byteArray of arbitrary data. Reciving contracts should take the `id` in consideration to properly decode the `data`. The function MUST revert if `id` is not accepted or unknown. 
+
+Returns `bytes32`, which can be used to encode response values.
+If the transfer fails the function reverts.
 
 
 ### Events
@@ -74,7 +77,7 @@ A solidty example of the described interface:
 pragma solidity 0.5.10;
 
 interface UniversalReceiver {
-    event Recieved(address indexed from, bytes32 indexed id, bytes calldata data);
+    event Received(address indexed from, bytes32 indexed id, bytes calldata data);
     function universalReceiver(bytes32 id, bytes calldata data) external;
 }
 ```
@@ -100,7 +103,7 @@ pragma solidity 0.5.10;
 contract BasicUniversalReceiver is UniversalReceiver {
 
     event TokenReceived(address tokenContract, address from, address to, uint256 amount);
-    bytes32 constant internal TOKEN_RECIEVE = keccak256(abi.encodePacked("TOKEN_RECIEVE")) 
+    bytes32 constant internal TOKEN_RECEIVE = keccak256(abi.encodePacked("TOKEN_RECEIVE")) 
 
     function toTokenData(bytes memory _bytes) internal pure returns(address _from, address _to, uint256 _amount) {
         require(_bytes.length == 72, "data has wrong size");
@@ -112,9 +115,10 @@ contract BasicUniversalReceiver is UniversalReceiver {
     }
 
     function universalReceiver(bytes32 id, bytes calldata data) external {
-        if(id == TOKEN_RECIEVE){
+        if(id == TOKEN_RECEIVE){
             (address from, address to, uint256 amount) = toTokenData(data);
-            emit TokenRecieved(msg.sender, from, to, amount);
+            emit TokenRecei
+            ved(msg.sender, from, to, amount);
         }
         emit Received(msg.sender, id, data);
     }
