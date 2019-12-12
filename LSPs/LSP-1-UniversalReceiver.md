@@ -114,7 +114,7 @@ contract BasicUniversalReceiver is UniversalReceiver {
         }
     }
 
-    function universalReceiver(bytes32 id, bytes calldata data) external {
+    function universalReceiver(bytes32 id, bytes calldata data) external returns (bytes32) {
         if(id == TOKEN_RECEIVE){
             (address from, address to, uint256 amount) = toTokenData(data);
             emit TokenRecei
