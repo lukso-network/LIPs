@@ -49,7 +49,7 @@ Allows to be called by any external contract to inform the contract about any in
 - `bytes data` is a byteArray of arbitrary data. Reciving contracts should take the `id` in consideration to properly decode the `data`. The function MUST revert if `id` is not accepted or unknown. 
 
 Returns `bytes32`, which can be used to encode response values.
-If the transfer fails the function reverts.
+**If the transfer should fail the function MUST revert.**
 
 
 ### Events
@@ -117,8 +117,7 @@ contract BasicUniversalReceiver is UniversalReceiver {
     function universalReceiver(bytes32 id, bytes calldata data) external returns (bytes32) {
         if(id == TOKEN_RECEIVE){
             (address from, address to, uint256 amount) = toTokenData(data);
-            emit TokenRecei
-            ved(msg.sender, from, to, amount);
+            emit TokenReceived(msg.sender, from, to, amount);
         }
         emit Received(msg.sender, id, data);
     }
