@@ -74,7 +74,7 @@ This can even be done in an upgradable way, where the receiving code can changed
  
 A solidty example of the described interface:
 ```solidity
-// SPDX-License-Identifier: Apache-2.0
+// SPDX-License-Identifier: CC0-1.0
 pragma solidity >=0.5.0 <0.7.0;
 
 interface ILSP1 {
@@ -88,6 +88,7 @@ interface ILSP1 {
 The most basic implementation can be achieved as following:
 
 ```solidity
+// SPDX-License-Identifier: CC0-1.0
 pragma solidity 0.6.10;
 
 contract BasicUniversalReceiver is ILSP1 {
@@ -102,6 +103,7 @@ contract BasicUniversalReceiver is ILSP1 {
 
 Example Implementation to receive and decode a simple token transfer:
 ```solidity
+// SPDX-License-Identifier: CC0-1.0
 pragma solidity 0.6.10;
 
 contract BasicUniversalReceiver is UniversalReceiver {
