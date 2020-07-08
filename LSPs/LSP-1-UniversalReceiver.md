@@ -92,8 +92,9 @@ pragma solidity 0.6.10;
 
 contract BasicUniversalReceiver is ILSP1 {
 
-    function universalReceiver(bytes32 typeId, bytes memory data) external {
+    function universalReceiver(bytes32 typeId, bytes memory data) external returns (bytes32) {
         emit UniversalReceiver(msg.sender, typeId, 0x0, data);
+        return 0x0;
     }
 
 }
@@ -123,6 +124,8 @@ contract BasicUniversalReceiver is UniversalReceiver {
             emit TokenReceived(msg.sender, from, to, amount);
         }
         emit UniversalReceiver(msg.sender, typeId, 0x0, data);
+        
+        return 0x0;
     }
 
 }
