@@ -109,7 +109,7 @@ pragma solidity 0.6.10;
 contract BasicUniversalReceiver is UniversalReceiver {
 
     event TokenReceived(address tokenContract, address from, address to, uint256 amount);
-    bytes32 constant internal TOKEN_RECEIVE = keccak256("TOKEN_RECEIVE")
+    bytes32 constant internal TOKEN_RECEIVE = keccak256("TOKEN_RECEIVE");
 
     function toTokenData(bytes memory _bytes) internal pure returns(address _from, address _to, uint256 _amount) {
         require(_bytes.length == 72, "data has wrong size");
