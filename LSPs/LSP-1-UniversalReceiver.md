@@ -31,7 +31,9 @@ In cases where smart contracts function as a profile or wallet over a long time,
 
 
 ## Specification
-<!--The technical specification should describe the syntax and semantics of any new feature. The specification should be detailed enough to allow competing, interoperable implementations for any of the current Ethereum platforms (go-ethereum, parity, cpp-ethereum, ethereumj, ethereumjs, and [others](https://github.com/ethereum/wiki/wiki/Clients)).-->
+
+ERC 165 interface id: `0x6bb56a14`
+
 Every contract that comply to the Universal Receiver standard MUST implement:
 
 ### Methods
@@ -77,6 +79,7 @@ A solidty example of the described interface:
 // SPDX-License-Identifier: CC0-1.0
 pragma solidity >=0.5.0 <0.7.0;
 
+// ERC 165 interface id: `0x6bb56a14`
 interface ILSP1 {
     event UniversalReceiver(address indexed from, bytes32 indexed typeId, bytes32 indexed returnedValue, bytes receivedData);
 
