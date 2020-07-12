@@ -102,8 +102,9 @@ In the above standard we define 4 types:
 
 ## Implementation
 
-The below defines the JSON interface of the ERC725Y account:
+The below defines the JSON interface of the ERC725Y account.
 
+ERC725Y JSON Interface:
 ```json
 [{
      "key": "0x2e3132fa655a0bf4164f7625f0ee4bf895a765a984dcc198dcfe1610d2bdc398", //keccak256('LSP2Links[]')
