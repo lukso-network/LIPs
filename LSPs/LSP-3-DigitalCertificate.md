@@ -1,18 +1,19 @@
 ---
-lip: 1
-title: Universal Receiver
-author: JG Carvalho (@jgcarv), Fabian Vogelsteller <@frozeman> 
+lip: 3
+title: Digital Certificate
+author: Fabian Vogelsteller <fabian@lukso.network> 
 discussions-to: https://discord.gg/E2rJPP4
 status: Draft
 type: LSP
-created: 2019-09-01
-requires: ERC165
+created: 2019-07-12
+requires: ERC165, ERC725, ERC777UniversalReceiver
 ---
 
+// TODO
 
 ## Simple Summary
 <!--"If you can't explain it simply, you don't understand it well enough." Provide a simplified and layman-accessible explanation of the LIP.-->
-A entry function to allow a contract to be able to receive any arbitrary information. 
+A interface to allow any contract to be able to receive any arbitrary information. 
 
 ## Abstract
 <!--A short (~200 word) description of the technical issue being addressed.-->
@@ -31,35 +32,30 @@ In cases where smart contracts function as a profile or wallet over a long time,
 
 
 ## Specification
-
-ERC 165 interface id: `0x6bb56a14`
-
-Every contract that complies to the Universal Receiver standard MUST implement:
+<!--The technical specification should describe the syntax and semantics of any new feature. The specification should be detailed enough to allow competing, interoperable implementations for any of the current Ethereum platforms (go-ethereum, parity, cpp-ethereum, ethereumj, ethereumjs, and [others](https://github.com/ethereum/wiki/wiki/Clients)).-->
+Every contract that comply to the Universal Receiver standard MUST implement:
 
 ### Methods
 
 #### universalReceiver
 
 ```solidity
-universalReceiver(bytes32 typeId, bytes data) external returns (bytes32)
+universalReceiver(bytes32 id, bytes data) external returns (bool success)
 ```
 
-Allows to be called by any external contract to inform the contract about any incoming transfers, interactions or simple information.
+Allows to be called by any external contract to inform it about any transfers, interactions or simple information.
 
-- `bytes32 typeId` is the hash of a standard (according to ERC165?)
+- `bytes32 id` is the hash of a standard (according to ERC165?)
 
 - `bytes data` is a byteArray of arbitrary data. Reciving contracts should take the `id` in consideration to properly decode the `data`. The function MUST revert if `id` is not accepted or unknown. 
-
-Returns `bytes32`, which can be used to encode response values.
-**If the receiving should fail the function MUST revert.**
 
 
 ### Events
 
-#### UniversalReceiver
+#### Received
 
 ```solidity
-event UniversalReceiver(address indexed from, bytes32 indexed typeId, bytes32 indexed returnedValue, bytes receivedData)
+Received(address indexed from, bytes32 indexed id, bytes data)
 ```
 
 This event MUST be emitted when the `universalReceiver` function is succesfully executed.
@@ -76,43 +72,36 @@ This can even be done in an upgradable way, where the receiving code can changed
  
 A solidty example of the described interface:
 ```solidity
-// SPDX-License-Identifier: CC0-1.0
-pragma solidity >=0.5.0 <0.7.0;
+pragma solidity 0.5.10;
 
-// ERC 165 interface id: `0x6bb56a14`
-interface ILSP1 {
-    event UniversalReceiver(address indexed from, bytes32 indexed typeId, bytes32 indexed returnedValue, bytes receivedData);
-
-    function universalReceiver(bytes32 typeId, bytes memory data) external returns (bytes32);
+interface UniversalReceiver {
+    event Recieved(address indexed from, bytes32 indexed id, bytes calldata data);
+    function universalReceiver(bytes32 id, bytes calldata data) external;
 }
-
 ```
 
 The most basic implementation can be achieved as following:
 
 ```solidity
-// SPDX-License-Identifier: CC0-1.0
-pragma solidity 0.6.10;
+pragma solidity 0.5.10;
 
-contract BasicUniversalReceiver is ILSP1 {
+contract BasicUniversalReceiver is UniversalReceiver {
 
-    function universalReceiver(bytes32 typeId, bytes memory data) external returns (bytes32) {
-        emit UniversalReceiver(msg.sender, typeId, 0x0, data);
-        return 0x0;
+    function universalReceiver(bytes32 id, bytes calldata data) external {
+        emit Received(msg.sender, id, data);
     }
 
 }
 ```
 
-Example Implementation to receive and decode a simple token transfer:
+Implementation to receive and decode a token transfer:
 ```solidity
-// SPDX-License-Identifier: CC0-1.0
-pragma solidity 0.6.10;
+pragma solidity 0.5.10;
 
 contract BasicUniversalReceiver is UniversalReceiver {
 
     event TokenReceived(address tokenContract, address from, address to, uint256 amount);
-    bytes32 constant internal TOKEN_RECEIVE = keccak256("TOKEN_RECEIVE");
+    bytes32 constant internal TOKEN_RECIEVE = keccak256(abi.encodePacked("TOKEN_RECIEVE")) 
 
     function toTokenData(bytes memory _bytes) internal pure returns(address _from, address _to, uint256 _amount) {
         require(_bytes.length == 72, "data has wrong size");
@@ -123,14 +112,12 @@ contract BasicUniversalReceiver is UniversalReceiver {
         }
     }
 
-    function universalReceiver(bytes32 typeId, bytes calldata data) external returns (bytes32) {
-        if(typeId == TOKEN_RECEIVE){
+    function universalReceiver(bytes32 id, bytes calldata data) external {
+        if(id == TOKEN_RECIEVE){
             (address from, address to, uint256 amount) = toTokenData(data);
-            emit TokenReceived(msg.sender, from, to, amount);
+            emit TokenRecieved(msg.sender, from, to, amount);
         }
-        emit UniversalReceiver(msg.sender, typeId, 0x0, data);
-        
-        return 0x0;
+        emit Received(msg.sender, id, data);
     }
 
 }
