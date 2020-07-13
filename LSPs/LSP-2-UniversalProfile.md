@@ -20,7 +20,7 @@ This standard, defines a set of key value stores that are useful to create a pub
 Additionally this standards expects (LSP1-UniversalReceiver)[https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-1-UniversalReceiver.md] to be implemented as well, to make the smart contract account future proof.
 
 ## Motivation
-To make the usage of blockchain infrastructure easier and allow smart contractbased account to be more than just a store of assets.
+To make the usage of blockchain infrastructure easier and allow smart contract based accounts to be more than just a store of assets.
 We need to define standards that make these accounts easier to use and interactable. Therefore we need to define:
 
 - Ways to make security and access to these accounts upgradeable through the use of ERC173 and ERC725X
@@ -36,6 +36,133 @@ Though we still think this addition is extremly necessary even on networks like 
 ## Specification
 
 Every contract that supports to the Universal Profile standard SHOULD implement:
+
+Every value has to be store as key `hash of bytes32` and value `bytes`, when we talk in the specification about other types for the value,
+those need to be converted by and from the interface to `bytes` before stored in the smart contract.
+
+### Keys
+
+#### LSP2Name
+
+The name of the profile, can be a username, company name, or other title.
+
+```json
+{
+    "type": "LSP2Name",
+    "key": "0xf9e26448acc9f20625c059a95279675b8f58ba4f06d262f83a32b4dd35dee019",
+    "keyType": "Singleton",
+    "value": "String",
+    "valueType": "string"
+}
+```
+
+Example:
+```solidity
+key: keccak256('LSP2Name') = 0xf9e26448acc9f20625c059a95279675b8f58ba4f06d262f83a32b4dd35dee019
+value: web3.utils.utf8ToHex('myamazingname') = 0x6d79616d617a696e676e616d65
+```
+
+#### LSP2Profile
+
+A JSON file that describes the profile information, like profile image, background image and description.
+
+```json
+{
+    "type": "LSP2Profile",
+    "key": "0x44367a5abdaa20de0422835e8abcbc096050530cc95916ff41e3341318b90853",
+    "keyType": "Singleton",
+    "value": "URI",
+    "valueType": "string"
+}
+```
+
+The linked JSON file MUST have the following format:
+```json
+{
+    "LSP2Profile": {
+        "profileImage": "URI", // The profile image represents one image representing the profile, like a person image, a company logo or avatar.
+        "backgroundImage": "URI", // The background is an image that can be used in conjunction with profile image to give a more personal look to the profile.
+                                  // Websites displaying the profile have to choose how or if, to use this image.
+        "description": "string" // A description, describing the person, company, organisation and/or creator of the profile.
+    }
+}
+```
+
+#### LSP2Links
+
+A JSON file describing a set of links related to this profile.
+
+```json
+{
+    "type": "LSP2Links",
+    "key": "0xb95a64d66e66f5c0cd985e2c3cc93fbea7f9259eadbe81c3ab0ff4e68df564d6",
+    "keyType": "Singleton",
+    "value": "URI",
+    "valueType": "string"
+}
+```
+
+The linked JSON file MUST have the following format:
+```json
+{
+    "LSP2Links": [
+        {
+            "title": "string",
+            "link": "URI"
+        },
+        ...
+    ]
+}
+```
+
+#### LSP2IssuedAssets[]
+
+References issued smart contract assets, like tokens and NFTs.
+
+```json
+{
+    "type": "LSP2IssuedAssets[]",
+    "key": "0xb8c4a0b76ed8454e098b20a987a980e69abe3b1a88567ae5472af5f863f8c8f9",
+    "keyType": "Array",
+    "value": "ArrayLength",
+    "valueType": "uint256",
+    "elementKey": "0xb8c4a0b76ed8454e098b20a987a980e6",
+    "elementKeyType": "ArrayElement",
+    "elementValue": "Address",
+    "elementValueType": "address"
+}
+```
+
+Example:
+```solidity
+key: keccak256('LSP2IssuedAssets[]') = 0xb8c4a0b76ed8454e098b20a987a980e69abe3b1a88567ae5472af5f863f8c8f9
+value: uint256 (array length) e.g. 0x0000000000000000000000000000000000000000000000000000000000000002
+
+// array items
+
+// element 0
+key: 0xb8c4a0b76ed8454e098b20a987a980e600000000000000000000000000000000
+value: 0xcafecafecafecafecafecafecafecafecafecafe
+
+// element 1
+key: 0xb8c4a0b76ed8454e098b20a987a980e600000000000000000000000000000001
+value: 0xcafecafecafecafecafecafecafecafecafecafe
+```
+
+## Rationale
+The structure of the key value layout as JSON allows interfaces to auto decode these key values as they will know how to decode them.   
+`keyType` always describes *how* a key MUST be treated.    
+and `valueType` describes how the value MUST be decoded. And `value` always describes *how* a value SHOULD be treated.
+
+In the above standard we define 3 `key types`:
+- `Singleton`: Tells the interface that the key is a hash of the key name `keccak256(keyName)`
+- `Array`: Tells the interface to look for Array elements using the `bytes16(keccak256(keyName))` + `uint128(element count)`
+- `ArrayElement`: Tells the interface that the key is constructed using the `bytes16(keccak256(keyName))` + `uint128(element count)`
+
+In the above standard we define `values`:
+- `Address`: The value content is an address.
+- `URI`: The value content is a utf8 encoded URI.
+- `Markdown`: The value content is a utf8 encoded string, that can contain Markdown elements.
 
 ### Multiple keys of the same type
 
@@ -56,49 +183,6 @@ This would looks as follows for `LSPXXXMyNewKeyType[]` (keccak256: `0x4f876465db
 - element 2: key: `0x4f876465dbe22c8495f4e4f823d8469500000000000000000000000000000001`, value: `0x321...` (element 1)
 ...
 
-### Keys
-
-#### LSP2_links
-
-```json
-{
-    "key": "0x2e3132fa655a0bf4164f7625f0ee4bf895a765a984dcc198dcfe1610d2bdc398", //keccak256('LSP2Links[]')
-    "keyType": "Array",
-    "value": "uint256",
-    "valueType": "ArrayLength",
-    "elementKey": "0x2e3132fa655a0bf4164f7625f0ee4bf800000000000000000000000000000000", //bytes16(keccak256('LSP2Links[]')) + uint128(element count)
-    "elementKeyType": "ArrayElement",
-    "elementValue": "String",
-    "elementValueType": "Markdown"
-}
-```
-
-
-```solidity
-key: keccak256('LSP2Links[]') = 0x2e3132fa655a0bf4164f7625f0ee4bf895a765a984dcc198dcfe1610d2bdc398
-value: uint256 (array length) e.g. 0x0000000000000000000000000000000000000000000000000000000000000002
-
-// array items
-
-// example link
-key: 0x2e3132fa655a0bf4164f7625f0ee4bf800000000000000000000000000000000
-value: web3.utils.utf8ToHex('https://twitter.com/myusername') = 0x68747470733a2f2f747769747465722e636f6d2f6d79757365726e616d65
-
-// example markdown link
-key: 0x2e3132fa655a0bf4164f7625f0ee4bf800000000000000000000000000000001
-value: web3.utils.utf8ToHex('[My Twitter Page](https://twitter.com/myusername)') = 0x5b4d79205477697474657220506167655d2868747470733a2f2f747769747465722e636f6d2f6d79757365726e616d6529
-```
-
-## Rationale
-The structure of the key value layout as JSON allows interfaces to auto decode these key values as they will know how to decode them.
-`**Type` alwasy describes *how* a key/value pair can be treated.
-
-In the above standard we define 4 types:
-- **keyType** `Array`: Tells the interface to look for Array elements using the `bytes16(key)` + `uint128(element count)`
-- **valueType** `ArrayLength`: Tells the interface how many array elements to expect
-- **elementKeyType** `ArrayElement`: Tells the interface that the key is an array element and must be constructed using `bytes16(key)` + `uint128(element count)`
-- **elementValueType** `Markdown`: Tells the interface to treat the value content as markdown
-
 
 ## Implementation
 
@@ -106,16 +190,40 @@ The below defines the JSON interface of the ERC725Y account.
 
 ERC725Y JSON Interface:
 ```json
-[{
-     "key": "0x2e3132fa655a0bf4164f7625f0ee4bf895a765a984dcc198dcfe1610d2bdc398", //keccak256('LSP2Links[]')
-     "keyType": "Array",
-     "value": "uint256",
-     "valueType": "ArrayLength",
-     "elementKey": "0x2e3132fa655a0bf4164f7625f0ee4bf800000000000000000000000000000000", //bytes16(keccak256('LSP2Links[]')) + uint128(element count)
-     "elementKeyType": "ArrayElement",
-     "elementValue": "String",
-     "elementValueType": "Markdown"
- }]
+[
+    {
+        "type": "LSP2Name",
+        "key": "0xf9e26448acc9f20625c059a95279675b8f58ba4f06d262f83a32b4dd35dee019",
+        "keyType": "Singleton",
+        "value": "String",
+        "valueType": "string"
+    },
+    {
+        "type": "LSP2Profile",
+        "key": "0x44367a5abdaa20de0422835e8abcbc096050530cc95916ff41e3341318b90853",
+        "keyType": "Singleton",
+        "value": "URI",
+        "valueType": "string"
+    },
+    {
+        "type": "LSP2Links",
+        "key": "0xb95a64d66e66f5c0cd985e2c3cc93fbea7f9259eadbe81c3ab0ff4e68df564d6",
+        "keyType": "Singleton",
+        "value": "URI",
+        "valueType": "string"
+    },
+    {
+        "type": "LSP2IssuedAssets[]",
+        "key": "0xb8c4a0b76ed8454e098b20a987a980e69abe3b1a88567ae5472af5f863f8c8f9",
+        "keyType": "Array",
+        "value": "ArrayLength",
+        "valueType": "uint256",
+        "elementKey": "0xb8c4a0b76ed8454e098b20a987a980e6",
+        "elementKeyType": "ArrayElement",
+        "elementValue": "Address",
+        "elementValueType": "address"
+    }
+]
 ```
 
 ## Copyright
