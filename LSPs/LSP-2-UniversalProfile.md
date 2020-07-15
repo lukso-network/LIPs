@@ -76,6 +76,12 @@ A JSON file that describes the profile information, like profile image, backgrou
 }
 ```
 
+Example:
+```solidity
+key: keccak256('LSP2Profile') = 0x44367a5abdaa20de0422835e8abcbc096050530cc95916ff41e3341318b90853
+value: web3.utils.utf8ToHex('ipfs://QmQ2CN2VUdb5nVAz28R47aWP6BjDLPGNJaSBniBuZRs3Jt') = 0x697066733a2f2f516d5132434e3256556462356e56417a323852343761575036426a444c50474e4a6153426e6942755a5273334a74
+```
+
 The linked JSON file MUST have the following format:
 ```json
 {
@@ -98,6 +104,12 @@ A JSON file describing a set of links related to this profile.
     "value": "URI",
     "valueType": "string"
 }
+```
+
+Example:
+```solidity
+key: keccak256('LSP2Links') = 0xb95a64d66e66f5c0cd985e2c3cc93fbea7f9259eadbe81c3ab0ff4e68df564d6
+value: web3.utils.utf8ToHex('ipfs://QmQ7UV2Vddb5nVAz28R47aWP6BjDLPGNJaSBniBuZRs1JJ') = 0x697066733a2f2f516d513755563256646462356e56417a323852343761575036426a444c50474e4a6153426e6942755a5273314a4a
 ```
 
 The linked JSON file MUST have the following format:
