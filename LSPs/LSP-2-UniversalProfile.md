@@ -102,15 +102,13 @@ A JSON file describing a set of links related to this profile.
 
 The linked JSON file MUST have the following format:
 ```json
-{
-    "LSP2Links": [
-        {
-            "title": "string",
-            "link": "URI"
-        },
-        ...
-    ]
-}
+[
+    {
+        "title": "string",
+        "link": "URI"
+    },
+    ...
+]
 ```
 
 #### LSP2IssuedAssets[]
