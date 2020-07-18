@@ -85,10 +85,12 @@ value: web3.utils.utf8ToHex('ipfs://QmQ2CN2VUdb5nVAz28R47aWP6BjDLPGNJaSBniBuZRs3
 The linked JSON file MUST have the following format:
 ```json
 {
-    "profileImage": "URI", // The profile image represents one image representing the profile, like a person image, a company logo or avatar.
-    "backgroundImage": "URI", // The background is an image that can be used in conjunction with profile image to give a more personal look to the profile.
-                              // Websites displaying the profile have to choose how or if, to use this image.
-    "description": "string" // A description, describing the person, company, organisation and/or creator of the profile.
+    "LSP2Profile": {
+        "profileImage": "URI", // The profile image represents one image representing the profile, like a person image, a company logo or avatar.
+        "backgroundImage": "URI", // The background is an image that can be used in conjunction with profile image to give a more personal look to the profile.
+                                  // Websites displaying the profile have to choose how or if, to use this image.
+        "description": "string" // A description, describing the person, company, organisation and/or creator of the profile.
+    }
 }
 ```
 
@@ -114,13 +116,15 @@ value: web3.utils.utf8ToHex('ipfs://QmQ7UV2Vddb5nVAz28R47aWP6BjDLPGNJaSBniBuZRs1
 
 The linked JSON file MUST have the following format:
 ```json
-[
-    {
-        "title": "string",
-        "link": "URI"
-    },
-    ...
-]
+{
+    "LSP2Links": [
+        {
+            "title": "string",
+            "link": "URI"
+        },
+        ...
+    ]
+}
 ```
 
 #### LSP2IssuedAssets[]
