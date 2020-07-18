@@ -6,7 +6,7 @@ discussions-to: https://discord.gg/E2rJPP4
 status: Draft
 type: LSP
 created: 2019-07-12
-requires: ERC725Y
+requires: ERC725Account
 ---
 
 
