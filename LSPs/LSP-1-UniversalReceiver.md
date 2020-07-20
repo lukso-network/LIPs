@@ -154,6 +154,29 @@ contract ExternalUniversalReceiver is ERC165, ILSP1 {
         return returnValue;
     }
 }
+
+contract UniversalReceiverDelegate is ERC165, ILSP1Delegate {
+
+    bytes4 _INTERFACE_ID_LSP1DELEGATE = 0xc2d7bcc1;
+
+    bytes32 constant internal _TOKENS_RECIPIENT_INTERFACE_HASH = keccak256("ERC777TokensRecipient");
+
+    address[] public addressStore;
+
+    constructor() public {
+        _registerInterface(_INTERFACE_ID_LSP1DELEGATE);
+    }
+
+    function universalReceiverDelegate(address sender, bytes32 typeId, bytes memory data) external override returns (bytes32) {
+        require(typeId == _TOKENS_RECIPIENT_INTERFACE_HASH, 'UniversalReceiverDelegate: Type not supported');
+
+        // lets store all incoming token address (this is simplistic, you want to use a enumerableSet)
+        // An example implementation can be found at https://github.com/lukso-network/standards-scenarios/blob/master/contracts/UniversalReceiver/UniversalReceiverAddressStore.sol
+        addressStore.push(sender);
+
+        return typeId;
+    }
+}
 ```
 
 Example Implementation to receive and decode a simple token transfer:
