@@ -13,8 +13,6 @@ requires: LSP2, LSP1, ERC165, ERC725Y, ERC777
 This standard describes a set of [ERC725Y](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) key value stores that describe a digital asset.
 
 ## Abstract
-ERC725Y allow smart contracts to store key value stores (`bytes32` > `bytes`). These keys need to be separately standardised.
-
 This standard, defines a set of key value stores that are useful to create digital asset, based on an (ERC777)[https://github.com/ethereum/EIPs/blob/master/EIPS/eip-777.md].
 
 Additionally this standards modifies ERC777 `decimals` return value. It is suggested to modify ERC777 to work (LSP1-UniversalReceiver)[https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-1-UniversalReceiver.md]
@@ -88,7 +86,34 @@ key: keccak256('LSP4Type') = 0x4cd61d42bec47e5be0fa92cb767c0a01f91af591cee430423
 value: keccak256('LSP5DigitalCloth') = 0x400823a66792632b83426dae64ca619a7b8ffcde4f406c2fb8fd5d0a62286b42
 ```
 
-#### LSP4Images
+#### LSP4Description (Optional)
+
+The description of the asset.
+
+```json
+{
+    "type": "LSP4Description",
+    "key": "0xfc5327884a7fb1912dcdd0d78d7e6753f03e61a8e0b845a4b62f5efde472d0a8",
+    "keyType": "Singleton",
+    "value": "URI",
+    "valueType": "string"
+}
+```
+
+Example:
+```solidity
+key: keccak256('LSP4Description') = 0xfc5327884a7fb1912dcdd0d78d7e6753f03e61a8e0b845a4b62f5efde472d0a8
+value: web3.utils.utf8ToHex('ipfs://QmQ2CN2VUdb5nVAz28R47aWP6BjDLPGNJaSBniBuZRs3Jt') = 0x697066733a2f2f516d5132434e3256556462356e56417a323852343761575036426a444c50474e4a6153426e6942755a5273334a74
+```
+
+The linked JSON file MUST have the following format:
+```js
+{
+    "LSP4Description": "Some description text..."
+}
+```
+
+#### LSP4Images (Optional)
 
 Images that are related to the NFT. This can be one or multiple.
 The first image SHOULD be seen as the main image.
@@ -123,7 +148,7 @@ The linked JSON file MUST have the following format:
 }
 ```
 
-#### LSP4Assets
+#### LSP4Assets (Optional)
 
 Asset files that are attached related to the NFT. This can be one or multiple.
 The first asset SHOULD be seen as the main asset.
@@ -175,6 +200,13 @@ ERC725Y JSON Interface `LSP4DigitalCertificate`:
         "keyType": "Singleton",
         "value": "Keccak256",
         "valueType": "bytes32"
+    },
+    {
+        "type": "LSP4Description",
+        "key": "0xfc5327884a7fb1912dcdd0d78d7e6753f03e61a8e0b845a4b62f5efde472d0a8",
+        "keyType": "Singleton",
+        "value": "URI",
+        "valueType": "string"
     },
     {
         "type": "LSP4Images",
