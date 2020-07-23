@@ -37,6 +37,16 @@ Every contract that supports to the Universal Profile standard SHOULD implement:
 
 ### Keys
 
+#### LSP1UniversalReceiverDelegate
+
+If the account delegates its universal receiver to another smart contract,
+this smart contract address SHOULD be stored at the following key:
+
+```solidity
+keccak256('LSP1UniversalReceiverDelegate') > 0x0cfc51aec37c55a4d0b1a65c6255c4bf2fbdf6277f3cc0730c45b828b6db8b47
+```
+
+
 #### LSP3Name
 
 The name of the profile, can be a username, company name, or other title.
