@@ -1,6 +1,6 @@
 ---
 lip: 2
-title: ERC725Y JSON Interface
+title: ERC725Y JSON Schema
 author: Fabian Vogelsteller <fabian@lukso.network> 
 discussions-to: https://discord.gg/E2rJPP4
 status: Draft
@@ -11,13 +11,13 @@ requires: ERC725Y
 
 
 ## Simple Summary
-This standard describes how a set of [ERC725Y](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) key value stores can be described.
+This schema describes how a set of [ERC725Y](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) key value stores can be described.
 
 ## Abstract
 ERC725Y allow smart contracts to store key value stores (`bytes32` > `bytes`). These keys need to be separately standardised.
 
 ## Motivation
-This standard, defines a way to make those key vale stores automatically parsable. 
+This schema, defines a way to make those key vale stores automatically parsable. 
 
 This is of importance for (ERC725)[https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md] based smart contracts like
 (LSP3-UniversalProfile)[https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-3-UniversalProfile.md] and (LSP4-DigitalCertificate)[https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-4-DigitalCertificate.md].
