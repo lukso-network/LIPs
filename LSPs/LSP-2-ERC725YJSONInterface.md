@@ -32,7 +32,7 @@ To make ERC725Y keys readable we define the following data types:
 - `keyType`: Types that determine how the values should be interpreted. Valid types are:
     - `Singleton`: A single key value store.
     - `Array`: Determines that the value of this key is the array length, and subsequent keys exist consisting of `bytes16(keyHash) + uint128(arrayElementIndex)`.
-- `value`: The content in the returned value. Valid values are:
+- `valueContent`: The content in the returned value. Valid values are:
     - `String`: The content is a generic UTF8 string.
     - `Address`: The content is an address.
     - `Keccak256`: The content is an keccak256 32 bytes hash.
@@ -49,7 +49,7 @@ Special key types exist for array elements:
 
 - `elementKey`: The first 16 bytes of the `key` hash of the root key.
 - `elementKeyType`: The type of the element, MUST be `ArrayElement` for an array element.
-- `elementValue`: Same as `value` above.
+- `elementValueContent`: Same as `valueContent` above.
 - `elementValueType`: Same as `valueType` above.
 
 
@@ -62,7 +62,7 @@ Below is an example of a Singleton key type:
     "type": "LSPXyz",
     "key": "0x259e3e88c900103c8f1c9153b97074c18f74c5e4f27873f3a3ac6060dea44422", //keccak256(LSPXyz)
     "keyType": "Singleton",
-    "value": "String",
+    "valueContent": "String",
     "valueType": "string"
 }
 ```
@@ -94,7 +94,7 @@ Below is an example of an Array key type:
     "type": "LSP2IssuedAssets[]",
     "key": "0xb8c4a0b76ed8454e098b20a987a980e69abe3b1a88567ae5472af5f863f8c8f9",
     "keyType": "Array",
-    "value": "ArrayLength",
+    "valueContent": "ArrayLength",
     "valueType": "uint256",
     "elementKey": "0xb8c4a0b76ed8454e098b20a987a980e6",
     "elementKeyType": "ArrayElement",
@@ -136,25 +136,25 @@ Example ERC725Y JSON Interface:
         "type": "LSP2Name",
         "key": "0xf9e26448acc9f20625c059a95279675b8f58ba4f06d262f83a32b4dd35dee019",
         "keyType": "Singleton",
-        "value": "String",
+        "valueContent": "String",
         "valueType": "string"
     },
     {
         "type": "LSP2Links",
         "key": "0xb95a64d66e66f5c0cd985e2c3cc93fbea7f9259eadbe81c3ab0ff4e68df564d6",
         "keyType": "Singleton",
-        "value": "URI",
+        "valueContent": "URI",
         "valueType": "string"
     },
     {
         "type": "LSP2IssuedAssets[]",
         "key": "0xb8c4a0b76ed8454e098b20a987a980e69abe3b1a88567ae5472af5f863f8c8f9",
         "keyType": "Array",
-        "value": "ArrayLength",
+        "valueContent": "ArrayLength",
         "valueType": "uint256",
         "elementKey": "0xb8c4a0b76ed8454e098b20a987a980e6",
         "elementKeyType": "ArrayElement",
-        "elementValue": "Address",
+        "elementValueContent": "Address",
         "elementValueType": "address"
     }
 ]
