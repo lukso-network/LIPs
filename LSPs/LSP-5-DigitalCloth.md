@@ -49,7 +49,7 @@ The first asset SHOULD be seen as the main asset.
     "type": "LSP4Assets",
     "key": "0x5fa8d8247112f88f035d746484935915caa778a049c0927c00bb1c2696497a95",
     "keyType": "Singleton",
-    "value": "URI",
+    "valueContent": "URI",
     "valueType": "string"
 }
 ```
@@ -89,28 +89,28 @@ ERC725Y JSON Interface `LSP5DigitalCLoth`:
         "type": "LSP4Type",
         "key": "0x4cd61d42bec47e5be0fa92cb767c0a01f91af591cee430423287127fe58b66ca",
         "keyType": "Singleton",
-        "value": "0x400823a66792632b83426dae64ca619a7b8ffcde4f406c2fb8fd5d0a62286b42",
+        "valueContent": "0x400823a66792632b83426dae64ca619a7b8ffcde4f406c2fb8fd5d0a62286b42",
         "valueType": "bytes32"
     },
     {
         "type": "LSP4Description",
         "key": "0xfc5327884a7fb1912dcdd0d78d7e6753f03e61a8e0b845a4b62f5efde472d0a8",
         "keyType": "Singleton",
-        "value": "URI",
+        "valueContent": "URI",
         "valueType": "string"
     },
     {
         "type": "LSP4Images",
         "key": "0x150834e6d4fd704dc914e5372942f0615863fd9d206030643c2a6391dc6ddbf1",
         "keyType": "Singleton",
-        "value": "URI",
+        "valueContent": "URI",
         "valueType": "string"
     },
     {
         "type": "LSP4Assets",
         "key": "0x5fa8d8247112f88f035d746484935915caa778a049c0927c00bb1c2696497a95",
         "keyType": "Singleton",
-        "value": "URI",
+        "valueContent": "URI",
         "valueType": "string"
     }
 ]
