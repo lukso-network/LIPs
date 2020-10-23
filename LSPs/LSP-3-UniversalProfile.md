@@ -207,7 +207,7 @@ ERC725Y JSON Schema `LSP3Account`:
         "keyType": "Array",
         "valueContent": "ArrayLength",
         "valueType": "uint256",
-        "elementKey": "0xb8c4a0b76ed8454e098b20a987a980e6",
+        "elementKey": "0x3a47ab5bd3a594c3a8995f8fa58d0876",
         "elementKeyType": "ArrayElement",
         "elementValueContent": "Address",
         "elementValueType": "address"
