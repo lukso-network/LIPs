@@ -177,7 +177,7 @@ or a verifiable public appearance.
 A implementation can be found in the [lukso-network/standards-scenarios](https://github.com/lukso-network/standards-scenarios/blob/master/contracts/Accounts/LSP3Account.sol);
 The below defines the JSON interface of the `LSP3Account`.
 
-ERC725Y JSON Interface `LSP3Account`:
+ERC725Y JSON Schema `LSP3Account`:
 ```json
 [
     {

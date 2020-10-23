@@ -191,7 +191,7 @@ The linked JSON file MUST have the following format:
 A implementation can be found in the [lukso-network/standards-scenarios](https://github.com/lukso-network/standards-scenarios/blob/master/contracts/DigitalCertificate/LSP4DigitalCertificate.sol);
 The below defines the JSON interface of the `LSP4DigitalCertificate`.
 
-ERC725Y JSON Interface `LSP4DigitalCertificate`:
+ERC725Y JSON Schema `LSP4DigitalCertificate`:
 ```json
 [
     {
