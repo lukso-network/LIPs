@@ -39,12 +39,14 @@ To make ERC725Y keys readable we define the following key value types:
     - `Address`: The content is an address.
     - `Keccak256`: The content is an keccak256 32 bytes hash.
     - `HashedAssetURI`: The content is bytes containing the following format:
-        - `bytes4(keccak256('hasFunctionType'))` + `bytes32(assetHash)` + `utf8ToHex('ipfs://QmQ2CN2VUdb5nVAz28R47aWP6BjDLPGNJaSBniBuZRs3Jt')`
-        - Hash function types can be: `keccak256('keccak256')`, (more need to be added)...
+        - `bytes4(keccak256('hashFunctionName'))` + `bytes32(assetHash)` + `utf8ToHex('ipfs://QmQ2CN2VUdb5nVAz28R47aWP6BjDLPGNJaSBniBuZRs3Jt')`
+        - Hash function types can be: 
+            - `keccak256('keccak256')` = `0xb7845733`
+            - TODO add more
     - `JSONURI`: The content is bytes containing the following format:
-        - `bytes4(keccak256('hasFunctionType'))` + `bytes32(assetHash)` + `utf8ToHex('ipfs://QmQ2CN2VUdb5nVAz28R47aWP6BjDLPGNJaSBniBuZRs3Jt')`
-        - Hash function types like above.
-    - `URI`: The content is an URI mostly encoded as UTF8 string.
+        - `bytes4(keccak256('hashFunctionName'))` + `bytes32(jsonHash)` + `utf8ToHex('ipfs://QmQ2CN2VUdb5nVAz28R47aWP6BjDLPGNJaSBniBuZRs3Jt')`
+        - Hash function names like above.
+    - `URI`: The content is an URI encoded as UTF8 string.
     - `Markdown`: The content is structured Markdown mostly encoded as UTF8 string.
     - `0x134...`: If the value type is a specific hash than the return value is expected to equal that hash (This is used for specific e.g. `LSP4Type`).
 - `valueType`: The type the content MUST be decoded with.
