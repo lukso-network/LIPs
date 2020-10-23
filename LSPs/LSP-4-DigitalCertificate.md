@@ -72,7 +72,7 @@ or other extra keys to be present in the digital certificate.
 
 ```json
 {
-    "type": "LSP4Type",
+    "name": "LSP4Type",
     "key": "0x4cd61d42bec47e5be0fa92cb767c0a01f91af591cee430423287127fe58b66ca",
     "keyType": "Singleton",
     "valueContent": "Keccak256",
@@ -92,7 +92,7 @@ The description of the asset.
 
 ```json
 {
-    "type": "LSP4Description",
+    "name": "LSP4Description",
     "key": "0xfc5327884a7fb1912dcdd0d78d7e6753f03e61a8e0b845a4b62f5efde472d0a8",
     "keyType": "Singleton",
     "valueContent": "URI",
@@ -120,7 +120,7 @@ The first image SHOULD be seen as the main image.
 
 ```json
 {
-    "type": "LSP4Images",
+    "name": "LSP4Images",
     "key": "0x150834e6d4fd704dc914e5372942f0615863fd9d206030643c2a6391dc6ddbf1",
     "keyType": "Singleton",
     "valueContent": "URI",
@@ -155,7 +155,7 @@ The first asset SHOULD be seen as the main asset.
 
 ```json
 {
-    "type": "LSP4Assets",
+    "name": "LSP4Assets",
     "key": "0x5fa8d8247112f88f035d746484935915caa778a049c0927c00bb1c2696497a95",
     "keyType": "Singleton",
     "valueContent": "URI",
@@ -195,28 +195,28 @@ ERC725Y JSON Interface `LSP4DigitalCertificate`:
 ```json
 [
     {
-        "type": "LSP4Type",
+        "name": "LSP4Type",
         "key": "0x4cd61d42bec47e5be0fa92cb767c0a01f91af591cee430423287127fe58b66ca",
         "keyType": "Singleton",
         "valueContent": "Keccak256",
         "valueType": "bytes32"
     },
     {
-        "type": "LSP4Description",
+        "name": "LSP4Description",
         "key": "0xfc5327884a7fb1912dcdd0d78d7e6753f03e61a8e0b845a4b62f5efde472d0a8",
         "keyType": "Singleton",
         "valueContent": "URI",
         "valueType": "string"
     },
     {
-        "type": "LSP4Images",
+        "name": "LSP4Images",
         "key": "0x150834e6d4fd704dc914e5372942f0615863fd9d206030643c2a6391dc6ddbf1",
         "keyType": "Singleton",
         "valueContent": "URI",
         "valueType": "string"
     },
     {
-        "type": "LSP4Assets",
+        "name": "LSP4Assets",
         "key": "0x5fa8d8247112f88f035d746484935915caa778a049c0927c00bb1c2696497a95",
         "keyType": "Singleton",
         "valueContent": "URI",

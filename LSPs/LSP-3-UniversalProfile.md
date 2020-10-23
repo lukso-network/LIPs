@@ -53,7 +53,7 @@ The name of the profile, can be a username, company name, or other title.
 
 ```json
 {
-    "type": "LSP3Name",
+    "name": "LSP3Name",
     "key": "0xa5f15b1fa920bbdbc28f5d785e5224e3a66eb5f7d4092dc9ba82d5e5ae3abc87",
     "keyType": "Singleton",
     "valueContent": "String",
@@ -73,7 +73,7 @@ A JSON file that describes the profile information, like profile image, backgrou
 
 ```json
 {
-    "type": "LSP3Profile",
+    "name": "LSP3Profile",
     "key": "0x5ef83ad9559033e6e941db7d7c495acdce616347d28e90c7ce47cbfcfcad3bc5",
     "keyType": "Singleton",
     "valueContent": "URI",
@@ -107,7 +107,7 @@ A JSON file describing a set of links related to this profile.
 
 ```json
 {
-    "type": "LSP3Links",
+    "name": "LSP3Links",
     "key": "0xca76618882d87383fed780cdd8bd4576dcc8c3d08a78ba85b2016652c7fdec40",
     "keyType": "Singleton",
     "valueContent": "URI",
@@ -140,7 +140,7 @@ References issued smart contract assets, like tokens and NFTs.
 
 ```json
 {
-    "type": "LSP3IssuedAssets[]",
+    "name": "LSP3IssuedAssets[]",
     "key": "0x3a47ab5bd3a594c3a8995f8fa58d0876c96819ca4516bd76100c92462f2f9dc0",
     "keyType": "Array",
     "valueContent": "ArrayLength",
@@ -181,28 +181,28 @@ ERC725Y JSON Interface `LSP3Account`:
 ```json
 [
     {
-        "type": "LSP3Name",
+        "name": "LSP3Name",
         "key": "0xa5f15b1fa920bbdbc28f5d785e5224e3a66eb5f7d4092dc9ba82d5e5ae3abc87",
         "keyType": "Singleton",
         "valueContent": "String",
         "valueType": "string"
     },
     {
-        "type": "LSP3Profile",
+        "name": "LSP3Profile",
         "key": "0x5ef83ad9559033e6e941db7d7c495acdce616347d28e90c7ce47cbfcfcad3bc5",
         "keyType": "Singleton",
         "valueContent": "URI",
         "valueType": "string"
     },
     {
-        "type": "LSP3Links",
+        "name": "LSP3Links",
         "key": "0xca76618882d87383fed780cdd8bd4576dcc8c3d08a78ba85b2016652c7fdec40",
         "keyType": "Singleton",
         "valueContent": "URI",
         "valueType": "string"
     },
     {
-        "type": "LSP3IssuedAssets[]",
+        "name": "LSP3IssuedAssets[]",
         "key": "0x3a47ab5bd3a594c3a8995f8fa58d0876c96819ca4516bd76100c92462f2f9dc0",
         "keyType": "Array",
         "valueContent": "ArrayLength",
