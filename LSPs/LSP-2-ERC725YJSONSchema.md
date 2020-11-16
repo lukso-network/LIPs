@@ -35,7 +35,8 @@ To make ERC725Y keys readable we define the following key value types:
     - `Singleton`: A single key value store.
     - `Array`: Determines that the value of this key is the array length, and subsequent keys consist of `bytes16(keyHash) + uint128(arrayElementIndex)`.
 - `valueContent`: The content in the returned value. Valid values are:
-    - `String`: The content is a generic UTF8 string.
+    - `Number`: The content is a number.
+    - `String`: The content is a UTF8 string.
     - `Address`: The content is an address.
     - `Keccak256`: The content is an keccak256 32 bytes hash.
     - `HashedAssetURI`: The content is bytes containing the following format:
@@ -113,7 +114,7 @@ Below is an example of an Array key type:
     "name": "LSP2IssuedAssets[]",
     "key": "0xb8c4a0b76ed8454e098b20a987a980e69abe3b1a88567ae5472af5f863f8c8f9",
     "keyType": "Array",
-    "valueContent": "ArrayLength",
+    "valueContent": "Number",
     "valueType": "uint256",
     "elementKey": "0xb8c4a0b76ed8454e098b20a987a980e6",
     "elementKeyType": "ArrayElement",
@@ -168,7 +169,7 @@ To allow interfaces to auto decode an ERC725Y key value store using the ERC725Y 
         "name": "LSP2IssuedAssets[]",
         "key": "0xb8c4a0b76ed8454e098b20a987a980e69abe3b1a88567ae5472af5f863f8c8f9",
         "keyType": "Array",
-        "valueContent": "ArrayLength",
+        "valueContent": "Number",
         "valueType": "uint256",
         "elementKey": "0xb8c4a0b76ed8454e098b20a987a980e6",
         "elementKeyType": "ArrayElement",
