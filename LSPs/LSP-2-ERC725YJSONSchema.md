@@ -33,7 +33,7 @@ To make ERC725Y keys readable we define the following key value types:
 - `key`: the keccak256 hash of the name. This is the actual key that MUST be retrievable via `ERC725Y.getData(bytes32 key)`. e.g: `keccack256('LSP2Name') = 0xf9e26448acc9f20625c059a95279675b8f58ba4f06d262f83a32b4dd35dee019`
 - `keyType`: Types that determine how the values should be interpreted. Valid types are:
     - `Singleton`: A single key value store.
-    - `Array`: Determines that the value of this key is the array length, and subsequent keys exist consisting of `bytes16(keyHash) + uint128(arrayElementIndex)`.
+    - `Array`: Determines that the value of this key is the array length, and subsequent keys consist of `bytes16(keyHash) + uint128(arrayElementIndex)`.
 - `valueContent`: The content in the returned value. Valid values are:
     - `String`: The content is a generic UTF8 string.
     - `Address`: The content is an address.
@@ -55,6 +55,11 @@ To make ERC725Y keys readable we define the following key value types:
     - `uint256`: The bytes are a 32 bytes uint256
     - `bytes32`: The bytes are a 32 bytes
     - `bytes`: The bytes are a bytes
+    - `string[]`: The bytes are a UTF8 encoded string array
+    - `address[]`: The bytes are an 20 bytes address array
+    - `uint256[]`: The bytes are a 32 bytes uint256 array
+    - `bytes32[]`: The bytes are a 32 bytes array
+    - `bytes[]`: The bytes are a bytes array
     
 Special key types exist for array elements:
 
@@ -79,6 +84,9 @@ Below is an example of a Singleton key type:
 ```
 
 ### Array
+
+*The advantage of the `keyType` Array over using simple array elements like `address[]`, is that the amount of elements that can be stored is unlimited.
+Storing an encoded array as a value, will reuqire a set amount of gas, which can exceed the block gas limit.*
 
 If you require multiple keys of the same key type they MUST be defined as follows:
 
