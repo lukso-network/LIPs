@@ -38,7 +38,7 @@ To make ERC725Y keys readable we define the following key value types:
     - `String`: The content is a generic UTF8 string.
     - `Address`: The content is an address.
     - `Keccak256`: The content is an keccak256 32 bytes hash.
-    - `HashedAssetURI`: The content is bytes containing the following format:
+    - `AssetURI`: The content is bytes containing the following format:
         - `bytes4(keccak256('hashFunctionName'))` + `bytes32(assetHash)` + `utf8ToHex('ipfs://QmQ2CN2VUdb5nVAz28R47aWP6BjDLPGNJaSBniBuZRs3Jt')`
         - Hash function types can be: 
             - `keccak256('keccak256')` = `0xb7845733`
@@ -77,6 +77,61 @@ Below is an example of a Singleton key type:
     "valueType": "string"
 }
 ```
+
+#### JSONURI Example
+
+The follow shows an example of how to encode a JSON object:
+
+```js
+let json = JSON.stringify({
+    myProperty: 'is a string',
+    anotherProperty: {
+        sdfsdf: 123456
+    }
+})
+
+web3.utils.keccak256(json)
+> '0x820464ddfac1bec070cc14a8daf04129871d458f2ca94368aae8391311af6361'
+
+// store the JSON anywhere and encode the URI
+> web3.utils.utf8ToHex('ifps://QmYr1VJLwerg6pEoscdhVGugo39pa6rycEZLjtRPDfW84UAx')
+'0x696670733a2f2f516d597231564a4c776572673670456f73636468564775676f3339706136727963455a4c6a7452504466573834554178'
+
+
+// Generated JSONURI
+0xb7845733 + 820464ddfac1bec070cc14a8daf04129871d458f2ca94368aae8391311af6361 + 696670733a2f2f516d597231564a4c776572673670456f73636468564775676f3339706136727963455a4c6a7452504466573834554178
+^            ^                                                                  ^
+keccack256   hash                                                               encoded URI
+
+```
+
+To decode, reverse the process:
+
+```js
+
+let data = myContract.methods.getData('0xsomeKey..').call()
+> '0xb7845733820464ddfac1bec070cc14a8daf04129871d458f2ca94368aae8391311af6361696670733a2f2f516d597231564a4c776572673670456f73636468564775676f3339706136727963455a4c6a7452504466573834554178'
+
+// slice the bytes to get its pieces
+let hashFunction = data.slice(0, 10)
+let hash = '0x' + data.slice(0, 74)
+let uri = '0x' + data.slice(74)
+
+// check if it uses keccak256
+if(hashFunction === '0xb7845733') {
+    // download the json file
+    let json = await ipfsMini.catJSON(
+        web3.utils.hexToUtf8(uri).replace('ipfs://','')
+    );
+
+    // compare hashes
+    if(web3.utils.keccak256(JSON.stringify(json)) === hash)
+        return
+            ? json
+            : false
+}
+```
+
 
 ### Array
 
