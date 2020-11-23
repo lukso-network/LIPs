@@ -47,90 +47,108 @@ keccak256('LSP1UniversalReceiverDelegate') > 0x0cfc51aec37c55a4d0b1a65c6255c4bf2
 ```
 
 
-#### LSP3Name
-
-The name of the profile, can be a username, company name, or other title.
-
-```json
-{
-    "name": "LSP3Name",
-    "key": "0xa5f15b1fa920bbdbc28f5d785e5224e3a66eb5f7d4092dc9ba82d5e5ae3abc87",
-    "keyType": "Singleton",
-    "valueContent": "String",
-    "valueType": "string"
-}
-```
-
-Example:
-```solidity
-key: keccak256('LSP3Name') = 0xa5f15b1fa920bbdbc28f5d785e5224e3a66eb5f7d4092dc9ba82d5e5ae3abc87
-value: web3.utils.utf8ToHex('myamazingname') = 0x6d79616d617a696e676e616d65
-```
-
 #### LSP3Profile
 
-A JSON file that describes the profile information, like profile image, background image and description.
+A JSON file that describes the profile information, including profile image, background image, description and related links.
 
 ```json
 {
     "name": "LSP3Profile",
     "key": "0x5ef83ad9559033e6e941db7d7c495acdce616347d28e90c7ce47cbfcfcad3bc5",
     "keyType": "Singleton",
-    "valueContent": "URI",
-    "valueType": "string"
+    "valueContent": "JSONURL",
+    "valueType": "bytes"
 }
 ```
 
 Example:
 ```solidity
 key: keccak256('LSP3Profile') = 0x5ef83ad9559033e6e941db7d7c495acdce616347d28e90c7ce47cbfcfcad3bc5
-value: web3.utils.utf8ToHex('ipfs://QmQ2CN2VUdb5nVAz28R47aWP6BjDLPGNJaSBniBuZRs3Jt') = 0x697066733a2f2f516d5132434e3256556462356e56417a323852343761575036426a444c50474e4a6153426e6942755a5273334a74
+value: 0x6f357c6a +      820464ddfac1bec070cc14a8daf04129871d458f2ca94368aae8391311af6361 + 696670733a2f2f516d597231564a4c776572673670456f73636468564775676f3339706136727963455a4c6a7452504466573834554178
+       ^                 ^                                                                  ^
+       keccak256(utf8)   hash                                                               encoded URL
+
 ```
 
 The linked JSON file MUST have the following format:
 ```js
 {
     "LSP3Profile": {
-        "profileImage": "URI", // The profile image represents one image representing the profile, like a person image, a company logo or avatar.
-        "profileImageHash": "keccak256",
-        "backgroundImage": "URI", // The background is an image that can be used in conjunction with profile image to give a more personal look to the profile.
-                                  // Websites displaying the profile have to choose how or if, to use this image.
-        "backgroundImageHash": "keccak256",
-        "description": "string" // A description, describing the person, company, organisation and/or creator of the profile.
+        "name": "string", // a self chosen username (will likely be replaced by an ENS name)
+        "description": "string" // A description, describing the person, company, organisation or creator of the profile.
+        "links": [ // links related to the profile
+            {
+                "title": "string", // a title for the link.
+                "url": "string" // the link itself
+            },
+            ...
+        ],
+        // below each image type SHOULD have different size of the same image, so that interfaces can choose which one to load for better loading performance
+        "profileImage": [ // One image in different sizes, representing the profile.
+            {  
+              width: Number,
+              height: Number,
+              hashFunction: 'keccak256(bytes)',
+              hash: 'string', // bytes32 hex string of the image hash
+              uri: 'string'
+            },
+            ...
+        ],
+        "backgroundImage": [ // Image in different sizes, that can be used in conjunction with profile image to give a more personal look to a profile.
+            { 
+              width: Number,
+              height: Number,
+              hashFunction: 'keccak256(bytes)',
+              hash: 'string', // bytes32 hex string of the image hash
+              uri: 'string'
+            },
+            ...
+        ]
     }
 }
 ```
 
-#### LSP3Links
-
-A JSON file describing a set of links related to this profile.
-
-```json
-{
-    "name": "LSP3Links",
-    "key": "0xca76618882d87383fed780cdd8bd4576dcc8c3d08a78ba85b2016652c7fdec40",
-    "keyType": "Singleton",
-    "valueContent": "URI",
-    "valueType": "string"
-}
-```
-
 Example:
-```solidity
-key: keccak256('LSP3Links') = 0xca76618882d87383fed780cdd8bd4576dcc8c3d08a78ba85b2016652c7fdec40
-value: web3.utils.utf8ToHex('ipfs://QmQ7UV2Vddb5nVAz28R47aWP6BjDLPGNJaSBniBuZRs1JJ') = 0x697066733a2f2f516d513755563256646462356e56417a323852343761575036426a444c50474e4a6153426e6942755a5273314a4a
-```
-
-The linked JSON file MUST have the following format:
-```json
+```js
 {
-    "LSP3Links": [
-        {
-            "title": "string",
-            "link": "URI"
-        },
-        ...
-    ]
+  name: 'frozeman',
+  links: [
+    { title: 'Twitter', url: 'https://twitter.com/feindura' },
+    { title: 'lukso.network', url: 'https://lukso.network' }
+  ],
+  description: 'The inventor of ERC725 and ERC20.....',
+  profileImage: [
+    {
+      width: 1024,
+      height: 974,
+      hashFunction: 'keccak256(bytes)',
+      hash: '0xbade827a9b6cb16897195d47e8866bef28c2136460b1e6051c6a7ddf2ff021a4',
+      uri: 'ifps://QmW4wM4r9yWeY1gUCtt7c6v3ve7Fzdg8CKvTS96NU9Uiwr'
+    },
+    {
+      width: 640,
+      height: 609,
+      hashFunction: 'keccak256(bytes)',
+      hash: '0xbade827a9b6cb16897195d47e8866bef28c2136460b1e6051c6a7ddf2ff021a4',
+      uri: 'ifps://QmXGELsqGidAHMwYRsEv6Z4emzMggtc5GXZYGFK7r6zFBg'
+    }
+  ],
+  backgroundImage: [
+    {
+      width: 1800,
+      height: 1013,
+      hashFunction: 'keccak256(bytes)',
+      hash: '0xbade827a9b6cb16897195d47e8866bef28c2136460b1e6051c6a7ddf2ff021a4',
+      uri: 'ifps://QmPJESHbVkPtSaHntNVY5F6JDLW8v69M2d6khXEYGUMn7N'
+    },
+    {
+      width: 1024,
+      height: 576,
+      hashFunction: 'keccak256(bytes)',
+      hash: '0xbade827a9b6cb16897195d47e8866bef28c2136460b1e6051c6a7ddf2ff021a4',
+      uri: 'ifps://QmZc9uMJxyUeUpuowJ7AD6MKoNTaWdVNcBj72iisRyM9Su'
+    }
+  ]
 }
 ```
 
@@ -181,25 +199,11 @@ ERC725Y JSON Schema `LSP3Account`:
 ```json
 [
     {
-        "name": "LSP3Name",
-        "key": "0xa5f15b1fa920bbdbc28f5d785e5224e3a66eb5f7d4092dc9ba82d5e5ae3abc87",
-        "keyType": "Singleton",
-        "valueContent": "String",
-        "valueType": "string"
-    },
-    {
         "name": "LSP3Profile",
         "key": "0x5ef83ad9559033e6e941db7d7c495acdce616347d28e90c7ce47cbfcfcad3bc5",
         "keyType": "Singleton",
-        "valueContent": "URI",
-        "valueType": "string"
-    },
-    {
-        "name": "LSP3Links",
-        "key": "0xca76618882d87383fed780cdd8bd4576dcc8c3d08a78ba85b2016652c7fdec40",
-        "keyType": "Singleton",
-        "valueContent": "URI",
-        "valueType": "string"
+        "valueContent": "JSONURL",
+        "valueType": "bytes"
     },
     {
         "name": "LSP3IssuedAssets[]",

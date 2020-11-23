@@ -38,13 +38,13 @@ To make ERC725Y keys readable we define the following key value types:
     - `String`: The content is a generic UTF8 string.
     - `Address`: The content is an address.
     - `Keccak256`: The content is an keccak256 32 bytes hash.
-    - `AssetURI`: The content is bytes containing the following format:
+    - `AssetURL`: The content is bytes containing the following format:
         - `bytes4(keccak256('hashFunctionName'))` + `bytes32(assetHash)` + `utf8ToHex('ipfs://QmQ2CN2VUdb5nVAz28R47aWP6BjDLPGNJaSBniBuZRs3Jt')`
         - Hash function bytes4 see below
-    - `JSONURI`: The content is bytes containing the following format:
+    - `JSONURL`: The content is bytes containing the following format:
         - `bytes4(keccak256('hashFunctionName'))` + `bytes32(jsonHash)` + `utf8ToHex('ipfs://QmQ2CN2VUdb5nVAz28R47aWP6BjDLPGNJaSBniBuZRs3Jt')`
         - Hash function bytes4 see below
-    - `URI`: The content is an URI encoded as UTF8 string.
+    - `URL`: The content is an URL encoded as UTF8 string.
     - `Markdown`: The content is structured Markdown mostly encoded as UTF8 string.
     - `0x134...`: If the value type is a specific hash than the return value is expected to equal that hash (This is used for specific e.g. `LSP4Type`).
 - `valueType`: The type the content MUST be decoded with.
@@ -81,7 +81,7 @@ Below is an example of a Singleton key type:
 }
 ```
 
-#### JSONURI Example
+#### JSONURL Example
 
 The follow shows an example of how to encode a JSON object:
 
@@ -96,15 +96,15 @@ let json = JSON.stringify({
 web3.utils.keccak256(json)
 > '0x820464ddfac1bec070cc14a8daf04129871d458f2ca94368aae8391311af6361'
 
-// store the JSON anywhere and encode the URI
+// store the JSON anywhere and encode the URL
 > web3.utils.utf8ToHex('ifps://QmYr1VJLwerg6pEoscdhVGugo39pa6rycEZLjtRPDfW84UAx')
 '0x696670733a2f2f516d597231564a4c776572673670456f73636468564775676f3339706136727963455a4c6a7452504466573834554178'
 
 
-// Generated JSONURI
+// Generated JSONURL
 0x6f357c6a +       820464ddfac1bec070cc14a8daf04129871d458f2ca94368aae8391311af6361 + 696670733a2f2f516d597231564a4c776572673670456f73636468564775676f3339706136727963455a4c6a7452504466573834554178
 ^                  ^                                                                  ^
-keccak256(utf8)   hash                                                               encoded URI
+keccak256(utf8)    hash                                                               encoded URL
 
 ```
 
@@ -118,13 +118,13 @@ let data = myContract.methods.getData('0xsomeKey..').call()
 // slice the bytes to get its pieces
 let hashFunction = data.slice(0, 10)
 let hash = '0x' + data.slice(0, 74)
-let uri = '0x' + data.slice(74)
+let url = '0x' + data.slice(74)
 
 // check if it uses keccak256
 if(hashFunction === '0xb7845733') {
     // download the json file
     let json = await ipfsMini.catJSON(
-        web3.utils.hexToUtf8(uri).replace('ipfs://','')
+        web3.utils.hexToUtf8(url).replace('ipfs://','')
     );
 
     // compare hashes
@@ -211,7 +211,7 @@ To allow interfaces to auto decode an ERC725Y key value store using the ERC725Y 
         "name": "LSP2Links",
         "key": "0xb95a64d66e66f5c0cd985e2c3cc93fbea7f9259eadbe81c3ab0ff4e68df564d6",
         "keyType": "Singleton",
-        "valueContent": "URI",
+        "valueContent": "URL",
         "valueType": "string"
     },
     {
