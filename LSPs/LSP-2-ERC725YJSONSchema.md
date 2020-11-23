@@ -40,12 +40,10 @@ To make ERC725Y keys readable we define the following key value types:
     - `Keccak256`: The content is an keccak256 32 bytes hash.
     - `AssetURI`: The content is bytes containing the following format:
         - `bytes4(keccak256('hashFunctionName'))` + `bytes32(assetHash)` + `utf8ToHex('ipfs://QmQ2CN2VUdb5nVAz28R47aWP6BjDLPGNJaSBniBuZRs3Jt')`
-        - Hash function types can be: 
-            - `keccak256('keccak256')` = `0xb7845733`
-            - TODO add more
+        - Hash function bytes4 see below
     - `JSONURI`: The content is bytes containing the following format:
         - `bytes4(keccak256('hashFunctionName'))` + `bytes32(jsonHash)` + `utf8ToHex('ipfs://QmQ2CN2VUdb5nVAz28R47aWP6BjDLPGNJaSBniBuZRs3Jt')`
-        - Hash function names like above.
+        - Hash function bytes4 see below
     - `URI`: The content is an URI encoded as UTF8 string.
     - `Markdown`: The content is structured Markdown mostly encoded as UTF8 string.
     - `0x134...`: If the value type is a specific hash than the return value is expected to equal that hash (This is used for specific e.g. `LSP4Type`).
@@ -56,12 +54,17 @@ To make ERC725Y keys readable we define the following key value types:
     - `bytes32`: The bytes are a 32 bytes
     - `bytes`: The bytes are a bytes
     
-Special key types exist for array elements:
+Special key types exist for **array elements**:
 
 - `elementKey`: The first 16 bytes of the `key` hash of the root key.
 - `elementKeyType`: The type of the element, MUST be `ArrayElement` for an array element.
 - `elementValueContent`: Same as `valueContent` above.
 - `elementValueType`: Same as `valueType` above.
+
+Defined **hash functions**:
+
+- `keccak256('keccak256(bytes)')` = `0x8019f9b1`
+- `keccak256('keccak256(utf8)')` = `0x6f357c6a`
 
 
 ### Singleton
@@ -99,9 +102,9 @@ web3.utils.keccak256(json)
 
 
 // Generated JSONURI
-0xb7845733 + 820464ddfac1bec070cc14a8daf04129871d458f2ca94368aae8391311af6361 + 696670733a2f2f516d597231564a4c776572673670456f73636468564775676f3339706136727963455a4c6a7452504466573834554178
-^            ^                                                                  ^
-keccack256   hash                                                               encoded URI
+0x6f357c6a +       820464ddfac1bec070cc14a8daf04129871d458f2ca94368aae8391311af6361 + 696670733a2f2f516d597231564a4c776572673670456f73636468564775676f3339706136727963455a4c6a7452504466573834554178
+^                  ^                                                                  ^
+keccak256(utf8)   hash                                                               encoded URI
 
 ```
 
@@ -110,7 +113,7 @@ To decode, reverse the process:
 ```js
 
 let data = myContract.methods.getData('0xsomeKey..').call()
-> '0xb7845733820464ddfac1bec070cc14a8daf04129871d458f2ca94368aae8391311af6361696670733a2f2f516d597231564a4c776572673670456f73636468564775676f3339706136727963455a4c6a7452504466573834554178'
+> '0x6f357c6a820464ddfac1bec070cc14a8daf04129871d458f2ca94368aae8391311af6361696670733a2f2f516d597231564a4c776572673670456f73636468564775676f3339706136727963455a4c6a7452504466573834554178'
 
 // slice the bytes to get its pieces
 let hashFunction = data.slice(0, 10)
