@@ -116,7 +116,7 @@ Example:
     { title: 'Twitter', url: 'https://twitter.com/feindura' },
     { title: 'lukso.network', url: 'https://lukso.network' }
   ],
-  description: 'The inventor of ERC725 and ERC20.....',
+  description: 'The inventor of ERC725 and ERC20...',
   profileImage: [
     {
       width: 1024,
