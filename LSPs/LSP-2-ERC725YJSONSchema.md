@@ -40,10 +40,10 @@ To make ERC725Y keys readable we define the following key value types:
     - `Address`: The content is an address.
     - `Keccak256`: The content is an keccak256 32 bytes hash.
     - `AssetURL`: The content is bytes containing the following format:
-        - `bytes4(keccak256('hashFunctionName'))` + `bytes32(assetHash)` + `utf8ToHex('ipfs://QmQ2CN2VUdb5nVAz28R47aWP6BjDLPGNJaSBniBuZRs3Jt')`
+        - `bytes4(keccak256('hashFunctionName'))` + `bytes32(assetHash)` + `utf8ToHex('AssetURL')`
         - Hash function bytes4 see below
     - `JSONURL`: The content is bytes containing the following format:
-        - `bytes4(keccak256('hashFunctionName'))` + `bytes32(jsonHash)` + `utf8ToHex('ipfs://QmQ2CN2VUdb5nVAz28R47aWP6BjDLPGNJaSBniBuZRs3Jt')`
+        - `0x6f357c6a` + `bytes32(jsonHash)` + `utf8ToHex('JSONURL')`
         - Hash function bytes4 see below
     - `URL`: The content is an URL encoded as UTF8 string.
     - `Markdown`: The content is structured Markdown mostly encoded as UTF8 string.
