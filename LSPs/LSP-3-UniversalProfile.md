@@ -37,6 +37,16 @@ Every contract that supports to the Universal Profile standard SHOULD implement:
 
 ### Keys
 
+
+#### SupportedStandards
+
+The supported standard SHOULD be `ERC725Account`
+
+```solidity
+key: '0xeafec4d89fa9619884b6b89135626455000000000000000000000000afdeb5d6'
+value: '0xafdeb5d6'
+```
+
 #### LSP1UniversalReceiverDelegate
 
 If the account delegates its universal receiver to another smart contract,
@@ -198,6 +208,13 @@ The below defines the JSON interface of the `LSP3Account`.
 ERC725Y JSON Schema `LSP3Account`:
 ```json
 [
+    {
+        "name": "SupportedStandards",
+        "key": "0xeafec4d89fa9619884b6b89135626455000000000000000000000000afdeb5d6",
+        "keyType": "Singleton",
+        "valueContent": "0xafdeb5d6",
+        "valueType": "bytes"
+    },
     {
         "name": "LSP3Profile",
         "key": "0x5ef83ad9559033e6e941db7d7c495acdce616347d28e90c7ce47cbfcfcad3bc5",
