@@ -90,7 +90,7 @@ The linked JSON file MUST have the following format:
               height: Number,
               hashFunction: 'keccak256(bytes)',
               hash: 'string', // bytes32 hex string of the image hash
-              uri: 'string'
+              url: 'string'
             },
             ...
         ],
@@ -100,7 +100,7 @@ The linked JSON file MUST have the following format:
               height: Number,
               hashFunction: 'keccak256(bytes)',
               hash: 'string', // bytes32 hex string of the image hash
-              uri: 'string'
+              url: 'string'
             },
             ...
         ]
@@ -123,14 +123,14 @@ Example:
       height: 974,
       hashFunction: 'keccak256(bytes)',
       hash: '0xa9399df007997de92a820c6c2ec1cb2d3f5aa5fc1adf294157de563eba39bb6e',
-      uri: 'ifps://QmW4wM4r9yWeY1gUCtt7c6v3ve7Fzdg8CKvTS96NU9Uiwr'
+      url: 'ifps://QmW4wM4r9yWeY1gUCtt7c6v3ve7Fzdg8CKvTS96NU9Uiwr'
     },
     {
       width: 640,
       height: 609,
       hashFunction: 'keccak256(bytes)',
       hash: '0xb316a695125cb0566da252266cfc9d5750a740bbdffa86712bb17508e70e6a31',
-      uri: 'ifps://QmXGELsqGidAHMwYRsEv6Z4emzMggtc5GXZYGFK7r6zFBg'
+      url: 'ifps://QmXGELsqGidAHMwYRsEv6Z4emzMggtc5GXZYGFK7r6zFBg'
     }
   ],
   backgroundImage: [
@@ -139,14 +139,14 @@ Example:
       height: 1013,
       hashFunction: 'keccak256(bytes)',
       hash: '0x98fe032f81c43426fbcfb21c780c879667a08e2a65e8ae38027d4d61cdfe6f55',
-      uri: 'ifps://QmPJESHbVkPtSaHntNVY5F6JDLW8v69M2d6khXEYGUMn7N'
+      url: 'ifps://QmPJESHbVkPtSaHntNVY5F6JDLW8v69M2d6khXEYGUMn7N'
     },
     {
       width: 1024,
       height: 576,
       hashFunction: 'keccak256(bytes)',
       hash: '0xfce1c7436a77a009a97e48e4e10c92e89fd95fe1556fc5c62ecef57cea51aa37',
-      uri: 'ifps://QmZc9uMJxyUeUpuowJ7AD6MKoNTaWdVNcBj72iisRyM9Su'
+      url: 'ifps://QmZc9uMJxyUeUpuowJ7AD6MKoNTaWdVNcBj72iisRyM9Su'
     }
   ]
 }
@@ -204,6 +204,13 @@ ERC725Y JSON Schema `LSP3Account`:
         "keyType": "Singleton",
         "valueContent": "JSONURL",
         "valueType": "bytes"
+    },
+    {
+        "name": "LSP1UniversalReceiverDelegate",
+        "key": "0x0cfc51aec37c55a4d0b1a65c6255c4bf2fbdf6277f3cc0730c45b828b6db8b47",
+        "keyType": "Singleton",
+        "valueContent": "Address",
+        "valueType": "address"
     },
     {
         "name": "LSP3IssuedAssets[]",
