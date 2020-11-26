@@ -47,7 +47,7 @@ To make ERC725Y keys readable we define the following key value types:
         - Hash function bytes4 see below
     - `URL`: The content is an URL encoded as UTF8 string.
     - `Markdown`: The content is structured Markdown mostly encoded as UTF8 string.
-    - `0x134...`: If the value type is a specific hash than the return value is expected to equal that hash (This is used for specific e.g. `LSP4Type`).
+    - `0x1345ABCD...`: If the value content are specific bytes, than the returned value is expected to equal those bytes.
 - `valueType`: The type the content MUST be decoded with.
     - `string`: The bytes are a UTF8 encoded string
     - `address`: The bytes are an 20 bytes address
