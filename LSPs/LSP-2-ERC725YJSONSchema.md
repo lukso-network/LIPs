@@ -62,8 +62,6 @@ To make ERC725Y keys readable we define the following key value types:
     
 Special key types exist for **array elements**:
 
-- `elementKey`: The first 16 bytes of the `key` hash of the root key.
-- `elementKeyType`: The type of the element, MUST be `ArrayElement` for an array element.
 - `elementValueContent`: Same as `valueContent` above.
 - `elementValueType`: Same as `valueType` above.
 
@@ -174,9 +172,7 @@ Below is an example of an Array key type:
     "keyType": "Array",
     "valueContent": "Number",
     "valueType": "uint256",
-    "elementKey": "0xb8c4a0b76ed8454e098b20a987a980e6",
-    "elementKeyType": "ArrayElement",
-    "elementValue": "Address",
+    "elementValueContent": "Address",
     "elementValueType": "address"
 }
 ```
@@ -229,8 +225,6 @@ To allow interfaces to auto decode an ERC725Y key value store using the ERC725Y 
         "keyType": "Array",
         "valueContent": "Number",
         "valueType": "uint256",
-        "elementKey": "0xb8c4a0b76ed8454e098b20a987a980e6",
-        "elementKeyType": "ArrayElement",
         "elementValueContent": "Address",
         "elementValueType": "address"
     }
