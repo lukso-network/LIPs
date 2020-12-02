@@ -32,8 +32,12 @@ To make ERC725Y keys readable we define the following key value types:
 - `name`: Describes the name of the key, SHOULD compromise of the Standards name + sub type. e.g: `LSP2Name`
 - `key`: the keccak256 hash of the name. This is the actual key that MUST be retrievable via `ERC725Y.getData(bytes32 key)`. e.g: `keccack256('LSP2Name') = 0xf9e26448acc9f20625c059a95279675b8f58ba4f06d262f83a32b4dd35dee019`
 - `keyType`: Types that determine how the values should be interpreted. Valid types are:
-    - `Singleton`: A single key value store.
-    - `Array`: Determines that the value of this key is the array length, and subsequent keys consist of `bytes16(keyHash) + uint128(arrayElementIndex)`.
+    - `Singleton`: A single key value store, constructed using `bytes32(keccak256(KeyName))`,    
+    e.g. `MyKeyName` > `0x35e6950bc8d21a1699e58328a3c4066df5803bb0b570d0150cb3819288e764b2`
+    - `Mapping`: A mapping key, constructed using `bytes16(keccak256(FirstWord)) + bytes4(keccak256(LastWord))`,    
+    e.g. `SupportedStandards:ERC725Account` > `0xeafec4d89fa9619884b6b89135626455000000000000000000000000afdeb5d6`
+    - `Array`: The initial key of the array containing the array length constructed using `bytes32(keccak256(KeyName))`.
+        - Subsequent keys consist of `bytes16(keccak256(KeyName)) + uint128(ArrayElementIndex)`.
 - `valueContent`: The content in the returned value. Valid values are:
     - `Number`: The content is a number.
     - `String`: The content is a UTF8 string.
@@ -139,6 +143,20 @@ if(hashFunction === '0xb7845733') {
 }
 ```
 
+### Mapping
+
+Below is an example of a mapping key type:
+
+```js
+{
+    "name": "LSPXyz:SomeSubKey",
+    "key": "0x259e3e88c900103c8f1c9153b97074c1000000000000000000000000289eb644",
+    "keyType": "Mapping",
+    "valueContent": "String",
+    "valueType": "string"
+}
+```
+
 
 ### Array
 
@@ -206,18 +224,18 @@ To allow interfaces to auto decode an ERC725Y key value store using the ERC725Y 
 ```json
 [
     {
-        "name": "LSP2Name",
-        "key": "0xf9e26448acc9f20625c059a95279675b8f58ba4f06d262f83a32b4dd35dee019",
-        "keyType": "Singleton",
-        "valueContent": "String",
-        "valueType": "string"
+        "name": "SupportedStandards:ERC725Account",
+        "key": "0xeafec4d89fa9619884b6b89135626455000000000000000000000000afdeb5d6",
+        "keyType": "Mapping",
+        "valueContent": "0xafdeb5d6",
+        "valueType": "bytes"
     },
     {
-        "name": "LSP2Links",
-        "key": "0xb95a64d66e66f5c0cd985e2c3cc93fbea7f9259eadbe81c3ab0ff4e68df564d6",
+        "name": "LSP3Profile",
+        "key": "0x5ef83ad9559033e6e941db7d7c495acdce616347d28e90c7ce47cbfcfcad3bc5",
         "keyType": "Singleton",
-        "valueContent": "URL",
-        "valueType": "string"
+        "valueContent": "JSONURL",
+        "valueType": "bytes"
     },
     {
         "name": "LSP2IssuedAssets[]",
