@@ -65,124 +65,117 @@ This is especially recommended for the LUKSO network, to improve the overall com
 
 ### Keys
 
-#### LSP4Type
 
-The type of asset, as defined in sub standards. These sub standards can define specifc asset formats,
-or other extra keys to be present in the digital certificate. 
+#### SupportedStandards
 
-```json
-{
-    "name": "LSP4Type",
-    "key": "0x4cd61d42bec47e5be0fa92cb767c0a01f91af591cee430423287127fe58b66ca",
-    "keyType": "Singleton",
-    "valueContent": "Keccak256",
-    "valueType": "bytes32"
-}
-```
+The supported standard SHOULD be `LSP4DigitalCertificate`
 
-Example:
 ```solidity
-key: keccak256('LSP4Type') = 0x4cd61d42bec47e5be0fa92cb767c0a01f91af591cee430423287127fe58b66ca
-value: keccak256('LSP5DigitalCloth') = 0x400823a66792632b83426dae64ca619a7b8ffcde4f406c2fb8fd5d0a62286b42
+key: '0xeafec4d89fa9619884b6b89135626455000000000000000000000000abf0613c'
+value: '0xabf0613c'
 ```
 
-#### LSP4Description (Optional)
+#### LSP4Metadata
 
 The description of the asset.
 
 ```json
 {
-    "name": "LSP4Description",
-    "key": "0xfc5327884a7fb1912dcdd0d78d7e6753f03e61a8e0b845a4b62f5efde472d0a8",
+    "name": "LSP4Metadata",
+    "key": "0x9afb95cacc9f95858ec44aa8c3b685511002e30ae54415823f406128b85b238e",
     "keyType": "Singleton",
-    "valueContent": "URI",
-    "valueType": "string"
+    "valueContent": "JSONURL",
+    "valueType": "bytes"
+}
+```
+
+For construction of the JSONURL value see: [ERC725Y JSON Schema](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-2-ERC725YJSONSchema.md#jsonurl-example)
+
+The linked JSON file SHOULD have the following format:
+```js
+{
+    "LSP4Metadata": {
+        "description": "string",
+        "links": [ // links related to DigitalCertificate
+            {
+                "title": "string", // a title for the link.
+                "url": "string" // the link itself
+            },
+            ...
+        ],  
+        "images": [ // multiple images in different sizes, related to the DigitalCertificate, image 0, should be the main image
+            [
+                {
+                    "width": Number,
+                    "height": Number,
+                    "hashFunction": 'keccak256(bytes)',
+                    "hash": 'string', // bytes32 hex string of the image hash
+                    "url": 'string'
+                },
+                ...
+            ],
+            [...]
+        ],
+        "assets": [{
+            "hashFunction": 'keccak256(bytes)',
+            "hash": 'string',
+            "url": 'string',
+            "fileType": 'string'
+        }]  
+    }
 }
 ```
 
 Example:
-```solidity
-key: keccak256('LSP4Description') = 0xfc5327884a7fb1912dcdd0d78d7e6753f03e61a8e0b845a4b62f5efde472d0a8
-value: web3.utils.utf8ToHex('ipfs://QmQ2CN2VUdb5nVAz28R47aWP6BjDLPGNJaSBniBuZRs3Jt') = 0x697066733a2f2f516d5132434e3256556462356e56417a323852343761575036426a444c50474e4a6153426e6942755a5273334a74
-```
-
-The linked JSON file MUST have the following format:
 ```js
 {
-    "LSP4Description": "Some description text..."
+    LSP4Metadata: {
+        description: 'The first digial golden pig.',
+        links: [
+            { title: 'Twitter', url: 'https://twitter.com/goldenpig123' },
+            { title: 'goldenpig.org', url: 'https://goldenpig.org' }
+        ],
+        images: [
+            [
+                {
+                    width: 1024,
+                    height: 974,
+                    hashFunction: 'keccak256(bytes)',
+                    hash: '0xa9399df007997de92a820c6c2ec1cb2d3f5aa5fc1adf294157de563eba39bb6e',
+                    url: 'ifps://QmW4wM4r9yWeY1gUCtt7c6v3ve7Fzdg8CKvTS96NU9Uiwr'
+                }, 
+                ... // more image sizes
+            ],
+            ... // more images
+        ],
+        assets: [{
+            hashFunction: 'keccak256(bytes)',
+            hash: '0x98fe032f81c43426fbcfb21c780c879667a08e2a65e8ae38027d4d61cdfe6f55
+            url: 'ifps://QmPJESHbVkPtSaHntNVY5F6JDLW8v69M2d6khXEYGUMn7N',
+            fileType: 'fbx'
+        }]  
+    }
 }
 ```
 
-#### LSP4Images (Optional)
+#### LSP4Creators[]
 
-Images that are related to the NFT. This can be one or multiple.
-The first image SHOULD be seen as the main image.
+An array of (ERC725Account) addresses of creators, 
 
 ```json
 {
-    "name": "LSP4Images",
-    "key": "0x150834e6d4fd704dc914e5372942f0615863fd9d206030643c2a6391dc6ddbf1",
-    "keyType": "Singleton",
-    "valueContent": "URI",
-    "valueType": "string"
+    "name": "LSP4Creators[]",
+    "key": "0x114bd03b3a46d48759680d81ebb2b414fda7d030a7105a851867accf1c2352e7",
+    "keyType": "Array",
+    "valueContent": "Number",
+    "valueType": "uint256",
+    "elementValueContent": "Address",
+    "elementValueType": "address"
 }
 ```
 
-Example:
-```solidity
-key: keccak256('LSP4Images') = 0x150834e6d4fd704dc914e5372942f0615863fd9d206030643c2a6391dc6ddbf1
-value: web3.utils.utf8ToHex('ipfs://QmQ2CN2VUdb5nVAz28R47aWP6BjDLPGNJaSBniBuZRs3Jt') = 0x697066733a2f2f516d5132434e3256556462356e56417a323852343761575036426a444c50474e4a6153426e6942755a5273334a74
-```
+For construction of the Asset Keys see: [ERC725Y JSON Schema](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-2-ERC725YJSONSchema.md#array)
 
-The linked JSON file MUST have the following format:
-```js
-{
-    "LSP4Images": [
-        {
-            "title": "string", // (optional)
-            "source": "URI",
-            "hash": "keccak256(file)"
-        },
-        ...
-    ]
-}
-```
-
-#### LSP4Assets (Optional)
-
-Asset files that are attached related to the NFT. This can be one or multiple.
-The first asset SHOULD be seen as the main asset.
-
-```json
-{
-    "name": "LSP4Assets",
-    "key": "0x5fa8d8247112f88f035d746484935915caa778a049c0927c00bb1c2696497a95",
-    "keyType": "Singleton",
-    "valueContent": "URI",
-    "valueType": "string"
-}
-```
-
-Example:
-```solidity
-key: keccak256('LSP4Assets') = 0x5fa8d8247112f88f035d746484935915caa778a049c0927c00bb1c2696497a95
-value: web3.utils.utf8ToHex('ipfs://QmQ2CN2VUdb5nVAz28R47aWP6BjDLPGNJaSBniBuZRs3Jt') = 0x697066733a2f2f516d5132434e3256556462356e56417a323852343761575036426a444c50474e4a6153426e6942755a5273334a74
-```
-
-The linked JSON file MUST have the following format:
-```js
-{
-    "LSP4Assets": [
-        {
-            "title": "string", // (optional)
-            "type": "fileTypeName",
-            "source": "URI",
-            "hash": "keccak256(file)"
-        },
-        ...
-    ]
-}
-```
 
 ## Rationale
 
@@ -195,32 +188,27 @@ ERC725Y JSON Schema `LSP4DigitalCertificate`:
 ```json
 [
     {
-        "name": "LSP4Type",
-        "key": "0x4cd61d42bec47e5be0fa92cb767c0a01f91af591cee430423287127fe58b66ca",
-        "keyType": "Singleton",
-        "valueContent": "Keccak256",
-        "valueType": "bytes32"
+        "name": "SupportedStandards:LSP4DigitalCertificate",
+        "key": "0xeafec4d89fa9619884b6b89135626455000000000000000000000000abf0613c",
+        "keyType": "Mapping",
+        "valueContent": "0xabf0613c",
+        "valueType": "bytes"
     },
     {
-        "name": "LSP4Description",
-        "key": "0xfc5327884a7fb1912dcdd0d78d7e6753f03e61a8e0b845a4b62f5efde472d0a8",
+        "name": "LSP4Metadata",
+        "key": "0x9afb95cacc9f95858ec44aa8c3b685511002e30ae54415823f406128b85b238e",
         "keyType": "Singleton",
-        "valueContent": "URI",
-        "valueType": "string"
+        "valueContent": "JSONURL",
+        "valueType": "bytes"
     },
     {
-        "name": "LSP4Images",
-        "key": "0x150834e6d4fd704dc914e5372942f0615863fd9d206030643c2a6391dc6ddbf1",
-        "keyType": "Singleton",
-        "valueContent": "URI",
-        "valueType": "string"
-    },
-    {
-        "name": "LSP4Assets",
-        "key": "0x5fa8d8247112f88f035d746484935915caa778a049c0927c00bb1c2696497a95",
-        "keyType": "Singleton",
-        "valueContent": "URI",
-        "valueType": "string"
+        "name": "LSP4Creators[]",
+        "key": "0x114bd03b3a46d48759680d81ebb2b414fda7d030a7105a851867accf1c2352e7",
+        "keyType": "Array",
+        "valueContent": "Number",
+        "valueType": "uint256",
+        "elementValueContent": "Address",
+        "elementValueType": "address"
     }
 ]
 ```

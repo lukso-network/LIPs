@@ -71,16 +71,9 @@ A JSON file that describes the profile information, including profile image, bac
 }
 ```
 
-Example:
-```solidity
-key: keccak256('LSP3Profile') = 0x5ef83ad9559033e6e941db7d7c495acdce616347d28e90c7ce47cbfcfcad3bc5
-value: 0x6f357c6a +      820464ddfac1bec070cc14a8daf04129871d458f2ca94368aae8391311af6361 + 696670733a2f2f516d597231564a4c776572673670456f73636468564775676f3339706136727963455a4c6a7452504466573834554178
-       ^                 ^                                                                  ^
-       keccak256(utf8)   hash                                                               encoded URL
+For construction of the JSONURL value see: [ERC725Y JSON Schema](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-2-ERC725YJSONSchema.md#jsonurl-example)
 
-```
-
-The linked JSON file MUST have the following format:
+The linked JSON file SHOULD have the following format:
 ```js
 {
     "LSP3Profile": {
@@ -96,21 +89,21 @@ The linked JSON file MUST have the following format:
         // below each image type SHOULD have different size of the same image, so that interfaces can choose which one to load for better loading performance
         "profileImage": [ // One image in different sizes, representing the profile.
             {  
-              width: Number,
-              height: Number,
-              hashFunction: 'keccak256(bytes)',
-              hash: 'string', // bytes32 hex string of the image hash
-              url: 'string'
+                "width": Number,
+                "height": Number,
+                "hashFunction": 'keccak256(bytes)',
+                "hash": 'string', // bytes32 hex string of the image hash
+                "url": 'string'
             },
             ...
         ],
         "backgroundImage": [ // Image in different sizes, that can be used in conjunction with profile image to give a more personal look to a profile.
             { 
-              width: Number,
-              height: Number,
-              hashFunction: 'keccak256(bytes)',
-              hash: 'string', // bytes32 hex string of the image hash
-              url: 'string'
+                "width": Number,
+                "height": Number,
+                "hashFunction": 'keccak256(bytes)',
+                "hash": 'string', // bytes32 hex string of the image hash
+                "url": 'string'
             },
             ...
         ]
@@ -121,44 +114,46 @@ The linked JSON file MUST have the following format:
 Example:
 ```js
 {
-  name: 'frozeman',
-  links: [
-    { title: 'Twitter', url: 'https://twitter.com/feindura' },
-    { title: 'lukso.network', url: 'https://lukso.network' }
-  ],
-  description: 'The inventor of ERC725 and ERC20...',
-  profileImage: [
-    {
-      width: 1024,
-      height: 974,
-      hashFunction: 'keccak256(bytes)',
-      hash: '0xa9399df007997de92a820c6c2ec1cb2d3f5aa5fc1adf294157de563eba39bb6e',
-      url: 'ifps://QmW4wM4r9yWeY1gUCtt7c6v3ve7Fzdg8CKvTS96NU9Uiwr'
-    },
-    {
-      width: 640,
-      height: 609,
-      hashFunction: 'keccak256(bytes)',
-      hash: '0xb316a695125cb0566da252266cfc9d5750a740bbdffa86712bb17508e70e6a31',
-      url: 'ifps://QmXGELsqGidAHMwYRsEv6Z4emzMggtc5GXZYGFK7r6zFBg'
+    LSP3Profile: {
+        name: 'frozeman',
+        description: 'The inventor of ERC725 and ERC20...',
+        links: [
+            { title: 'Twitter', url: 'https://twitter.com/feindura' },
+            { title: 'lukso.network', url: 'https://lukso.network' }
+        ],
+        profileImage: [
+            {
+                width: 1024,
+                height: 974,
+                hashFunction: 'keccak256(bytes)',
+                hash: '0xa9399df007997de92a820c6c2ec1cb2d3f5aa5fc1adf294157de563eba39bb6e',
+                url: 'ifps://QmW4wM4r9yWeY1gUCtt7c6v3ve7Fzdg8CKvTS96NU9Uiwr'
+            },
+            {
+                width: 640,
+                height: 609,
+                hashFunction: 'keccak256(bytes)',
+                hash: '0xb316a695125cb0566da252266cfc9d5750a740bbdffa86712bb17508e70e6a31',
+                url: 'ifps://QmXGELsqGidAHMwYRsEv6Z4emzMggtc5GXZYGFK7r6zFBg'
+            }
+        ],
+        backgroundImage: [
+            {
+                width: 1800,
+                height: 1013,
+                hashFunction: 'keccak256(bytes)',
+                hash: '0x98fe032f81c43426fbcfb21c780c879667a08e2a65e8ae38027d4d61cdfe6f55',
+                url: 'ifps://QmPJESHbVkPtSaHntNVY5F6JDLW8v69M2d6khXEYGUMn7N'
+            },
+            {
+                width: 1024,
+                height: 576,
+                hashFunction: 'keccak256(bytes)',
+                hash: '0xfce1c7436a77a009a97e48e4e10c92e89fd95fe1556fc5c62ecef57cea51aa37',
+                url: 'ifps://QmZc9uMJxyUeUpuowJ7AD6MKoNTaWdVNcBj72iisRyM9Su'
+            }
+        ]
     }
-  ],
-  backgroundImage: [
-    {
-      width: 1800,
-      height: 1013,
-      hashFunction: 'keccak256(bytes)',
-      hash: '0x98fe032f81c43426fbcfb21c780c879667a08e2a65e8ae38027d4d61cdfe6f55',
-      url: 'ifps://QmPJESHbVkPtSaHntNVY5F6JDLW8v69M2d6khXEYGUMn7N'
-    },
-    {
-      width: 1024,
-      height: 576,
-      hashFunction: 'keccak256(bytes)',
-      hash: '0xfce1c7436a77a009a97e48e4e10c92e89fd95fe1556fc5c62ecef57cea51aa37',
-      url: 'ifps://QmZc9uMJxyUeUpuowJ7AD6MKoNTaWdVNcBj72iisRyM9Su'
-    }
-  ]
 }
 ```
 
@@ -180,21 +175,7 @@ References issued smart contract assets, like tokens and NFTs.
 }
 ```
 
-Example:
-```solidity
-key: keccak256('LSP3IssuedAssets[]') = 0x3a47ab5bd3a594c3a8995f8fa58d0876c96819ca4516bd76100c92462f2f9dc0
-value: uint256 (array length) e.g. 0x0000000000000000000000000000000000000000000000000000000000000002
-
-// array items
-
-// element 0
-key: 0xb8c4a0b76ed8454e098b20a987a980e600000000000000000000000000000000
-value: 0xcafecafecafecafecafecafecafecafecafecafe
-
-// element 1
-key: 0xb8c4a0b76ed8454e098b20a987a980e600000000000000000000000000000001
-value: 0xcafecafecafecafecafecafecafecafecafecafe
-```
+For construction of the Asset Keys see: [ERC725Y JSON Schema](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-2-ERC725YJSONSchema.md#array)
 
 ## Rationale
 Universal Profiles are important to create verifiable public accounts that are the source of asset issuance,
@@ -235,8 +216,6 @@ ERC725Y JSON Schema `LSP3Account`:
         "keyType": "Array",
         "valueContent": "Number",
         "valueType": "uint256",
-        "elementKey": "0x3a47ab5bd3a594c3a8995f8fa58d0876",
-        "elementKeyType": "ArrayElement",
         "elementValueContent": "Address",
         "elementValueType": "address"
     }
