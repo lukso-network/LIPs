@@ -38,7 +38,7 @@ Every contract that supports to the Universal Profile standard SHOULD implement:
 ### Keys
 
 
-#### SupportedStandards
+#### SupportedStandards:ERC725Account
 
 The supported standard SHOULD be `ERC725Account`
 
@@ -166,7 +166,7 @@ References issued smart contract assets, like tokens and NFTs.
     "name": "LSP3IssuedAssets[]",
     "key": "0x3a47ab5bd3a594c3a8995f8fa58d0876c96819ca4516bd76100c92462f2f9dc0",
     "keyType": "Array",
-    "valueContent": "ArrayLength",
+    "valueContent": "Number",
     "valueType": "uint256",
     "elementKey": "0xb8c4a0b76ed8454e098b20a987a980e6",
     "elementKeyType": "ArrayElement",
@@ -190,7 +190,7 @@ ERC725Y JSON Schema `LSP3Account`:
 ```json
 [
     {
-        "name": "SupportedStandards",
+        "name": "SupportedStandards:ERC725Account",
         "key": "0xeafec4d89fa9619884b6b89135626455000000000000000000000000afdeb5d6",
         "keyType": "Mapping",
         "valueContent": "0xafdeb5d6",
