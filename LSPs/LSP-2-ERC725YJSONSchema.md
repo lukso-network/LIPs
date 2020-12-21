@@ -101,7 +101,7 @@ let json = JSON.stringify({
     }
 })
 
-let hashFunction = web3.utils.keccak256('keccak256(utf8)').substr(0, 8)
+let hashFunction = web3.utils.keccak256('keccak256(utf8)').substr(0, 10)
 > '0x6f357c6a'
 
 let hash = web3.utils.keccak256(json)
