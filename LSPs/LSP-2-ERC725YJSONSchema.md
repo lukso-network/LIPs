@@ -111,11 +111,19 @@ let hash = web3.utils.keccak256(json)
 let url = web3.utils.utf8ToHex('ifps://QmYr1VJLwerg6pEoscdhVGugo39pa6rycEZLjtRPDfW84UAx')
 > '0x696670733a2f2f516d597231564a4c776572673670456f73636468564775676f3339706136727963455a4c6a7452504466573834554178'
 
-
-// Generated JSONURL
+// final result (to be stored on chain)
+let JSONURL = hashFunction + hash.subtsring(2) + url.substring(2)
+              ^              ^                   ^
+              0x6f357c6a   + 820464ddfac1be... + 696670733a2f2...
+              
+// structure of the JSONURL
 0x6f357c6a +       820464ddfac1bec070cc14a8daf04129871d458f2ca94368aae8391311af6361 + 696670733a2f2f516d597231564a4c776572673670456f73636468564775676f3339706136727963455a4c6a7452504466573834554178
 ^                  ^                                                                  ^
 keccak256(utf8)    hash                                                               encoded URL
+
+// example value
+0x6f357c6a820464ddfac1bec070cc14a8daf04129871d458f2ca94368aae8391311af6361696670733a2f2f516d597231564a4c776572673670456f73636468564775676f3339706136727963455a4c6a7452504466573834554178
+
 
 ```
 
