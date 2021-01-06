@@ -150,7 +150,7 @@ Example:
         ],
         assets: [{
             hashFunction: 'keccak256(bytes)',
-            hash: '0x98fe032f81c43426fbcfb21c780c879667a08e2a65e8ae38027d4d61cdfe6f55
+            hash: '0x98fe032f81c43426fbcfb21c780c879667a08e2a65e8ae38027d4d61cdfe6f55'
             url: 'ifps://QmPJESHbVkPtSaHntNVY5F6JDLW8v69M2d6khXEYGUMn7N',
             fileType: 'fbx'
         }]  
