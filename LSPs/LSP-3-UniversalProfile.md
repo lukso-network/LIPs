@@ -86,6 +86,7 @@ The linked JSON file SHOULD have the following format:
             },
             ...
         ],
+        "tags": [ "string", "string", ... ], // tags related to the profile
         // below each image type SHOULD have different size of the same image, so that interfaces can choose which one to load for better loading performance
         "profileImage": [ // One image in different sizes, representing the profile.
             {  
@@ -121,6 +122,7 @@ Example:
             { title: 'Twitter', url: 'https://twitter.com/feindura' },
             { title: 'lukso.network', url: 'https://lukso.network' }
         ],
+        tags: [ 'brand', 'public profile' ],
         profileImage: [
             {
                 width: 1024,
