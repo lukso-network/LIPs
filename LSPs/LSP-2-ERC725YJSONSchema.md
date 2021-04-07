@@ -35,7 +35,9 @@ To make ERC725Y keys readable we define the following key value types:
     - `Singleton`: A single key value store, constructed using `bytes32(keccak256(KeyName))`,    
     e.g. `MyKeyName` > `0x35e6950bc8d21a1699e58328a3c4066df5803bb0b570d0150cb3819288e764b2`
     - `Mapping`: A mapping key, constructed using `bytes16(keccak256(FirstWord)) + bytes4(keccak256(LastWord))`,    
-    e.g. `SupportedStandards:ERC725Account` > `0xeafec4d89fa9619884b6b89135626455000000000000000000000000afdeb5d6`
+    e.g. `SupportedStandards:ERC725Account` > `0xeafec4d89fa9619884b6b89135626455 000000000000000000000000 afdeb5d6`
+    - `KeyMapping`: A mapping key, constructed using `bytes8(keccak256(FirstWord)) + bytes4(keccak256(SecondWord)) + bytes20(address)`,    
+    e.g. `ERC725AccountKeyRoles:Roles:address` > `0xd76bc04c245897e9 eced5608 cafecafecafecafecafecafecafecafecafecafe`
     - `Array`: The initial key of the array containing the array length constructed using `bytes32(keccak256(KeyName))`.
         - Subsequent keys consist of `bytes16(keccak256(KeyName)) + uint128(ArrayElementIndex)`.
 - `valueContent`: The content in the returned value. Valid values are:
