@@ -40,6 +40,17 @@ To make ERC725Y keys readable we define the following key value types:
     e.g. `ERC725AccountKeyRoles:Roles:<address>` > `0xd76bc04c245897e9 eced5608 cafecafecafecafecafecafecafecafecafecafe`
     - `Array`: The initial key of the array containing the array length constructed using `bytes32(keccak256(KeyName))`.
         - Subsequent keys consist of `bytes16(keccak256(KeyName)) + uint128(ArrayElementIndex)`.
+- `valueType`: The type the content MUST be decoded with.
+    - `string`: The bytes are a UTF8 encoded string
+    - `address`: The bytes are an 20 bytes address
+    - `uint256`: The bytes are a uint256
+    - `bytes32`: The bytes are a 32 bytes
+    - `bytes`: The bytes are a bytes
+    - `string[]`: The bytes are a UTF8 encoded string array
+    - `address[]`: The bytes are an 20 bytes address array
+    - `uint256[]`: The bytes are a uint256 array
+    - `bytes32[]`: The bytes are a 32 bytes array
+    - `bytes[]`: The bytes are a bytes array
 - `valueContent`: The content in the returned value. Valid values are:
     - `Number`: The content is a number.
     - `String`: The content is a UTF8 string.
@@ -54,17 +65,6 @@ To make ERC725Y keys readable we define the following key value types:
     - `URL`: The content is an URL encoded as UTF8 string.
     - `Markdown`: The content is structured Markdown mostly encoded as UTF8 string.
     - `0x1345ABCD...`: If the value content are specific bytes, than the returned value is expected to equal those bytes.
-- `valueType`: The type the content MUST be decoded with.
-    - `string`: The bytes are a UTF8 encoded string
-    - `address`: The bytes are an 20 bytes address
-    - `uint256`: The bytes are a uint256
-    - `bytes32`: The bytes are a 32 bytes
-    - `bytes`: The bytes are a bytes
-    - `string[]`: The bytes are a UTF8 encoded string array
-    - `address[]`: The bytes are an 20 bytes address array
-    - `uint256[]`: The bytes are a uint256 array
-    - `bytes32[]`: The bytes are a 32 bytes array
-    - `bytes[]`: The bytes are a bytes array
     
 Special key types exist for **array elements**:
 
