@@ -34,14 +34,10 @@ To make ERC725Y keys readable we define the following key value types:
 - `keyType`: Types that determine how the values should be interpreted. Valid types are:
     - `Singleton`: A single key value store, constructed using `bytes32(keccak256(KeyName))`,    
     e.g. `MyKeyName` > `0x35e6950bc8d21a1699e58328a3c4066df5803bb0b570d0150cb3819288e764b2`
-    - `Array`: The initial key of the array containing the array length constructed using `bytes32(keccak256(KeyName))`.
-        - Subsequent keys consist of `bytes16(keccak256(KeyName)) + uint128(ArrayElementIndex)`.
-    - `Mapping`: A mapping key, constructed using `bytes16(keccak256(FirstWord)) + bytes12(0) + bytes4(keccak256(LastWord))`,    
-    e.g. `SupportedStandards:ERC725Account` > `0xeafec4d89fa9619884b6b89135626455 000000000000000000000000 afdeb5d6`.
-    - `AddressMapping`: A mapping key, constructed using `bytes8(keccak256(FirstWord)) + bytes4(0) + bytes20(address)`,    
-    e.g. `AddressPurpose:<address>` > `0xf5801e8ea836d92d 00000000 cafecafecafecafecafecafecafecafecafecafe`.
-    - `AddressMappingWithGrouping`: A mapping key, constructed using `bytes4(keccak256(FirstWord)) + bytes4(0) + bytes2(keccak256(SecondWord)) + bytes2(0) + bytes20(address)`,    
-    e.g. `AddressPermissions:Permissions:<address>` > `0x4b80742d 00000000 eced 0000 cafecafecafecafecafecafecafecafecafecafe`.
+    - [`Array`](#array): An array spanning multiple ERC725Y keys.
+    - [`Mapping`](#mapping): A key that maps two words.
+    - [`AddressMapping`](#addressmapping): A key that maps a word to an address.
+    - [`AddressMappingWithGrouping`](#addressmappingwithgrouping): A key that maps a word, to a grouping word to an address.
 - `valueType`: The type the content MUST be decoded with.
     - `string`: The bytes are a UTF8 encoded string
     - `address`: The bytes are an 20 bytes address
@@ -158,25 +154,14 @@ if(hashFunction === '0xb7845733') {
 }
 ```
 
-### Mapping
-
-Below is an example of a mapping key type:
-
-```js
-{
-    "name": "LSPXyz:SomeSubKey",
-    "key": "0x259e3e88c900103c8f1c9153b97074c1000000000000000000000000289eb644",
-    "keyType": "Mapping",
-    "valueContent": "String",
-    "valueType": "string"
-}
-```
-
-
 ### Array
+
+An initial key of an array containing the array length constructed using `bytes32(keccak256(KeyName))`.
+Subsequent keys consist of `bytes16(keccak256(KeyName)) + bytes16(uint128(ArrayElementIndex))`.
 
 *The advantage of the `keyType` Array over using simple array elements like `address[]`, is that the amount of elements that can be stored is unlimited.
 Storing an encoded array as a value, will reuqire a set amount of gas, which can exceed the block gas limit.*
+
 
 If you require multiple keys of the same key type they MUST be defined as follows:
 
@@ -225,6 +210,59 @@ value: 0xcafecafecafecafecafecafecafecafecafecafe
 key: 0xb8c4a0b76ed8454e098b20a987a980e600000000000000000000000000000001
 value: 0xcafecafecafecafecafecafecafecafecafecafe
 ```
+
+### Mapping
+
+A mapping key is constructed using `bytes16(keccak256(FirstWord)) + bytes12(0) + bytes4(keccak256(LastWord))`,    
+
+Below is an example of a mapping key type:
+
+```js
+{
+    "name": "SupportedStandards:ERC725Account",
+    "key": "0xeafec4d89fa9619884b6b89135626455000000000000000000000000afdeb5d6",
+    "keyType": "Mapping",
+    "valueContent": mixed,
+    "valueType": "mixed"
+}
+```
+
+### AddressMapping
+
+An address mapping key is constructed using `bytes8(keccak256(FirstWord)) + bytes4(0) + bytes20(address)`.
+
+e.g. `MyCoolAddress:<address>` > `0x22496f48a493035f 00000000 cafecafecafecafecafecafecafecafecafecafe`.
+    
+Below is an example of an address mapping key type:
+
+```js
+{
+    "name": "MyCoolAddress:0xcafecafecafecafecafecafecafecafecafecafe",
+    "key": "0x22496f48a493035f00000000cafecafecafecafecafecafecafecafecafecafe",
+    "keyType": "AddressMapping",
+    "valueContent": mixed,
+    "valueType": "mixed"
+}
+```
+
+### AddressMappingWithGrouping
+
+A mapping key, constructed using `bytes4(keccak256(FirstWord)) + bytes4(0) + bytes2(keccak256(SecondWord)) + bytes2(0) + bytes20(address)`,     
+
+e.g. `AddressPermissions:Permissions:<address>` > `0x4b80742d 00000000 eced 0000 cafecafecafecafecafecafecafecafecafecafe`.
+
+Below is an example of a mapping key type:
+    
+```js
+{
+    "name": "AddressPermissions:Permissions:cafecafecafecafecafecafecafecafecafecafe",
+    "key": "0x4b80742d00000000eced0000cafecafecafecafecafecafecafecafecafecafe",
+    "keyType": "AddressMappingWithGrouping",
+    "valueContent": mixed,
+    "valueType": mixed
+}
+```
+
 
 ## Rationale
 The structure of the key value layout as JSON allows interfaces to auto decode these key values as they will know how to decode them.   
