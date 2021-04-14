@@ -38,8 +38,8 @@ To make ERC725Y keys readable we define the following key value types:
         - Subsequent keys consist of `bytes16(keccak256(KeyName)) + uint128(ArrayElementIndex)`.
     - `Mapping`: A mapping key, constructed using `bytes16(keccak256(FirstWord)) + bytes12(0) + bytes4(keccak256(LastWord))`,    
     e.g. `SupportedStandards:ERC725Account` > `0xeafec4d89fa9619884b6b89135626455 000000000000000000000000 afdeb5d6`.
-    - `KeyMapping`: A mapping key, constructed using `bytes4(keccak256(FirstWord)) + bytes4(0) + bytes2(keccak256(SecondWord)) + bytes2(0) + bytes20(address)`,    
-    e.g. `ERC725AccountKeyRoles:Roles:<address>` > `0xd76bc04c 00000000 eced 0000 cafecafecafecafecafecafecafecafecafecafe`.
+    - `AddressMapping`: A mapping key, constructed using `bytes4(keccak256(FirstWord)) + bytes4(0) + bytes2(keccak256(SecondWord)) + bytes2(0) + bytes20(address)`,    
+    e.g. `AddressPermissions:Permissions:<address>` > `0x4b80742d 00000000 eced 0000 cafecafecafecafecafecafecafecafecafecafe`.
 - `valueType`: The type the content MUST be decoded with.
     - `string`: The bytes are a UTF8 encoded string
     - `address`: The bytes are an 20 bytes address
