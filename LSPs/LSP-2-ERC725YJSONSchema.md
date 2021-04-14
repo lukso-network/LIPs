@@ -32,8 +32,7 @@ To make ERC725Y keys readable we define the following key value types:
 - `name`: Describes the name of the key, SHOULD compromise of the Standards name + sub type. e.g: `LSP2Name`
 - `key`: the keccak256 hash of the name. This is the actual key that MUST be retrievable via `ERC725Y.getData(bytes32 key)`. e.g: `keccack256('LSP2Name') = 0xf9e26448acc9f20625c059a95279675b8f58ba4f06d262f83a32b4dd35dee019`
 - `keyType`: Types that determine how the values should be interpreted. Valid types are:
-    - `Singleton`: A single key value store, constructed using `bytes32(keccak256(KeyName))`,    
-    e.g. `MyKeyName` > `0x35e6950bc8d21a1699e58328a3c4066df5803bb0b570d0150cb3819288e764b2`
+    - [`Singleton`](#singleton): A simple key.
     - [`Array`](#array): An array spanning multiple ERC725Y keys.
     - [`Mapping`](#mapping): A key that maps two words.
     - [`AddressMapping`](#addressmapping): A key that maps a word to an address.
@@ -54,103 +53,27 @@ To make ERC725Y keys readable we define the following key value types:
     - `String`: The content is a UTF8 string.
     - `Address`: The content is an address.
     - `Keccak256`: The content is an keccak256 32 bytes hash.
-    - `AssetURL`: The content is bytes containing the following format:
-        - `bytes4(keccak256('hashFunctionName'))` + `bytes32(assetHash)` + `utf8ToHex('AssetURL')`
-        - Hash function bytes4 see below
-    - `JSONURL`: The content is bytes containing the following format:
-        - `0x6f357c6a` + `bytes32(jsonHash)` + `utf8ToHex('JSONURL')`
-        - Hash function bytes4 see below
+    - [`AssetURL`](#asseturl): The content contains the hash function, hash and link to the asset file.
+    - [`JSONURL`](#jsonurl): The content contains the hash function, hash and link to the JSON file.
     - `URL`: The content is an URL encoded as UTF8 string.
     - `Markdown`: The content is structured Markdown mostly encoded as UTF8 string.
     - `0x1345ABCD...`: If the value content are specific bytes, than the returned value is expected to equal those bytes.
-    
-Special key types exist for **array elements**:
-
-- `elementValueContent`: Same as `valueContent` above.
-- `elementValueType`: Same as `valueType` above.
-
-Defined **hash functions**:
-
-- `keccak256('keccak256(bytes)')` = `0x8019f9b1`
-- `keccak256('keccak256(utf8)')` = `0x6f357c6a`
+  
 
 
 ### Singleton
+
+A simple key is constructed using `bytes32(keccak256(KeyName))`,    
 
 Below is an example of a Singleton key type:
 
 ```js
 {
-    "name": "LSPXyz",
-    "key": "0x259e3e88c900103c8f1c9153b97074c18f74c5e4f27873f3a3ac6060dea44422", //keccak256(LSPXyz)
+    "name": "MyKeyName",
+    "key": "0x35e6950bc8d21a1699e58328a3c4066df5803bb0b570d0150cb3819288e764b2",
     "keyType": "Singleton",
-    "valueContent": "String",
-    "valueType": "string"
-}
-```
-
-#### JSONURL Example
-
-The follow shows an example of how to encode a JSON object:
-
-```js
-let json = JSON.stringify({
-    myProperty: 'is a string',
-    anotherProperty: {
-        sdfsdf: 123456
-    }
-})
-
-let hashFunction = web3.utils.keccak256('keccak256(utf8)').substr(0, 10)
-> '0x6f357c6a'
-
-let hash = web3.utils.keccak256(json)
-> '0x820464ddfac1bec070cc14a8daf04129871d458f2ca94368aae8391311af6361'
-
-// store the JSON anywhere and encode the URL
-let url = web3.utils.utf8ToHex('ifps://QmYr1VJLwerg6pEoscdhVGugo39pa6rycEZLjtRPDfW84UAx')
-> '0x696670733a2f2f516d597231564a4c776572673670456f73636468564775676f3339706136727963455a4c6a7452504466573834554178'
-
-// final result (to be stored on chain)
-let JSONURL = hashFunction + hash.subtsring(2) + url.substring(2)
-              ^              ^                   ^
-              0x6f357c6a   + 820464ddfac1be... + 696670733a2f2...
-              
-// structure of the JSONURL
-0x6f357c6a +       820464ddfac1bec070cc14a8daf04129871d458f2ca94368aae8391311af6361 + 696670733a2f2f516d597231564a4c776572673670456f73636468564775676f3339706136727963455a4c6a7452504466573834554178
-^                  ^                                                                  ^
-keccak256(utf8)    hash                                                               encoded URL
-
-// example value
-0x6f357c6a820464ddfac1bec070cc14a8daf04129871d458f2ca94368aae8391311af6361696670733a2f2f516d597231564a4c776572673670456f73636468564775676f3339706136727963455a4c6a7452504466573834554178
-
-
-```
-
-To decode, reverse the process:
-
-```js
-
-let data = myContract.methods.getData('0xsomeKey..').call()
-> '0x6f357c6a820464ddfac1bec070cc14a8daf04129871d458f2ca94368aae8391311af6361696670733a2f2f516d597231564a4c776572673670456f73636468564775676f3339706136727963455a4c6a7452504466573834554178'
-
-// slice the bytes to get its pieces
-let hashFunction = data.slice(0, 10)
-let hash = '0x' + data.slice(0, 74)
-let url = '0x' + data.slice(74)
-
-// check if it uses keccak256
-if(hashFunction === '0xb7845733') {
-    // download the json file
-    let json = await ipfsMini.catJSON(
-        web3.utils.hexToUtf8(url).replace('ipfs://','')
-    );
-
-    // compare hashes
-    if(web3.utils.keccak256(JSON.stringify(json)) === hash)
-        return
-            ? json
-            : false
+    "valueContent": mixed,
+    "valueType": mixed
 }
 ```
 
@@ -173,13 +96,18 @@ For all other elements:
 - The second 16 bytes is a `uint128` of the number of the element
 - Elements start at number `0`
 
-#### Example
+
 This would looks as follows for `LSP2IssuedAssets[]`:
 - element number: key: `0xb8c4a0b76ed8454e098b20a987a980e69abe3b1a88567ae5472af5f863f8c8f9`, value: `0x0000000000000000000000000000000000000000000000000000000000000002` (2 elements)
 - element 1: key: `0xb8c4a0b76ed8454e098b20a987a980e600000000000000000000000000000000`, value: `0x123...` (element 0)
 - element 2: key: `0xb8c4a0b76ed8454e098b20a987a980e600000000000000000000000000000001`, value: `0x321...` (element 1)
 ...
 
+
+Special key types exist for **array elements**:
+
+- `elementValueContent`: Same as `valueContent` above.
+- `elementValueType`: Same as `valueType` above.
 
 Below is an example of an Array key type:
 
@@ -195,7 +123,7 @@ Below is an example of an Array key type:
 }
 ```
 
-Example:
+#### Example
 ```solidity
 key: keccak256('LSP2IssuedAssets[]') = 0xb8c4a0b76ed8454e098b20a987a980e69abe3b1a88567ae5472af5f863f8c8f9
 value: uint256 (array length) e.g. 0x0000000000000000000000000000000000000000000000000000000000000002
@@ -260,6 +188,88 @@ Below is an example of a mapping key type:
     "keyType": "AddressMappingWithGrouping",
     "valueContent": mixed,
     "valueType": mixed
+}
+```
+
+### ASSETURL
+
+
+The content is bytes containing the following format:     
+`bytes4(keccack256('hashFunction'))` + `bytes32(keccack256(assetBytes))` + `utf8ToHex('AssetURL')`
+
+Known hash functions:
+- `0x8019f9b1`: keccak256('keccak256(bytes)')
+
+
+### JSONURL
+
+The content is bytes containing the following format:     
+`bytes4(keccack256('hashFunction'))` + `bytes32(keccack256(JSON.stringify(JSON)))` + `utf8ToHex('JSONURL')`
+
+Known hash functions:
+- `0x6f357c6a`: keccak256('keccak256(utf8)')
+
+#### Example
+The following shows an example of how to encode a JSON object:
+
+```js
+let json = JSON.stringify({
+    myProperty: 'is a string',
+    anotherProperty: {
+        sdfsdf: 123456
+    }
+})
+
+let hashFunction = web3.utils.keccak256('keccak256(utf8)').substr(0, 10)
+> '0x6f357c6a'
+
+let hash = web3.utils.keccak256(json)
+> '0x820464ddfac1bec070cc14a8daf04129871d458f2ca94368aae8391311af6361'
+
+// store the JSON anywhere and encode the URL
+let url = web3.utils.utf8ToHex('ifps://QmYr1VJLwerg6pEoscdhVGugo39pa6rycEZLjtRPDfW84UAx')
+> '0x696670733a2f2f516d597231564a4c776572673670456f73636468564775676f3339706136727963455a4c6a7452504466573834554178'
+
+// final result (to be stored on chain)
+let JSONURL = hashFunction + hash.subtsring(2) + url.substring(2)
+              ^              ^                   ^
+              0x6f357c6a   + 820464ddfac1be... + 696670733a2f2...
+              
+// structure of the JSONURL
+0x6f357c6a +       820464ddfac1bec070cc14a8daf04129871d458f2ca94368aae8391311af6361 + 696670733a2f2f516d597231564a4c776572673670456f73636468564775676f3339706136727963455a4c6a7452504466573834554178
+^                  ^                                                                  ^
+keccak256(utf8)    hash                                                               encoded URL
+
+// example value
+0x6f357c6a820464ddfac1bec070cc14a8daf04129871d458f2ca94368aae8391311af6361696670733a2f2f516d597231564a4c776572673670456f73636468564775676f3339706136727963455a4c6a7452504466573834554178
+
+
+```
+
+To decode, reverse the process:
+
+```js
+
+let data = myContract.methods.getData('0xsomeKey..').call()
+> '0x6f357c6a820464ddfac1bec070cc14a8daf04129871d458f2ca94368aae8391311af6361696670733a2f2f516d597231564a4c776572673670456f73636468564775676f3339706136727963455a4c6a7452504466573834554178'
+
+// slice the bytes to get its pieces
+let hashFunction = data.slice(0, 10)
+let hash = '0x' + data.slice(0, 74)
+let url = '0x' + data.slice(74)
+
+// check if it uses keccak256
+if(hashFunction === '0xb7845733') {
+    // download the json file
+    let json = await ipfsMini.catJSON(
+        web3.utils.hexToUtf8(url).replace('ipfs://','')
+    );
+
+    // compare hashes
+    if(web3.utils.keccak256(JSON.stringify(json)) === hash)
+        return
+            ? json
+            : false
 }
 ```
 
