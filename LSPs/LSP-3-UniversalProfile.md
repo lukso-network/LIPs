@@ -170,8 +170,6 @@ References issued smart contract assets, like tokens and NFTs.
     "keyType": "Array",
     "valueContent": "Number",
     "valueType": "uint256",
-    "elementKey": "0x3a47ab5bd3a594c3a8995f8fa58d0876",
-    "elementKeyType": "ArrayElement",
     "elementValueContent": "Address",
     "elementValueType": "address"
 }
