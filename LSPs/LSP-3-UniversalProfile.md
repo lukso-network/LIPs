@@ -6,7 +6,7 @@ discussions-to: https://discord.gg/E2rJPP4
 status: Draft
 type: LSP
 created: 2019-07-12
-requires: LSP2, LSP1, ERC725Account
+requires: LSP2, LSP1, ERC1271, ERC725Account
 ---
 
 
@@ -232,6 +232,8 @@ interface ILSP3  /* is ERC165 */ {
     
     event Executed(uint256 indexed _operation, address indexed _to, uint256 indexed  _value, bytes _data);
     
+    event ValueReceived(address indexed sender, uint256 indexed value);
+    
     event ContractCreated(address indexed contractAddress);
     
     event DataChanged(bytes32 indexed key, bytes value);
@@ -258,6 +260,11 @@ interface ILSP3  /* is ERC165 */ {
     // LSP1UniversalReceiverDelegate: 0x0cfc51aec37c55a4d0b1a65c6255c4bf2fbdf6277f3cc0730c45b828b6db8b47
     
     function setData(bytes32 key, bytes calldata value) external onlyOwner;
+    
+    
+    // ERC1271
+    
+    function isValidSignature(bytes32 _hash, bytes memory _signature) public view returns (bytes4 magicValue);
     
     
     // LSP1
