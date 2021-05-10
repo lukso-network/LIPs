@@ -243,8 +243,6 @@ interface ILSP3  /* is ERC165 */ {
     
     function owner() public view virtual returns (address);
     
-    function renounceOwnership() public virtual onlyOwner;
-    
     function transferOwnership(address newOwner) public virtual onlyOwner;
     
     
