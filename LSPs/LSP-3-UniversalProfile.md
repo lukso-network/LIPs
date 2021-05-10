@@ -254,6 +254,8 @@ interface ILSP3  /* is ERC165 */ {
     // LSP1
 
     function universalReceiver(bytes32 typeId, bytes calldata data) external returns (bytes32);
+    // IF `LSP1UniversalReceiverDelegate` key is set
+    // THEN calls will be forwarded to the address given (UniversalReceiver even MUST still be fired)
 }
 
 
