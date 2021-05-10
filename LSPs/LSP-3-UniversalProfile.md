@@ -228,7 +228,7 @@ ERC725Y JSON Schema `LSP3Account`:
 
 interface ILSP3  /* is ERC165 */ {
     
-    event UniversalReceiver(address indexed from, bytes32 indexed typeId, bytes32 indexed returnedValue, bytes receivedData);
+    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
     
     event Executed(uint256 indexed _operation, address indexed _to, uint256 indexed  _value, bytes _data);
     
@@ -236,10 +236,21 @@ interface ILSP3  /* is ERC165 */ {
     
     event DataChanged(bytes32 indexed key, bytes value);
     
+    event UniversalReceiver(address indexed from, bytes32 indexed typeId, bytes32 indexed returnedValue, bytes receivedData);
+    
+    
+    // ERC173
+    
+    function owner() public view virtual returns (address);
+    
+    function renounceOwnership() public virtual onlyOwner;
+    
+    function transferOwnership(address newOwner) public virtual onlyOwner;
+    
     
     // ERC725Account (ERC725X + ERC725Y)
     
-    function execute(uint256 operationType, address to, uint256 value, bytes calldata data) external payable;
+    function execute(uint256 operationType, address to, uint256 value, bytes calldata data) external payable onlyOwner;
     
     function getData(bytes32 key) external view returns (bytes memory value);
     // LSP3 retrievable keys:
@@ -248,7 +259,7 @@ interface ILSP3  /* is ERC165 */ {
     // LSP3IssuedAssets[]: 0x3a47ab5bd3a594c3a8995f8fa58d0876c96819ca4516bd76100c92462f2f9dc0
     // LSP1UniversalReceiverDelegate: 0x0cfc51aec37c55a4d0b1a65c6255c4bf2fbdf6277f3cc0730c45b828b6db8b47
     
-    function setData(bytes32 key, bytes calldata value) external;
+    function setData(bytes32 key, bytes calldata value) external onlyOwner;
     
     
     // LSP1
