@@ -13,10 +13,10 @@ requires: LSP2, LSP1, ERC165, ERC725Y, ERC777
 This standard describes a set of [ERC725Y](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) key value stores that describe a digital asset.
 
 ## Abstract
-This standard, defines a set of key value stores that are useful to create digital asset, based on an (ERC777)[https://github.com/ethereum/EIPs/blob/master/EIPS/eip-777.md].
+This standard, defines a set of key value stores that are useful to create digital asset, based on an [ERC777](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-777.md).
 
-Additionally this standards modifies ERC777 `decimals` return value. It is suggested to modify ERC777 to work (LSP1-UniversalReceiver)[https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-1-UniversalReceiver.md]
-to allow the asset to be received by any smart contract implementing (LSP1)[https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-1-UniversalReceiver.md], including an (LSP2 Account)[https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-3-UniversalProfile.md].
+Additionally this standards modifies ERC777 `decimals` return value. It is suggested to modify ERC777 to work [LSP1-UniversalReceiver](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-1-UniversalReceiver.md)
+to allow the asset to be received by any smart contract implementing [LSP1](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-1-UniversalReceiver.md), including an [LSP2 Account](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-3-UniversalProfile.md).
 
 
 ## Motivation
@@ -60,7 +60,7 @@ symbol() => 'MYASSET01'
 #### universalReceiver
 
 Instead of relying on 1820, the ERC777 smart contract COULD expect receivers to implement LSP1.
-This is especially recommended for the LUKSO network, to improve the overall compatibility and future proofness of assets and universal profiles based on (LSP1)[https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-3-UniversalProfile.md]. 
+This is especially recommended for the LUKSO network, to improve the overall compatibility and future proofness of assets and universal profiles based on [LSP1](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-3-UniversalProfile.md). 
 
 
 ### Keys
