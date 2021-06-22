@@ -42,9 +42,14 @@ Every contract that supports to the Universal Profile standard SHOULD implement:
 
 The supported standard SHOULD be `ERC725Account`
 
-```solidity
-key: '0xeafec4d89fa9619884b6b89135626455000000000000000000000000afdeb5d6'
-value: '0xafdeb5d6'
+```json
+{
+    "name": "LSP1UniversalReceiverDelegate",
+    "key": "0xeafec4d89fa9619884b6b89135626455000000000000000000000000afdeb5d6",
+    "keyType": "Singleton",
+    "valueContent": "0xafdeb5d6",
+    "valueType": "bytes4"
+}
 ```
 
 #### LSP1UniversalReceiverDelegate
@@ -52,8 +57,14 @@ value: '0xafdeb5d6'
 If the account delegates its universal receiver to another smart contract,
 this smart contract address SHOULD be stored at the following key:
 
-```solidity
-keccak256('LSP1UniversalReceiverDelegate') > 0x0cfc51aec37c55a4d0b1a65c6255c4bf2fbdf6277f3cc0730c45b828b6db8b47
+```json
+{
+    "name": "LSP1UniversalReceiverDelegate",
+    "key": "0x0cfc51aec37c55a4d0b1a65c6255c4bf2fbdf6277f3cc0730c45b828b6db8b47",
+    "keyType": "Singleton",
+    "valueContent": "Address",
+    "valueType": "address"
+}
 ```
 
 
