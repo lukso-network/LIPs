@@ -66,14 +66,20 @@ This is especially recommended for the LUKSO network, to improve the overall com
 ### Keys
 
 
-#### SupportedStandards
+#### SupportedStandards:LSP4DigitalCertificate
 
 The supported standard SHOULD be `LSP4DigitalCertificate`
 
-```solidity
-key: '0xeafec4d89fa9619884b6b89135626455000000000000000000000000abf0613c'
-value: '0xabf0613c'
+```json
+{
+    "name": "SupportedStandards:LSP4DigitalCertificate",
+    "key": "0xeafec4d89fa9619884b6b89135626455000000000000000000000000abf0613c",
+    "keyType": "Mapping",
+    "valueContent": "0xabf0613c",
+    "valueType": "bytes"
+}
 ```
+
 
 #### LSP4Metadata
 
