@@ -46,7 +46,7 @@ The supported standard SHOULD be `ERC725Account`
 {
     "name": "LSP1UniversalReceiverDelegate",
     "key": "0xeafec4d89fa9619884b6b89135626455000000000000000000000000afdeb5d6",
-    "keyType": "Singleton",
+    "keyType": "Mapping",
     "valueContent": "0xafdeb5d6",
     "valueType": "bytes4"
 }
