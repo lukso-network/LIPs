@@ -10,16 +10,18 @@ requires: LSP2, LSP1, ERC165, ERC725Y, ERC777
 ---
 
 ## Simple Summary
+
 This standard describes a set of [ERC725Y](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) key value stores that describe a digital asset.
 
 ## Abstract
+
 This standard, defines a set of key value stores that are useful to create digital asset, based on an [ERC777](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-777.md).
 
 Additionally this standards modifies ERC777 `decimals` return value. It is suggested to modify ERC777 to work [LSP1-UniversalReceiver](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-1-UniversalReceiver.md)
 to allow the asset to be received by any smart contract implementing [LSP1](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-1-UniversalReceiver.md), including an [LSP2 Account](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-3-UniversalProfile.md).
 
-
 ## Motivation
+
 This standard aims to create a better version of NFTs (NFT 2.0) to allow more functionality to be attached to those assets, and the ability for those assets to change over time.
 As NFTs mostly have a creator, those creators should be able to improve the assets (link better 3D files, as 3D file standards improve), or change attributes.
 One could even think of a smart contract system that can increase attributes based on certain inputs automatically.
@@ -35,10 +37,10 @@ Every contract that supports to the Digital Certificate standard SHOULD implemen
 
 To be compliant with this standard the required ERC777 needs to be modified as follows:
 
-#### decmials
+#### decimals
 
  ```solidity
- decmials() external returns (uint8)
+ decimals() external returns (uint8)
  ```
 
 MUST return `0`.
@@ -49,9 +51,10 @@ NFTs are non-fungible and therefore the smallest unit is 1.
 
 To define the Assets name and Symbol, ERC777 default `name` and `symbol` are used.
 
-Symbols should be UPPERCASE, without spaces and contain only ASCII. 
+Symbols should be UPPERCASE, without spaces and contain only ASCII.
 
 Example:
+
 ```js
 name() => 'My Amazing Asset'
 symbol() => 'MYASSET01'
@@ -62,9 +65,7 @@ symbol() => 'MYASSET01'
 Instead of relying on 1820, the ERC777 smart contract COULD expect receivers to implement LSP1.
 This is especially recommended for the LUKSO network, to improve the overall compatibility and future proofness of assets and universal profiles based on [LSP1](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-3-UniversalProfile.md). 
 
-
 ### Keys
-
 
 #### SupportedStandards:LSP4DigitalCertificate
 
@@ -98,6 +99,7 @@ The description of the asset.
 For construction of the JSONURL value see: [ERC725Y JSON Schema](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-2-ERC725YJSONSchema.md#jsonurl-example)
 
 The linked JSON file SHOULD have the following format:
+
 ```js
 {
     "LSP4Metadata": {
@@ -133,6 +135,7 @@ The linked JSON file SHOULD have the following format:
 ```
 
 Example:
+
 ```js
 {
     LSP4Metadata: {
@@ -166,7 +169,7 @@ Example:
 
 #### LSP4Creators[]
 
-An array of (ERC725Account) addresses of creators, 
+An array of (ERC725Account) addresses of creators,
 
 ```json
 {
@@ -182,7 +185,6 @@ An array of (ERC725Account) addresses of creators,
 
 For construction of the Asset Keys see: [ERC725Y JSON Schema](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-2-ERC725YJSONSchema.md#array)
 
-
 ## Rationale
 
 ## Implementation
@@ -191,6 +193,7 @@ A implementation can be found in the [lukso-network/standards-scenarios](https:/
 The below defines the JSON interface of the `LSP4DigitalCertificate`.
 
 ERC725Y JSON Schema `LSP4DigitalCertificate`:
+
 ```json
 [
     {
@@ -220,4 +223,5 @@ ERC725Y JSON Schema `LSP4DigitalCertificate`:
 ```
 
 ## Copyright
+
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
