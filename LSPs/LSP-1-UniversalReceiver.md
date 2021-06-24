@@ -12,12 +12,12 @@ requires: ERC165
 
 ## Simple Summary
 <!--"If you can't explain it simply, you don't understand it well enough." Provide a simplified and layman-accessible explanation of the LIP.-->
-A entry function to allow a contract to be able to receive any arbitrary information. 
+A entry function to allow a contract to be able to receive any arbitrary information.
 
 ## Abstract
 <!--A short (~200 word) description of the technical issue being addressed.-->
-Similar to a smart contracts fallback function, which allows a contract to be notified of a incoming transaction with value, the Universal Receiver allow for any contract to recevie information about any interaction. 
-This allows receiving contracts to react on incoming transfers or other interactions. 
+Similar to a smart contracts fallback function, which allows a contract to be notified of a incoming transaction with value, the Universal Receiver allow for any contract to recevie information about any interaction.
+This allows receiving contracts to react on incoming transfers or other interactions.
 
 
 ## Motivation
@@ -28,7 +28,6 @@ A good example are token transfers, where the token smart contract should inform
 By creating a universal function that many smart contracts implement, receiving of asset and information can be unified.
 
 In cases where smart contracts function as a profile or wallet over a long time, an upgradable receiver can allow for future assets to be received, without that the interface needs to be changed.
-
 
 ## Specification
 
@@ -74,6 +73,7 @@ This can even be done in an upgradable way, where the receiving code can changed
 ## Implementation
 
 A solidity example of the described interface:
+
 ```solidity
 // SPDX-License-Identifier: CC0-1.0
 pragma solidity >=0.5.0 <0.7.0;
@@ -103,6 +103,7 @@ interface ILSP1Delegate  /* is ERC165 */ {
 ### Examples
 
 The most basic implementation can be achieved as following:
+
 ```solidity
 // SPDX-License-Identifier: CC0-1.0
 pragma solidity 0.6.10;
@@ -124,7 +125,8 @@ contract BasicUniversalReceiver is ERC165, ILSP1 {
 ```
 
 
-Example Implementation of a universalReceiver delegation
+Example Implementation of a universalReceiver delegation:
+
 ```solidity
 // SPDX-License-Identifier: CC0-1.0
 pragma solidity 0.6.10;
@@ -180,6 +182,7 @@ contract UniversalReceiverDelegate is ERC165, ILSP1Delegate {
 ```
 
 Example Implementation to receive and decode a simple token transfer:
+
 ```solidity
 // SPDX-License-Identifier: CC0-1.0
 pragma solidity 0.6.10;
@@ -212,5 +215,7 @@ contract UniversalReceiverExample is BasicUniversalReceiver {
 
 }
 ```
+
 ## Copyright
+
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).

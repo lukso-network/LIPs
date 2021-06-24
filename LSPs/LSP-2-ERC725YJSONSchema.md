@@ -11,13 +11,16 @@ requires: ERC725Y
 
 
 ## Simple Summary
+
 This schema describes how a set of [ERC725Y](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) key values can be described.
 
 ## Abstract
+
 ERC725Y allow smart contracts to store key value stores (`bytes32` > `bytes`).
 This schema allows to standardize the key values that can be used in ERC725Y sub standards.
 
 ## Motivation
+
 This schema defines a way to make those key values automatically parsable, so a interface or smart contract knows how to read and interact with them. 
 
 This schema is for example used in [ERC725](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) based smart contracts like
@@ -59,11 +62,9 @@ To make ERC725Y keys readable we define the following key value types:
     - `Markdown`: The content is structured Markdown mostly encoded as UTF8 string.
     - `0x1345ABCD...`: If the value content are specific bytes, than the returned value is expected to equal those bytes.
   
-
-
 ### Singleton
 
-A simple key is constructed using `bytes32(keccak256(KeyName))`,    
+A simple key is constructed using `bytes32(keccak256(KeyName))`,
 
 Below is an example of a Singleton key type:
 
@@ -85,19 +86,19 @@ Subsequent keys consist of `bytes16(keccak256(KeyName)) + bytes16(uint128(ArrayE
 *The advantage of the `keyType` Array over using simple array elements like `address[]`, is that the amount of elements that can be stored is unlimited.
 Storing an encoded array as a value, will reuqire a set amount of gas, which can exceed the block gas limit.*
 
-
 If you require multiple keys of the same key type they MUST be defined as follows:
 
 - The keytype name MUST have a `[]` add and then hashed
 - The key hash MUST contain the number of all elements, and is required to be updated when a new key element is added.
 
 For all other elements:
+
 - The first 16 bytes are the first 16 bytes of the key hash
 - The second 16 bytes is a `uint128` of the number of the element
 - Elements start at number `0`
 
-
 This would looks as follows for `LSP2IssuedAssets[]`:
+
 - element number: key: `0xb8c4a0b76ed8454e098b20a987a980e69abe3b1a88567ae5472af5f863f8c8f9`, value: `0x0000000000000000000000000000000000000000000000000000000000000002` (2 elements)
 - element 1: key: `0xb8c4a0b76ed8454e098b20a987a980e600000000000000000000000000000000`, value: `0x123...` (element 0)
 - element 2: key: `0xb8c4a0b76ed8454e098b20a987a980e600000000000000000000000000000001`, value: `0x321...` (element 1)
@@ -111,7 +112,7 @@ Special key types exist for **array elements**:
 
 Below is an example of an Array key type:
 
-```js
+```json
 {
     "name": "LSP2IssuedAssets[]",
     "key": "0xb8c4a0b76ed8454e098b20a987a980e69abe3b1a88567ae5472af5f863f8c8f9",
@@ -124,6 +125,7 @@ Below is an example of an Array key type:
 ```
 
 #### Example
+
 ```solidity
 key: keccak256('LSP2IssuedAssets[]') = 0xb8c4a0b76ed8454e098b20a987a980e69abe3b1a88567ae5472af5f863f8c8f9
 value: uint256 (array length) e.g. 0x0000000000000000000000000000000000000000000000000000000000000002
@@ -151,7 +153,7 @@ Below is an example of a mapping key type:
     "key": "0xeafec4d89fa9619884b6b89135626455000000000000000000000000afdeb5d6",
     "keyType": "Mapping",
     "valueContent": mixed,
-    "valueType": "mixed"
+    "valueType": mixed
 }
 ```
 
@@ -160,7 +162,7 @@ Below is an example of a mapping key type:
 An address mapping key is constructed using `bytes8(keccak256(FirstWord)) + bytes4(0) + bytes20(address)`.
 
 e.g. `MyCoolAddress:<address>` > `0x22496f48a493035f 00000000 cafecafecafecafecafecafecafecafecafecafe`.
-    
+
 Below is an example of an address mapping key type:
 
 ```js
@@ -169,7 +171,7 @@ Below is an example of an address mapping key type:
     "key": "0x22496f48a493035f00000000cafecafecafecafecafecafecafecafecafecafe",
     "keyType": "AddressMapping",
     "valueContent": mixed,
-    "valueType": "mixed"
+    "valueType": mixed
 }
 ```
 
@@ -180,7 +182,7 @@ A mapping key, constructed using `bytes4(keccak256(FirstWord)) + bytes4(0) + byt
 e.g. `AddressPermissions:Permissions:<address>` > `0x4b80742d 00000000 eced 0000 cafecafecafecafecafecafecafecafecafecafe`.
 
 Below is an example of a mapping key type:
-    
+
 ```js
 {
     "name": "AddressPermissions:Permissions:cafecafecafecafecafecafecafecafecafecafe",
@@ -193,13 +195,12 @@ Below is an example of a mapping key type:
 
 ### ASSETURL
 
-
-The content is bytes containing the following format:     
+The content is bytes containing the following format:
 `bytes4(keccack256('hashFunction'))` + `bytes32(keccack256(assetBytes))` + `utf8ToHex('AssetURL')`
 
 Known hash functions:
-- `0x8019f9b1`: keccak256('keccak256(bytes)')
 
+- `0x8019f9b1`: keccak256('keccak256(bytes)')
 
 ### JSONURL
 
@@ -207,9 +208,11 @@ The content is bytes containing the following format:
 `bytes4(keccack256('hashFunction'))` + `bytes32(keccack256(JSON.stringify(JSON)))` + `utf8ToHex('JSONURL')`
 
 Known hash functions:
+
 - `0x6f357c6a`: keccak256('keccak256(utf8)')
 
 #### Example
+
 The following shows an example of how to encode a JSON object:
 
 ```js
@@ -231,7 +234,7 @@ let url = web3.utils.utf8ToHex('ifps://QmYr1VJLwerg6pEoscdhVGugo39pa6rycEZLjtRPD
 > '0x696670733a2f2f516d597231564a4c776572673670456f73636468564775676f3339706136727963455a4c6a7452504466573834554178'
 
 // final result (to be stored on chain)
-let JSONURL = hashFunction + hash.subtsring(2) + url.substring(2)
+let JSONURL = hashFunction + hash.substring(2) + url.substring(2)
               ^              ^                   ^
               0x6f357c6a   + 820464ddfac1be... + 696670733a2f2...
               
@@ -275,10 +278,10 @@ if(hashFunction === '0xb7845733') {
 
 
 ## Rationale
+
 The structure of the key value layout as JSON allows interfaces to auto decode these key values as they will know how to decode them.   
 `keyType` always describes *how* a key MUST be treated.    
 and `valueType` describes how the value MUST be decoded. And `value` always describes *how* a value SHOULD be treated.
-
 
 ## Example
 
@@ -313,4 +316,5 @@ To allow interfaces to auto decode an ERC725Y key value store using the ERC725Y 
 ```
 
 ## Copyright
+
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).

@@ -11,13 +11,16 @@ requires: LSP2, LSP1, ERC1271, ERC725Account
 
 
 ## Simple Summary
+
 This standard describes a set of [ERC725Y](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) key value stores that are useful to describe a smart contract based profile.
 
 ## Abstract
+
 This standard, defines a set of key value stores that are useful to create a public on-chain profile, based on an (ERC725Account)[https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md].
 Additionally this standards expects (LSP1-UniversalReceiver)[https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-1-UniversalReceiver.md] to be implemented as well, to make the smart contract account future proof.
 
 ## Motivation
+
 To make the usage of Blockchain infrastructures easier and allow smart contract based accounts to be more than just a store of assets.
 We need to define standards that make these accounts easier to use and interact-able. Therefore we need to define:
 
@@ -85,6 +88,7 @@ A JSON file that describes the profile information, including profile image, bac
 For construction of the JSONURL value see: [ERC725Y JSON Schema](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-2-ERC725YJSONSchema.md#jsonurl-example)
 
 The linked JSON file SHOULD have the following format:
+
 ```js
 {
     "LSP3Profile": {
@@ -124,6 +128,7 @@ The linked JSON file SHOULD have the following format:
 ```
 
 Example:
+
 ```js
 {
     LSP3Profile: {
@@ -189,6 +194,7 @@ References issued smart contract assets, like tokens and NFTs.
 For construction of the Asset Keys see: [ERC725Y JSON Schema](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-2-ERC725YJSONSchema.md#array)
 
 ## Rationale
+
 Universal Profiles are important to create verifiable public accounts that are the source of asset issuance,
 or a verifiable public appearance. 
 
@@ -198,6 +204,7 @@ A implementation can be found in the [lukso-network/standards-scenarios](https:/
 The below defines the JSON interface of the `LSP3Account`.
 
 ERC725Y JSON Schema `LSP3Account`:
+
 ```json
 [
     {
@@ -289,4 +296,5 @@ interface ILSP3  /* is ERC165 */ {
 ```
 
 ## Copyright
+
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).

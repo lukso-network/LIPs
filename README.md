@@ -1,4 +1,5 @@
 # LIPs
+
 LUKSO Improvement Proposals (LIPs) and LUKSO standard proposal (LSPs) describe standards for the LUKSO platform, including core protocol specifications, client APIs, and smart contract standards.
 
 A browsable version of all current and draft LIPs can be found on [the official LIP folder](https://github.com/lukso-network/LIPs/tree/master/LIPs).
@@ -17,6 +18,7 @@ If your LIP requires images, the image files should be included in a subdirector
 When you believe your LIP is mature and ready to progress past the draft phase, you should do open a PR changing the state of your LIP to 'Final'. An editor will review your draft and ask if anyone objects to its being finalised. If the editor decides there is no rough consensus - for instance, because contributors point out significant issues with the LIP - they may close the PR and request that you fix the issues in the draft before trying again.
 
 # LIP Status Terms
+
 * **Draft** - an LIP that is undergoing rapid iteration and changes.
 * **Last Call** - an LIP that is done with its initial iteration and ready for review by a wide audience.
 * **Accepted** - a core LIP that has been in Last Call for at least 2 weeks and any technical changes that were requested have been addressed by the author. The process for Core Devs to decide whether to encode an LIP into their clients as part of a hard fork is not part of the LIP process. If such a decision is made, the LIP wil move to final.
