@@ -262,7 +262,7 @@ let hash = '0x' + data.slice(0, 74)
 let url = '0x' + data.slice(74)
 
 // check if it uses keccak256
-if(hashFunction === '0xb7845733') {
+if(hashFunction === '0x6f357c6a') {
     // download the json file
     let json = await ipfsMini.catJSON(
         web3.utils.hexToUtf8(url).replace('ipfs://','')
