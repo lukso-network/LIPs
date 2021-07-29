@@ -16,8 +16,8 @@ This standard describes a set of [ERC725Y](https://github.com/ethereum/EIPs/blob
 
 ## Abstract
 
-This standard, defines a set of key value stores that are useful to create a public on-chain profile, based on an (ERC725Account)[https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md].
-Additionally this standards expects (LSP1-UniversalReceiver)[https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-1-UniversalReceiver.md] to be implemented as well, to make the smart contract account future proof.
+This standard, defines a set of key value stores that are useful to create a public on-chain profile, based on an [ERC725Account](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md).
+Additionally this standards expects [LSP1-UniversalReceiver](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-1-UniversalReceiver.md) to be implemented as well, to make the smart contract account future proof.
 
 ## Motivation
 
