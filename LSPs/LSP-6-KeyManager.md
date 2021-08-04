@@ -51,7 +51,7 @@ What is required is a contract design that enable ERC725 account owners to:
 The following keys can be used to get and set permissions on a ERC725 account.
 These keys are based on the [LSP2-ERC725YJSONSchema](https://github.com/CJ42/LIPs/blob/master/LSPs/LSP-2-ERC725YJSONSchema.md) standard, and use the key type **[AddressMappingWithGrouping](https://github.com/CJ42/LIPs/blob/master/LSPs/LSP-2-ERC725YJSONSchema.md#addressmappingwithgrouping)**
 
-```
+```solidity
 bytes12 internal constant KEY_PERMISSIONS      = 0x4b80742d0000000082ac0000; // AddressPermissions:Permissions:<address> --> bytes1
 bytes12 internal constant KEY_ALLOWEDADDRESSES = 0x4b80742d00000000c6dd0000; // AddressPermissions:AllowedAddresses:<address> --> address[]
 bytes12 internal constant KEY_ALLOWEDFUNCTIONS = 0x4b80742d000000008efe0000; // AddressPermissions:AllowedFunctions:<address> --> bytes4[]
@@ -62,7 +62,7 @@ bytes12 internal constant KEY_ALLOWEDSTANDARDS = 0x4b80742d000000003efa0000; // 
 
 The KeyManager defines the following set of constants, representing permissions as `bytesN`.
 
-```
+```solidity
 // PERMISSIONS VALUES
 bytes1 internal constant PERMISSION_CHANGEOWNER   = 0x01;   // 0000 0001
 bytes1 internal constant PERMISSION_CHANGEKEYS    = 0x02;   // 0000 0010
@@ -84,7 +84,7 @@ In order to set these permissions, [LSP2-ERC725YJSONSchema]() must be implemente
 
 Latest nonce of the caller. Used to prevent replay attacks.
 
-```
+```solidity
 mapping (address => uint256) internal _nonceStore;
 function getNonce(address _address) public view returns (uint256) {
     return _nonceStore[_address];
@@ -99,7 +99,7 @@ The first 4 bytes of the `_data` payload MUST correspond to one of the function 
 
 ***return:*** `true` if the call on ERC725 account succeeded, `false` otherwise.
 
-```
+```solidity
 function execute(bytes calldata _data) 
     external 
     payable 
@@ -116,7 +116,7 @@ Allows anybody to execute `_data` payload on a ERC725 account, given they have a
 
 `_signature`: bytes32 ethereum signature.
 
-```
+```solidity
 function executeRelayedCall(
     bytes calldata _data,
     address _signedFor,
