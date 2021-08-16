@@ -49,9 +49,11 @@ To make ERC725Y keys readable we define the following key value types:
     - `string[]`: The bytes are a UTF8 encoded string array
     - `address[]`: The bytes are an 20 bytes address array
     - `uint256[]`: The bytes are a uint256 array
-    - `bytes32[]`: The bytes are a 32 bytes array
     - `bytes[]`: The bytes are a bytes array
+    - `bytesN[]`: The bytes are a N bytes
 - `valueContent`: The content in the returned value. Valid values are:
+    - `Bytes`: The content are bytes. 
+    - `BytesN`: The content are bytes with length N.
     - `Number`: The content is a number.
     - `String`: The content is a UTF8 string.
     - `Address`: The content is an address.
