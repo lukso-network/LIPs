@@ -46,6 +46,8 @@ What is required is a contract design that enable ERC725 account owners to:
 
 ## Specification
 
+![lsp-key-manager-flow-chart](https://user-images.githubusercontent.com/31145285/129573696-1e4ecfb6-9137-46b7-8ff6-59539b04cf56.png)
+
 ### Permission Keys on the ERC725Account
 
 The following keys can be used to get and set permissions of certain addresses on a ERC725 account.   
@@ -123,6 +125,9 @@ DEPLOY        = 0x20;   // 0010 0000
 TRANSFERVALUE = 0x40;   // 0100 0000
 SIGN          = 0x80;   // 1000 0000
 ```
+
+![lsp6-key-manager-permissions-range](https://user-images.githubusercontent.com/31145285/129573621-33898637-80af-4937-884d-911372007c55.png)
+
 
 ### Methods
 
