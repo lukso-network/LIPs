@@ -6,7 +6,7 @@ discussions-to: https://discord.gg/E2rJPP4
 status: Draft
 type: LSP
 created: 2020-07-21
-requires: LSP2, LSP1, ERC165, ERC725Y, ERC777
+requires: LSP1, LSP2, ERC165, ERC173, ERC725Y, ERC777
 ---
 
 ## Simple Summary
