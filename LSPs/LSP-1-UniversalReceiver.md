@@ -222,7 +222,7 @@ contract UniversalReceiverExample is BasicUniversalReceiver {
 
 interface ILSP1  /* is ERC165 */ {
     
-   function universalReceiver(bytes32 typeId, bytes calldata data) external returns (bytes32);
+    function universalReceiver(bytes32 typeId, bytes calldata data) external returns (bytes32);
     
     event UniversalReceiver(address indexed from, bytes32 indexed typeId, bytes32 indexed returnedValue, bytes receivedData);
 
