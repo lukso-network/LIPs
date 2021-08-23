@@ -221,7 +221,6 @@ ERC725Y JSON Schema `LSP4DigitalCertificate`:
     }
 ]
 ```
-```
 
 ## Interface Cheat Sheet
 
