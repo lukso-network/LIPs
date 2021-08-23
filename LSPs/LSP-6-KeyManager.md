@@ -25,6 +25,9 @@ It provides functionalities to allow / disallow third parties to perform actions
 
 Such actions are represented as permissions that can be assigned to any third party address.
 
+![lsp6-key-manager-flow-chart](https://user-images.githubusercontent.com/31145285/129574099-9eba52d4-4f82-4f11-8ac5-8bfa18ce97d6.jpeg)
+
+
 
 
 ## Motivation
@@ -45,9 +48,6 @@ What is required is a contract design that enable ERC725 account owners to:
 
 
 ## Specification
-
-
-![lsp6-key-manager-flow-chart](https://user-images.githubusercontent.com/31145285/129574099-9eba52d4-4f82-4f11-8ac5-8bfa18ce97d6.jpeg)
 
 
 ### Permission Keys on the ERC725Account
