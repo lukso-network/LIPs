@@ -220,50 +220,12 @@ contract UniversalReceiverExample is BasicUniversalReceiver {
 
 ```solidity
 
-interface ILSP3  /* is ERC165 */ {
+interface ILSP1  /* is ERC165 */ {
     
-    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
-    
-    event Executed(uint256 indexed _operation, address indexed _to, uint256 indexed  _value, bytes _data);
-    
-    event ValueReceived(address indexed sender, uint256 indexed value);
-    
-    event ContractCreated(address indexed contractAddress);
-    
-    event DataChanged(bytes32 indexed key, bytes value);
+    function universalReceiver(bytes32 typeId, bytes calldata data) external returns (bytes32);
     
     event UniversalReceiver(address indexed from, bytes32 indexed typeId, bytes32 indexed returnedValue, bytes receivedData);
-    
-    
-    // ERC173
-    
-    function owner() public view virtual returns (address);
-    
-    function transferOwnership(address newOwner) public virtual onlyOwner;
-    
-    
-    // ERC725Account (ERC725X + ERC725Y)
-    
-    function execute(uint256 operationType, address to, uint256 value, bytes calldata data) external payable onlyOwner;
-    
-    function getData(bytes32 key) external view returns (bytes memory value);
-    // LSP3 retrievable keys:
-    // SupportedStandards:ERC725Account: 0xeafec4d89fa9619884b6b89135626455000000000000000000000000afdeb5d6
-    // LSP3Profile: 0x5ef83ad9559033e6e941db7d7c495acdce616347d28e90c7ce47cbfcfcad3bc5
-    // LSP3IssuedAssets[]: 0x3a47ab5bd3a594c3a8995f8fa58d0876c96819ca4516bd76100c92462f2f9dc0
-    // LSP1UniversalReceiverDelegate: 0x0cfc51aec37c55a4d0b1a65c6255c4bf2fbdf6277f3cc0730c45b828b6db8b47
-    
-    function setData(bytes32 key, bytes calldata value) external onlyOwner;
-    
-    
-    // ERC1271
-    
-    function isValidSignature(bytes32 _hash, bytes memory _signature) public view returns (bytes4 magicValue);
-    
-    
-    // LSP1
 
-    function universalReceiver(bytes32 typeId, bytes calldata data) external returns (bytes32);
     // IF `LSP1UniversalReceiverDelegate` key is set
     // THEN calls will be forwarded to the address given (UniversalReceiver even MUST still be fired)
 }
