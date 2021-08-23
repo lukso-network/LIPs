@@ -251,6 +251,7 @@ interface ILSP4  /* is ERC165 */ {
     
     function transferOwnership(address newOwner) public virtual onlyOwner;
     
+    
     // ERC777
     
      function name() external view returns (string memory);
@@ -280,9 +281,6 @@ interface ILSP4  /* is ERC165 */ {
      function operatorBurn(address account, uint256 amount, bytes calldata data, bytes calldata operatorData) external;
      
      
- 
-    
-    
     // ERC725Y 
     
     function getData(bytes32 key) external view returns (bytes memory value);
