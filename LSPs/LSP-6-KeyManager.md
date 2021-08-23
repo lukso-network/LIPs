@@ -38,7 +38,6 @@ ERC725 accounts enable to own a universal profile, that:
 * many addresses (whether users or contracts) can interact with.
 
 However, data stored in a ERC725 account (under the JSON schema) can be easily updated by any address, using the function `setData(...)`. 
-
 Currently, ERC725 accounts do not implement any form of delegate access control, so to grant or restrict third parties to perform action on their behalf.
 
 What is required is a contract design that enable ERC725 account owners to:
