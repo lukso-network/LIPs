@@ -59,7 +59,7 @@ The KeyManager will read the permissions from the ERC725Account key value store,
 
 #### AddressPermissions:Permissions:\<address\>
 
-Holds the permissions for a key. See [Permission Values](#permissions-values-in-addresspermissions-Permissions-address) for details.
+Holds the permissions for a key. See [Permission Values](#permission-values-in-addresspermissionspermissionsaddress) for details.
 
 ```json
 {
