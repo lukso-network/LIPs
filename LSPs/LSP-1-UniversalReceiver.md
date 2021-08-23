@@ -226,8 +226,6 @@ interface ILSP1  /* is ERC165 */ {
     
     event UniversalReceiver(address indexed from, bytes32 indexed typeId, bytes32 indexed returnedValue, bytes receivedData);
 
-    // IF `LSP1UniversalReceiverDelegate` key is set
-    // THEN calls will be forwarded to the address given (UniversalReceiver even MUST still be fired)
 }
 ```
 
