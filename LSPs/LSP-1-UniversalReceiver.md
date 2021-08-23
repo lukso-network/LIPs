@@ -229,7 +229,7 @@ interface ILSP1  /* is ERC165 */ {
     // IF `LSP1UniversalReceiverDelegate` key is set
     // THEN calls will be forwarded to the address given (UniversalReceiver even MUST still be fired)
 }
-
+```
 
 ## Copyright
 
