@@ -13,7 +13,7 @@ requires: LSP1, LSP2, ERC165, ERC173, ERC1271, ERC725Account
 ## Simple Summary
 
 This standard describes a set of [ERC725Y](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) key value stores that are useful to describe a smart contract based profile.
-
+ 
 ## Abstract
 
 This standard, defines a set of key value stores that are useful to create a public on-chain profile, based on an [ERC725Account](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md).
