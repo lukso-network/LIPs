@@ -8,7 +8,7 @@ type: LSP
 created: 2020-07-21
 requires: LSP1, LSP2, ERC165, ERC173, ERC725Y, ERC777
 ---
-
+ 
 ## Simple Summary
 
 This standard describes a set of [ERC725Y](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) key value stores that describe a digital asset.
