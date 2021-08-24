@@ -250,6 +250,19 @@ interface ILSP4  /* is ERC165 */ {
     event Transfer(address indexed from, address indexed to, uint256 value);
     
     
+    
+    function dataCount() public view returns (uint256);
+    
+    function allDataKeys() public view returns (bytes32[] memory);
+    
+    function allTokenHolders() public view returns (bytes32[] memory);
+    
+    function removeDefaultOperators() external onlyDefaultOperators;
+    
+    function removeMinter() external onlyMinter;
+    
+    
+    // ERC777
   
     function name() public view override returns (string memory);
     
@@ -263,15 +276,11 @@ interface ILSP4  /* is ERC165 */ {
     
     function balanceOf(address tokenHolder) public view override(IERC20, IERC777) returns (uint256);
     
+    function mint(address _address, uint256 _amount) external override onlyMinter;
+    
     function send(address recipient, uint256 amount, bytes memory data) public override;
     
     function transfer(address recipient, uint256 amount) public override returns (bool);
-    
-    function mint(address _address, uint256 _amount) external override onlyMinter;
-    
-    function removeMinter() external onlyMinter;
-    
-    function removeDefaultOperators() external onlyDefaultOperators;
     
     function burn(uint256 amount, bytes memory data) public override;
     
@@ -293,11 +302,17 @@ interface ILSP4  /* is ERC165 */ {
     
     function transferFrom(address holder, address recipient, uint256 amount) public override returns (bool);
     
+    
+    // Pausable
+    
     function paused() public view virtual returns (bool);
     
     function pause() external whenNotPaused onlyDefaultOperators;
     
     function unpause() external whenPaused onlyDefaultOperators;
+    
+    
+    // ERC173
     
     function owner() public view virtual returns (address);
     
@@ -305,15 +320,13 @@ interface ILSP4  /* is ERC165 */ {
     
     function transferOwnership(address newOwner) public override onlyOwner;
     
+    
+    // ERC725Y
+    
     function getData(bytes32 _key) public view override virtual returns (bytes memory _value);
     
     function setData(bytes32 _key, bytes memory _value) external override onlyOwner;
-    
-    function dataCount() public view returns (uint256);
-    
-    function allDataKeys() public view returns (bytes32[] memory);
-    
-    function allTokenHolders() public view returns (bytes32[] memory);
+
   
 }
 
