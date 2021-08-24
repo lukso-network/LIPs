@@ -150,7 +150,7 @@ function execute(bytes calldata _data) external payable returns (bool)
 
 #### getNonce
 
-Returns the current nonce to be used when using the [`executeRelayCall`](#relayCall)
+Returns the current nonce to be used when using the [`executeRelayCall`](#executeRelayCall)
 
 ```solidity
 function getNonce(address _address) public view returns (uint256)
