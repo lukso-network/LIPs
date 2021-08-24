@@ -247,9 +247,7 @@ interface ILSP4  /* is ERC165 */ {
     
     
     // ERC173
-    
-    function owner() public view virtual returns (address);
-    
+        
     function transferOwnership(address newOwner) public virtual onlyOwner;
     
     
