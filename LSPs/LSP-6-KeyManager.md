@@ -114,7 +114,7 @@ Holds an array of bytes4 ERC165 standards signatures, other smart contracts shou
 
 ### Permission Values in AddressPermissions:Permissions:\<address\>
 
-The following permissions are set in the BitArray of the [AddressPermissions:Permissions:<address>](#address-permissions:permissionsaddress) key in the following order:
+The following permissions are set in the BitArray of the `AddressPermissions:Permissions:<address>` key in the following order:
 
 ```solidity
 CHANGEOWNER   = 0x01;   // 0000 0001
