@@ -200,7 +200,7 @@ or a verifiable public appearance.
 
 ## Implementation
 
-A implementation can be found in the [lukso-network/standards-scenarios](https://github.com/lukso-network/standards-scenarios/blob/master/contracts/Accounts/LSP3Account.sol);
+A implementation can be found in the [lukso-network/universalprofile-smart-contracts](https://github.com/lukso-network/universalprofile-smart-contracts/blob/main/contracts/LSP3Account.sol);
 The below defines the JSON interface of the `LSP3Account`.
 
 ERC725Y JSON Schema `LSP3Account`:
