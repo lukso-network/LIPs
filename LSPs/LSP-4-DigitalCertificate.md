@@ -60,10 +60,11 @@ name() => 'My Amazing Asset'
 symbol() => 'MYASSET01'
 ```
 
-#### universalReceiver
+#### Universal Receiver
 
 Instead of relying on 1820, the ERC777 smart contract COULD expect receivers to implement LSP1.
 This is especially recommended for the LUKSO network, to improve the overall compatibility and future proofness of assets and universal profiles based on [LSP1](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-3-UniversalProfile.md). 
+
 
 ### Keys
 
