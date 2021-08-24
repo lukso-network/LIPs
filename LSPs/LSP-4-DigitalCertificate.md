@@ -234,7 +234,7 @@ interface ILSP4  /* is ERC165 */ {
     
     event UniversalReceiver(address indexed from, bytes32 indexed typeId, bytes32 indexed returnedValue, bytes receivedData);
     
-     event Sent(address indexed operator, address indexed from, address indexed to, uint256 amount, bytes data, bytes operatorData);
+    event Sent(address indexed operator, address indexed from, address indexed to, uint256 amount, bytes data, bytes operatorData);
 
     event Minted(address indexed operator, address indexed to, uint256 amount, bytes data, bytes operatorData);
 
