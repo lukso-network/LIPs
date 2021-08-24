@@ -150,13 +150,13 @@ function execute(bytes calldata _data) external payable returns (bool)
 
 #### getNonce
 
-Returns the current nonce to be used when using the [`relayCall`](#relayCall)
+Returns the current nonce to be used when using the [`executeRelayCall`](#relayCall)
 
 ```solidity
 function getNonce(address _address) public view returns (uint256)
 ```
 
-#### relayCall
+#### executeRelayCall
 
 Allows anybody to execute `_data` payload on a ERC725 account, given they have a signed message from an executor.
 
@@ -171,7 +171,7 @@ Allows anybody to execute `_data` payload on a ERC725 account, given they have a
 
 
 ```solidity
-function relayCall(bytes calldata _data, address _signedFor, uint256 _nonce, bytes memory _signature) external payable returns (bool)
+function executeRelayCall(bytes calldata _data, address _signedFor, uint256 _nonce, bytes memory _signature) external payable returns (bool)
 ```
 
 **Important:** the message to sign MUST be of the following format: `<KeyManager address>` + `<_data payload>` + `<signer nonce>`.
@@ -240,7 +240,7 @@ interface ILSP6  /* is ERC165 */ {
     
     function execute(bytes calldata _data) external payable returns (bool);
     
-    function relayCall(bytes calldata _data, address _signedFor, uint256 _nonce, bytes memory _signature) external payable returns (bool);
+    function executeRelayCall(bytes calldata _data, address _signedFor, uint256 _nonce, bytes memory _signature) external payable returns (bool);
  
         
     // ERC1271
