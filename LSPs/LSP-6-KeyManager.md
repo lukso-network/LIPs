@@ -236,7 +236,6 @@ interface ILSP6  /* is ERC165 */ {
         
     event Executed(uint256 indexed  _value, bytes _data); 
     
-    
     function getNonce(address _address) public view returns (uint256);
     
     function execute(bytes calldata _data) external payable returns (bool);
