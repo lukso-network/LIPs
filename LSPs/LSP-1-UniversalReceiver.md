@@ -226,7 +226,7 @@ interface ILSP1  /* is ERC165 */ {
     
     event UniversalReceiver(address indexed from, bytes32 indexed typeId, bytes32 indexed returnedValue, bytes receivedData);
     
-    }
+}
     
 interface ILSP1Delegate  /* is ERC165 */ {
     
