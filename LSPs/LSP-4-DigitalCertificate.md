@@ -250,7 +250,6 @@ interface ILSP4  /* is ERC165 */ {
     event Transfer(address indexed from, address indexed to, uint256 value);
     
     
-    
   
     function name() public view override returns (string memory);
     
