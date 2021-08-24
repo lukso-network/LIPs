@@ -18,7 +18,7 @@ This standard describes a set of [ERC725Y](https://github.com/ethereum/EIPs/blob
 This standard, defines a set of key value stores that are useful to create digital asset, based on an [ERC777](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-777.md).
 
 Additionally this standards modifies ERC777 `decimals` return value. It is suggested to modify ERC777 to work [LSP1-UniversalReceiver](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-1-UniversalReceiver.md)
-to allow the asset to be received by any smart contract implementing [LSP1](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-1-UniversalReceiver.md), including an [LSP2 Account](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-3-UniversalProfile.md).
+to allow the asset to be received by any smart contract implementing [LSP1](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-1-UniversalReceiver.md), including an [LSP3 Account](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-3-UniversalProfile.md).
 
 ## Motivation
 
