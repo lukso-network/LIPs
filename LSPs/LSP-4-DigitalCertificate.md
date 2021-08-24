@@ -228,85 +228,72 @@ ERC725Y JSON Schema `LSP4DigitalCertificate`:
 ```solidity
 
 interface ILSP4  /* is ERC165 */ {
-    
-    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
-                
-    event DataChanged(bytes32 indexed key, bytes value);
-    
-    event UniversalReceiver(address indexed from, bytes32 indexed typeId, bytes32 indexed returnedValue, bytes receivedData);
-    
-    event Sent(address indexed operator, address indexed from, address indexed to, uint256 amount, bytes data, bytes operatorData);
-
-    event Minted(address indexed operator, address indexed to, uint256 amount, bytes data, bytes operatorData);
-
-    event Burned(address indexed operator, address indexed from, uint256 amount, bytes data, bytes operatorData);
-
-    event AuthorizedOperator(address indexed operator, address indexed tokenHolder);
-
-    event RevokedOperator(address indexed operator, address indexed tokenHolder);
-    
-    
-    // ERC173
-        
-    function transferOwnership(address newOwner) public virtual onlyOwner;
-    
-    
-    // ERC777
-    
-     function name() external view returns (string memory);
-     
-     function symbol() external view returns (string memory);
-     
-     function decimals() external returns (uint8);
-     
-     function totalSupply() external view returns (uint256);
-     
-     function balanceOf(address owner) external view returns (uint256);
-     
-     function mint(address _address, uint256 _amount) external onlyMinter;
-     
-     function burn(uint256 amount, bytes memory data) public override;
-     
-     function removeMinter() external onlyMinter;
-     
-     function removeDefaultOperators() external onlyDefaultOperators;
-    
-     function transferFrom(address holder, address recipient, uint256 amount) public override returns (bool);
-     
-     function approve(address spender, uint256 value) public override returns (bool);
-     
-     function allowance(address holder, address spender) public view override returns (uint256);
-     
-     function operatorBurn(address account, uint256 amount, bytes memory data, bytes memory operatorData) public override;
-     
-     function operatorSend(address sender, address recipient, uint256 amount, bytes memory data, bytes memory operatorData) public override;
-    
-     function defaultOperators() public view override returns (address[] memory);   
-     
-     function isOperatorFor(address operator, address tokenHolder) public view override returns (bool);
-     
-     function revokeOperator(address operator) public override;
-     
-     function authorizeOperator(address operator) public override;
-       
-     function dataCount() public view returns (uint256);
-     
-     function allDataKeys() public view returns (bytes32[] memory);
-     
-     function allTokenHolders() public view returns (bytes32[] memory);
-     
-     function paused() public view virtual returns (bool);
-     
-     function pause() external whenNotPaused onlyDefaultOperators;
-     
-     function unpause() external whenPaused onlyDefaultOperators;
   
-     
-    // ERC725Y 
-     
-     function getData(bytes32 key) external view returns (bytes memory value);
+    function name() public view override returns (string memory);
     
-     function setData(bytes32 key, bytes calldata value) external onlyOwner;
+    function symbol() public view override returns (string memory);
+    
+    function decimals() public pure override returns (uint8);
+    
+    function granularity() public pure override returns (uint256);
+    
+    function totalSupply() public view override(IERC20, IERC777) returns (uint256);
+    
+    function balanceOf(address tokenHolder) public view override(IERC20, IERC777) returns (uint256);
+    
+    function send(address recipient, uint256 amount, bytes memory data) public override;
+    
+    function transfer(address recipient, uint256 amount) public override returns (bool);
+    
+    function mint(address _address, uint256 _amount) external override onlyMinter;
+    
+    function removeMinter() external onlyMinter;
+    
+    function removeDefaultOperators() external onlyDefaultOperators;
+    
+    function burn(uint256 amount, bytes memory data) public override;
+    
+    function isOperatorFor(address operator, address tokenHolder) public view override returns (bool);
+    
+    function authorizeOperator(address operator) public override;
+    
+    function revokeOperator(address operator) public override;
+    
+    function defaultOperators() public view override returns (address[] memory);
+    
+    function operatorSend(address sender, address recipient, uint256 amount, bytes memory data, bytes memory operatorData) public override;
+    
+    function operatorBurn(address account, uint256 amount, bytes memory data, bytes memory operatorData) public override;
+    
+    function allowance(address holder, address spender) public view override returns (uint256);
+    
+    function approve(address spender, uint256 value) public override returns (bool);
+    
+    function transferFrom(address holder, address recipient, uint256 amount) public override returns (bool);
+    
+    function paused() public view virtual returns (bool);
+    
+    function pause() external whenNotPaused onlyDefaultOperators;
+    
+    function unpause() external whenPaused onlyDefaultOperators;
+    
+    function owner() public view virtual returns (address);
+    
+    function renounceOwnership() public virtual onlyOwner;
+    
+    function transferOwnership(address newOwner) public override onlyOwner;
+    
+    function getData(bytes32 _key) public view override virtual returns (bytes memory _value);
+    
+    function setData(bytes32 _key, bytes memory _value) external override onlyOwner;
+    
+    function dataCount() public view returns (uint256);
+    
+    function allDataKeys() public view returns (bytes32[] memory);
+    
+    function allTokenHolders() public view returns (bytes32[] memory);
+  
+  
 
 }
 
