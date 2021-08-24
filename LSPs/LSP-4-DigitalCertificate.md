@@ -228,6 +228,29 @@ ERC725Y JSON Schema `LSP4DigitalCertificate`:
 ```solidity
 
 interface ILSP4  /* is ERC165 */ {
+
+    event Paused(address account);
+    
+    event Unpaused(address account);
+    
+    event DataChanged(bytes32 indexed key, bytes value);
+    
+    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
+    
+    event Minted(address indexed operator, address indexed to, uint256 amount, bytes data, bytes operatorData);
+
+    event Burned(address indexed operator, address indexed from, uint256 amount, bytes data, bytes operatorData);
+
+    event AuthorizedOperator(address indexed operator, address indexed tokenHolder);
+
+    event RevokedOperator(address indexed operator, address indexed tokenHolder);
+    
+    event Approval(address indexed owner, address indexed spender, uint256 value);
+    
+    event Transfer(address indexed from, address indexed to, uint256 value);
+    
+    
+    
   
     function name() public view override returns (string memory);
     
