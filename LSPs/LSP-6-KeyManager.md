@@ -190,7 +190,7 @@ To illustrate, for a file set with permission `755`, the group permission (secon
 ## Implementation
 <!--The implementations must be completed before any LIP is given status "Final", but it need not be completed before the LIP is accepted. While there is merit to the approach of reaching consensus on the specification and rationale before writing code, the principle of "rough consensus and running code" is still useful when it comes to resolving many discussions of API details.-->
 
-A implementation can be found in the [lukso-network/standards-scenarios](https://github.com/lukso-network/standards-scenarios/blob/master/contracts/Accounts/LSP3Account.sol);
+A implementation can be found in the [lukso-network/universalprofile-smart-contracts](https://github.com/lukso-network/universalprofile-smart-contracts/blob/main/contracts/LSP3Account.sol);
 The below defines the JSON interface of the `LSP3Account`.
 
 ERC725Y JSON Schema `LSP6KeyManager`, set at the `LSP3Account`:
