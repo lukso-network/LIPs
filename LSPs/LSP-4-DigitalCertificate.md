@@ -190,7 +190,7 @@ For construction of the Asset Keys see: [ERC725Y JSON Schema](https://github.com
 
 ## Implementation
 
-A implementation can be found in the [lukso-network/standards-scenarios](https://github.com/lukso-network/standards-scenarios/blob/master/contracts/DigitalCertificate/LSP4DigitalCertificate.sol);
+A implementation can be found in the [lukso-network/universalprofile-smart-contracts](https://github.com/lukso-network/universalprofile-smart-contracts/blob/main/contracts/TestHelpers/LSP4DigitalCertificate.sol);
 The below defines the JSON interface of the `LSP4DigitalCertificate`.
 
 ERC725Y JSON Schema `LSP4DigitalCertificate`:
@@ -265,33 +265,50 @@ interface ILSP4  /* is ERC165 */ {
      
      function balanceOf(address owner) external view returns (uint256);
      
-     function send(address recipient, uint256 amount, bytes calldata data) external;
+     function mint(address _address, uint256 _amount) external onlyMinter;
      
-     function burn(uint256 amount, bytes calldata data) external;
+     function burn(uint256 amount, bytes memory data) public override;
      
-     function isOperatorFor(address operator, address tokenHolder) external view returns (bool);
+     function removeMinter() external onlyMinter;
      
-     function authorizeOperator(address operator) external;
+     function removeDefaultOperators() external onlyDefaultOperators;
+    
+     function transferFrom(address holder, address recipient, uint256 amount) public override returns (bool);
      
-     function revokeOperator(address operator) external;
+     function approve(address spender, uint256 value) public override returns (bool);
      
-     function defaultOperators() external view returns (address[] memory);
+     function allowance(address holder, address spender) public view override returns (uint256);
      
-     function operatorSend(address sender, address recipient, uint256 amount, bytes calldata data, bytes calldata operatorData) external;
+     function operatorBurn(address account, uint256 amount, bytes memory data, bytes memory operatorData) public override;
      
-     function operatorBurn(address account, uint256 amount, bytes calldata data, bytes calldata operatorData) external;
+     function operatorSend(address sender, address recipient, uint256 amount, bytes memory data, bytes memory operatorData) public override;
+    
+     function defaultOperators() public view override returns (address[] memory);   
      
+     function isOperatorFor(address operator, address tokenHolder) public view override returns (bool);
+     
+     function revokeOperator(address operator) public override;
+     
+     function authorizeOperator(address operator) public override;
+       
+     function dataCount() public view returns (uint256);
+     
+     function allDataKeys() public view returns (bytes32[] memory);
+     
+     function allTokenHolders() public view returns (bytes32[] memory);
+     
+     function paused() public view virtual returns (bool);
+     
+     function pause() external whenNotPaused onlyDefaultOperators;
+     
+     function unpause() external whenPaused onlyDefaultOperators;
+  
      
     // ERC725Y 
+     
+     function getData(bytes32 key) external view returns (bytes memory value);
     
-    function getData(bytes32 key) external view returns (bytes memory value);
-    
-    function setData(bytes32 key, bytes calldata value) external onlyOwner;
-    
-    
-    // LSP1
-
-    function universalReceiver(bytes32 typeId, bytes calldata data) external returns (bytes32);
+     function setData(bytes32 key, bytes calldata value) external onlyOwner;
 
 }
 
