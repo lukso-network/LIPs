@@ -315,8 +315,6 @@ interface ILSP4  /* is ERC165 */ {
     
     function allTokenHolders() public view returns (bytes32[] memory);
   
-  
-
 }
 
 
