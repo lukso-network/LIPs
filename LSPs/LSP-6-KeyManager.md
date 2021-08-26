@@ -138,7 +138,7 @@ SIGN          = 0x80;   // 1000 0000
 
 #### execute
 
-Execute the a calldata payload on an ERC725 account.
+Execute a calldata payload on an ERC725 account.
 
 The first 4 bytes of the `_data` payload MUST correspond to one of the function selector in the ERC725 account, such as `setData(...)`, `execute(...)` or `transferOwnership(...)`.
 
