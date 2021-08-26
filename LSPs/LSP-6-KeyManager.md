@@ -6,7 +6,7 @@ discussions-to:
 status: Draft
 type: LSP
 created: 2021-08-03
-requires: LSP2, ERC165, ERC1271
+requires: ERC725Y, LSP2, ERC165, ERC1271
 ---
 
 
@@ -114,7 +114,7 @@ Holds an array of bytes4 ERC165 standards signatures, other smart contracts shou
 
 ### Permission Values in AddressPermissions:Permissions:\<address\>
 
-The following permissions are set in the [BitArray]() of the `AddressPermissions:Permissions:<address>` key in the following order:
+The following permissions are set in the BitArray of the `AddressPermissions:Permissions:<address>` key in the following order:
 
 ```solidity
 CHANGEOWNER   = 0x01;   // 0000 0001
@@ -138,7 +138,7 @@ SIGN          = 0x80;   // 1000 0000
 
 #### execute
 
-Execute the a calldata payload on an ERC725 account.
+Execute a calldata payload on an ERC725 account.
 
 The first 4 bytes of the `_data` payload MUST correspond to one of the function selector in the ERC725 account, such as `setData(...)`, `execute(...)` or `transferOwnership(...)`.
 
@@ -150,7 +150,7 @@ function execute(bytes calldata _data) external payable returns (bool)
 
 #### getNonce
 
-Returns the current nonce to be used when using the [`executeRelayCall`](#executerelaycall)
+Returns the current nonce to be used when using the [`executeRelayCall`](#executeRelayCall)
 
 ```solidity
 function getNonce(address _address) public view returns (uint256)
@@ -168,6 +168,7 @@ Allows anybody to execute `_data` payload on a ERC725 account, given they have a
 - `_signature`: bytes32 ethereum signature.
 
 **returns:** true if the call on ERC725 account succeeded, false otherwise.
+
 
 ```solidity
 function executeRelayCall(bytes calldata _data, address _signedFor, uint256 _nonce, bytes memory _signature) external payable returns (bool)
@@ -189,9 +190,7 @@ To illustrate, for a file set with permission `755`, the group permission (secon
 ## Implementation
 <!--The implementations must be completed before any LIP is given status "Final", but it need not be completed before the LIP is accepted. While there is merit to the approach of reaching consensus on the specification and rationale before writing code, the principle of "rough consensus and running code" is still useful when it comes to resolving many discussions of API details.-->
 
-## Implementation
-
-A implementation can be found in the [lukso-network/standards-scenarios](https://github.com/lukso-network/standards-scenarios/blob/master/contracts/Accounts/LSP3Account.sol);
+A implementation can be found in the [lukso-network/universalprofile-smart-contracts](https://github.com/lukso-network/universalprofile-smart-contracts/blob/main/contracts/LSP3Account.sol);
 The below defines the JSON interface of the `LSP3Account`.
 
 ERC725Y JSON Schema `LSP6KeyManager`, set at the `LSP3Account`:
@@ -234,56 +233,24 @@ ERC725Y JSON Schema `LSP6KeyManager`, set at the `LSP3Account`:
 ```solidity
 
 interface ILSP6  /* is ERC165 */ {
-    
-    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
-    
-    event Executed(uint256 indexed _operation, address indexed _to, uint256 indexed  _value, bytes _data);
-    
-    event ValueReceived(address indexed sender, uint256 indexed value);
-    
-    event ContractCreated(address indexed contractAddress);
-    
-    event DataChanged(bytes32 indexed key, bytes value);
-    
-    event UniversalReceiver(address indexed from, bytes32 indexed typeId, bytes32 indexed returnedValue, bytes receivedData);
+        
+    event Executed(uint256 indexed  _value, bytes _data); 
     
     
-    // ERC173
+    function getNonce(address _address) public view returns (uint256);
     
-    function owner() public view virtual returns (address);
+    function execute(bytes calldata _data) external payable returns (bool);
     
-    function transferOwnership(address newOwner) public virtual onlyOwner;
-    
-    
-    // ERC725Account (ERC725X + ERC725Y)
-    
-    function execute(uint256 operationType, address to, uint256 value, bytes calldata data) external payable onlyOwner;
-    
-    function getData(bytes32 key) external view returns (bytes memory value);
-    // LSP3 retrievable keys:
-    // SupportedStandards:ERC725Account: 0xeafec4d89fa9619884b6b89135626455000000000000000000000000afdeb5d6
-    // LSP3Profile: 0x5ef83ad9559033e6e941db7d7c495acdce616347d28e90c7ce47cbfcfcad3bc5
-    // LSP3IssuedAssets[]: 0x3a47ab5bd3a594c3a8995f8fa58d0876c96819ca4516bd76100c92462f2f9dc0
-    // LSP1UniversalReceiverDelegate: 0x0cfc51aec37c55a4d0b1a65c6255c4bf2fbdf6277f3cc0730c45b828b6db8b47
-    
-    function setData(bytes32 key, bytes calldata value) external onlyOwner;
-    
-    
+    function executeRelayCall(bytes calldata _data, address _signedFor, uint256 _nonce, bytes memory _signature) external payable returns (bool);
+ 
+        
     // ERC1271
     
     function isValidSignature(bytes32 _hash, bytes memory _signature) public view returns (bytes4 magicValue);
     
-    
-    // LSP1
-
-    function universalReceiver(bytes32 typeId, bytes calldata data) external returns (bytes32);
-    // IF `LSP1UniversalReceiverDelegate` key is set
-    // THEN calls will be forwarded to the address given (UniversalReceiver even MUST still be fired)
 }
 
-
 ```
-
 
 ## Copyright
 

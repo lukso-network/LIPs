@@ -8,7 +8,7 @@ type: LSP
 created: 2020-07-21
 requires: LSP1, LSP2, ERC165, ERC173, ERC725Y, ERC777
 ---
-
+ 
 ## Simple Summary
 
 This standard describes a set of [ERC725Y](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) key value stores that describe a digital asset.
@@ -18,7 +18,7 @@ This standard describes a set of [ERC725Y](https://github.com/ethereum/EIPs/blob
 This standard, defines a set of key value stores that are useful to create digital asset, based on an [ERC777](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-777.md).
 
 Additionally this standards modifies ERC777 `decimals` return value. It is suggested to modify ERC777 to work [LSP1-UniversalReceiver](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-1-UniversalReceiver.md)
-to allow the asset to be received by any smart contract implementing [LSP1](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-1-UniversalReceiver.md), including an [LSP2 Account](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-3-UniversalProfile.md).
+to allow the asset to be received by any smart contract implementing [LSP1](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-1-UniversalReceiver.md), including an [LSP3 Account](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-3-UniversalProfile.md).
 
 ## Motivation
 
@@ -60,10 +60,11 @@ name() => 'My Amazing Asset'
 symbol() => 'MYASSET01'
 ```
 
-#### universalReceiver
+#### Universal Receiver
 
 Instead of relying on 1820, the ERC777 smart contract COULD expect receivers to implement LSP1.
-This is especially recommended for the LUKSO network, to improve the overall compatibility and future proofness of assets and universal profiles based on [LSP1](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-3-UniversalProfile.md). 
+This is especially recommended for the LUKSO network, to improve the overall compatibility and future proofness of assets and universal profiles based on [LSP3](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-3-UniversalProfile.md). 
+
 
 ### Keys
 
@@ -189,7 +190,7 @@ For construction of the Asset Keys see: [ERC725Y JSON Schema](https://github.com
 
 ## Implementation
 
-A implementation can be found in the [lukso-network/standards-scenarios](https://github.com/lukso-network/standards-scenarios/blob/master/contracts/DigitalCertificate/LSP4DigitalCertificate.sol);
+A implementation can be found in the [lukso-network/universalprofile-smart-contracts](https://github.com/lukso-network/universalprofile-smart-contracts/blob/main/contracts/TestHelpers/LSP4DigitalCertificate.sol);
 The below defines the JSON interface of the `LSP4DigitalCertificate`.
 
 ERC725Y JSON Schema `LSP4DigitalCertificate`:
@@ -221,6 +222,117 @@ ERC725Y JSON Schema `LSP4DigitalCertificate`:
     }
 ]
 ```
+
+## Interface Cheat Sheet
+
+```solidity
+
+interface ILSP4  /* is ERC165 */ {
+
+    event Paused(address account);
+    
+    event Unpaused(address account);
+    
+    event DataChanged(bytes32 indexed key, bytes value);
+    
+    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
+    
+    event Minted(address indexed operator, address indexed to, uint256 amount, bytes data, bytes operatorData);
+
+    event Burned(address indexed operator, address indexed from, uint256 amount, bytes data, bytes operatorData);
+
+    event AuthorizedOperator(address indexed operator, address indexed tokenHolder);
+
+    event RevokedOperator(address indexed operator, address indexed tokenHolder);
+    
+    event Approval(address indexed owner, address indexed spender, uint256 value);
+    
+    event Transfer(address indexed from, address indexed to, uint256 value);
+    
+    
+    
+    function dataCount() public view returns (uint256);
+    
+    function allDataKeys() public view returns (bytes32[] memory);
+    
+    function allTokenHolders() public view returns (bytes32[] memory);
+    
+    function removeDefaultOperators() external onlyDefaultOperators;
+    
+    function removeMinter() external onlyMinter;
+    
+    
+    // ERC777
+  
+    function name() public view override returns (string memory);
+    
+    function symbol() public view override returns (string memory);
+    
+    function decimals() public pure override returns (uint8);
+    
+    function granularity() public pure override returns (uint256);
+    
+    function totalSupply() public view override(IERC20, IERC777) returns (uint256);
+    
+    function balanceOf(address tokenHolder) public view override(IERC20, IERC777) returns (uint256);
+    
+    function mint(address _address, uint256 _amount) external override onlyMinter;
+    
+    function send(address recipient, uint256 amount, bytes memory data) public override;
+    
+    function transfer(address recipient, uint256 amount) public override returns (bool);
+    
+    function burn(uint256 amount, bytes memory data) public override;
+    
+    function isOperatorFor(address operator, address tokenHolder) public view override returns (bool);
+    
+    function authorizeOperator(address operator) public override;
+    
+    function revokeOperator(address operator) public override;
+    
+    function defaultOperators() public view override returns (address[] memory);
+    
+    function operatorSend(address sender, address recipient, uint256 amount, bytes memory data, bytes memory operatorData) public override;
+    
+    function operatorBurn(address account, uint256 amount, bytes memory data, bytes memory operatorData) public override;
+    
+    function allowance(address holder, address spender) public view override returns (uint256);
+    
+    function approve(address spender, uint256 value) public override returns (bool);
+    
+    function transferFrom(address holder, address recipient, uint256 amount) public override returns (bool);
+    
+    
+    // Pausable
+    
+    function paused() public view virtual returns (bool);
+    
+    function pause() external whenNotPaused onlyDefaultOperators;
+    
+    function unpause() external whenPaused onlyDefaultOperators;
+    
+    
+    // ERC173
+    
+    function owner() public view virtual returns (address);
+    
+    function renounceOwnership() public virtual onlyOwner;
+    
+    function transferOwnership(address newOwner) public override onlyOwner;
+    
+    
+    // ERC725Y
+    
+    function getData(bytes32 _key) public view override virtual returns (bytes memory _value);
+    
+    function setData(bytes32 _key, bytes memory _value) external override onlyOwner;
+
+  
+}
+
+
+```
+
 
 ## Copyright
 

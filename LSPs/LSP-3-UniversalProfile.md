@@ -13,7 +13,7 @@ requires: LSP1, LSP2, ERC165, ERC173, ERC1271, ERC725Account
 ## Simple Summary
 
 This standard describes a set of [ERC725Y](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) key value stores that are useful to describe a smart contract based profile.
-
+ 
 ## Abstract
 
 This standard, defines a set of key value stores that are useful to create a public on-chain profile, based on an [ERC725Account](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md).
@@ -200,7 +200,7 @@ or a verifiable public appearance.
 
 ## Implementation
 
-A implementation can be found in the [lukso-network/standards-scenarios](https://github.com/lukso-network/standards-scenarios/blob/master/contracts/Accounts/LSP3Account.sol);
+A implementation can be found in the [lukso-network/universalprofile-smart-contracts](https://github.com/lukso-network/universalprofile-smart-contracts/blob/main/contracts/LSP3Account.sol);
 The below defines the JSON interface of the `LSP3Account`.
 
 ERC725Y JSON Schema `LSP3Account`:

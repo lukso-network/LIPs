@@ -8,7 +8,7 @@ type: LSP
 created: 2019-09-01
 requires: ERC165
 ---
-
+ 
 
 ## Simple Summary
 <!--"If you can't explain it simply, you don't understand it well enough." Provide a simplified and layman-accessible explanation of the LIP.-->
@@ -212,6 +212,25 @@ contract UniversalReceiverExample is BasicUniversalReceiver {
         
         return 0x0;
     }
+
+}
+```
+
+## Interface Cheat Sheet
+
+```solidity
+
+interface ILSP1  /* is ERC165 */ {
+
+    event UniversalReceiver(address indexed from, bytes32 indexed typeId, bytes32 indexed returnedValue, bytes receivedData);
+    
+    function universalReceiver(bytes32 typeId, bytes calldata data) external returns (bytes32);
+    
+}
+    
+interface ILSP1Delegate  /* is ERC165 */ {
+    
+    function universalReceiverDelegate(address sender, bytes32 typeId, bytes memory data) external returns (bytes32);
 
 }
 ```
