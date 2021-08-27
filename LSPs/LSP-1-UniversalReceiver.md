@@ -82,11 +82,11 @@ Allows to be called by any external contract when an address wants to delegate i
 
 **Parameters:**
 
-- `sender` is the implementer of the universalReceiver functionality to another smart contract.
+- `sender` is the address delegating his universalReceiver functionality.
 
-- `typeId` is the hash of a standard (according to ERC165?)
+- `typeId` is the hash of a standard (according to ERC165?).
 
-- `data` is a byteArray of arbitrary data. Reciving contracts should take the `id` in consideration to properly decode the `data`. The function MUST revert if `id` is not accepted or unknown. 
+- `data` is a byteArray of arbitrary data. Reciving contracts should take the `id` in consideration to properly decode the `data`. The function MUST revert if `id` is not accepted or unknown.
 
 **returns:** `bytes32`, which can be used to encode response values.
 
