@@ -6,7 +6,7 @@ discussions-to:
 status: Draft
 type: LSP
 created: 2021-08-03
-requires: ERC725Y, LSP2, ERC165, ERC1271
+requires: LSP2, ERC165, ERC725Y, ERC1271
 ---
 
 
@@ -138,44 +138,57 @@ SIGN          = 0x80;   // 1000 0000
 
 #### execute
 
-Execute a calldata payload on an ERC725 account.
-
-The first 4 bytes of the `_data` payload MUST correspond to one of the function selector in the ERC725 account, such as `setData(...)`, `execute(...)` or `transferOwnership(...)`.
-
-**returns:** `true` if the call on ERC725 account succeeded, `false` otherwise.
-
 ```solidity
-function execute(bytes calldata _data) external payable returns (bool)
+function execute(bytes calldata _data) public payable returns (bool)
 ```
 
-#### getNonce
+Execute a calldata payload on an ERC725 account.
 
-Returns the current nonce to be used when using the [`executeRelayCall`](#executeRelayCall)
+**Parameters:**
+
+- `_data`: The call data to be executed. The first 4 bytes of the `_data` payload MUST correspond to one of the function selector in the ERC725 account, such as `setData(...)`, `execute(...)` or `transferOwnership(...)`.
+
+**returns:** `bool` , `true` if the call on ERC725 account succeeded, `false` otherwise.
+
+
+
+
+#### getNonce
 
 ```solidity
 function getNonce(address _address) public view returns (uint256)
 ```
 
+Executed by the Relay Service to get the nonce when using the [`executeRelayCall`](#executeRelayCall)
+
+**Parameters:**
+
+- `_address`: the address of the signer of the transaction.
+
+**returns:** `uint256` , returns the current nonce.
+
+
+
 #### executeRelayCall
+
+```solidity
+function executeRelayCall(bytes calldata _data, address _signedFor, uint256 _nonce, bytes memory _signature) public payable returns (bool)
+```
 
 Allows anybody to execute `_data` payload on a ERC725 account, given they have a signed message from an executor.
 
-**Parameters**
+**Parameters:**
 
 - `_data`: The call data to be executed.
 - `_signedFor`: MUST be the `KeyManager` contract.
 - `_nonce`: MUST be the nonce of the address that signed the message. This can be obtained via the `getNonce(address _address)` function.
 - `_signature`: bytes32 ethereum signature.
 
-**returns:** true if the call on ERC725 account succeeded, false otherwise.
-
-
-```solidity
-function executeRelayCall(bytes calldata _data, address _signedFor, uint256 _nonce, bytes memory _signature) external payable returns (bool)
-```
+**returns:** `bool` , true if the call on ERC725 account succeeded, false otherwise.
 
 **Important:** the message to sign MUST be of the following format: `<KeyManager address>` + `<_data payload>` + `<signer nonce>`.
 
+<br>
 
 ## Rationale
 <!--The rationale fleshes out the specification by describing what motivated the design and why particular design decisions were made. It should describe alternate designs that were considered and related work, e.g. how the feature is supported in other languages. The rationale may also provide evidence of consensus within the community, and should discuss important objections or concerns raised during discussion.-->
@@ -239,9 +252,9 @@ interface ILSP6  /* is ERC165 */ {
     
     function getNonce(address _address) public view returns (uint256);
     
-    function execute(bytes calldata _data) external payable returns (bool);
+    function execute(bytes calldata _data) public payable returns (bool);
     
-    function executeRelayCall(bytes calldata _data, address _signedFor, uint256 _nonce, bytes memory _signature) external payable returns (bool);
+    function executeRelayCall(bytes calldata _data, address _signedFor, uint256 _nonce, bytes memory _signature) public payable returns (bool);
  
         
     // ERC1271
