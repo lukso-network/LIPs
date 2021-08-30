@@ -31,7 +31,7 @@ In cases where smart contracts function as a profile or wallet over a long time,
 
 ## Specification
 
-`ERC165` interface id: `0x6bb56a14`
+ERC165 interface id: `0x6bb56a14`
 
 Every contract that complies to the Universal Receiver standard MUST implement:
 
@@ -71,7 +71,7 @@ This event MUST be emitted when the `universalReceiver` function is succesfully 
 
 ### Optional
 
-`ERC165` interface id: `0xc2d7bcc1`
+ERC165 interface id: `0xc2d7bcc1`
 
 
 ```solidity
