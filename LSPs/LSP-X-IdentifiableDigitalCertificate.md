@@ -46,9 +46,23 @@ All uses of tokenId should be `bytes32` instead of `uint256`.
 
 On the lukso network it is expected that most tokens will be sent to addresses that are contract LSP3Account, so performing the additional check `onERC721Received` is not needed. The `safeTransferFrom` and `_safeMint` functions are removed.
 
-### _checkOnERC721Received
+#### _checkOnERC721Received
 
 It is not expected that `onERC721Received` will be implemented by receiving addresses, as the LSP1 standard will be the main use case. Since `safeTransferFrom` and `safeMint` are removed, the function `_checkOnERC721Received` is also removed.
+
+TODO: should we add a check to this standard and the LSP4 standard to ensure that tokens cannot get stuck in a contract that is not able to interact with them.
+
+#### token supply cap
+
+To enforce scarcity of a token, a `uint256 tokenSupplyCap` is provided during initialization. This is used as an invariant check when minting new tokens.
+
+Additionally the following functions have been added to see what the current supply is:
+
+- `function totalSupply()`: Returns the total amount of tokens stored by the contract. (the `tokenSupplyCap` provided)
+- `function mintedSupply()`: Returns the number of tokens that have been minted.
+- `function mintableSupply()`: Returns the number of tokens available to be minted.
+
+
 
 #### Universal Receiver
 
