@@ -25,7 +25,7 @@ This standard also includes a set of key value stores that are useful to know wh
 ## Motivation
 <!--The motivation is critical for LIPs that want to change the Lukso protocol. It should clearly explain why the existing protocol specification is inadequate to address the problem that the LIP solves. LIP submissions without sufficient motivation may be rejected outright.-->
 
-This standard aims to support use cases not covered by LSP4 NFTs, by providing identifiable tokens instead of a quantity of tokens. This allows for each `tokenId` to have metadata in an ERC725Y in addition to the metadata of the smart contract that mints the tokens. In this way individual tokens benefit from the flexibility & upgradability of the ERC725Y standard, and transfering a token carries the history of ownership and metadata updates.
+This standard aims to support use cases not covered by LSP4, by providing identifiable tokens instead of a quantity of tokens. This allows for each `tokenId` to have metadata in an ERC725Y in addition to the metadata of the smart contract that mints the tokens. In this way individual tokens benefit from the flexibility & upgradability of the ERC725Y standard, and transfering a token carries the history of ownership and metadata updates.
 
 As LSP4 is also in DRAFT status at this time, this standard additionally aims to find common naming for transfer related functions, as well as hooks behavior to interact with [LSP1](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-1-UniversalReceiver.md)
 
