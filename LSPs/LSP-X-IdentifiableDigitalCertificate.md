@@ -1,7 +1,7 @@
 ---
 lip: <to be assigned>
 title: Identifiable Digital Certificate
-author: Claudio Weck <https://github.com/ClaudioZone> , Matthew Stevens <@mattgstevens>, Ankit Kumar <https://github.com/ankitkumar9018>
+author: Claudio Weck <https://github.com/ClaudioZone> , Matthew Stevens <@mattgstevens>, [Ankit Kumar](https://github.com/ankitkumar9018)
 discussions-to: https://discord.gg/E2rJPP4 (LUKSO), https://discord.gg/PQvJQtCV (FANZONE)
 status: Draft
 created: 2021-09-02
