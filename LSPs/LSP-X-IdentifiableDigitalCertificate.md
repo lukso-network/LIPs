@@ -181,17 +181,33 @@ What the `tokenId` represents in this contract, to be stored in the ERC725Y of t
 }
 ```
 
+(TODO: discussion if there are other keys to include in the standard for the contract which mints tokens)
+
 #### ERC721-LSPXTokenIdMetadataMintedBy
 
 The `address` of the contract which minted this tokenId, to be stored in the ERC725Y of a `tokenId` metadata conract.
 
 ```json
 {
-    "name": "ERC721-LSPXTokenIdMintedBy",
+    "name": "ERC721-LSPXTokenIdMetadataMintedBy",
     "key": "TODO",
     "keyType": "Singleton",
     "valueContent": "Address",
     "valueType": "address"
+}
+```
+
+#### ERC721-LSPXTokenIdMetadataTokenId
+
+The `bytes32` of the `tokenId` this metadata is for, to be stored in the ERC725Y of a `tokenId` metadata conract.
+
+```json
+{
+    "name": "ERC721-LSPXTokenIdMetadataTokenId",
+    "key": "TODO",
+    "keyType": "Singleton",
+    "valueContent": "Bytes32",
+    "valueType": "bytes32"
 }
 ```
 
