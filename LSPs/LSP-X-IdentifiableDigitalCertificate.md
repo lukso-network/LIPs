@@ -12,7 +12,7 @@ requires: LSP1, LSP2, ERC165, ERC725Y
 
 ## Simple Summary
 <!--"If you can't explain it simply, you don't understand it well enough." Provide a simplified and layman-accessible explanation of the LIP.-->
-A standard interface for identifiable digital certificates based on ERC721 and ERC725 for unique and upgradable NFTs. 
+A standard interface for identifiable digital certificates, based on ERC721 for unique and upgradable NFTs. 
 
 ## Abstract
 <!--A short (~200 word) description of the technical issue being addressed.-->
