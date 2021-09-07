@@ -8,6 +8,9 @@ type: LSP
 created: 2021-08-03
 requires: LSP2, ERC165, ERC725Y, ERC1271
 ---
+Also do you think we should explain it from a developer perspective ?
+￼
+Message @CJ-42
 
 
 ## Simple Summary
@@ -189,6 +192,26 @@ Allows anybody to execute `_data` payload on a ERC725 account, given they have a
 **Important:** the message to sign MUST be of the following format: `<KeyManager address>` + `<_data payload>` + `<signer nonce>`.
 
 <br>
+
+## Multi-timeline nonce
+
+Just like native ethereum transactions, it is essential to prevent signed messages from being replayed (executed multiple times). This is achieved using a nonce system. However, unlike the native transaction in which nonces are strictly sequential, the Key Manager uses a multi-timeline nonce system to allow out-of-order execution of some messages.
+
+Messages with sequential nonces must be executed in order, according to the nonce they are given. This means order number 6 must be executed before order number 7 can be executed. Some users may want to sign multiple orders, allowing the transfer of different tokens to different users. In that case, the order recipient will want to be able to execute the order whenever they want, and will certainly not want to wait on anyone executing their order before they can execute theirs. This is where out-of-order execution comes in.
+
+Out-of-order execution is achieved by using multiple independent channels. Each channel's nonce behaves as expected, but different channels are independent. This means that messages 5, 6, and 7 of channel 0 must be executed sequentially, but order 6 of channel 1 is independent, and only depends on order 5 of channel 1.
+
+The Key Manager's nonces, which are represented as `uint256` should be seen as the concatenation of two `uint128`, the `channelId` and the `nonceId`.<br> 
+The first 128 bits represents the `nonceId` within the channel and the second 128 bits represents the `channelId`
+
+The current nonce on a specific channel can be queried using :
+
+```solidity
+function getNonce(address signer, uint256 channel) public view returns (uint256)
+```
+
+Since the `channelId` represents the second 128 bits, using a minimal value like `1` will return a huge `nonce` number : `2**128` equal to `340282366920938463463374607431768211456`.<br>
+After the signed transaction is executed the `nonceId` will be incremented by 1, this will increment the `nonce` by 1 as well because the nonceId represents the first 128 bits of the `nonce` so it will be `340282366920938463463374607431768211457` .
 
 ## Rationale
 <!--The rationale fleshes out the specification by describing what motivated the design and why particular design decisions were made. It should describe alternate designs that were considered and related work, e.g. how the feature is supported in other languages. The rationale may also provide evidence of consensus within the community, and should discuss important objections or concerns raised during discussion.-->
