@@ -8,9 +8,6 @@ type: LSP
 created: 2021-08-03
 requires: LSP2, ERC165, ERC725Y, ERC1271
 ---
-Also do you think we should explain it from a developer perspective ?
-￼
-Message @CJ-42
 
 
 ## Simple Summary
