@@ -17,7 +17,7 @@ This standard describes a set of [ERC725Y](https://github.com/ethereum/EIPs/blob
 
 This standard, defines a set of key value stores that are useful to create digital asset, based on an [ERC777](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-777.md).
 
-Additionally this standards modifies ERC777 `decimals` return value. It is suggested to modify ERC777 to work [LSP1-UniversalReceiver](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-1-UniversalReceiver.md)
+Additionally this standards modifies [ERC777](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-777.md) `decimals` return value. It is suggested to modify ERC777 to work [LSP1-UniversalReceiver](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-1-UniversalReceiver.md)
 to allow the asset to be received by any smart contract implementing [LSP1](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-1-UniversalReceiver.md), including an [LSP3 Account](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-3-UniversalProfile.md).
 
 ## Motivation
@@ -35,23 +35,19 @@ Every contract that supports to the Digital Certificate standard SHOULD implemen
 
 ### ERC777 modifications
 
-To be compliant with this standard the required ERC777 needs to be modified as follows:
+To be compliant with this standard the required [ERC777](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-777.md) needs to be modified as follows:
 
 #### decimals
 
  ```solidity
  decimals() external returns (uint8)
  ```
-
-MUST return `0`.
-
 NFTs are non-fungible and therefore the smallest unit is 1.
 
+**returns:** `uint8` , MUST return `0`.
+
+
 #### Asset names
-
-To define the Assets name and Symbol, ERC777 default `name` and `symbol` are used.
-
-Symbols should be UPPERCASE, without spaces and contain only ASCII.
 
 Example:
 
@@ -60,9 +56,14 @@ name() => 'My Amazing Asset'
 symbol() => 'MYASSET01'
 ```
 
+To define the Assets name and Symbol, ERC777 default `name` and `symbol` are used.
+
+Symbols should be UPPERCASE, without spaces and contain only ASCII.
+
+
 #### Universal Receiver
 
-Instead of relying on 1820, the ERC777 smart contract COULD expect receivers to implement LSP1.
+Instead of relying on [ERC1820](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1820.md), the ERC777 smart contract COULD expect receivers to implement LSP1.
 This is especially recommended for the LUKSO network, to improve the overall compatibility and future proofness of assets and universal profiles based on [LSP3](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-3-UniversalProfile.md). 
 
 
@@ -228,14 +229,46 @@ ERC725Y JSON Schema `LSP4DigitalCertificate`:
 ```solidity
 
 interface ILSP4  /* is ERC165 */ {
-
-    event Paused(address account);
     
-    event Unpaused(address account);
+        
+    // ERC725Y
     
     event DataChanged(bytes32 indexed key, bytes value);
+
     
-    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
+    function getData(bytes32 _key) public view override virtual returns (bytes memory _value);
+    
+    function setData(bytes32 _key, bytes memory _value) external override onlyOwner;
+    
+    
+    // ERC20
+
+    event Transfer(address indexed from, address indexed to, uint256 value);
+    
+    event Approval(address indexed owner, address indexed spender, uint256 value);
+    
+    
+    function name() public view override returns (string memory);
+    
+    function symbol() public view override returns (string memory);
+    
+    function decimals() public pure override returns (uint8);
+    
+    function totalSupply() public view override(IERC20, IERC777) returns (uint256);
+    
+    function balanceOf(address tokenHolder) public view override(IERC20, IERC777) returns (uint256);
+    
+    function allowance(address holder, address spender) public view override returns (uint256);
+    
+    function approve(address spender, uint256 value) public override returns (bool);
+    
+    function transferFrom(address holder, address recipient, uint256 amount) public override returns (bool);
+        
+    function transfer(address recipient, uint256 amount) public override returns (bool);
+    
+    
+    
+    // ERC777
     
     event Minted(address indexed operator, address indexed to, uint256 amount, bytes data, bytes operatorData);
 
@@ -249,41 +282,13 @@ interface ILSP4  /* is ERC165 */ {
     
     event Transfer(address indexed from, address indexed to, uint256 value);
     
+    event Sent(address indexed operator, address indexed from, address indexed to, uint256 amount, bytes data, bytes operatorData);
     
-    
-    function dataCount() public view returns (uint256);
-    
-    function allDataKeys() public view returns (bytes32[] memory);
-    
-    function allTokenHolders() public view returns (bytes32[] memory);
-    
-    function removeDefaultOperators() external onlyDefaultOperators;
-    
-    function removeMinter() external onlyMinter;
-    
-    
-    // ERC777
-  
-    function name() public view override returns (string memory);
-    
-    function symbol() public view override returns (string memory);
-    
-    function decimals() public pure override returns (uint8);
     
     function granularity() public pure override returns (uint256);
-    
-    function totalSupply() public view override(IERC20, IERC777) returns (uint256);
-    
-    function balanceOf(address tokenHolder) public view override(IERC20, IERC777) returns (uint256);
-    
-    function mint(address _address, uint256 _amount) external override onlyMinter;
-    
+        
     function send(address recipient, uint256 amount, bytes memory data) public override;
-    
-    function transfer(address recipient, uint256 amount) public override returns (bool);
-    
-    function burn(uint256 amount, bytes memory data) public override;
-    
+        
     function isOperatorFor(address operator, address tokenHolder) public view override returns (bool);
     
     function authorizeOperator(address operator) public override;
@@ -295,41 +300,20 @@ interface ILSP4  /* is ERC165 */ {
     function operatorSend(address sender, address recipient, uint256 amount, bytes memory data, bytes memory operatorData) public override;
     
     function operatorBurn(address account, uint256 amount, bytes memory data, bytes memory operatorData) public override;
-    
-    function allowance(address holder, address spender) public view override returns (uint256);
-    
-    function approve(address spender, uint256 value) public override returns (bool);
-    
-    function transferFrom(address holder, address recipient, uint256 amount) public override returns (bool);
-    
-    
-    // Pausable
-    
-    function paused() public view virtual returns (bool);
-    
-    function pause() external whenNotPaused onlyDefaultOperators;
-    
-    function unpause() external whenPaused onlyDefaultOperators;
+   
     
     
     // ERC173
     
+    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
+
+    
     function owner() public view virtual returns (address);
-    
-    function renounceOwnership() public virtual onlyOwner;
-    
+        
     function transferOwnership(address newOwner) public override onlyOwner;
-    
-    
-    // ERC725Y
-    
-    function getData(bytes32 _key) public view override virtual returns (bytes memory _value);
-    
-    function setData(bytes32 _key, bytes memory _value) external override onlyOwner;
 
   
 }
-
 
 ```
 
