@@ -252,9 +252,9 @@ interface ILSP3  /* is ERC165 */ {
     event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
 
 
-    function owner() public view virtual returns (address);
+    function owner() external view virtual returns (address);
     
-    function transferOwnership(address newOwner) public virtual onlyOwner;
+    function transferOwnership(address newOwner) external virtual onlyOwner;
     
     
     // ERC725Account (ERC725X + ERC725Y)
@@ -268,28 +268,28 @@ interface ILSP3  /* is ERC165 */ {
     event DataChanged(bytes32 indexed key, bytes value);
     
     
-    function execute(uint256 operationType, address to, uint256 value, bytes calldata data) public payable onlyOwner;
+    function execute(uint256 operationType, address to, uint256 value, bytes calldata data) external payable onlyOwner;
     
-    function getData(bytes32[] calldata key) public view returns (bytes[] memory value);
+    function getData(bytes32[] calldata key) external view returns (bytes[] memory value);
     // LSP3 retrievable keys:
     // SupportedStandards:ERC725Account: 0xeafec4d89fa9619884b6b89135626455000000000000000000000000afdeb5d6
     // LSP3Profile: 0x5ef83ad9559033e6e941db7d7c495acdce616347d28e90c7ce47cbfcfcad3bc5
     // LSP3IssuedAssets[]: 0x3a47ab5bd3a594c3a8995f8fa58d0876c96819ca4516bd76100c92462f2f9dc0
     // LSP1UniversalReceiverDelegate: 0x0cfc51aec37c55a4d0b1a65c6255c4bf2fbdf6277f3cc0730c45b828b6db8b47
     
-    function setData(bytes32[] calldata key, bytes[] calldata value) public onlyOwner;
+    function setData(bytes32[] calldata key, bytes[] calldata value) external onlyOwner;
     
     
     // ERC1271
     
-    function isValidSignature(bytes32 _hash, bytes memory _signature) public view returns (bytes4 magicValue);
+    function isValidSignature(bytes32 _hash, bytes memory _signature) external view returns (bytes4 magicValue);
     
     
     // LSP1
 
     event UniversalReceiver(address indexed from, bytes32 indexed typeId, bytes32 indexed returnedValue, bytes receivedData);
 
-    function universalReceiver(bytes32 typeId, bytes calldata data) public returns (bytes32);
+    function universalReceiver(bytes32 typeId, bytes calldata data) external returns (bytes32);
     // IF `LSP1UniversalReceiverDelegate` key is set
     // THEN calls will be forwarded to the address given (UniversalReceiver even MUST still be fired)
 }
