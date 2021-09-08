@@ -297,16 +297,16 @@ interface ILSP6  /* is ERC165 */ {
     event Executed(uint256 indexed  _value, bytes _data); 
     
     
-    function getNonce(address _address) public view returns (uint256);
+    function getNonce(address _address) external view returns (uint256);
     
-    function execute(bytes calldata _data) public payable returns (bool);
+    function execute(bytes calldata _data) external payable returns (bool);
     
-    function executeRelayCall(bytes calldata _data, address _signedFor, uint256 _nonce, bytes memory _signature) public payable returns (bool);
+    function executeRelayCall(bytes calldata _data, address _signedFor, uint256 _nonce, bytes memory _signature) external payable returns (bool);
  
         
     // ERC1271
     
-    function isValidSignature(bytes32 _hash, bytes memory _signature) public view returns (bytes4 magicValue);
+    function isValidSignature(bytes32 _hash, bytes memory _signature) external view returns (bytes4 magicValue);
     
 }
 
