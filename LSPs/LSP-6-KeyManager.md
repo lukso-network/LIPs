@@ -191,30 +191,50 @@ Allows anybody to execute `_data` payload on a ERC725 account, given they have a
 
 <br>
 
-## Multi-timeline nonce
 
-It is essential to prevent signed messages from being replayed, this is achieved using a nonce system. A nonce is an arbitrary number that can be used just once in a transaction. It is often a random or pseudo-random number issued in an authentication protocol to ensure that old transaction cannot be reused in replay attacks (executed multiple times). However, unlike the native transaction in which nonces are strictly sequential, the Key Manager uses a multi-timeline nonce system to allow out-of-order execution of some messages.
+## Multi-Channel nonce
 
-Messages with sequential nonces must be executed in order. This means order number 3 must be executed before order number 4 can be executed. Some users may want to sign multiple orders, allowing the transfer of different tokens to different users. In that case, the order recipient will want to be able to execute the order whenever they want, and will certainly not want to wait on anyone executing their order before they can execute theirs. This is where out-of-order execution comes in.
+Using nonces prevent old signed transactions from being replayed (replay attacks). A nonce is an arbitrary number that can be used just once in a transaction.
+
+#### Problem of Sequential Nonces
+
+With native transactions, nonces are strictly sequential. This means that messages with sequential nonces must be executed in order. For instance, in order for message number 4 to be executed, it must wait for message number 3 to complete.
+
+However, **sequential nonces come with the following limitation**:
+
+Some users may want to sign multiple message, allowing the transfer of different assets to different recipients. In that case, the recipient will want to be able to use / transfer their assets whenever they want, and will certainly not want to wait on anyone to receive their assets before they can use theirs.
+
+ This is where **out-of-order execution** comes in.
+ 
+ #### Introducing multi-channel nonces
 
 Out-of-order execution is achieved by using multiple independent channels. Each channel's nonce behaves as expected, but different channels are independent. This means that messages 2, 3, and 4 of channel 0 must be executed sequentially, but message 3 of channel 1 is independent, and only depends on message 2 of channel 1.
 
-The Key Manager's nonces are represented as `uint256` formed from the concatenation of two `uint128`, the channelId and the nonceId.
-The first 128 bits represents the `nonceId` within the channel and the second 128 bits represents the `channelId`.
+#### Nonces in the KeyManager
 
-The current nonce can be queried using :
+The Key Manager allows out-of-order execution of messages by using nonces through multiple channels.
+
+Nonces are represented as `uint256` from the concatenation of two `uint128` : the `channelId` and the `nonceId`.
+
+- left most 128 bits : `channelId`
+- right most 128 bits: `nonceId`
+
+<img align="center" alt="multi-channel-nonce" width="1000px" height="400px" src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/60e3f00b-2e25-4087-997b-5cf0cde7019e/multi-channel-nonce.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20210908%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20210908T153817Z&X-Amz-Expires=86400&X-Amz-Signature=1b7172d9a49f433d5f82eb00cbd9cb4586b4f2a74fc86a5c298bc71d4ab89a47&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22multi-channel-nonce.jpeg%22" />
+
+<p align="center"><i> Example of multi channel nonce, where channelId = 5 and nonceId = 1 </i></p>
+
+
+The current nonce can be queried using:
 
 ```solidity
 function getNonce(address _address, uint256 _channel) public view returns (uint256)
-```
+````
+Since the `channelId` represents the left-most 128 bits, using a minimal value like 1 will return a huge `nonce` number: `2**128` equal to `340282366920938463463374607431768211456`.
 
-Since the `channelId` represents the second 128 bits, using a minimal value like 1 will return a huge `nonce` number : `2**128` equal to `340282366920938463463374607431768211456`.<br>
-After the signed transaction is executed the `nonceId` will be incremented by 1, this will increment the `nonce` by 1 as well because the nonceId represents the first 128 bits of the nonce so it will be `340282366920938463463374607431768211457` .<br>
+After the signed transaction is executed the `nonceId` will be incremented by 1, this will increment the `nonce` by 1 as well because the nonceId represents the first 128 bits of the nonce so it will be `340282366920938463463374607431768211457`.
+For sequential messages, users could use channel `0` and for out-of-order messages they could use channel `n`.
 
-For sequantial messages, users could use channel `0` and for out-of-order messages they could use channel `n`.<br>
-
-**Important:** It's up to the user to choose the channel that he wants to sign mulitple sequantial orders on it, not necessary `0`.
-
+**Important:** It's up to the user to choose the channel that he wants to sign multiple sequential orders on it, not necessary `0`.
 
 
 ## Rationale
