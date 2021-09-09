@@ -241,6 +241,14 @@ function getNonce(address _address, uint256 _channel) public view returns (uint2
 Since the `channelId` represents the left-most 128 bits, using a minimal value like 1 will return a huge `nonce` number: `2**128` equal to `340282366920938463463374607431768211456`.
 
 After the signed transaction is executed the `nonceId` will be incremented by 1, this will increment the `nonce` by 1 as well because the nonceId represents the first 128 bits of the nonce so it will be `340282366920938463463374607431768211457`.
+
+```solidity
+
+_nonces[signer][nonce >> 128]++
+
+```
+`nonce >> 128` represents the channel which the signer chose for executing the transaction. After looking up the nonce of the signer at that specific channel it will be incremented by 1 `++`.<br>
+
 For sequential messages, users could use channel `0` and for out-of-order messages they could use channel `n`.
 
 **Important:** It's up to the user to choose the channel that he wants to sign multiple sequential orders on it, not necessary `0`.
