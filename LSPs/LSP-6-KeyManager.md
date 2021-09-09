@@ -159,12 +159,16 @@ Execute a calldata payload on an ERC725 account.
 function getNonce(address _address, uint256 _channel) public view returns (uint256)
 ```
 
-Executed by the Relay Service to get the nonce when using the [`executeRelayCall`](#executeRelayCall)
+Returns the nonce that needs to be signed by a allowed key to be passed into the executeRelayCall function. A signer can choose his channel number arbitrarily.
+
+If multiple transactions should be signed, nonces in the same channel can simply be increased by increasing the returned nonce.
+
+Read [what are multi-channel nonces](#what-are-multi-channel-nonces)
 
 **Parameters:**
 
 - `_address`: the address of the signer of the transaction.
-- `_channel` : the channel which the signer use for executing the transaction.
+- `_channel` :  the channel which the signer wants to use for executing the transaction.
 
 **returns:** `uint256` , returns the current nonce.
 
@@ -192,9 +196,11 @@ Allows anybody to execute `_data` payload on a ERC725 account, given they have a
 <br>
 
 
-## Multi-Channel nonce
+### What are multi-channel nonces
 
-Using nonces prevent old signed transactions from being replayed (replay attacks). A nonce is an arbitrary number that can be used just once in a transaction.
+This concept was taken from <https://github.com/amxx/permit#out-of-order-execution>.
+
+Using nonces prevent old signed transactions from being replayed again (replay attacks). A nonce is an arbitrary number that can be used just once in a transaction.
 
 #### Problem of Sequential Nonces
 
@@ -202,24 +208,27 @@ With native transactions, nonces are strictly sequential. This means that messag
 
 However, **sequential nonces come with the following limitation**:
 
-Some users may want to sign multiple message, allowing the transfer of different assets to different recipients. In that case, the recipient will want to be able to use / transfer their assets whenever they want, and will certainly not want to wait on anyone to receive their assets before they can use theirs.
+Some users may want to sign multiple message, allowing the transfer of different assets to different recipients. In that case, the recipient want to be able to use / transfer their assets whenever they want, and will certainly not want to wait on anyone before signing another transaction.
 
  This is where **out-of-order execution** comes in.
- 
- #### Introducing multi-channel nonces
 
-Out-of-order execution is achieved by using multiple independent channels. Each channel's nonce behaves as expected, but different channels are independent. This means that messages 2, 3, and 4 of channel 0 must be executed sequentially, but message 3 of channel 1 is independent, and only depends on message 2 of channel 1.
+#### Introducing multi-channel nonces
+
+Out-of-order execution is achieved by using multiple independent channels. Each channel's nonce behaves as expected, but different channels are independent. This means that messages 2, 3, and 4 of `channel 0` must be executed sequentially, but message 3 of channel 1 is independent, and only depends on message 2 of `channel 1`.
+
+The benefit is that the signer key can determine for which channel to sign the nonces. Relay services will have to understand the channel the signer choose and execute the transactions of each channel in the right order, to prevent failing transactions.
 
 #### Nonces in the KeyManager
 
 The Key Manager allows out-of-order execution of messages by using nonces through multiple channels.
 
-Nonces are represented as `uint256` from the concatenation of two `uint128` : the `channelId` and the `nonceId`.
+ Nonces are represented as `uint256` from the concatenation of two `uint128` : the `channelId` and the `nonceId`.
 
-- left most 128 bits : `channelId`
-- right most 128 bits: `nonceId`
+ - left most 128 bits : `channelId`
+ - right most 128 bits: `nonceId`
 
-<img align="center" alt="multi-channel-nonce" width="1000px" height="400px" src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/60e3f00b-2e25-4087-997b-5cf0cde7019e/multi-channel-nonce.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20210908%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20210908T153817Z&X-Amz-Expires=86400&X-Amz-Signature=1b7172d9a49f433d5f82eb00cbd9cb4586b4f2a74fc86a5c298bc71d4ab89a47&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22multi-channel-nonce.jpeg%22" />
+![multi-channel-nonce](https://user-images.githubusercontent.com/86341666/132648960-297b1803-0c36-413d-be44-6fa7ea709c13.jpeg)
+
 
 <p align="center"><i> Example of multi channel nonce, where channelId = 5 and nonceId = 1 </i></p>
 
