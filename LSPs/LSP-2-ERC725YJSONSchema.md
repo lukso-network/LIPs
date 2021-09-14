@@ -99,11 +99,11 @@ For all other elements:
 - The second 16 bytes is a `uint128` of the number of the element
 - Elements start at number `0`
 
-This would looks as follows for `LSP2IssuedAssets[]`:
+This would looks as follows for `LSP3IssuedAssets[]`:
 
-- element number: key: `0xb8c4a0b76ed8454e098b20a987a980e69abe3b1a88567ae5472af5f863f8c8f9`, value: `0x0000000000000000000000000000000000000000000000000000000000000002` (2 elements)
-- element 1: key: `0xb8c4a0b76ed8454e098b20a987a980e600000000000000000000000000000000`, value: `0x123...` (element 0)
-- element 2: key: `0xb8c4a0b76ed8454e098b20a987a980e600000000000000000000000000000001`, value: `0x321...` (element 1)
+- element number: key: `0x3a47ab5bd3a594c3a8995f8fa58d0876c96819ca4516bd76100c92462f2f9dc0`, value: `0x0000000000000000000000000000000000000000000000000000000000000002` (2 elements)
+- element 1: key: `0x3a47ab5bd3a594c3a8995f8fa58d087600000000000000000000000000000000`, value: `0x123...` (element 0)
+- element 2: key: `0x3a47ab5bd3a594c3a8995f8fa58d087600000000000000000000000000000001`, value: `0x321...` (element 1)
 ...
 
 
@@ -116,8 +116,8 @@ Below is an example of an Array key type:
 
 ```json
 {
-    "name": "LSP2IssuedAssets[]",
-    "key": "0xb8c4a0b76ed8454e098b20a987a980e69abe3b1a88567ae5472af5f863f8c8f9",
+    "name": "LSP3IssuedAssets[]",
+    "key": "0x3a47ab5bd3a594c3a8995f8fa58d0876c96819ca4516bd76100c92462f2f9dc0",
     "keyType": "Array",
     "valueContent": "Number",
     "valueType": "uint256",
@@ -129,17 +129,17 @@ Below is an example of an Array key type:
 #### Example
 
 ```solidity
-key: keccak256('LSP2IssuedAssets[]') = 0xb8c4a0b76ed8454e098b20a987a980e69abe3b1a88567ae5472af5f863f8c8f9
+key: keccak256('LSP3IssuedAssets[]') = 0x3a47ab5bd3a594c3a8995f8fa58d0876c96819ca4516bd76100c92462f2f9dc0
 value: uint256 (array length) e.g. 0x0000000000000000000000000000000000000000000000000000000000000002
 
 // array items
 
 // element 0
-key: 0xb8c4a0b76ed8454e098b20a987a980e600000000000000000000000000000000
+key: 0x3a47ab5bd3a594c3a8995f8fa58d087600000000000000000000000000000000
 value: 0xcafecafecafecafecafecafecafecafecafecafe
 
 // element 1
-key: 0xb8c4a0b76ed8454e098b20a987a980e600000000000000000000000000000001
+key: 0x3a47ab5bd3a594c3a8995f8fa58d087600000000000000000000000000000001
 value: 0xcafecafecafecafecafecafecafecafecafecafe
 ```
 
@@ -306,8 +306,8 @@ To allow interfaces to auto decode an ERC725Y key value store using the ERC725Y 
         "valueType": "bytes"
     },
     {
-        "name": "LSP2IssuedAssets[]",
-        "key": "0xb8c4a0b76ed8454e098b20a987a980e69abe3b1a88567ae5472af5f863f8c8f9",
+        "name": "LSP3IssuedAssets[]",
+        "key": "0x3a47ab5bd3a594c3a8995f8fa58d0876c96819ca4516bd76100c92462f2f9dc0",
         "keyType": "Array",
         "valueContent": "Number",
         "valueType": "uint256",

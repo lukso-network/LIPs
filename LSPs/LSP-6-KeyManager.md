@@ -17,6 +17,7 @@ This standard describes a `KeyManager` contract with a set of pre-defined permis
 Such permissions are useful to control actions performed by other addresses when interacting with an [ERC725Account](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md).
 
 ## Abstract
+
 <!--A short (~200 word) description of the technical issue being addressed.-->
 
 This standard allows for a controller and permissioning layer to be set on an ERC725 account.
@@ -56,6 +57,20 @@ These keys are based on the [LSP2-ERC725YJSONSchema](https://github.com/CJ42/LIP
 
 The KeyManager will read the permissions from the ERC725Account key value store, to determine if a key is allowed to perform certain actions.
 
+#### AddressPermissions[]
+
+Holds an array of address, that have permission some permission sets to interact with the ERC725Account.
+
+```json
+{
+    "name": "AddressPermissions[]",
+    "key": "0xdf30dba06db6a30e65354d9a64c609861f089545ca58c6b4dbe31a5f338cb0e3",
+    "keyType": "Array",
+    "valueContent": "Address",
+    "valueType": "address"
+}
+```
+
 #### AddressPermissions:Permissions:\<address\>
 
 Holds the permissions for a key. See [Permission Values](#permission-values-in-addresspermissionspermissionsaddress) for details.
@@ -64,7 +79,7 @@ Holds the permissions for a key. See [Permission Values](#permission-values-in-a
 {
     "name": "AddressPermissions:Permissions:<address>",
     "key": "0x4b80742d0000000082ac0000<address>",
-    "keyType": "Singleton",
+    "keyType": "AddressMappingWithGrouping",
     "valueContent": "BitArray",
     "valueType": "bytes4"
 }
@@ -78,7 +93,7 @@ Holds an array of address, the key is allowed to talk to.
 {
     "name": "AddressPermissions:AllowedAddresses:<address>",
     "key": "0x4b80742d00000000c6dd0000<address>",
-    "keyType": "Singleton",
+    "keyType": "AddressMappingWithGrouping",
     "valueContent": "Address",
     "valueType": "address[]"
 }
@@ -92,7 +107,7 @@ Holds an array of bytes4 function signatures, the key is allowed to call on othe
 {
     "name": "AddressPermissions:AllowedFunctions:<address>",
     "key": "0x4b80742d000000008efe0000<address>",
-    "keyType": "Singleton",
+    "keyType": "AddressMappingWithGrouping",
     "valueContent": "Bytes4",
     "valueType": "bytes4[]"
 }
@@ -106,7 +121,7 @@ Holds an array of bytes4 ERC165 standards signatures, other smart contracts shou
 {
     "name": "AddressPermissions:AllowedStandards:<address>",
     "key": "0x4b80742d000000003efa0000<address>",
-    "keyType": "Singleton",
+    "keyType": "AddressMappingWithGrouping",
     "valueContent": "Bytes4",
     "valueType": "bytes4[]"
 }
@@ -192,6 +207,12 @@ Allows anybody to execute `_data` payload on a ERC725 account, given they have a
 **returns:** `bool` , true if the call on ERC725 account succeeded, false otherwise.
 
 **Important:** the message to sign MUST be of the following format: `<KeyManager address>` + `<signer nonce>` + `<_data payload>` .
+These 3 parameters MUST be:
+
+- packed encoded (not zero padded, leading `0`s are removed)
+- hashed with `keccak256`
+
+The final message MUST be signed using ethereum specific signature, based on [EIP712](https://eips.ethereum.org/EIPS/eip-712).
 
 <br>
 
@@ -227,8 +248,8 @@ The Key Manager allows out-of-order execution of messages by using nonces throug
  - left most 128 bits : `channelId`
  - right most 128 bits: `nonceId`
 
-![multi-channel-nonce](https://user-images.githubusercontent.com/86341666/132648960-297b1803-0c36-413d-be44-6fa7ea709c13.jpeg)
 
+![multi-channel-nonce](https://user-images.githubusercontent.com/31145285/133292580-42817340-104e-48c5-832b-533842b98d26.jpg)
 
 <p align="center"><i> Example of multi channel nonce, where channelId = 5 and nonceId = 1 </i></p>
 
@@ -237,7 +258,7 @@ The current nonce can be queried using:
 
 ```solidity
 function getNonce(address _address, uint256 _channel) public view returns (uint256)
-````
+```
 Since the `channelId` represents the left-most 128 bits, using a minimal value like 1 will return a huge `nonce` number: `2**128` equal to 3402823669209384634633746074317682114**56**.
 
 After the signed transaction is executed the `nonceId` will be incremented by 1, this will increment the `nonce` by 1 as well because the nonceId represents the first 128 bits of the nonce so it will be 3402823669209384634633746074317682114**57**.
@@ -277,28 +298,28 @@ ERC725Y JSON Schema `LSP6KeyManager`, set at the `LSP3Account`:
     {
         "name": "AddressPermissions:Permissions:<address>",
         "key": "0x4b80742d0000000082ac0000<address>",
-        "keyType": "Singleton",
+        "keyType": "AddressMappingWithGrouping",
         "valueContent": "BitArray",
         "valueType": "bytes4"
     },
     {
         "name": "AddressPermissions:AllowedAddresses:<address>",
         "key": "0x4b80742d00000000c6dd0000<address>",
-        "keyType": "Singleton",
+        "keyType": "AddressMappingWithGrouping",
         "valueContent": "Address",
         "valueType": "address[]"
     },
     {
         "name": "AddressPermissions:AllowedFunctions:<address>",
         "key": "0x4b80742d000000008efe0000<address>",
-        "keyType": "Singleton",
+        "keyType": "AddressMappingWithGrouping",
         "valueContent": "Bytes4",
         "valueType": "bytes4[]"
     },
     {
         "name": "AddressPermissions:AllowedStandards:<address>",
         "key": "0x4b80742d000000003efa0000<address>",
-        "keyType": "Singleton",
+        "keyType": "AddressMappingWithGrouping",
         "valueContent": "Bytes4",
         "valueType": "bytes4[]"
     }
