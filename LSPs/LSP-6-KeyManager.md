@@ -62,7 +62,7 @@ Holds the permissions for a key. See [Permission Values](#permission-values-in-a
 {
   "name": "AddressPermissions:Permissions:<address>",
   "key": "0x4b80742d0000000082ac0000<address>",
-  "keyType": "Singleton",
+  "keyType": "AddressMappingWithGrouping",
   "valueContent": "BitArray",
   "valueType": "bytes4"
 }
@@ -76,7 +76,7 @@ Holds an array of address, the key is allowed to talk to.
 {
   "name": "AddressPermissions:AllowedAddresses:<address>",
   "key": "0x4b80742d00000000c6dd0000<address>",
-  "keyType": "Singleton",
+  "keyType": "AddressMappingWithGrouping",
   "valueContent": "Address",
   "valueType": "address[]"
 }
@@ -90,7 +90,7 @@ Holds an array of bytes4 function signatures, the key is allowed to call on othe
 {
   "name": "AddressPermissions:AllowedFunctions:<address>",
   "key": "0x4b80742d000000008efe0000<address>",
-  "keyType": "Singleton",
+  "keyType": "AddressMappingWithGrouping",
   "valueContent": "Bytes4",
   "valueType": "bytes4[]"
 }
@@ -104,7 +104,7 @@ Holds an array of bytes4 ERC165 standards signatures, other smart contracts shou
 {
   "name": "AddressPermissions:AllowedStandards:<address>",
   "key": "0x4b80742d000000003efa0000<address>",
-  "keyType": "Singleton",
+  "keyType": "AddressMappingWithGrouping",
   "valueContent": "Bytes4",
   "valueType": "bytes4[]"
 }
