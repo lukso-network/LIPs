@@ -271,28 +271,28 @@ ERC725Y JSON Schema `LSP6KeyManager`, set at the `LSP3Account`:
   {
     "name": "AddressPermissions:Permissions:<address>",
     "key": "0x4b80742d0000000082ac0000<address>",
-    "keyType": "Singleton",
+    "keyType": "AddressMappingWithGrouping",
     "valueContent": "BitArray",
     "valueType": "bytes4"
   },
   {
     "name": "AddressPermissions:AllowedAddresses:<address>",
     "key": "0x4b80742d00000000c6dd0000<address>",
-    "keyType": "Singleton",
+    "keyType": "AddressMappingWithGrouping",
     "valueContent": "Address",
     "valueType": "address[]"
   },
   {
     "name": "AddressPermissions:AllowedFunctions:<address>",
     "key": "0x4b80742d000000008efe0000<address>",
-    "keyType": "Singleton",
+    "keyType": "AddressMappingWithGrouping",
     "valueContent": "Bytes4",
     "valueType": "bytes4[]"
   },
   {
     "name": "AddressPermissions:AllowedStandards:<address>",
     "key": "0x4b80742d000000003efa0000<address>",
-    "keyType": "Singleton",
+    "keyType": "AddressMappingWithGrouping",
     "valueContent": "Bytes4",
     "valueType": "bytes4[]"
   }
