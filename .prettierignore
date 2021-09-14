@@ -1,0 +1,2 @@
+# Disable prettier on any Markdown file
+*.md
