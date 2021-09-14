@@ -57,6 +57,20 @@ These keys are based on the [LSP2-ERC725YJSONSchema](https://github.com/CJ42/LIP
 
 The KeyManager will read the permissions from the ERC725Account key value store, to determine if a key is allowed to perform certain actions.
 
+#### AddressPermissions[]
+
+Holds an array of address, that have permission some permission sets to interact with the ERC725Account.
+
+```json
+{
+    "name": "AddressPermissions[]",
+    "key": "0xdf30dba06db6a30e65354d9a64c609861f089545ca58c6b4dbe31a5f338cb0e3",
+    "keyType": "Array",
+    "valueContent": "Address",
+    "valueType": "address"
+}
+```
+
 #### AddressPermissions:Permissions:\<address\>
 
 Holds the permissions for a key. See [Permission Values](#permission-values-in-addresspermissionspermissionsaddress) for details.
