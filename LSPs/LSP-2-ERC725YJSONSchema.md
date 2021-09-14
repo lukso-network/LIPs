@@ -1,7 +1,7 @@
 ---
 lip: 2
 title: ERC725Y JSON Schema
-author: Fabian Vogelsteller <fabian@lukso.network>
+author: Fabian Vogelsteller <fabian@lukso.network> 
 discussions-to: https://discord.gg/E2rJPP4
 status: Draft
 type: LSP
@@ -40,7 +40,7 @@ To make ERC725Y keys readable we define the following key value types:
     - [`Mapping`](#mapping): A key that maps two words.
     - [`AddressMapping`](#addressmapping): A key that maps a word to an address.
     - [`AddressMappingWithGrouping`](#addressmappingwithgrouping): A key that maps a word, to a grouping word to an address.
-    - `valueType`: The type the content MUST be decoded with.
+- `valueType`: The type the content MUST be decoded with.
     - `string`: The bytes are a UTF8 encoded string
     - `address`: The bytes are an 20 bytes address
     - `uint256`: The bytes are a uint256
@@ -51,8 +51,8 @@ To make ERC725Y keys readable we define the following key value types:
     - `uint256[]`: The bytes are a uint256 array
     - `bytes[]`: The bytes are a bytes array
     - `bytesN[]`: The bytes are a N bytes
-    - `valueContent`: The content in the returned value. Valid values are:
-    - `Bytes`: The content are bytes.
+- `valueContent`: The content in the returned value. Valid values are:
+    - `Bytes`: The content are bytes. 
     - `BytesN`: The content are bytes with length N.
     - `Number`: The content is a number.
     - `String`: The content is a UTF8 string.
