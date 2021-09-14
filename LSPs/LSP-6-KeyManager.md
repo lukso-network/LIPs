@@ -180,6 +180,12 @@ Allows anybody to execute `_data` payload on a ERC725 account, given they have a
 **returns:** `bool` , true if the call on ERC725 account succeeded, false otherwise.
 
 **Important:** the message to sign MUST be of the following format: `<KeyManager address>` + `<signer nonce>` + `<_data payload>` .
+These 3 parameters MUST be:
+
+- packed encoded (not zero padded, leading `0`s are removed)
+- hashed with `keccak256`
+
+The final message MUST be signed using ethereum specific signature, based on [EIP712](https://eips.ethereum.org/EIPS/eip-712).
 
 <br>
 
