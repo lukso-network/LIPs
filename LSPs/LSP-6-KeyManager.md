@@ -220,7 +220,8 @@ Nonces are represented as `uint256` from the concatenation of two `uint128` : th
 - left most 128 bits : `channelId`
 - right most 128 bits: `nonceId`
 
-![multi-channel-nonce](https://user-images.githubusercontent.com/31145285/133278359-8dd0778e-6a3d-4471-a64e-46cb2a8cff41.jpeg)
+![multi-channel-nonce](https://user-images.githubusercontent.com/31145285/133279158-f0cd959e-2a60-4049-9729-5087a77f555a.jpeg)
+
 <p align="center">
   <i> Example of multi channel nonce, where channelId = 5 and nonceId = 1 </i>
 </p>
