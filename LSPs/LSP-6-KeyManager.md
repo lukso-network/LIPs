@@ -220,11 +220,9 @@ Nonces are represented as `uint256` from the concatenation of two `uint128` : th
 - left most 128 bits : `channelId`
 - right most 128 bits: `nonceId`
 
-![multi-channel-nonce](https://user-images.githubusercontent.com/31145285/133279354-82bebc4f-21f4-40e4-b959-93ccd624e5c4.jpg)
+![multi-channel-nonce](https://user-images.githubusercontent.com/86341666/132648960-297b1803-0c36-413d-be44-6fa7ea709c13.jpeg)
 
-<p align="center">
-  <i> Example of multi channel nonce, where channelId = 5 and nonceId = 1 </i>
-</p>
+<p align="center"><i> Example of multi channel nonce, where channelId = 5 and nonceId = 1 </i></p>
 
 The current nonce can be queried using:
 
@@ -273,28 +271,28 @@ ERC725Y JSON Schema `LSP6KeyManager`, set at the `LSP3Account`:
   {
     "name": "AddressPermissions:Permissions:<address>",
     "key": "0x4b80742d0000000082ac0000<address>",
-    "keyType": "AddressMappingWithGrouping",
+    "keyType": "Singleton",
     "valueContent": "BitArray",
     "valueType": "bytes4"
   },
   {
     "name": "AddressPermissions:AllowedAddresses:<address>",
     "key": "0x4b80742d00000000c6dd0000<address>",
-    "keyType": "AddressMappingWithGrouping",
+    "keyType": "Singleton",
     "valueContent": "Address",
     "valueType": "address[]"
   },
   {
     "name": "AddressPermissions:AllowedFunctions:<address>",
     "key": "0x4b80742d000000008efe0000<address>",
-    "keyType": "AddressMappingWithGrouping",
+    "keyType": "Singleton",
     "valueContent": "Bytes4",
     "valueType": "bytes4[]"
   },
   {
     "name": "AddressPermissions:AllowedStandards:<address>",
     "key": "0x4b80742d000000003efa0000<address>",
-    "keyType": "AddressMappingWithGrouping",
+    "keyType": "Singleton",
     "valueContent": "Bytes4",
     "valueType": "bytes4[]"
   }
