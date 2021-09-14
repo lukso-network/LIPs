@@ -9,6 +9,7 @@ created: 2020-07-01
 requires: ERC725Y
 ---
 
+
 ## Simple Summary
 
 This schema describes how a set of [ERC725Y](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) key values can be described.
@@ -20,48 +21,49 @@ This schema allows to standardize the key values that can be used in ERC725Y sub
 
 ## Motivation
 
-This schema defines a way to make those key values automatically parsable, so a interface or smart contract knows how to read and interact with them.
+This schema defines a way to make those key values automatically parsable, so a interface or smart contract knows how to read and interact with them. 
 
 This schema is for example used in [ERC725](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) based smart contracts like
 [LSP3-UniversalProfile](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-3-UniversalProfile.md) and [LSP4-DigitalCertificate](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-4-DigitalCertificate.md).
 
+
 ## Specification
 
-To make ERC725Y keys readable we define the following key value types:  
+To make ERC725Y keys readable we define the following key value types:   
 (Note: this set is not complete yet, and should be extended over time)
 
 - `name`: Describes the name of the key, SHOULD compromise of the Standards name + sub type. e.g: `LSP2Name`
 - `key`: the keccak256 hash of the name. This is the actual key that MUST be retrievable via `ERC725Y.getData(bytes32 key)`. e.g: `keccack256('LSP2Name') = 0xf9e26448acc9f20625c059a95279675b8f58ba4f06d262f83a32b4dd35dee019`
 - `keyType`: Types that determine how the values should be interpreted. Valid types are:
-  - [`Singleton`](#singleton): A simple key.
-  - [`Array`](#array): An array spanning multiple ERC725Y keys.
-  - [`Mapping`](#mapping): A key that maps two words.
-  - [`AddressMapping`](#addressmapping): A key that maps a word to an address.
-  - [`AddressMappingWithGrouping`](#addressmappingwithgrouping): A key that maps a word, to a grouping word to an address.
-  - `valueType`: The type the content MUST be decoded with.
-  - `string`: The bytes are a UTF8 encoded string
-  - `address`: The bytes are an 20 bytes address
-  - `uint256`: The bytes are a uint256
-  - `bytes32`: The bytes are a 32 bytes
-  - `bytes`: The bytes are a bytes
-  - `string[]`: The bytes are a UTF8 encoded string array
-  - `address[]`: The bytes are an 20 bytes address array
-  - `uint256[]`: The bytes are a uint256 array
-  - `bytes[]`: The bytes are a bytes array
-  - `bytesN[]`: The bytes are a N bytes
-  - `valueContent`: The content in the returned value. Valid values are:
-  - `Bytes`: The content are bytes.
-  - `BytesN`: The content are bytes with length N.
-  - `Number`: The content is a number.
-  - `String`: The content is a UTF8 string.
-  - `Address`: The content is an address.
-  - `Keccak256`: The content is an keccak256 32 bytes hash.
-  - [`AssetURL`](#asseturl): The content contains the hash function, hash and link to the asset file.
-  - [`JSONURL`](#jsonurl): The content contains the hash function, hash and link to the JSON file.
-  - `URL`: The content is an URL encoded as UTF8 string.
-  - `Markdown`: The content is structured Markdown mostly encoded as UTF8 string.
-  - `0x1345ABCD...`: If the value content are specific bytes, than the returned value is expected to equal those bytes.
-
+    - [`Singleton`](#singleton): A simple key.
+    - [`Array`](#array): An array spanning multiple ERC725Y keys.
+    - [`Mapping`](#mapping): A key that maps two words.
+    - [`AddressMapping`](#addressmapping): A key that maps a word to an address.
+    - [`AddressMappingWithGrouping`](#addressmappingwithgrouping): A key that maps a word, to a grouping word to an address.
+    - `valueType`: The type the content MUST be decoded with.
+    - `string`: The bytes are a UTF8 encoded string
+    - `address`: The bytes are an 20 bytes address
+    - `uint256`: The bytes are a uint256
+    - `bytes32`: The bytes are a 32 bytes
+    - `bytes`: The bytes are a bytes
+    - `string[]`: The bytes are a UTF8 encoded string array
+    - `address[]`: The bytes are an 20 bytes address array
+    - `uint256[]`: The bytes are a uint256 array
+    - `bytes[]`: The bytes are a bytes array
+    - `bytesN[]`: The bytes are a N bytes
+    - `valueContent`: The content in the returned value. Valid values are:
+    - `Bytes`: The content are bytes.
+    - `BytesN`: The content are bytes with length N.
+    - `Number`: The content is a number.
+    - `String`: The content is a UTF8 string.
+    - `Address`: The content is an address.
+    - `Keccak256`: The content is an keccak256 32 bytes hash.
+    - [`AssetURL`](#asseturl): The content contains the hash function, hash and link to the asset file.
+    - [`JSONURL`](#jsonurl): The content contains the hash function, hash and link to the JSON file.
+    - `URL`: The content is an URL encoded as UTF8 string.
+    - `Markdown`: The content is structured Markdown mostly encoded as UTF8 string.
+    - `0x1345ABCD...`: If the value content are specific bytes, than the returned value is expected to equal those bytes.
+  
 ### Singleton
 
 A simple key is constructed using `bytes32(keccak256(KeyName))`,
@@ -83,8 +85,8 @@ Below is an example of a Singleton key type:
 An initial key of an array containing the array length constructed using `bytes32(keccak256(KeyName))`.
 Subsequent keys consist of `bytes16(keccak256(KeyName)) + bytes16(uint128(ArrayElementIndex))`.
 
-_The advantage of the `keyType` Array over using simple array elements like `address[]`, is that the amount of elements that can be stored is unlimited.
-Storing an encoded array as a value, will reuqire a set amount of gas, which can exceed the block gas limit._
+*The advantage of the `keyType` Array over using simple array elements like `address[]`, is that the amount of elements that can be stored is unlimited.
+Storing an encoded array as a value, will reuqire a set amount of gas, which can exceed the block gas limit.*
 
 If you require multiple keys of the same key type they MUST be defined as follows:
 
@@ -102,7 +104,8 @@ This would looks as follows for `LSP3IssuedAssets[]`:
 - element number: key: `0x3a47ab5bd3a594c3a8995f8fa58d0876c96819ca4516bd76100c92462f2f9dc0`, value: `0x0000000000000000000000000000000000000000000000000000000000000002` (2 elements)
 - element 1: key: `0x3a47ab5bd3a594c3a8995f8fa58d087600000000000000000000000000000000`, value: `0x123...` (element 0)
 - element 2: key: `0x3a47ab5bd3a594c3a8995f8fa58d087600000000000000000000000000000001`, value: `0x321...` (element 1)
-  ...
+...
+
 
 Special key types exist for **array elements**:
 
@@ -113,13 +116,13 @@ Below is an example of an Array key type:
 
 ```json
 {
-  "name": "LSP3IssuedAssets[]",
-  "key": "0x3a47ab5bd3a594c3a8995f8fa58d0876c96819ca4516bd76100c92462f2f9dc0",
-  "keyType": "Array",
-  "valueContent": "Number",
-  "valueType": "uint256",
-  "elementValueContent": "Address",
-  "elementValueType": "address"
+    "name": "LSP3IssuedAssets[]",
+    "key": "0x3a47ab5bd3a594c3a8995f8fa58d0876c96819ca4516bd76100c92462f2f9dc0",
+    "keyType": "Array",
+    "valueContent": "Number",
+    "valueType": "uint256",
+    "elementValueContent": "Address",
+    "elementValueType": "address"
 }
 ```
 
@@ -142,7 +145,7 @@ value: 0xcafecafecafecafecafecafecafecafecafecafe
 
 ### Mapping
 
-A mapping key is constructed using `bytes16(keccak256(FirstWord)) + bytes12(0) + bytes4(keccak256(LastWord))`,
+A mapping key is constructed using `bytes16(keccak256(FirstWord)) + bytes12(0) + bytes4(keccak256(LastWord))`,    
 
 Below is an example of a mapping key type:
 
@@ -176,7 +179,7 @@ Below is an example of an address mapping key type:
 
 ### AddressMappingWithGrouping
 
-A mapping key, constructed using `bytes4(keccak256(FirstWord)) + bytes4(0) + bytes2(keccak256(SecondWord)) + bytes2(0) + bytes20(address)`,
+A mapping key, constructed using `bytes4(keccak256(FirstWord)) + bytes4(0) + bytes2(keccak256(SecondWord)) + bytes2(0) + bytes20(address)`,     
 
 e.g. `AddressPermissions:Permissions:<address>` > `0x4b80742d 00000000 eced 0000 cafecafecafecafecafecafecafecafecafecafe`.
 
@@ -203,7 +206,7 @@ Known hash functions:
 
 ### JSONURL
 
-The content is bytes containing the following format:  
+The content is bytes containing the following format:     
 `bytes4(keccack256('hashFunction'))` + `bytes32(keccack256(JSON.stringify(JSON)))` + `utf8ToHex('JSONURL')`
 
 Known hash functions:
@@ -236,7 +239,7 @@ let url = web3.utils.utf8ToHex('ifps://QmYr1VJLwerg6pEoscdhVGugo39pa6rycEZLjtRPD
 let JSONURL = hashFunction + hash.substring(2) + url.substring(2)
               ^              ^                   ^
               0x6f357c6a   + 820464ddfac1be... + 696670733a2f2...
-
+              
 // structure of the JSONURL
 0x6f357c6a +       820464ddfac1bec070cc14a8daf04129871d458f2ca94368aae8391311af6361 + 696670733a2f2f516d597231564a4c776572673670456f73636468564775676f3339706136727963455a4c6a7452504466573834554178
 ^                  ^                                                                  ^
@@ -275,11 +278,12 @@ if(hashFunction === '0x6f357c6a') {
 }
 ```
 
+
 ## Rationale
 
-The structure of the key value layout as JSON allows interfaces to auto decode these key values as they will know how to decode them.  
-`keyType` always describes _how_ a key MUST be treated.  
-and `valueType` describes how the value MUST be decoded. And `value` always describes _how_ a value SHOULD be treated.
+The structure of the key value layout as JSON allows interfaces to auto decode these key values as they will know how to decode them.   
+`keyType` always describes *how* a key MUST be treated.    
+and `valueType` describes how the value MUST be decoded. And `value` always describes *how* a value SHOULD be treated.
 
 ## Example
 
@@ -287,29 +291,29 @@ To allow interfaces to auto decode an ERC725Y key value store using the ERC725Y 
 
 ```json
 [
-  {
-    "name": "SupportedStandards:ERC725Account",
-    "key": "0xeafec4d89fa9619884b6b89135626455000000000000000000000000afdeb5d6",
-    "keyType": "Mapping",
-    "valueContent": "0xafdeb5d6",
-    "valueType": "bytes"
-  },
-  {
-    "name": "LSP3Profile",
-    "key": "0x5ef83ad9559033e6e941db7d7c495acdce616347d28e90c7ce47cbfcfcad3bc5",
-    "keyType": "Singleton",
-    "valueContent": "JSONURL",
-    "valueType": "bytes"
-  },
-  {
-    "name": "LSP3IssuedAssets[]",
-    "key": "0x3a47ab5bd3a594c3a8995f8fa58d0876c96819ca4516bd76100c92462f2f9dc0",
-    "keyType": "Array",
-    "valueContent": "Number",
-    "valueType": "uint256",
-    "elementValueContent": "Address",
-    "elementValueType": "address"
-  }
+    {
+        "name": "SupportedStandards:ERC725Account",
+        "key": "0xeafec4d89fa9619884b6b89135626455000000000000000000000000afdeb5d6",
+        "keyType": "Mapping",
+        "valueContent": "0xafdeb5d6",
+        "valueType": "bytes"
+    },
+    {
+        "name": "LSP3Profile",
+        "key": "0x5ef83ad9559033e6e941db7d7c495acdce616347d28e90c7ce47cbfcfcad3bc5",
+        "keyType": "Singleton",
+        "valueContent": "JSONURL",
+        "valueType": "bytes"
+    },
+    {
+        "name": "LSP3IssuedAssets[]",
+        "key": "0x3a47ab5bd3a594c3a8995f8fa58d0876c96819ca4516bd76100c92462f2f9dc0",
+        "keyType": "Array",
+        "valueContent": "Number",
+        "valueType": "uint256",
+        "elementValueContent": "Address",
+        "elementValueType": "address"
+    }
 ]
 ```
 
