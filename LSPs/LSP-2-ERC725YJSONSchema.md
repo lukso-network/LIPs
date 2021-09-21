@@ -107,11 +107,6 @@ This would looks as follows for `LSP3IssuedAssets[]`:
 ...
 
 
-Special key types exist for **array elements**:
-
-- `elementValueContent`: Same as `valueContent` above.
-- `elementValueType`: Same as `valueType` above.
-
 Below is an example of an Array key type:
 
 ```json
@@ -119,10 +114,8 @@ Below is an example of an Array key type:
     "name": "LSP3IssuedAssets[]",
     "key": "0x3a47ab5bd3a594c3a8995f8fa58d0876c96819ca4516bd76100c92462f2f9dc0",
     "keyType": "Array",
-    "valueContent": "Number",
-    "valueType": "uint256",
-    "elementValueContent": "Address",
-    "elementValueType": "address"
+    "valueContent": "Address", // describes the content of the elements
+    "valueType": "address" // describes the content of the elements
 }
 ```
 
@@ -309,10 +302,8 @@ To allow interfaces to auto decode an ERC725Y key value store using the ERC725Y 
         "name": "LSP3IssuedAssets[]",
         "key": "0x3a47ab5bd3a594c3a8995f8fa58d0876c96819ca4516bd76100c92462f2f9dc0",
         "keyType": "Array",
-        "valueContent": "Number",
-        "valueType": "uint256",
-        "elementValueContent": "Address",
-        "elementValueType": "address"
+        "valueContent": "Address",
+        "valueType": "address",
     }
 ]
 ```

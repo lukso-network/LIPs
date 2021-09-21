@@ -1,12 +1,12 @@
 ---
 lip: 3
-title: Universal Profile
+title: Universal Profile Metadata
 author: Fabian Vogelsteller <fabian@lukso.network> 
 discussions-to: https://discord.gg/E2rJPP4
 status: Draft
 type: LSP
 created: 2019-07-12
-requires: LSP1, LSP2, ERC165, ERC173, ERC725Account, ERC1271
+requires: LSP1, LSP2, LSP5, ERC165, ERC725Account
 ---
 
 
@@ -16,57 +16,30 @@ This standard describes a set of [ERC725Y](https://github.com/ethereum/EIPs/blob
  
 ## Abstract
 
-This standard, defines a set of key value stores that are useful to create a public on-chain profile, based on an [ERC725Account](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md).
-Additionally this standards expects [LSP1-UniversalReceiver](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-1-UniversalReceiver.md) to be implemented as well, to make the smart contract account future proof.
+This standard, defines a set of key value stores that are useful to create a public on-chain profile, based on an [ERC725Account](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-0-ERC725Account.md).
 
 ## Motivation
 
-To make the usage of Blockchain infrastructures easier and allow smart contract based accounts to be more than just a store of assets.
-We need to define standards that make these accounts easier to use and interact-able. Therefore we need to define:
-
-- Ways to make security and access to these accounts upgradeable through the use of ERC173 and ERC725X
-- Allow these accounts to store information and reference other related systems through the use of ERC725Y
-- Define a number of key values stores that any interface can expect to present through this standard (LSP3)  
-
-On top of that many token standards (like ERC721, ERC223 and ERC777) do define their own way of calling contracts.
-To rectify this, we propose the usage of [LSP1-UniversalReceiver](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-1-UniversalReceiver.md) and modified versions of ERC777 and other token standards,
-to be used with this standard. This is obviously easier on EVM networks that have not yet an established ecosystem like LUKSO, than on the Ethereum mainnet.
-Though we still think this addition is extremly necessary even on networks like Ethereum, as more standards are appearing that require to notify other smart contracts. 
-
+This standard describes meta data that can be added to a [ERC725Account](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-0-ERC725Account.md), to give it a profile like character.
 
 ## Specification
 
-Every contract that supports to the Universal Profile standard SHOULD implement:
+Every contract that supports to the Universal Profile standard SHOULD add the following [ERC725Y](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) keys:
 
 ### Keys
 
 
-#### SupportedStandards:ERC725Account
+#### SupportedStandards:LSP3UniversalProfile
 
-The supported standard SHOULD be `ERC725Account`
+The supported standard SHOULD be `LSP3UniversalProfile`
 
 ```json
 {
-    "name": "SupportedStandards:ERC725Account",
-    "key": "0xeafec4d89fa9619884b6b89135626455000000000000000000000000afdeb5d6",
+    "name": "SupportedStandards:LSP3UniversalProfile",
+    "key": "0xeafec4d89fa9619884b6b89135626455000000000000000000000000abe425d6",
     "keyType": "Mapping",
-    "valueContent": "0xafdeb5d6",
+    "valueContent": "0xabe425d6",
     "valueType": "bytes"
-}
-```
-
-#### LSP1UniversalReceiverDelegate
-
-If the account delegates its universal receiver to another smart contract,
-this smart contract address SHOULD be stored at the following key:
-
-```json
-{
-    "name": "LSP1UniversalReceiverDelegate",
-    "key": "0x0cfc51aec37c55a4d0b1a65c6255c4bf2fbdf6277f3cc0730c45b828b6db8b47",
-    "keyType": "Singleton",
-    "valueContent": "Address",
-    "valueType": "address"
 }
 ```
 
@@ -175,6 +148,22 @@ Example:
 }
 ```
 
+#### LSP3IssuedAssetsMap
+
+References issued smart contract assets, like tokens and NFTs.
+
+The `valueContent` MUST be constructed as follows: `bytes8(indexNumber) + bytes4(standardInterfaceId)`. Where `indexNumber` is the index in the [LSP3IssuedAssets[] Array](#lsp3issuedassets) and `standardInterfaceId` the interface ID if the token or asset smart contract standard.
+
+```json
+{
+    "name": "LSP3IssuedAssetsMap:<address>",
+    "key": "0x83f5e77bfb14241600000000<address>",
+    "keyType": "Mapping",
+    "valueContent": "Mixed",
+    "valueType": "bytes"
+}
+```
+
 #### LSP3IssuedAssets[]
 
 References issued smart contract assets, like tokens and NFTs.
@@ -184,10 +173,8 @@ References issued smart contract assets, like tokens and NFTs.
     "name": "LSP3IssuedAssets[]",
     "key": "0x3a47ab5bd3a594c3a8995f8fa58d0876c96819ca4516bd76100c92462f2f9dc0",
     "keyType": "Array",
-    "valueContent": "Number",
-    "valueType": "uint256",
-    "elementValueContent": "Address",
-    "elementValueType": "address"
+    "valueContent": "Address",
+    "valueType": "address"
 }
 ```
 
@@ -201,17 +188,17 @@ or a verifiable public appearance.
 ## Implementation
 
 A implementation can be found in the [lukso-network/universalprofile-smart-contracts](https://github.com/lukso-network/universalprofile-smart-contracts/blob/main/contracts/LSP3Account.sol);
-The below defines the JSON interface of the `LSP3Account`.
+The below defines the JSON interface of the `LSP3UniversalProfile`.
 
-ERC725Y JSON Schema `LSP3Account`:
+ERC725Y JSON Schema `LSP3UniversalProfile`:
 
 ```json
 [
     {
-        "name": "SupportedStandards:ERC725Account",
-        "key": "0xeafec4d89fa9619884b6b89135626455000000000000000000000000afdeb5d6",
+        "name": "SupportedStandards:LSP3UniversalProfile",
+        "key": "0xeafec4d89fa9619884b6b89135626455000000000000000000000000abe425d6",
         "keyType": "Mapping",
-        "valueContent": "0xafdeb5d6",
+        "valueContent": "0xabe425d6",
         "valueType": "bytes"
     },
     {
@@ -222,20 +209,34 @@ ERC725Y JSON Schema `LSP3Account`:
         "valueType": "bytes"
     },
     {
-        "name": "LSP1UniversalReceiverDelegate",
-        "key": "0x0cfc51aec37c55a4d0b1a65c6255c4bf2fbdf6277f3cc0730c45b828b6db8b47",
-        "keyType": "Singleton",
-        "valueContent": "Address",
-        "valueType": "address"
+        "name": "LSP3IssuedAssetsMap:<address>",
+        "key": "0x83f5e77bfb14241600000000<address>",
+        "keyType": "Mapping",
+        "valueContent": "Mixed",
+        "valueType": "bytes"
     },
     {
         "name": "LSP3IssuedAssets[]",
         "key": "0x3a47ab5bd3a594c3a8995f8fa58d0876c96819ca4516bd76100c92462f2f9dc0",
         "keyType": "Array",
-        "valueContent": "Number",
-        "valueType": "uint256",
-        "elementValueContent": "Address",
-        "elementValueType": "address"
+        "valueContent": "Address",
+        "valueType": "address"
+    },
+
+    // from ERC725Account
+    {
+        "name": "SupportedStandards:ERC725Account",
+        "key": "0xeafec4d89fa9619884b6b89135626455000000000000000000000000afdeb5d6",
+        "keyType": "Mapping",
+        "valueContent": "0xafdeb5d6",
+        "valueType": "bytes"
+    },
+    {
+        "name": "LSP1UniversalReceiverDelegate",
+        "key": "0x0cfc51aec37c55a4d0b1a65c6255c4bf2fbdf6277f3cc0730c45b828b6db8b47",
+        "keyType": "Singleton",
+        "valueContent": "Address",
+        "valueType": "address"
     }
 ]
 ```

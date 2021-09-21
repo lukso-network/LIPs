@@ -159,6 +159,8 @@ function execute(bytes calldata _data) public payable returns (bool)
 
 Execute a calldata payload on an ERC725 account.
 
+MUST fire the [Executed event](#executed).
+
 **Parameters:**
 
 - `_data`: The call data to be executed. The first 4 bytes of the `_data` payload MUST correspond to one of the function selector in the ERC725 account, such as `setData(...)`, `execute(...)` or `transferOwnership(...)`.
@@ -197,6 +199,8 @@ function executeRelayCall(bytes calldata _data, address _signedFor, uint256 _non
 
 Allows anybody to execute `_data` payload on a ERC725 account, given they have a signed message from an executor.
 
+MUST fire the [Executed event](#executed).
+
 **Parameters:**
 
 - `_data`: The call data to be executed.
@@ -214,7 +218,16 @@ These 3 parameters MUST be:
 
 The final message MUST be signed using ethereum specific signature, based on [EIP712](https://eips.ethereum.org/EIPS/eip-712).
 
-<br>
+
+### Events
+
+#### Executed
+
+```solidity
+event Executed(uint256 indexed  _value, bytes _data);
+```
+
+MUST be fired when a transaction was successfully executed.
 
 
 ### What are multi-channel nonces
@@ -273,6 +286,7 @@ _nonces[signer][nonce >> 128]++
 For sequential messages, users could use channel `0` and for out-of-order messages they could use channel `n`.
 
 **Important:** It's up to the user to choose the channel that he wants to sign multiple sequential orders on it, not necessary `0`.
+
 
 
 ## Rationale
