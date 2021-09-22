@@ -12,13 +12,14 @@ requires: ERC165
 
 ## Simple Summary
 <!--"If you can't explain it simply, you don't understand it well enough." Provide a simplified and layman-accessible explanation of the LIP.-->
-A entry function to allow a contract to be able to receive any arbitrary information.
+A entry function to allow a contract to be able to receive any arbitrary information. This includes ECR20 tokens, NFTs or any other assets. 
 
 ## Abstract
 <!--A short (~200 word) description of the technical issue being addressed.-->
 Similar to a smart contracts fallback function, which allows a contract to be notified of a incoming transaction with value, the Universal Receiver allow for any contract to recevie information about any interaction.
 This allows receiving contracts to react on incoming transfers or other interactions.
 
+![LSP1 explained](https://user-images.githubusercontent.com/616913/134361070-5eb95d87-ad0f-44e5-9b79-377e4021d397.png)
 
 ## Motivation
 <!--The motivation is critical for LIPs that want to change the Ethereum protocol. It should clearly explain why the existing protocol specification is inadequate to address the problem that the LIP solves. LIP submissions without sufficient motivation may be rejected outright.-->
