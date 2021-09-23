@@ -192,16 +192,16 @@ Read [what are multi-channel nonces](#what-are-multi-channel-nonces)
 #### executeRelayCall
 
 ```solidity
-function executeRelayCall(bytes calldata _data, address _signedFor, uint256 _nonce, bytes memory _signature) public payable returns (bool)
+function executeRelayCall(address _signedFor, uint256 _nonce, bytes calldata _data, bytes memory _signature) public payable returns (bool)
 ```
 
 Allows anybody to execute `_data` payload on a ERC725 account, given they have a signed message from an executor.
 
 **Parameters:**
 
-- `_data`: The call data to be executed.
 - `_signedFor`: MUST be the `KeyManager` contract.
 - `_nonce`: MUST be the nonce of the address that signed the message. This can be obtained via the `getNonce(address _address, uint256 _channel)` function.
+- `_data`: The call data to be executed.
 - `_signature`: bytes32 ethereum signature.
 
 **returns:** `bool` , true if the call on ERC725 account succeeded, false otherwise.
@@ -335,11 +335,11 @@ interface ILSP6  /* is ERC165 */ {
     event Executed(uint256 indexed  _value, bytes _data); 
     
     
-    function getNonce(address _address) external view returns (uint256);
+    function getNonce(address _address, uint256 _channel) external view returns (uint256);
     
     function execute(bytes calldata _data) external payable returns (bool);
     
-    function executeRelayCall(bytes calldata _data, address _signedFor, uint256 _nonce, bytes memory _signature) external payable returns (bool);
+    function executeRelayCall(address _signedFor, uint256 _nonce, bytes calldata _data, bytes memory _signature) external payable returns (bool);
  
         
     // ERC1271
