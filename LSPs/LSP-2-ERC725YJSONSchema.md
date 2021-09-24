@@ -188,7 +188,7 @@ Below is an example of a mapping key type:
 ```js
 {
     "name": "AddressPermissions:Permissions:cafecafecafecafecafecafecafecafecafecafe",
-    "key": "0x4b80742d00000000eced0000cafecafecafecafecafecafecafecafecafecafe",
+    "key": "0x4b80742d0000000082ac0000cafecafecafecafecafecafecafecafecafecafe",
     "keyType": "AddressMappingWithGrouping",
     "valueContent": mixed,
     "valueType": mixed
