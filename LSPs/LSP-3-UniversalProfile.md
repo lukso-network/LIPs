@@ -6,7 +6,7 @@ discussions-to: https://discord.gg/E2rJPP4
 status: Draft
 type: LSP
 created: 2019-07-12
-requires: LSP1, LSP2, LSP5, ERC165, ERC725Account
+requires: LSP1, LSP2, LSP5, ERC165, ERC725Y
 ---
 
 
@@ -182,8 +182,8 @@ For construction of the Asset Keys see: [ERC725Y JSON Schema](https://github.com
 
 ## Rationale
 
-Universal Profiles are important to create verifiable public accounts that are the source of asset issuance,
-or a verifiable public appearance. 
+Universal Profiles metadata is important to create verifiable public account that are the source of asset issuance,
+or a verifiable public appearance. This metadata dos not need to belong to a real world person, but gives the account a "face".
 
 ## Implementation
 
@@ -223,14 +223,23 @@ ERC725Y JSON Schema `LSP3UniversalProfile`:
         "valueType": "address"
     },
 
-    // from ERC725Account
+    // from LSP5 ReceivedAssets
     {
-        "name": "SupportedStandards:ERC725Account",
-        "key": "0xeafec4d89fa9619884b6b89135626455000000000000000000000000afdeb5d6",
+        "name": "LSP5ReceivedAssetsMap:<address>",
+        "key": "0x812c4334633eb81600000000<address>",
         "keyType": "Mapping",
-        "valueContent": "0xafdeb5d6",
+        "valueContent": "Mixed",
         "valueType": "bytes"
     },
+    {
+        "name": "LSP5ReceivedAssets[]",
+        "key": "0x6460ee3c0aac563ccbf76d6e1d07bada78e3a9514e6382b736ed3f478ab7b90b",
+        "keyType": "Array",
+        "valueContent": "Address",
+        "valueType": "address"
+    }
+
+    // from ERC725Account
     {
         "name": "LSP1UniversalReceiverDelegate",
         "key": "0x0cfc51aec37c55a4d0b1a65c6255c4bf2fbdf6277f3cc0730c45b828b6db8b47",
@@ -258,41 +267,28 @@ interface ILSP3  /* is ERC165 */ {
     function transferOwnership(address newOwner) external virtual onlyOwner;
     
     
-    // ERC725Account (ERC725X + ERC725Y)
+    // ERC725Y
       
     event Executed(uint256 indexed _operation, address indexed _to, uint256 indexed  _value, bytes _data);
-    
-    event ValueReceived(address indexed sender, uint256 indexed value);
     
     event ContractCreated(address indexed contractAddress);
     
     event DataChanged(bytes32 indexed key, bytes value);
     
     
-    function execute(uint256 operationType, address to, uint256 value, bytes calldata data) external payable onlyOwner;
-    
     function getData(bytes32[] calldata key) external view returns (bytes[] memory value);
-    // LSP3 retrievable keys:
-    // SupportedStandards:ERC725Account: 0xeafec4d89fa9619884b6b89135626455000000000000000000000000afdeb5d6
+    // LSP3 possible keys:
+    // SupportedStandards:LSP3UniversalProfile: 0xeafec4d89fa9619884b6b89135626455000000000000000000000000abe425d6
     // LSP3Profile: 0x5ef83ad9559033e6e941db7d7c495acdce616347d28e90c7ce47cbfcfcad3bc5
+    // LSP3IssuedAssetsMap: 0x83f5e77bfb14241600000000<address>
     // LSP3IssuedAssets[]: 0x3a47ab5bd3a594c3a8995f8fa58d0876c96819ca4516bd76100c92462f2f9dc0
     // LSP1UniversalReceiverDelegate: 0x0cfc51aec37c55a4d0b1a65c6255c4bf2fbdf6277f3cc0730c45b828b6db8b47
     
     function setData(bytes32[] calldata key, bytes[] calldata value) external onlyOwner;
-    
-    
-    // ERC1271
-    
-    function isValidSignature(bytes32 _hash, bytes memory _signature) external view returns (bytes4 magicValue);
-    
-    
-    // LSP1
 
-    event UniversalReceiver(address indexed from, bytes32 indexed typeId, bytes32 indexed returnedValue, bytes receivedData);
-
-    function universalReceiver(bytes32 typeId, bytes calldata data) external returns (bytes32);
-    // IF `LSP1UniversalReceiverDelegate` key is set
-    // THEN calls will be forwarded to the address given (UniversalReceiver even MUST still be fired)
+    
+    // In most cases this standard is used in combination with `ERC725Account` (LSP0),
+    // which would add additional functions (execute, isValidSignature, universalReceiver)
 }
 
 

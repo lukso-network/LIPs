@@ -46,24 +46,10 @@ Every contract that supports to the ERC725Account SHOULD implement:
 ### Keys
 
 
-#### SupportedStandards:ERC725Account
-
-The supported standard SHOULD be `ERC725Account`
-
-```json
-{
-    "name": "SupportedStandards:ERC725Account",
-    "key": "0xeafec4d89fa9619884b6b89135626455000000000000000000000000afdeb5d6",
-    "keyType": "Mapping",
-    "valueContent": "0xafdeb5d6",
-    "valueType": "bytes"
-}
-```
-
 #### LSP1UniversalReceiverDelegate
 
 If the account delegates its universal receiver to another smart contract,
-this smart contract address SHOULD be stored at the following key:
+this smart contract address MUST be stored under the following key:
 
 ```json
 {
@@ -103,13 +89,6 @@ ERC725Y JSON Schema `ERC725Account`:
 
 ```json
 [
-    {
-        "name": "SupportedStandards:ERC725Account",
-        "key": "0xeafec4d89fa9619884b6b89135626455000000000000000000000000afdeb5d6",
-        "keyType": "Mapping",
-        "valueContent": "0xafdeb5d6",
-        "valueType": "bytes"
-    },
     {
         "name": "LSP1UniversalReceiverDelegate",
         "key": "0x0cfc51aec37c55a4d0b1a65c6255c4bf2fbdf6277f3cc0730c45b828b6db8b47",
@@ -151,8 +130,7 @@ interface ILSP0  /* is ERC165 */ {
     function execute(uint256 operationType, address to, uint256 value, bytes calldata data) external payable onlyOwner;
     
     function getData(bytes32[] calldata key) external view returns (bytes[] memory value);
-    // LSP3 retrievable keys:
-    // SupportedStandards:ERC725Account: 0xeafec4d89fa9619884b6b89135626455000000000000000000000000afdeb5d6
+    // LSP0 possible keys:
     // LSP1UniversalReceiverDelegate: 0x0cfc51aec37c55a4d0b1a65c6255c4bf2fbdf6277f3cc0730c45b828b6db8b47
     
     function setData(bytes32[] calldata key, bytes[] calldata value) external onlyOwner;
