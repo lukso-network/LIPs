@@ -86,7 +86,7 @@ An initial key of an array containing the array length constructed using `bytes3
 Subsequent keys consist of `bytes16(keccak256(KeyName)) + bytes16(uint128(ArrayElementIndex))`.
 
 *The advantage of the `keyType` Array over using simple array elements like `address[]`, is that the amount of elements that can be stored is unlimited.
-Storing an encoded array as a value, will reuqire a set amount of gas, which can exceed the block gas limit.*
+Storing an encoded array as a value, will require a set amount of gas, which can exceed the block gas limit.*
 
 If you require multiple keys of the same key type they MUST be defined as follows:
 
