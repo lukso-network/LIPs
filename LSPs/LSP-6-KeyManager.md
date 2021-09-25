@@ -49,6 +49,23 @@ What is required is a contract design that enable ERC725 account owners to:
 
 ## Specification
 
+Every contract that supports the Key Manager standard SHOULD add the following [ERC725Y](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) keys:
+
+### Keys
+
+#### SupportedStandards:LSP6KeyManager
+
+The supported standard SHOULD be `LSP6KeyManager`
+
+```json
+{
+    "name": "SupportedStandards:LSP6KeyManager",
+    "key": "0xeafec4d89fa9619884b6b891356264550000000000000000000000006d9de44d",
+    "keyType": "Mapping",
+    "valueContent": "0x6d9de44d",
+    "valueType": "bytes"
+}
+```
 
 ### Permission Keys on the ERC725Account
 
