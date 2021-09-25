@@ -173,8 +173,10 @@ References issued smart contract assets, like tokens and NFTs.
     "name": "LSP3IssuedAssets[]",
     "key": "0x3a47ab5bd3a594c3a8995f8fa58d0876c96819ca4516bd76100c92462f2f9dc0",
     "keyType": "Array",
-    "valueContent": "Address",
-    "valueType": "address"
+    "valueContent": "Number",
+    "valueType": "uint256",
+    "elementValueContent": "Address",
+    "elementValueType": "address"
 }
 ```
 

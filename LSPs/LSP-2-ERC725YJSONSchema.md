@@ -90,7 +90,7 @@ Storing an encoded array as a value, will reuqire a set amount of gas, which can
 
 If you require multiple keys of the same key type they MUST be defined as follows:
 
-- The keytype name MUST have a `[]` add and then hashed
+- The `keyType` name MUST have a `[]` add and then hashed
 - The key hash MUST contain the number of all elements, and is required to be updated when a new key element is added.
 
 For all other elements:
@@ -114,8 +114,10 @@ Below is an example of an Array key type:
     "name": "LSP3IssuedAssets[]",
     "key": "0x3a47ab5bd3a594c3a8995f8fa58d0876c96819ca4516bd76100c92462f2f9dc0",
     "keyType": "Array",
-    "valueContent": "Address", // describes the content of the elements
-    "valueType": "address" // describes the content of the elements
+    "valueContent": "Number", // the number of elements, start at number 0
+    "valueType": "uint256",
+    "elementValueContent": "Address", // describes the content of the elements
+    "elementValueType": "address" // describes the content of the elements
 }
 ```
 
