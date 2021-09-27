@@ -39,7 +39,7 @@ This allows us to:
 
 ## Specification
 
-ERC165 interface id: `0xXXXXXXXX`
+ERC165 interface id: `0x63cb749b`
 
 Every contract that supports to the ERC725Account SHOULD implement:
 
