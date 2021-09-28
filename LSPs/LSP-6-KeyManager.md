@@ -154,18 +154,18 @@ SIGN          = 0x80;   // 1000 0000
 #### execute
 
 ```solidity
-function execute(bytes calldata _data) public payable returns (bool)
+function execute(bytes calldata _data) public payable returns (bytes memory)
 ```
 
 Execute a calldata payload on an ERC725 account.
 
 MUST fire the [Executed event](#executed).
 
-**Parameters:**
+_Parameters:_
 
 - `_data`: The call data to be executed. The first 4 bytes of the `_data` payload MUST correspond to one of the function selector in the ERC725 account, such as `setData(...)`, `execute(...)` or `transferOwnership(...)`.
 
-**returns:** `bool` , `true` if the call on ERC725 account succeeded, `false` otherwise.
+_Returns:_ `bytes` , returned from the function called.
 
 
 
@@ -182,33 +182,33 @@ If multiple transactions should be signed, nonces in the same channel can simply
 
 Read [what are multi-channel nonces](#what-are-multi-channel-nonces)
 
-**Parameters:**
+_Parameters:_
 
 - `_address`: the address of the signer of the transaction.
 - `_channel` :  the channel which the signer wants to use for executing the transaction.
 
-**returns:** `uint256` , returns the current nonce.
+_Returns:_ `uint256` , returns the current nonce.
 
 
 
 #### executeRelayCall
 
 ```solidity
-function executeRelayCall(address _signedFor, uint256 _nonce, bytes calldata _data, bytes memory _signature) public payable returns (bool)
+function executeRelayCall(address _signedFor, uint256 _nonce, bytes calldata _data, bytes memory _signature) public payable returns (bytes memory)
 ```
 
 Allows anybody to execute `_data` payload on a ERC725 account, given they have a signed message from an executor.
 
 MUST fire the [Executed event](#executed).
 
-**Parameters:**
+_Parameters:_
 
 - `_signedFor`: MUST be the `KeyManager` contract.
 - `_nonce`: MUST be the nonce of the address that signed the message. This can be obtained via the `getNonce(address _address, uint256 _channel)` function.
 - `_data`: The call data to be executed.
 - `_signature`: bytes32 ethereum signature.
 
-**returns:** `bool` , true if the call on ERC725 account succeeded, false otherwise.
+_Returns:_ `bytes` , returned from the function called.
 
 **Important:** the message to sign MUST be of the following format: `<KeyManager address>` + `<signer nonce>` + `<_data payload>` .
 These 3 parameters MUST be:
@@ -283,9 +283,9 @@ _nonces[signer][nonce >> 128]++
 ```
 `nonce >> 128` represents the channel which the signer chose for executing the transaction. After looking up the nonce of the signer at that specific channel it will be incremented by 1 `++`.<br>
 
-For sequential messages, users could use channel `0` and for out-of-order messages they could use channel `n`.
+For sequential messages, users could use channel `0` and for out-of-order messages they could use channel `n`.
 
-**Important:** It's up to the user to choose the channel that he wants to sign multiple sequential orders on it, not necessary `0`.
+**Important:** It's up to the user to choose the channel that he wants to sign multiple sequential orders on it, not necessary `0`.
 
 
 
@@ -351,9 +351,9 @@ interface ILSP6  /* is ERC165 */ {
     
     function getNonce(address _address, uint256 _channel) external view returns (uint256);
     
-    function execute(bytes calldata _data) external payable returns (bool);
+    function execute(bytes calldata _data) external payable returns (bytes memory);
     
-    function executeRelayCall(address _signedFor, uint256 _nonce, bytes calldata _data, bytes memory _signature) external payable returns (bool);
+    function executeRelayCall(address _signedFor, uint256 _nonce, bytes calldata _data, bytes memory _signature) external payable returns (bytes memory);
  
         
     // ERC1271
