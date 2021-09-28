@@ -187,6 +187,38 @@ An array of (ERC725Account) addresses of creators,
 
 For construction of the Asset Keys see: [ERC725Y JSON Schema](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-2-ERC725YJSONSchema.md#array)
 
+#### LSP4TokenName
+
+A string representing the name for the token collection.
+
+```json
+  {
+      "name": "LSP4TokenName",
+      "key": "0xdeba1e292f8ba88238e10ab3c7f88bd4be4fac56cad5194b6ecceaf653468af1",
+      "keyType": "Singleton",
+      "valueContent": "String",
+      "valueType": "string"
+  }
+```
+
+This SHOULD not be changeable, and set only during initialization of the token.
+
+#### LSP4TokenSymbol
+
+A string representing the symbol for the token collection, usually a shorter version of the name.
+
+```json
+  {
+      "name": "LSP4TokenSymbol",
+      "key": "0x2f0a68ab07768e01943a599e73362a0e17a63a72e94dd2e384d2c1d4db932756",
+      "keyType": "Singleton",
+      "valueContent": "String",
+      "valueType": "string"
+  }
+```
+
+This SHOULD not be changeable, and set only during initialization of the token.
+
 ## Rationale
 
 ## Implementation
@@ -220,7 +252,21 @@ ERC725Y JSON Schema `LSP4DigitalCertificate`:
         "valueType": "uint256",
         "elementValueContent": "Address",
         "elementValueType": "address"
-    }
+    },
+    {
+        "name": "LSP4TokenName",
+        "key": "0xdeba1e292f8ba88238e10ab3c7f88bd4be4fac56cad5194b6ecceaf653468af1",
+        "keyType": "Singleton",
+        "valueContent": "String",
+        "valueType": "string"
+    },
+    {
+      "name": "LSP4TokenSymbol",
+      "key": "0x2f0a68ab07768e01943a599e73362a0e17a63a72e94dd2e384d2c1d4db932756",
+      "keyType": "Singleton",
+      "valueContent": "String",
+      "valueType": "string"
+  }
 ]
 ```
 
