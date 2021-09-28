@@ -1,7 +1,7 @@
 ---
 lip: 8
 title: Identifiable Digital Asset
-author: Claudio Weck <https://github.com/ClaudioZone>, Fabian Vogelsteller <fabian@lukso.network>, Matthew Stevens <@mattgstevens>, Ankit Kumar <https://github.com/ankitkumar9018>
+author: Claudio Weck <claudio@fanzone.media>, Fabian Vogelsteller <fabian@lukso.network>, Matthew Stevens <@mattgstevens>, Ankit Kumar <https://github.com/ankitkumar9018>
 discussions-to: https://discord.gg/E2rJPP4 (LUKSO), https://discord.gg/PQvJQtCV (FANZONE)
 status: Draft
 type: LSP
