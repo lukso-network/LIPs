@@ -223,11 +223,11 @@ ERC725Y JSON Schema `LSP4DigitalCertificate`:
         "valueType": "string"
     },
     {
-      "name": "LSP4TokenSymbol",
-      "key": "0x2f0a68ab07768e01943a599e73362a0e17a63a72e94dd2e384d2c1d4db932756",
-      "keyType": "Singleton",
-      "valueContent": "String",
-      "valueType": "string"
+        "name": "LSP4TokenSymbol",
+        "key": "0x2f0a68ab07768e01943a599e73362a0e17a63a72e94dd2e384d2c1d4db932756",
+        "keyType": "Singleton",
+        "valueContent": "String",
+        "valueType": "string"
   }
 ]
 ```
