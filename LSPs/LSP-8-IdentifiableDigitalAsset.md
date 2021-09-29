@@ -13,13 +13,13 @@ requires: LSP1, LSP2, LSP4, ERC165, ERC725Y
 
 ## Simple Summary
 <!--"If you can't explain it simply, you don't understand it well enough." Provide a simplified and layman-accessible explanation of the LIP.-->
-A standard interface for identifiable digital certificates, allowing for tokens to be uniquely traded and given metadata using ERC725Y.
+A standard interface for identifiable digital assets, allowing for tokens to be uniquely traded and given metadata using ERC725Y.
 
 ## Abstract
 <!--A short (~200 word) description of the technical issue being addressed.-->
-This standard defines an interface for tokens that are identified with a `tokenId`, based on [ERC721](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-721.md). A `bytes32` value is used for `tokenId` which allows for a wider use case of token identification including numbers, contract addresses, and hashed values (ie. serial numbers).
+This standard defines an interface for tokens that are identified with a `tokenId`, based on [ERC721](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-721.md). A `bytes32` value is used for `tokenId` to allow many uses of token identification including numbers, contract addresses, and hashed values (ie. serial numbers).
 
-This standard defines a set of key value stores that are useful to know what the `tokenId` represents, and metadata about individual `tokenId`.
+This standard defines a set of key value stores that are useful to know what the `tokenId` represents, and metadata for each `tokenId`.
 
 ## Motivation
 <!--The motivation is critical for LIPs that want to change the Lukso protocol. It should clearly explain why the existing protocol specification is inadequate to address the problem that the LIP solves. LIP submissions without sufficient motivation may be rejected outright.-->
@@ -268,7 +268,7 @@ Emits an [AuthorizedOperator event](#authorizedoperator).
 #### revokeOperator
 
 ```solidity
-function revokeOperator(address to, bytes32 tokenId) external;
+function revokeOperator(address operator, bytes32 tokenId) external;
 ```
 
 Removes `operator` address as an operator of `tokenId`.
@@ -304,7 +304,6 @@ Operators can send and burn tokens on behalf of their owners. The tokenOwner is 
 
 - `tokenId` must exist
 - caller must be current `tokenOwner` of `tokenId`.
-- `operator` cannot be calling address.
 
 **Returns:** `address` the token owner.
 
@@ -334,7 +333,7 @@ Returns all `operator` addresses of `tokenId`.
 function transfer(address from, address to, bytes32 tokenId, bool force, bytes calldata data) external;
 ```
 
-Transfers `tokenId` token from `from` to `to`.
+Transfers `tokenId` token from `from` to `to`. The `force` parameter will be used when notifying the token sender and receiver.
 
 MUST Emit a [Transfer event](#transfer) when transfer was successful.
 
@@ -356,26 +355,7 @@ MUST Emit a [Transfer event](#transfer) when transfer was successful.
 #### transferBatch
 
 ```solidity
-/**
- * @dev
- *
- * Requirements:
- *
- * - `from`, `to`, `tokenId` lists are the same length.
- * - no values in `from` can be the zero address.
- * - no values in `to` can be the zero address.
- * - each `tokenId` token must be owned by `from`.
- * - If the caller is not `from`, it must be an operator of `tokenId`.
- *
- * Emits {Transfer} events.
- */
-function transferBatch(
-    address[] calldata from,
-    address[] calldata to,
-    bytes32[] calldata tokenId,
-    bool force,
-    bytes[] calldata data
-) external;
+function transferBatch(address[] calldata from, address[] calldata to, bytes32[] calldata tokenId, bool force, bytes[] calldata data) external;
 ```
 
 Transfers many tokens based on the list `from`, `to`, `tokenId`. If any transfer fails, the call will revert.
@@ -427,6 +407,27 @@ MUST be emitted when `tokenOwner` disables `operator` for `tokenId`.
 ## Rationale
 <!--The rationale fleshes out the specification by describing what motivated the design and why particular design decisions were made. It should describe alternate designs that were considered and related work, e.g. how the feature is supported in other languages. The rationale may also provide evidence of consensus within the community, and should discuss important objections or concerns raised during discussion.-->
 
+There should be a base token standard that allows tracking unique assets for the LSP ecosystem of contracts, which will allow common tooling and clients to be built. Existing tools and clients that expect ERC721 can be made to work with this standard by using "compatability" contract extensions that match the desired interface.
+
+### Token Identifier
+
+Every token is identified by a unique `bytes32 tokenId` which SHALL NOT change for the life of the contract. The pair `(contract address, uint256 tokenId)` is globally unique and a fully-qualified identifier for a specific asset on-chain. While some implementations may find it convenient to use the tokenId as an `uint256` that is incremented for each minted token, callers SHALL NOT assume that tokenIds have any specific pattern to them, and MUST treat the tokenId as a "black box". Also note that a tokenId MAY become invalid (when burned).
+
+The choice of `bytes32 tokenId` allows a wide variety of applications including numbers, contract addresses, and hashed values (ie. serial numbers).
+
+### Operators
+
+To clarify the ability of an address to access tokens from another address, `operator` was chosen as the name for functions, events and variables in all cases. This is originally from ERC777 standard and replaces the `approve` functionality from ERC721.
+
+### Token Transfers
+
+There is only one transfer function, which is aware of operators. This deviates from ERC721 and ERC777 which added functions specifically for the token owner to use, and for those with access to tokens. By having a single function to call this makes it simple to move tokens, and the caller will be exposed in the `Transfer` event as an indexed value.
+
+### Usage of hooks
+
+When a token is changing owners (minting, transfering, burning) an attempt is made to notify the token sender and receiver using LSP1 interface. The implementation uses `_notifyTokenSender` and `_notifyTokenReceiver` as the internal functions to process this.
+
+The `force` parameter sent during `function transfer` SHOULD be used when notifying the token receiver, to determine if it must support LSP1. This is used to prevent accidental token transfers, which may results in lost tokens: non-contract addresses could be a copy paste issue, contracts not supporting LSP1 might not be able to move tokens.
 
 ## Implementation
 <!--The implementations must be completed before any LIP is given status "Final", but it need not be completed before the LIP is accepted. While there is merit to the approach of reaching consensus on the specification and rationale before writing code, the principle of "rough consensus and running code" is still useful when it comes to resolving many discussions of API details.-->
