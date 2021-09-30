@@ -76,15 +76,13 @@ This SHOULD not be changeable, and set only during initialization of the token.
 
 When a metadata contract is created for a tokenId, the address SHOULD be stored in the minting contract storage.
 
-bytes8(keccak256("LSP8MetaData")) + bytes4(0) + bytes20(keccak256(tokenId))
-
 ```json
 {
-    "name": "LSP8MetaDataAddress:0x20BytesTokenIdHash",
-    "key": "0x909a51614d7c065f00000000cafecafecafecafecafecafecafecafecafecafe",
-    "keyType": "AddressMapping", // better Data/BytesMapping?
+    "name": "LSP8MetadataAddress:0x20BytesTokenIdHash",
+    "key": "0x73dcc7c3c4096cdc00000000cafecafecafecafecafecafecafecafecafecafe",
+    "keyType": "AddressMapping", // TODO: better Data/BytesMapping?
     "valueContent": Mixed,
-    "valueType": bytes32 + address
+    "valueType": mixed
 }
 ```
 
@@ -94,11 +92,11 @@ When metadata JSON is created for a tokenId, the URL SHOULD be stored in the min
 
 ```json
 {
-    "name": "LSP8MetaDataJSON:0x20BytesTokenIdHash",
-    "key": "0x23ec8802c8f5e54800000000cafecafecafecafecafecafecafecafecafecafe",
-    "keyType": "AddressMapping", // better Data/BytesMapping?
+    "name": "LSP8MetadataJSON:0x20BytesTokenIdHash",
+    "key": "0x9a26b4060ae7f7d500000000cafecafecafecafecafecafecafecafecafecafe",
+    "keyType": "AddressMapping", // TODO: better Data/BytesMapping?
     "valueContent": Mixed,
-    "valueType": JSONURL bytes4 + bytes32 + utf8hex
+    "valueType": mixed
 }
 ```
 
