@@ -148,6 +148,20 @@ Example:
 }
 ```
 
+#### LSP3IssuedAssets[]
+
+References issued smart contract assets, like tokens and NFTs.
+
+```json
+{
+    "name": "LSP3IssuedAssets[]",
+    "key": "0x3a47ab5bd3a594c3a8995f8fa58d0876c96819ca4516bd76100c92462f2f9dc0",
+    "keyType": "Array",
+    "valueContent": "Address",
+    "valueType": "address"
+}
+```
+
 #### LSP3IssuedAssetsMap
 
 References issued smart contract assets, like tokens and NFTs.
@@ -161,20 +175,6 @@ The `valueContent` MUST be constructed as follows: `bytes8(indexNumber) + bytes4
     "keyType": "Mapping",
     "valueContent": "Mixed",
     "valueType": "bytes"
-}
-```
-
-#### LSP3IssuedAssets[]
-
-References issued smart contract assets, like tokens and NFTs.
-
-```json
-{
-    "name": "LSP3IssuedAssets[]",
-    "key": "0x3a47ab5bd3a594c3a8995f8fa58d0876c96819ca4516bd76100c92462f2f9dc0",
-    "keyType": "Array",
-    "valueContent": "Address",
-    "valueType": "address"
 }
 ```
 
