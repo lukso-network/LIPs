@@ -24,6 +24,22 @@ Every contract that supports to the ERC725Account SHOULD have the following keys
 
 ### Keys
 
+
+#### LSP5ReceivedAssets[]
+
+References issued smart contract assets, like tokens and NFTs.
+
+```json
+{
+    "name": "LSP5ReceivedAssets[]",
+    "key": "0x6460ee3c0aac563ccbf76d6e1d07bada78e3a9514e6382b736ed3f478ab7b90b",
+    "keyType": "Array",
+    "valueContent": "Address",
+    "valueType": "address"
+}
+```
+
+
 #### LSP5ReceivedAssetsMap
 
 References issued smart contract assets, like tokens and NFTs.
@@ -37,20 +53,6 @@ The `valueContent` MUST be constructed as follows: `bytes8(indexNumber) + bytes4
     "keyType": "Mapping",
     "valueContent": "Mixed",
     "valueType": "bytes"
-}
-```
-
-#### LSP5ReceivedAssets[]
-
-References issued smart contract assets, like tokens and NFTs.
-
-```json
-{
-    "name": "LSP5ReceivedAssets[]",
-    "key": "0x6460ee3c0aac563ccbf76d6e1d07bada78e3a9514e6382b736ed3f478ab7b90b",
-    "keyType": "Array",
-    "valueContent": "Address",
-    "valueType": "address"
 }
 ```
 
