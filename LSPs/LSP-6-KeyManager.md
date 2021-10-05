@@ -6,7 +6,7 @@ discussions-to:
 status: Draft
 type: LSP
 created: 2021-08-03
-requires: LSP2, ERC165, ERC725Y, ERC1271
+requires: LSP2, ERC165, ERC1271
 ---
 
 
@@ -32,9 +32,8 @@ Such actions are represented as permissions that can be assigned to any third pa
 
 
 ## Motivation
-<!--The motivation is critical for LIPs that want to change the Lukso protocol. It should clearly explain why the existing protocol specification is inadequate to address the problem that the LIP solves. LIP submissions without sufficient motivation may be rejected outright.--> 
 
-ERC725 accounts enable to own a universal profile, that:
+ERC725Accounts enable to own a universal profile, that:
 * can hold multiple assets (tokens, NFTs...).
 * many addresses (whether users or contracts) can interact with.
 
