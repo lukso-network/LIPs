@@ -45,13 +45,13 @@ universalReceiver(bytes32 typeId, bytes data) public returns (bytes memory)
 
 Allows to be called by any external contract to inform the contract about any incoming transfers, interactions or simple information.
 
-**Parameters:**
+_Parameters:_
 
 - `bytes32 typeId` is the hash of a standard (according to ERC165?)
 
 - `bytes data` is a byteArray of arbitrary data. Reciving contracts should take the `id` in consideration to properly decode the `data`. The function MUST revert if `id` is not accepted or unknown. 
 
-**returns:** `bytes`, which can be used to encode response values.
+_Returns:_ `bytes`, which can be used to encode response values.
 
 **If the receiving should fail the function MUST revert.**
 
@@ -80,7 +80,7 @@ universalReceiverDelegate(address sender, bytes32 typeId, bytes memory data) pub
 
 Allows to be called by any external contract when an address wants to delegate its universalReceiver functionality to another smart contract.
 
-**Parameters:**
+_Parameters:_
 
 - `sender` is the address delegating his universalReceiver functionality.
 
@@ -88,7 +88,7 @@ Allows to be called by any external contract when an address wants to delegate i
 
 - `data` is a byteArray of arbitrary data. Reciving contracts should take the `id` in consideration to properly decode the `data`. The function MUST revert if `id` is not accepted or unknown.
 
-**returns:** `bytes`, which can be used to encode response values.
+_Returns:_ `bytes`, which can be used to encode response values.
 
 **If the receiving should fail the function MUST revert.**
 
@@ -251,7 +251,7 @@ contract UniversalReceiverExample is BasicUniversalReceiver {
 
 interface ILSP1  /* is ERC165 */ {
 
-    event UniversalReceiver(address indexed from, bytes32 indexed typeId, byte indexed returnedValue, bytes receivedData);
+    event UniversalReceiver(address indexed from, bytes32 indexed typeId, bytes indexed returnedValue, bytes receivedData);
     
     function universalReceiver(bytes32 typeId, bytes calldata data) external returns (bytes memory);
     
