@@ -61,7 +61,7 @@ Allows to be called by any external contract to inform the contract about any in
 #### UniversalReceiver
 
 ```solidity
-event UniversalReceiver(address indexed from, bytes32 indexed typeId, bytes32 indexed returnedValue, bytes receivedData)
+event UniversalReceiver(address indexed from, bytes32 indexed typeId, bytes indexed returnedValue, bytes receivedData)
 ```
 
 This event MUST be emitted when the `universalReceiver` function is succesfully executed.
@@ -109,7 +109,7 @@ pragma solidity >=0.5.0 <0.7.0;
 
 // ERC 165 interface id: `0x6bb56a14`
 interface ILSP1 {
-    event UniversalReceiver(address indexed from, bytes32 indexed typeId, bytes32 indexed returnedValue, bytes receivedData);
+    event UniversalReceiver(address indexed from, bytes32 indexed typeId, bytes indexed returnedValue, bytes receivedData);
 
     function universalReceiver(bytes32 typeId, bytes memory data) external returns (bytes memory);
 }
@@ -205,7 +205,7 @@ contract UniversalReceiverDelegate is ERC165, ILSP1Delegate {
         // An example implementation can be found at https://github.com/lukso-network/standards-scenarios/blob/master/contracts/UniversalReceiver/UniversalReceiverAddressStore.sol
         addressStore.push(sender);
 
-        return typeId;
+        return abi.encodePacked(typeId);
     }
 }
 ```
@@ -251,7 +251,7 @@ contract UniversalReceiverExample is BasicUniversalReceiver {
 
 interface ILSP1  /* is ERC165 */ {
 
-    event UniversalReceiver(address indexed from, bytes32 indexed typeId, bytes32 indexed returnedValue, bytes receivedData);
+    event UniversalReceiver(address indexed from, bytes32 indexed typeId, byte indexed returnedValue, bytes receivedData);
     
     function universalReceiver(bytes32 typeId, bytes calldata data) external returns (bytes memory);
     
