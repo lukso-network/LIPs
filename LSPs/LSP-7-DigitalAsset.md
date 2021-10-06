@@ -136,7 +136,7 @@ Emits an [RevokedOperator event](#revokedoperator).
 #### isOperatorFor
 
 ```solidity
-function isOperatorFor(address operator, uint256 amount) external view returns (uint256);
+function isOperatorFor(address tokenOwner, address operator) external view returns (uint256);
 ```
 
 Returns amount of tokens `operator` address has access to from `tokenOwner`.
@@ -176,7 +176,7 @@ MUST Emit a [Transfer event](#transfer) when transfer was successful.
 #### transferBatch
 
 ```solidity
-function transferBatch(address[] calldata from, address[] calldata to, bytes32[] calldata tokenId, bool force, bytes[] calldata data) external;
+function transferBatch(address[] calldata from, address[] calldata to, uint256[] calldata amount, bool force, bytes[] calldata data) external;
 ```
 
 Transfers many tokens based on the list `from`, `to`, `amount`. If any transfer fails, the call will revert.
@@ -187,13 +187,13 @@ MUST emit a [Transfer event](#transfer) for each transfered token.
 
 - `from` the list of sending addresses.
 - `to` the list of receiving addresses.
-- `tokenId` the list of tokens to transfer.
+- `amount` the amount of tokens to transfer.
 - `force` when set to true, `to` may be any address; when set to false `to` must be a contract that supports `LSP1` and successfully processes a call to `universalReceiver(bytes32 typeId, bytes memory data)`.
 - `data` the list of additional data the caller wants included in the emmited event, and sent in the hooks to `from` and `to` addresses.
 
 **Requirements:**
 
-- `from`, `to`, `tokenId` lists are the same length.
+- `from`, `to`, `amount` lists are the same length.
 - no values in `from` can be the zero address.
 - no values in `to` can be the zero address.
 - each `amount` tokens must be owned by `from`.
@@ -207,7 +207,7 @@ MUST emit a [Transfer event](#transfer) for each transfered token.
 event Transfer(address indexed operator, address indexed from, address indexed to, uint256 amount, bytes data);
 ```
 
-MUST be emitted when `amount` token is transferred from `from` to `to`.
+MUST be emitted when `amount` tokens is transferred from `from` to `to`.
 
 #### AuthorizedOperator
 
