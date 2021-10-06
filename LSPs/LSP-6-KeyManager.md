@@ -186,7 +186,7 @@ _Parameters:_
 - `_address`: the address of the signer of the transaction.
 - `_channel` :  the channel which the signer wants to use for executing the transaction.
 
-_Returns:_ `uint256` , returns the current nonce.
+_Returns:_ `uint256` , the current nonce.
 
 
 
