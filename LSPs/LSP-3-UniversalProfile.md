@@ -250,50 +250,6 @@ ERC725Y JSON Schema `LSP3UniversalProfile`:
 ]
 ```
 
-## Interface Cheat Sheet
-
-```solidity
-
-interface ILSP3  /* is ERC165 */ {
-         
-    
-    // ERC173
-    
-    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
-
-
-    function owner() external view returns (address);
-    
-    function transferOwnership(address newOwner) external; // onlyOwner
-    
-    
-    // ERC725Y
-      
-    event Executed(uint256 indexed _operation, address indexed _to, uint256 indexed  _value, bytes _data);
-    
-    event ContractCreated(address indexed contractAddress);
-    
-    event DataChanged(bytes32 indexed key, bytes value);
-    
-    
-    function getData(bytes32[] memory key) external view returns (bytes[] memory value);
-    
-    // LSP3 possible keys:
-    // SupportedStandards:LSP3UniversalProfile: 0xeafec4d89fa9619884b6b89135626455000000000000000000000000abe425d6
-    // LSP3Profile: 0x5ef83ad9559033e6e941db7d7c495acdce616347d28e90c7ce47cbfcfcad3bc5
-    // LSP3IssuedAssetsMap: 0x83f5e77bfb14241600000000<address>
-    // LSP3IssuedAssets[]: 0x3a47ab5bd3a594c3a8995f8fa58d0876c96819ca4516bd76100c92462f2f9dc0
-    // LSP1UniversalReceiverDelegate: 0x0cfc51aec37c55a4d0b1a65c6255c4bf2fbdf6277f3cc0730c45b828b6db8b47
-    
-    function setData(bytes32[] memory key, bytes[] memory value) external; // onlyOwner
-
-    // In most cases this standard is used in combination with `ERC725Account` (LSP0),
-    // which would add additional functions (execute, isValidSignature, universalReceiver)
-}
-
-
-```
-
 ## Copyright
 
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
