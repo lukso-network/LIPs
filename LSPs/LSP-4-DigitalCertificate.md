@@ -15,10 +15,7 @@ This standard describes a set of [ERC725Y](https://github.com/ethereum/EIPs/blob
 
 ## Abstract
 
-This standard, defines a set of key value stores that are useful to create digital asset, based on an [ERC777](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-777.md).
-
-Additionally this standards modifies [ERC777](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-777.md) `decimals` return value. It is suggested to modify ERC777 to work [LSP1-UniversalReceiver](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-1-UniversalReceiver.md)
-to allow the asset to be received by any smart contract implementing [LSP1](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-1-UniversalReceiver.md), including an [LSP3 Account](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-3-UniversalProfile.md).
+This standard, defines a set of key value stores that are useful to create digital asset.
 
 ## Motivation
 
@@ -31,43 +28,7 @@ An LSP4 asset is controlled by a single `owner`, like an ERC725 smart contract. 
 
 ## Specification
 
-Every contract that supports to the Digital Certificate standard SHOULD implement:
-
-### ERC777 modifications
-
-To be compliant with this standard the required [ERC777](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-777.md) needs to be modified as follows:
-
-#### decimals
-
- ```solidity
- decimals() external returns (uint8)
- ```
-NFTs are non-fungible and therefore the smallest unit is 1.
-
-**returns:** `uint8` , MUST return `0`.
-
-
-#### Asset names
-
-Example:
-
-```js
-name() => 'My Amazing Asset'
-symbol() => 'MYASSET01'
-```
-
-To define the Assets name and Symbol, ERC777 default `name` and `symbol` are used.
-
-Symbols should be UPPERCASE, without spaces and contain only ASCII.
-
-
-#### Universal Receiver
-
-Instead of relying on [ERC1820](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1820.md), the ERC777 smart contract COULD expect receivers to implement LSP1.
-This is especially recommended for the LUKSO network, to improve the overall compatibility and future proofness of assets and universal profiles based on [LSP3](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-3-UniversalProfile.md). 
-
-
-### Keys
+### ERC725Y Keys
 
 #### SupportedStandards:LSP4DigitalCertificate
 
@@ -82,7 +43,6 @@ The supported standard SHOULD be `LSP4DigitalCertificate`
     "valueType": "bytes"
 }
 ```
-
 
 #### LSP4Metadata
 
@@ -187,11 +147,45 @@ An array of (ERC725Account) addresses of creators,
 
 For construction of the Asset Keys see: [ERC725Y JSON Schema](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-2-ERC725YJSONSchema.md#array)
 
+#### LSP4TokenName
+
+A string representing the name for the token collection.
+
+```json
+  {
+      "name": "LSP4TokenName",
+      "key": "0xdeba1e292f8ba88238e10ab3c7f88bd4be4fac56cad5194b6ecceaf653468af1",
+      "keyType": "Singleton",
+      "valueContent": "String",
+      "valueType": "string"
+  }
+```
+
+This SHOULD not be changeable, and set only during initialization of the token.
+
+#### LSP4TokenSymbol
+
+A string representing the symbol for the token collection. Symbols should be UPPERCASE, without spaces and contain only ASCII.
+
+```json
+  {
+      "name": "LSP4TokenSymbol",
+      "key": "0x2f0a68ab07768e01943a599e73362a0e17a63a72e94dd2e384d2c1d4db932756",
+      "keyType": "Singleton",
+      "valueContent": "String",
+      "valueType": "string"
+  }
+```
+
+This SHOULD not be changeable, and set only during initialization of the token.
+
 ## Rationale
+
+There can be many token implementations, and this standard fills a need for common metadata describing issuers, creators and the token itself.
 
 ## Implementation
 
-A implementation can be found in the [lukso-network/universalprofile-smart-contracts](https://github.com/lukso-network/universalprofile-smart-contracts/blob/main/contracts/TestHelpers/LSP4DigitalCertificate.sol);
+A implementation can be found in the [lukso-network/universalprofile-smart-contracts](https://github.com/lukso-network/universalprofile-smart-contracts/blob/main/contracts/LSP4/LSP4.sol);
 The below defines the JSON interface of the `LSP4DigitalCertificate`.
 
 ERC725Y JSON Schema `LSP4DigitalCertificate`:
@@ -220,103 +214,23 @@ ERC725Y JSON Schema `LSP4DigitalCertificate`:
         "valueType": "uint256",
         "elementValueContent": "Address",
         "elementValueType": "address"
-    }
+    },
+    {
+        "name": "LSP4TokenName",
+        "key": "0xdeba1e292f8ba88238e10ab3c7f88bd4be4fac56cad5194b6ecceaf653468af1",
+        "keyType": "Singleton",
+        "valueContent": "String",
+        "valueType": "string"
+    },
+    {
+        "name": "LSP4TokenSymbol",
+        "key": "0x2f0a68ab07768e01943a599e73362a0e17a63a72e94dd2e384d2c1d4db932756",
+        "keyType": "Singleton",
+        "valueContent": "String",
+        "valueType": "string"
+  }
 ]
 ```
-
-## Interface Cheat Sheet
-
-```solidity
-
-interface ILSP4  /* is ERC165 */ {
-    
-        
-    // ERC725Y
-    
-    event DataChanged(bytes32 indexed key, bytes value);
-
-    
-    function getData(bytes32 _key) public view override virtual returns (bytes memory _value);
-    
-    function setData(bytes32 _key, bytes memory _value) external override onlyOwner;
-    
-    
-    // ERC20
-
-    event Transfer(address indexed from, address indexed to, uint256 value);
-    
-    event Approval(address indexed owner, address indexed spender, uint256 value);
-    
-    
-    function name() public view override returns (string memory);
-    
-    function symbol() public view override returns (string memory);
-    
-    function decimals() public pure override returns (uint8);
-    
-    function totalSupply() public view override(IERC20, IERC777) returns (uint256);
-    
-    function balanceOf(address tokenHolder) public view override(IERC20, IERC777) returns (uint256);
-    
-    function allowance(address holder, address spender) public view override returns (uint256);
-    
-    function approve(address spender, uint256 value) public override returns (bool);
-    
-    function transferFrom(address holder, address recipient, uint256 amount) public override returns (bool);
-        
-    function transfer(address recipient, uint256 amount) public override returns (bool);
-    
-    
-    
-    // ERC777
-    
-    event Minted(address indexed operator, address indexed to, uint256 amount, bytes data, bytes operatorData);
-
-    event Burned(address indexed operator, address indexed from, uint256 amount, bytes data, bytes operatorData);
-
-    event AuthorizedOperator(address indexed operator, address indexed tokenHolder);
-
-    event RevokedOperator(address indexed operator, address indexed tokenHolder);
-    
-    event Approval(address indexed owner, address indexed spender, uint256 value);
-    
-    event Transfer(address indexed from, address indexed to, uint256 value);
-    
-    event Sent(address indexed operator, address indexed from, address indexed to, uint256 amount, bytes data, bytes operatorData);
-    
-    
-    function granularity() public pure override returns (uint256);
-        
-    function send(address recipient, uint256 amount, bytes memory data) public override;
-        
-    function isOperatorFor(address operator, address tokenHolder) public view override returns (bool);
-    
-    function authorizeOperator(address operator) public override;
-    
-    function revokeOperator(address operator) public override;
-    
-    function defaultOperators() public view override returns (address[] memory);
-    
-    function operatorSend(address sender, address recipient, uint256 amount, bytes memory data, bytes memory operatorData) public override;
-    
-    function operatorBurn(address account, uint256 amount, bytes memory data, bytes memory operatorData) public override;
-   
-    
-    
-    // ERC173
-    
-    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
-
-    
-    function owner() public view virtual returns (address);
-        
-    function transferOwnership(address newOwner) public override onlyOwner;
-
-  
-}
-
-```
-
 
 ## Copyright
 
