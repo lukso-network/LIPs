@@ -262,6 +262,7 @@ Emits an [AuthorizedOperator event](#authorizedoperator).
 - `tokenId` must exist
 - caller must be current `tokenOwner` of `tokenId`.
 - `operator` cannot be calling address.
+- `operator` cannot be the zero address.
 
 #### revokeOperator
 
@@ -283,6 +284,7 @@ Emits an [RevokedOperator event](#revokedoperator).
 - `tokenId` must exist
 - caller must be current `tokenOwner` of `tokenId`.
 - `operator` cannot be calling address.
+- `operator` cannot be the zero address.
 
 #### isOperatorFor
 

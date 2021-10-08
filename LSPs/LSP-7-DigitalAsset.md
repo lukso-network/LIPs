@@ -114,6 +114,7 @@ Emits an [AuthorizedOperator event](#authorizedoperator).
 **Requirements:**
 
 - `operator` cannot be calling address.
+- `operator` cannot be the zero address.
 
 #### revokeOperator
 
@@ -132,6 +133,7 @@ Emits an [RevokedOperator event](#revokedoperator).
 **Requirements:**
 
 - `operator` cannot be calling address.
+- `operator` cannot be the zero address.
 
 #### isOperatorFor
 
