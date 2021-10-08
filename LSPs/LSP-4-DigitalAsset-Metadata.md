@@ -1,12 +1,12 @@
 ---
 lip: 4
-title: Digital Certificate
+title: Digital Asset Metadata
 author: Fabian Vogelsteller <fabian@lukso.network> 
 discussions-to: https://discord.gg/E2rJPP4
 status: Draft
 type: LSP
 created: 2020-07-21
-requires: LSP1, LSP2, ERC165, ERC173, ERC725Y, ERC777
+requires: LSP2, ERC725Y
 ---
  
 ## Simple Summary
@@ -19,11 +19,11 @@ This standard, defines a set of key value stores that are useful to create digit
 
 ## Motivation
 
-This standard aims to create a better version of NFTs (NFT 2.0) to allow more functionality to be attached to those assets, and the ability for those assets to change over time.
+This standard aims to create a better version of tokens and NFTs to allow more functionality to be attached to those assets, and the ability for those assets to change over time.
 As NFTs mostly have a creator, those creators should be able to improve the assets (link better 3D files, as 3D file standards improve), or change attributes.
 One could even think of a smart contract system that can increase attributes based on certain inputs automatically.
 
-An LSP4 asset is controlled by a single `owner`, like an ERC725 smart contract. This owner is able to `setData`, and therefore change values of keys, and can potentially mint new items.
+An LSP4 asset is controlled by a single `owner`, expected to be a ERC725 smart contract. This owner is able to `setData`, and therefore change values of keys, and can potentially mint new items.
  
 
 ## Specification
@@ -43,6 +43,39 @@ The supported standard SHOULD be `LSP4DigitalCertificate`
     "valueType": "bytes"
 }
 ```
+
+#### LSP4TokenName
+
+A string representing the name for the token collection.
+
+```json
+  {
+      "name": "LSP4TokenName",
+      "key": "0xdeba1e292f8ba88238e10ab3c7f88bd4be4fac56cad5194b6ecceaf653468af1",
+      "keyType": "Singleton",
+      "valueContent": "String",
+      "valueType": "string"
+  }
+```
+
+This MUST NOT be changeable, and set only during initialization of the token.
+
+#### LSP4TokenSymbol
+
+A string representing the symbol for the token collection. Symbols should be UPPERCASE, without spaces and contain only ASCII.
+
+```json
+  {
+      "name": "LSP4TokenSymbol",
+      "key": "0x2f0a68ab07768e01943a599e73362a0e17a63a72e94dd2e384d2c1d4db932756",
+      "keyType": "Singleton",
+      "valueContent": "String",
+      "valueType": "string"
+  }
+```
+
+This MUST NOT be changeable, and set only during initialization of the token.
+
 
 #### LSP4Metadata
 
@@ -147,37 +180,9 @@ An array of (ERC725Account) addresses of creators,
 
 For construction of the Asset Keys see: [ERC725Y JSON Schema](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-2-ERC725YJSONSchema.md#array)
 
-#### LSP4TokenName
+#### LSP4CreatorsMap
 
-A string representing the name for the token collection.
-
-```json
-  {
-      "name": "LSP4TokenName",
-      "key": "0xdeba1e292f8ba88238e10ab3c7f88bd4be4fac56cad5194b6ecceaf653468af1",
-      "keyType": "Singleton",
-      "valueContent": "String",
-      "valueType": "string"
-  }
-```
-
-This SHOULD not be changeable, and set only during initialization of the token.
-
-#### LSP4TokenSymbol
-
-A string representing the symbol for the token collection. Symbols should be UPPERCASE, without spaces and contain only ASCII.
-
-```json
-  {
-      "name": "LSP4TokenSymbol",
-      "key": "0x2f0a68ab07768e01943a599e73362a0e17a63a72e94dd2e384d2c1d4db932756",
-      "keyType": "Singleton",
-      "valueContent": "String",
-      "valueType": "string"
-  }
-```
-
-This SHOULD not be changeable, and set only during initialization of the token.
+TODO: take a look at lsp5 to get the map
 
 ## Rationale
 
@@ -200,6 +205,20 @@ ERC725Y JSON Schema `LSP4DigitalCertificate`:
         "valueType": "bytes"
     },
     {
+        "name": "LSP4TokenName",
+        "key": "0xdeba1e292f8ba88238e10ab3c7f88bd4be4fac56cad5194b6ecceaf653468af1",
+        "keyType": "Singleton",
+        "valueContent": "String",
+        "valueType": "string"
+    },
+    {
+        "name": "LSP4TokenSymbol",
+        "key": "0x2f0a68ab07768e01943a599e73362a0e17a63a72e94dd2e384d2c1d4db932756",
+        "keyType": "Singleton",
+        "valueContent": "String",
+        "valueType": "string"
+    }
+    {
         "name": "LSP4Metadata",
         "key": "0x9afb95cacc9f95858ec44aa8c3b685511002e30ae54415823f406128b85b238e",
         "keyType": "Singleton",
@@ -214,21 +233,7 @@ ERC725Y JSON Schema `LSP4DigitalCertificate`:
         "valueType": "uint256",
         "elementValueContent": "Address",
         "elementValueType": "address"
-    },
-    {
-        "name": "LSP4TokenName",
-        "key": "0xdeba1e292f8ba88238e10ab3c7f88bd4be4fac56cad5194b6ecceaf653468af1",
-        "keyType": "Singleton",
-        "valueContent": "String",
-        "valueType": "string"
-    },
-    {
-        "name": "LSP4TokenSymbol",
-        "key": "0x2f0a68ab07768e01943a599e73362a0e17a63a72e94dd2e384d2c1d4db932756",
-        "keyType": "Singleton",
-        "valueContent": "String",
-        "valueType": "string"
-  }
+    }
 ]
 ```
 
