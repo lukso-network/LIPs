@@ -76,7 +76,7 @@ See the [Interface Cheat Sheet](#interface-cheat-sheet) for details.
 event ValueReceived(address indexed sender, uint256 indexed value);
 ```
 
-MUST be fired when a native token transfer was received.
+MUST be emitted when a native token transfer was received.
 
 
 ## Rationale

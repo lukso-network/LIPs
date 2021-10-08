@@ -1,7 +1,7 @@
 ---
 lip: 8
 title: Identifiable Digital Asset
-author: Claudio Weck <claudio@fanzone.media>, Fabian Vogelsteller <fabian@lukso.network>, Matthew Stevens <@mattgstevens>, Ankit Kumar <https://github.com/ankitkumar9018>
+author: Claudio Weck <claudio@fanzone.media>, Fabian Vogelsteller <fabian@lukso.network>, Matthew Stevens <@mattgstevens>, Ankit Kumar <@ankitkumar9018>
 discussions-to: https://discord.gg/E2rJPP4 (LUKSO), https://discord.gg/PQvJQtCV (FANZONE)
 status: Draft
 type: LSP
@@ -24,32 +24,22 @@ This standard defines a set of key value stores that are useful to know what the
 ## Motivation
 <!--The motivation is critical for LIPs that want to change the Lukso protocol. It should clearly explain why the existing protocol specification is inadequate to address the problem that the LIP solves. LIP submissions without sufficient motivation may be rejected outright.-->
 
-This standard aims to support use cases not covered by LSP7, by using a `tokenId` instead of an amount of tokens to mint, burn, and transfer tokens. Each `tokenId` may have metadata (either as a on-chain ERC725Y contract or off-chain JSON) in addition to the LSP4 metadata of the smart contract that mints the tokens. In this way a minted token benefits from the flexibility & upgradability of the ERC725Y standard, and transfering a token carries the history of ownership and metadata updates. This is beneficial for a new generation of NFTs.
+This standard aims to support use cases not covered by [LSP-7-DigitalAsset](), by using a `tokenId` instead of an amount of tokens to mint, burn, and transfer tokens. Each `tokenId` may have metadata (either as a on-chain ERC725Y contract or off-chain JSON) in addition to the LSP4 metadata of the smart contract that mints the tokens. In this way a minted token benefits from the flexibility & upgradability of the ERC725Y standard, and transfering a token carries the history of ownership and metadata updates. This is beneficial for a new generation of NFTs.
 
-A commonality with LSP7 is desired so that the two token implementations use similar naming for functions, events, and using hooks to notify token senders and receivers using LSP1.
+A commonality with [LSP-7-DigitalAsset]() is desired so that the two token implementations use similar naming for functions, events, and using hooks to notify token senders and receivers using LSP1.
 
 ## Specification
 <!--The technical specification should describe the syntax and semantics of any new feature. The specification should be detailed enough to allow competing, interoperable implementations for any of the current Ethereum platforms (go-ethereum, parity, cpp-ethereum, ethereumj, ethereumjs, and [others](https://github.com/ethereum/wikwi/wiki/Clients)).-->
 
-### ERC725Y Keys for minting contract
+### ERC725Y Keys
 
 These are the expected keys for the LSP8 contract which mints tokens.
 
-#### SupportedStandards:LSP8IdentifiableDigitalAsset
-
-The supported standard SHOULD be `LSP8IdentifiableDigitalAsset`
-
-```json
-{
-    "name": "SupportedStandards:LSP8IdentifiableDigitalAsset",
-    "key": "0xeafec4d89fa9619884b6b891356264550000000000000000000000006a3c8618",
-    "keyType": "Mapping",
-    "valueContent": "0x6a3c8618",
-    "valueType": "bytes"
-}
-```
+This standard expects the keys from [LSP-4-DigitalAsset-Metadata.](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-4-DigitalAsset-Metadata.md#erc725ykeys).
 
 #### LSP8TokenIdType
+
+TODO: make this look like an enum
 
 What the `tokenId` represents in this contract, to be stored in the ERC725Y of the contract which mints tokens.
 
@@ -59,14 +49,13 @@ Expected values include [uint256, address, bytes32].
 - `address`: another contract could be used to mint a token.
 - `bytes32`: a hashed value (ie. serial number) is used to
 
-(TODO: is there a better way to encode this than `string`)
 ```json
 {
     "name": "LSP8TokenIdType",
     "key": "0x715f248956de7ce65e94d9d836bfead479f7e70d69b718d47bfe7b00e05b4fe4",
     "keyType": "Singleton",
-    "valueContent": "String",
-    "valueType": "string"
+    "valueContent": "Mixed",
+    "valueType": "bytes"
 }
 ```
 
@@ -74,7 +63,7 @@ This SHOULD not be changeable, and set only during initialization of the token.
 
 #### LSP8MetadataAddress:TokenId
 
-When a metadata contract is created for a tokenId, the address SHOULD be stored in the minting contract storage.
+When a metadata contract is created for a tokenId, the address COULD be stored in the minting contract storage.
 
 ```json
 {
@@ -88,15 +77,15 @@ When a metadata contract is created for a tokenId, the address SHOULD be stored 
 
 #### LSP8MetadataJSON:TokenId
 
-When metadata JSON is created for a tokenId, the URL SHOULD be stored in the minting contract storage.
+When metadata JSON is created for a tokenId, the URL COULD be stored in the minting contract storage.
 
 ```json
 {
     "name": "LSP8MetadataJSON:0x20BytesTokenIdHash",
     "key": "0x9a26b4060ae7f7d500000000cafecafecafecafecafecafecafecafecafecafe",
     "keyType": "AddressMapping", // TODO: better Data/BytesMapping?
-    "valueContent": Mixed,
-    "valueType": mixed
+    "valueContent": JSONURL,
+    "valueType": bytes
 }
 ```
 
@@ -104,21 +93,6 @@ When metadata JSON is created for a tokenId, the URL SHOULD be stored in the min
 (TODO: discussion if there are other keys to include in the standard for the contract which mints tokens)
 ---
 
-#### LSP4Metadata
-
-The description of the asset, to be stored in the ERC725Y of the contract which mints tokens.
-
-Please see [LSP4Metadata](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-4-DigitalCertificate.md#lsp4metadata) for details.
-
-#### LSP4Creators[]
-
-An array of (ERC725Account) addresses of creators,
-
-Please see [LSP4Creators[]](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-4-DigitalCertificate.md#lsp4creators) for details.
-
-### ERC725Y Keys for on-chain tokenId metadata
-
-These are the expected keys for metadata contracts created for a tokenId.
 
 #### LSP8TokenIdMetadataMintedBy
 
@@ -204,7 +178,7 @@ function balanceOf(address tokenOwner) external view returns (uint256);
 
 Returns the number of tokens owned by `tokenOwner`.
 
-**Parameters:**
+__Parameters:__
 
 - `tokenOwner` the address to query.
 
@@ -218,11 +192,11 @@ function tokenOwnerOf(bytes32 tokenId) external view returns (address);
 
 Returns the `tokenOwner` address of the `tokenId` token.
 
-**Parameters:**
+__Parameters:__
 
 - `tokenId` the token to query.
 
-**Requirements:**
+__Requirements:__
 
 - `tokenId` must exist
 
@@ -236,7 +210,7 @@ function tokenIdsOf(address tokenOwner) external view returns (bytes32[] memory)
 
 Returns the list of `tokenIds` for the `tokenOwner` address.
 
-**Parameters:**
+__Parameters:__
 
 - `tokenOwner` the address to query.
 
@@ -250,14 +224,14 @@ function authorizeOperator(address operator, bytes32 tokenId) external;
 
 Makes `operator` address an operator of `tokenId`.
 
-Emits an [AuthorizedOperator event](#authorizedoperator).
+MUST emit an [AuthorizedOperator event](#authorizedoperator).
 
-**Parameters:**
+__Parameters:__
 
 - `operator` the address to authorize as an operator.
 - `tokenId` the token to enable operator status to.
 
-**Requirements:**
+__Requirements:__
 
 - `tokenId` must exist
 - caller must be current `tokenOwner` of `tokenId`.
@@ -272,14 +246,14 @@ function revokeOperator(address operator, bytes32 tokenId) external;
 
 Removes `operator` address as an operator of `tokenId`.
 
-Emits an [RevokedOperator event](#revokedoperator).
+MUST emit a [RevokedOperator event](#revokedoperator).
 
-**Parameters:**
+__Parameters:__
 
 - `operator` the address to revoke as an operator.
 - `tokenId` the token to disable operator status to.
 
-**Requirements:**
+__Requirements:__
 
 - `tokenId` must exist
 - caller must be current `tokenOwner` of `tokenId`.
@@ -295,12 +269,12 @@ function isOperatorFor(address operator, bytes32 tokenId) external view returns 
 Returns whether `operator` address is an operator of `tokenId`.
 Operators can send and burn tokens on behalf of their owners. The tokenOwner is their own operator.
 
-**Parameters:**
+__Parameters:__
 
 - `operator` the address to query operator status for.
 - `tokenId` the token to query.
 
-**Requirements:**
+__Requirements:__
 
 - `tokenId` must exist
 - caller must be current `tokenOwner` of `tokenId`.
@@ -315,11 +289,11 @@ function getOperatorsOf(bytes32 tokenId) external view returns (address[] memory
 
 Returns all `operator` addresses of `tokenId`.
 
-**Parameters:**
+__Parameters:__
 
 - `tokenId` the token to query.
 
-**Requirements:**
+__Requirements:__
 
 - `tokenId` must exist
 - caller must be current `tokenOwner` of `tokenId`.
@@ -330,22 +304,22 @@ Returns all `operator` addresses of `tokenId`.
 #### transfer
 
 ```solidity
-function transfer(address from, address to, bytes32 tokenId, bool force, bytes calldata data) external;
+function transfer(address from, address to, bytes32 tokenId, bool force, bytes memory data) external;
 ```
 
 Transfers `tokenId` token from `from` to `to`. The `force` parameter will be used when notifying the token sender and receiver.
 
-MUST Emit a [Transfer event](#transfer) when transfer was successful.
+MUST emit a [Transfer event](#transfer) when transfer was successful.
 
-**Parameters:**
+__Parameters:__
 
 - `from` the sending address.
 - `to` the receiving address.
 - `tokenId` the token to transfer.
 - `force` when set to true, `to` may be any address; when set to false `to` must be a contract that supports `LSP1` and successfully processes a call to `universalReceiver(bytes32 typeId, bytes memory data)`.
-- `data` additional data the caller wants included in the emmited event, and sent in the hooks to `from` and `to` addresses.
+- `data` additional data the caller wants included in the emitted event, and sent in the hooks to `from` and `to` addresses.
 
-**Requirements:**
+__Requirements:__
 
 - `from` cannot be the zero address.
 - `to` cannot be the zero address.
@@ -355,22 +329,22 @@ MUST Emit a [Transfer event](#transfer) when transfer was successful.
 #### transferBatch
 
 ```solidity
-function transferBatch(address[] calldata from, address[] calldata to, bytes32[] calldata tokenId, bool force, bytes[] calldata data) external;
+function transferBatch(address[] memory from, address[] memory to, bytes32[] memory tokenId, bool force, bytes[] memory data) external;
 ```
 
 Transfers many tokens based on the list `from`, `to`, `tokenId`. If any transfer fails, the call will revert.
 
 MUST emit a [Transfer event](#transfer) for each transfered token.
 
-**Parameters:**
+__Parameters:__
 
 - `from` the list of sending addresses.
 - `to` the list of receiving addresses.
 - `tokenId` the list of tokens to transfer.
 - `force` when set to true, `to` may be any address; when set to false `to` must be a contract that supports `LSP1` and successfully processes a call to `universalReceiver(bytes32 typeId, bytes memory data)`.
-- `data` the list of additional data the caller wants included in the emmited event, and sent in the hooks to `from` and `to` addresses.
+- `data` the list of additional data the caller wants included in the emitted event, and sent in the hooks to `from` and `to` addresses.
 
-**Requirements:**
+__Requirements:__
 
 - `from`, `to`, `tokenId` lists are the same length.
 - no values in `from` can be the zero address.
@@ -432,26 +406,35 @@ The `force` parameter sent during `function transfer` SHOULD be used when notify
 ## Implementation
 <!--The implementations must be completed before any LIP is given status "Final", but it need not be completed before the LIP is accepted. While there is merit to the approach of reaching consensus on the specification and rationale before writing code, the principle of "rough consensus and running code" is still useful when it comes to resolving many discussions of API details.-->
 
-A implementation can be found in the [lukso-network/universalprofile-smart-contracts](https://github.com/lukso-network/universalprofile-smart-contracts/blob/master/contracts/LSP8/LSP8Core.sol);
-
-ERC725Y JSON Schema `LSP8IdentifiableDigitalCertificate`:
-
-```json
-[
-    {
-        "name": "SupportedStandards:LSP8IdentifiableDigitalCertificate",
-        "key": "0xeafec4d89fa9619884b6b891356264550000000000000000000000006a3c8618",
-        "keyType": "Mapping",
-        "valueContent": "0x6a3c8618",
-        "valueType": "bytes"
-    },
-]
-```
+A implementation can be found in the [lukso-network/lsp-smart-contracts](https://github.com/lukso-network/lsp-smart-contracts/blob/master/contracts/LSP8/LSP8Core.sol);
 
 ## Interface Cheat Sheet
 
 ```solidity
-interface ILSP8 is IERC165, IERC725Y {
+interface ILSP8 is /* IERC165 */ {
+
+    // ERC173
+
+    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
+
+    function owner() public view virtual returns (address);
+
+    function renounceOwnership() public virtual onlyOwner;
+
+    function transferOwnership(address newOwner) public override onlyOwner;
+
+
+    // ERC725Y
+
+    event DataChanged(bytes32 indexed key, bytes value);
+
+    function getData(bytes32 _key) public view override virtual returns (bytes memory _value);
+
+    function setData(bytes32 _key, bytes memory _value) external override onlyOwner;
+
+
+    // LSP8
+
     event Transfer(address operator, address indexed from, address indexed to, bytes32 indexed tokenId, bytes data);
 
     event AuthorizedOperator(address indexed operator, address indexed tokenOwner, bytes32 indexed tokenId);
@@ -474,28 +457,9 @@ interface ILSP8 is IERC165, IERC725Y {
 
     function getOperatorsOf(bytes32 tokenId) external view returns (address[] memory);
 
-    function transfer(address from, address to, bytes32 tokenId, bool force, bytes calldata data) external;
+    function transfer(address from, address to, bytes32 tokenId, bool force, bytes memory data) external;
 
-    function transferBatch(address[] calldata from, address[] calldata to, bytes32[] calldata tokenId, bool force, bytes[] calldata data) external;
-
-    // ERC173
-
-    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
-
-    function owner() public view virtual returns (address);
-
-    function renounceOwnership() public virtual onlyOwner;
-
-    function transferOwnership(address newOwner) public override onlyOwner;
-
-
-    // ERC725Y
-
-    event DataChanged(bytes32 indexed key, bytes value);
-
-    function getData(bytes32 _key) public view override virtual returns (bytes memory _value);
-
-    function setData(bytes32 _key, bytes memory _value) external override onlyOwner;
+    function transferBatch(address[] memory from, address[] memory to, bytes32[] memory tokenId, bool force, bytes[] memory data) external;
 }
 
 ```
