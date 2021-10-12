@@ -52,7 +52,7 @@ What is required is a contract design that enable ERC725 account owners to:
 ### Permission Keys on the ERC725Account
 
 The following keys can be used to get and set permissions of certain addresses on a ERC725 account.   
-These keys are based on the [LSP2-ERC725YJSONSchema](https://github.com/CJ42/LIPs/blob/master/LSPs/LSP-2-ERC725YJSONSchema.md) standard, and use the key type **[AddressMappingWithGrouping](https://github.com/CJ42/LIPs/blob/master/LSPs/LSP-2-ERC725YJSONSchema.md#addressmappingwithgrouping)**
+These keys are based on the [LSP2-ERC725YJSONSchema](https://github.com/lukso-network/LIPs/blob/main/LSPs/LSP-2-ERC725YJSONSchema.md) standard, and use the key type **[Bytes20MappingWithGrouping](https://github.com/lukso-network/LIPs/blob/main/LSPs/LSP-2-ERC725YJSONSchema.md#bytes20mappingwithgrouping)**
 
 The KeyManager will read the permissions from the ERC725Account key value store, to determine if a key is allowed to perform certain actions.
 
@@ -78,7 +78,7 @@ Holds the permissions for a key. See [Permission Values](#permission-values-in-a
 {
     "name": "AddressPermissions:Permissions:<address>",
     "key": "0x4b80742d0000000082ac0000<address>",
-    "keyType": "AddressMappingWithGrouping",
+    "keyType": "Bytes20MappingWithGrouping",
     "valueContent": "BitArray",
     "valueType": "bytes4"
 }
@@ -92,7 +92,7 @@ Holds an array of address, the key is allowed to talk to.
 {
     "name": "AddressPermissions:AllowedAddresses:<address>",
     "key": "0x4b80742d00000000c6dd0000<address>",
-    "keyType": "AddressMappingWithGrouping",
+    "keyType": "Bytes20MappingWithGrouping",
     "valueContent": "Address",
     "valueType": "address[]"
 }
@@ -106,7 +106,7 @@ Holds an array of bytes4 function signatures, the key is allowed to call on othe
 {
     "name": "AddressPermissions:AllowedFunctions:<address>",
     "key": "0x4b80742d000000008efe0000<address>",
-    "keyType": "AddressMappingWithGrouping",
+    "keyType": "Bytes20MappingWithGrouping",
     "valueContent": "Bytes4",
     "valueType": "bytes4[]"
 }
@@ -120,7 +120,7 @@ Holds an array of bytes4 ERC165 standards signatures, other smart contracts shou
 {
     "name": "AddressPermissions:AllowedStandards:<address>",
     "key": "0x4b80742d000000003efa0000<address>",
-    "keyType": "AddressMappingWithGrouping",
+    "keyType": "Bytes20MappingWithGrouping",
     "valueContent": "Bytes4",
     "valueType": "bytes4[]"
 }
@@ -153,7 +153,7 @@ SIGN          = 0x80;   // 1000 0000
 #### execute
 
 ```solidity
-function execute(bytes calldata _data) public payable returns (bool)
+function execute(bytes memory _data) public payable returns (bool)
 ```
 
 Execute a calldata payload on an ERC725 account.
@@ -193,7 +193,7 @@ _Returns:_ `uint256` , the current nonce.
 #### executeRelayCall
 
 ```solidity
-function executeRelayCall(address _signedFor, uint256 _nonce, bytes calldata _data, bytes memory _signature) public payable returns (bool)
+function executeRelayCall(address _signedFor, uint256 _nonce, bytes memory _data, bytes memory _signature) public payable returns (bool)
 ```
 
 Allows anybody to execute `_data` payload on a ERC725 account, given they have a signed message from an executor.
@@ -311,28 +311,28 @@ ERC725Y JSON Schema `LSP6KeyManager`, set at the `LSP3Account`:
     {
         "name": "AddressPermissions:Permissions:<address>",
         "key": "0x4b80742d0000000082ac0000<address>",
-        "keyType": "AddressMappingWithGrouping",
+        "keyType": "Bytes20MappingWithGrouping",
         "valueContent": "BitArray",
         "valueType": "bytes4"
     },
     {
         "name": "AddressPermissions:AllowedAddresses:<address>",
         "key": "0x4b80742d00000000c6dd0000<address>",
-        "keyType": "AddressMappingWithGrouping",
+        "keyType": "Bytes20MappingWithGrouping",
         "valueContent": "Address",
         "valueType": "address[]"
     },
     {
         "name": "AddressPermissions:AllowedFunctions:<address>",
         "key": "0x4b80742d000000008efe0000<address>",
-        "keyType": "AddressMappingWithGrouping",
+        "keyType": "Bytes20MappingWithGrouping",
         "valueContent": "Bytes4",
         "valueType": "bytes4[]"
     },
     {
         "name": "AddressPermissions:AllowedStandards:<address>",
         "key": "0x4b80742d000000003efa0000<address>",
-        "keyType": "AddressMappingWithGrouping",
+        "keyType": "Bytes20MappingWithGrouping",
         "valueContent": "Bytes4",
         "valueType": "bytes4[]"
     }
@@ -350,9 +350,9 @@ interface ILSP6  /* is ERC165 */ {
     
     function getNonce(address _address, uint256 _channel) external view returns (uint256);
     
-    function execute(bytes calldata _data) external payable returns (bool);
+    function execute(bytes memory _data) external payable returns (bool);
     
-    function executeRelayCall(address _signedFor, uint256 _nonce, bytes calldata _data, bytes memory _signature) external payable returns (bool);
+    function executeRelayCall(address _signedFor, uint256 _nonce, bytes memory _data, bytes memory _signature) external payable returns (bool);
  
         
     // ERC1271

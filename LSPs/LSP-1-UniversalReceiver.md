@@ -40,16 +40,16 @@ Every contract that complies to the Universal Receiver standard MUST implement:
 #### universalReceiver
 
 ```solidity
-universalReceiver(bytes32 typeId, bytes data) public returns (bytes memory)
+universalReceiver(bytes32 typeId, bytes memory data) public returns (bytes memory)
 ```
 
 Allows to be called by any external contract to inform the contract about any incoming transfers, interactions or simple information.
 
 _Parameters:_
 
-- `bytes32 typeId` is the hash of a standard (according to ERC165?)
+- `typeId` is the hash of a standard (according to ERC165?)
 
-- `bytes data` is a byteArray of arbitrary data. Reciving contracts should take the `id` in consideration to properly decode the `data`. The function MUST revert if `id` is not accepted or unknown. 
+- `data` is a byteArray of arbitrary data. Reciving contracts should take the `id` in consideration to properly decode the `data`. The function MUST revert if `id` is not accepted or unknown. 
 
 _Returns:_ `bytes`, which can be used to encode response values.
 
@@ -232,7 +232,7 @@ contract UniversalReceiverExample is BasicUniversalReceiver {
         }
     }
 
-    function universalReceiver(bytes32 typeId, bytes calldata data) public returns (bytes memory) {
+    function universalReceiver(bytes32 typeId, bytes memory data) public returns (bytes memory) {
         if(typeId == TOKEN_RECEIVE){
             (address from, address to, uint256 amount) = toTokenData(data);
             emit TokenReceived(msg.sender, from, to, amount);
@@ -253,7 +253,7 @@ interface ILSP1  /* is ERC165 */ {
 
     event UniversalReceiver(address indexed from, bytes32 indexed typeId, bytes indexed returnedValue, bytes receivedData);
     
-    function universalReceiver(bytes32 typeId, bytes calldata data) external returns (bytes memory);
+    function universalReceiver(bytes32 typeId, bytes memory data) external returns (bytes memory);
     
 }
     
