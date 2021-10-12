@@ -22,7 +22,7 @@ To be able to display received assets in a profile we need to keep track of all 
 
 Every contract that supports to the ERC725Account SHOULD have the following keys:
 
-### Keys
+### ERC725Y Keys
 
 
 #### LSP5ReceivedAssets[]

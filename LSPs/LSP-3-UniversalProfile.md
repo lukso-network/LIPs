@@ -26,7 +26,7 @@ This standard describes meta data that can be added to a [ERC725Account](https:/
 
 Every contract that supports to the Universal Profile standard SHOULD add the following [ERC725Y](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) keys:
 
-### Keys
+### ERC725Y Keys
 
 
 #### SupportedStandards:LSP3UniversalProfile
