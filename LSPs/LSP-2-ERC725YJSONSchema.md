@@ -190,7 +190,7 @@ Below is an example of a mapping key type:
 }
 ```
 
-### ASSETURL
+### AssetURL
 
 The content is bytes containing the following format:
 `bytes4(keccack256('hashFunction'))` + `bytes32(keccack256(assetBytes))` + `utf8ToHex('AssetURL')`
