@@ -38,8 +38,8 @@ To make ERC725Y keys readable we define the following key value types:
     - [`Singleton`](#singleton): A simple key.
     - [`Array`](#array): An array spanning multiple ERC725Y keys.
     - [`Mapping`](#mapping): A key that maps two words.
-    - [`AddressMapping`](#addressmapping): A key that maps a word to an address.
-    - [`AddressMappingWithGrouping`](#addressmappingwithgrouping): A key that maps a word, to a grouping word to an address.
+    - [`Bytes20Mapping`](#bytes20mapping): A key that maps a word to an address.
+    - [`Bytes20MappingWithGrouping`](#bytes20mappingwithgrouping): A key that maps a word, to a grouping word to an address.
 - `valueType`: The type the content MUST be decoded with.
     - `string`: The bytes are a UTF8 encoded string
     - `address`: The bytes are an 20 bytes address
@@ -152,26 +152,28 @@ Below is an example of a mapping key type:
 }
 ```
 
-### AddressMapping
+### Bytes20Mapping
 
-An address mapping key is constructed using `bytes8(keccak256(FirstWord)) + bytes4(0) + bytes20(address)`.
+Bytes 20 mapping could be used to map words to addresses, or other bytes 20 long data.
+An bytes mapping key is constructed using `bytes8(keccak256(FirstWord)) + bytes4(0) + bytes20(address)`.
 
 e.g. `MyCoolAddress:<address>` > `0x22496f48a493035f 00000000 cafecafecafecafecafecafecafecafecafecafe`.
 
-Below is an example of an address mapping key type:
+Below is an example of an bytes20 mapping key type:
 
 ```js
 {
     "name": "MyCoolAddress:0xcafecafecafecafecafecafecafecafecafecafe",
     "key": "0x22496f48a493035f00000000cafecafecafecafecafecafecafecafecafecafe",
-    "keyType": "AddressMapping",
+    "keyType": "Bytes20Mapping",
     "valueContent": mixed,
     "valueType": mixed
 }
 ```
 
-### AddressMappingWithGrouping
+### Bytes20MappingWithGrouping
 
+Bytes 20 mapping with grouping could be used to map two words to addresses, or other bytes 20 long data.
 A mapping key, constructed using `bytes4(keccak256(FirstWord)) + bytes4(0) + bytes2(keccak256(SecondWord)) + bytes2(0) + bytes20(address)`,     
 
 e.g. `AddressPermissions:Permissions:<address>` > `0x4b80742d 00000000 eced 0000 cafecafecafecafecafecafecafecafecafecafe`.
@@ -182,7 +184,7 @@ Below is an example of a mapping key type:
 {
     "name": "AddressPermissions:Permissions:cafecafecafecafecafecafecafecafecafecafe",
     "key": "0x4b80742d0000000082ac0000cafecafecafecafecafecafecafecafecafecafe",
-    "keyType": "AddressMappingWithGrouping",
+    "keyType": "Bytes20MappingWithGrouping",
     "valueContent": mixed,
     "valueType": mixed
 }
