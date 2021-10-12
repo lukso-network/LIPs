@@ -41,11 +41,11 @@ This allows us to:
 
 ERC165 interface id: `0x63cb749b`
 
-This interface id is the XOR of ERC725Y, ERC725X, LSP1-UniversalReceiver, ERC1271-isValidSignature, to allow detection of ERC725Accounts.
+_This interface id is the XOR of ERC725Y, ERC725X, LSP1-UniversalReceiver, ERC1271-isValidSignature, to allow detection of ERC725Accounts._
 
 Every contract that supports to the ERC725Account SHOULD implement:
 
-### Keys
+### ERC725Y Keys
 
 
 #### LSP1UniversalReceiverDelegate
@@ -124,12 +124,12 @@ interface ILSP0  /* is ERC165 */ {
     
     event ValueReceived(address indexed sender, uint256 indexed value);
     
-    event ContractCreated(address indexed contractAddress);
+    event ContractCreated(uint256 indexed _operation, address indexed contractAddress, uint256 indexed  _value);
     
     event DataChanged(bytes32 indexed key, bytes value);
     
     
-    function execute(uint256 operationType, address to, uint256 value, bytes calldata data) external payable returns (bytes memory); // onlyOwner
+    function execute(uint256 operationType, address to, uint256 value, bytes memory data) external payable returns (bytes memory); // onlyOwner
     
     function getData(bytes32[] memory key) external view returns (bytes[] memory value);
     
@@ -148,7 +148,7 @@ interface ILSP0  /* is ERC165 */ {
 
     event UniversalReceiver(address indexed from, bytes32 indexed typeId, bytes indexed returnedValue, bytes receivedData);
 
-    function universalReceiver(bytes32 typeId, bytes calldata data) external returns (bytes memory);
+    function universalReceiver(bytes32 typeId, bytes memory data) external returns (bytes memory);
     
     // IF LSP1UniversalReceiverDelegate key is set
     // THEN calls will be forwarded to the address given (UniversalReceiver even MUST still be fired)
