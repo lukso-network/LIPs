@@ -43,19 +43,19 @@ TODO: make this look like an enum
 
 What the `tokenId` represents in this contract, to be stored in the [ERC725Y][ERC725] of the contract which mints tokens.
 
-Expected values include [uint256, address, bytes32].
+Expected values are represented by the enum:
 
-- `uint256`: could be an incrementing count where each minted token is assigned the next number.
-- `address`: another contract could be used to mint a token.
-- `bytes32`: a hashed value (ie. serial number) is used to
+- 1 -> `uint256`: a number, which may be an incrementing count where each minted token is assigned the next number.
+- 2 -> `address`: another contract.
+- 3 -> `bytes32`: a hashed value (ie. serial number).
 
 ```json
 {
     "name": "LSP8TokenIdType",
     "key": "0x715f248956de7ce65e94d9d836bfead479f7e70d69b718d47bfe7b00e05b4fe4",
     "keyType": "Singleton",
-    "valueContent": "Mixed",
-    "valueType": "bytes"
+    "valueContent": "Number",
+    "valueType": "uint256"
 }
 ```
 
@@ -69,11 +69,13 @@ When a metadata contract is created for a tokenId, the address COULD be stored i
 {
     "name": "LSP8MetadataAddress:0x20BytesTokenIdHash",
     "key": "0x73dcc7c3c4096cdc00000000cafecafecafecafecafecafecafecafecafecafe",
-    "keyType": "AddressMapping", // TODO: better Data/BytesMapping?
+    "keyType": "Bytes20Mapping",
     "valueContent": Mixed,
     "valueType": mixed
 }
 ```
+
+For construction of the Bytes20Mapping key see: [LSP2 ERC725Y JSON Schema][LSP2#bytes20mapping]
 
 #### LSP8MetadataJSON:TokenId
 
@@ -83,11 +85,13 @@ When metadata JSON is created for a tokenId, the URL COULD be stored in the mint
 {
     "name": "LSP8MetadataJSON:0x20BytesTokenIdHash",
     "key": "0x9a26b4060ae7f7d500000000cafecafecafecafecafecafecafecafecafecafe",
-    "keyType": "AddressMapping", // TODO: better Data/BytesMapping?
+    "keyType": "Bytes20Mapping",
     "valueContent": JSONURL,
     "valueType": bytes
 }
 ```
+For construction of the Bytes20Mapping key see: [LSP2 ERC725Y JSON Schema][LSP2#bytes20mapping]
+For construction of the JSONURL value see: [LSP2 ERC725Y JSON Schema][LSP2#jsonurl]
 
 ---
 (TODO: discussion if there are other keys to include in the standard for the contract which mints tokens)
@@ -149,8 +153,8 @@ The linked JSON file SHOULD have the following format:
 ```json
 {
     "LSP8TokenIdMetadata": {
-        "tokenId": "bytes32",
         "mintedBy": "address",
+        "tokenId": "bytes32",
     }
 }
 ```
@@ -473,6 +477,7 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 [ERC777]: <https://github.com/ethereum/EIPs/blob/master/EIPS/eip-777.md>
 [LSP1]: <https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-1-UniversalReceiver.md>
 [LSP2#jsonurl]: <https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-2-ERC725YJSONSchema.md#jsonurl>
+[LSP2#bytes20mapping]: <https://github.com/lukso-network/LIPs/blob/main/LSPs/LSP-2-ERC725YJSONSchema.md#bytes20mapping>
 [LSP4#erc725ykeys]: <https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-4-DigitalAsset-Metadata.md#erc725ykeys>
 [LSP7]: <https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-7-DigitalAsset.md>
 [LSP8]: <https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-8-IdentifiableDigitalAsset.md>
