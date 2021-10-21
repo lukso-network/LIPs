@@ -127,15 +127,15 @@ Contains an array of bytes4 ERC165 interface Ids, other smart contracts MUST sup
 The following permissions are allowed in the BitArray of the `AddressPermissions:Permissions:<address>` key for an address. The order can not be changed:
 
 ```js
-CHANGEOWNER        = 0x01;   // 0000 0000 0001 // Allows changing the owner of the controlled contract
-CHANGEPERMISSIONS  = 0x02;   // 0000 0000 0010 // Allows changing of permissions of addresses
-SETDATA            = 0x04;   // 0000 0000 0100 // Allows setting data on the controlled contract
-CALL               = 0x08;   // 0000 0000 1000 // Allows calling other contracts through the controlled contract
-STATICCALL         = 0x10;   // 0000 0001 0000 // Allows calling other contracts through the controlled contract
-DELEGATECALL       = 0x20;   // 0000 0010 0000 // Allows delegate calling other contracts through the controlled contract
-DEPLOY             = 0x40;   // 0000 0100 0000 // Allows deploying other contracts through the controlled contract
-TRANSFERVALUE      = 0x80;   // 0000 1000 0000 // Allows transfering value to other contracts from the controlled contract
-SIGN               = 0x80;   // 0001 0000 0000 // Allows signing on behalf of the controlled account, for example for login purposes
+CHANGEOWNER        = 0x0001;   // 0000 0000 0001 // Allows changing the owner of the controlled contract
+CHANGEPERMISSIONS  = 0x0002;   // 0000 0000 0010 // Allows changing of permissions of addresses
+SETDATA            = 0x0004;   // 0000 0000 0100 // Allows setting data on the controlled contract
+CALL               = 0x0008;   // 0000 0000 1000 // Allows calling other contracts through the controlled contract
+STATICCALL         = 0x0010;   // 0000 0001 0000 // Allows calling other contracts through the controlled contract
+DELEGATECALL       = 0x0020;   // 0000 0010 0000 // Allows delegate calling other contracts through the controlled contract
+DEPLOY             = 0x0040;   // 0000 0100 0000 // Allows deploying other contracts through the controlled contract
+TRANSFERVALUE      = 0x0080;   // 0000 1000 0000 // Allows transfering value to other contracts from the controlled contract
+SIGN               = 0x0100;   // 0001 0000 0000 // Allows signing on behalf of the controlled account, for example for login purposes
 ```
 
 ![lsp6-key-manager-permissions-range](https://user-images.githubusercontent.com/31145285/129574070-8aceb32c-edf1-4134-b7c8-ca242a14c9c3.jpeg)
