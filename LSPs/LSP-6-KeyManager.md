@@ -81,7 +81,7 @@ Contains [the permissions](#permission-values-in-addresspermissionspermissionsad
     
 #### AddressPermissions:AllowedAddresses:\<address\>
 
-Contains an array of allowed addres a controlling address is alloowed to interact with.
+Contains an array of allowed address a controlling address is allowed to interact with.
 IF no addresses are set, interacting with ALL addresses is allowed. IF one or more addresses is set, the controlling address, is only allowed to interacti with those addresses.
 
 ```json
@@ -152,7 +152,7 @@ SIGN               = 0x0100;   // 0001 0000 0000 // Allows signing on behalf of 
 function execute(bytes memory _data) public payable returns (bool)
 ```
 
-Execute a calldata payload on an ERC725 account.
+Execute a payload on an ERC725 account.
 
 MUST fire the [Executed event](#executed).
 
@@ -160,7 +160,7 @@ _Parameters:_
 
 - `_data`: The call data to be executed. The first 4 bytes of the `_data` payload MUST correspond to one of the function selector in the ERC725 account, such as `setData(...)`, `execute(...)` or `transferOwnership(...)`.
 
-_Returns:_ `bool` , `true` if the call on ERC725 account succeeded, `false` otherwise.
+_Returns:_ `bytes` , the returned data as abi-encoded bytes if the call on ERC725 account succeeded, otherwise revert with a reason-string. 
 
 
 
@@ -203,7 +203,7 @@ _Parameters:_
 - `_data`: The call data to be executed.
 - `_signature`: bytes32 ethereum signature.
 
-_Returns:_ `bool` , true if the call on ERC725 account succeeded, false otherwise.
+_Returns:_ `bytes` , the returned data as abi-encoded bytes if the call on ERC725 account succeeded, otherwise revert with a reason-string. 
 
 **Important:** the message to sign MUST be of the following format: `<KeyManager address>` + `<signer nonce>` + `<_data payload>` .
 These 3 parameters MUST be:
@@ -309,7 +309,7 @@ ERC725Y JSON Schema `LSP6KeyManager`, set at the `LSP3Account`:
         "key": "0x4b80742d0000000082ac0000<address>",
         "keyType": "Bytes20MappingWithGrouping",
         "valueContent": "BitArray",
-        "valueType": "bytes4"
+        "valueType": "byte32"
     },
     {
         "name": "AddressPermissions:AllowedAddresses:<address>",
