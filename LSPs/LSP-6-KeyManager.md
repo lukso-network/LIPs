@@ -11,20 +11,21 @@ requires: LSP2, ERC165, ERC1271
 
 
 ## Simple Summary
-<!--"If you can't explain it simply, you don't understand it well enough." Provide a simplified and layman-accessible explanation of the LIP.-->
 
-This standard describes a `KeyManager` contract with a set of pre-defined permissions that can be used as a controller for a ERC725 account.
-Such permissions are useful to control actions performed by other addresses when interacting with an [ERC725Account](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md).
+This standard describes a `KeyManager` contract with a set of pre-defined permissions for addresses. A KeyManager contract can control an [ERC725Account](https://github.com/lukso-network/LIPs/blob/main/LSPs/LSP-0-ERC725Account.md) like account, or any other [ERC725](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) smart contract.
+
 
 ## Abstract
 
-<!--A short (~200 word) description of the technical issue being addressed.-->
+This standard allows for controlling addresses to be restricted through multiple permissions, to act on and through this KeyManager on a controlled smart contract (for example an [ERC725Account](https://github.com/lukso-network/LIPs/blob/main/LSPs/LSP-0-ERC725Account.md)).
 
-This standard allows for a controller and permissioning layer to be set on an ERC725 account.
+The KeyManager functions as a gateway for the [ERC725Account](https://github.com/lukso-network/LIPs/blob/main/LSPs/LSP-0-ERC725Account.md) restricting an address actions based on set permissions.
 
-It provides functionalities to allow / disallow third parties to perform actions on an ERC725 account, on behalf of its owner.
+Permissions are described in the [Permissions values section](#permission-values-in-addresspermissionspermissionsaddress). Furthermore addresses can be restricted to only talk to certain other smart contracts or address, specific functions or smart contracts supporting only specifc standard interfaces.
 
-Such actions are represented as permissions that can be assigned to any third party address.
+The Permissions are stored at [ERC725Account](https://github.com/lukso-network/LIPs/blob/main/LSPs/LSP-0-ERC725Account.md) ERC725Y key value store, and can therefore survive an upgrade to a new KeyManager contract.
+
+The flow of a transactions is as follows:
 
 ![lsp6-key-manager-flow-chart](https://user-images.githubusercontent.com/31145285/129574099-9eba52d4-4f82-4f11-8ac5-8bfa18ce97d6.jpeg)
 
@@ -33,32 +34,26 @@ Such actions are represented as permissions that can be assigned to any third pa
 
 ## Motivation
 
-ERC725Accounts enable to own a universal profile, that:
-* can hold multiple assets (tokens, NFTs...).
-* many addresses (whether users or contracts) can interact with.
+The benefit of a KeyManager is to externalise permission logic from [ERC725Y and X](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) contracts (such as an [ERC725Account](https://github.com/lukso-network/LIPs/blob/main/LSPs/LSP-0-ERC725Account.md)). This allows for such an logic to be upgraded without needing to change the core [ERC725Account](https://github.com/lukso-network/LIPs/blob/main/LSPs/LSP-0-ERC725Account.md) contract.
 
-However, data stored in a ERC725 account (under the JSON schema) can be easily updated by any address, using the function `setData(...)`. 
-Currently, ERC725 accounts do not implement any form of delegate access control, so to grant or restrict third parties to perform action on their behalf.
-
-What is required is a contract design that enable ERC725 account owners to:
-
-* control who can interact with their profile.
-* grant permissions, so to allow third parties to act on their behalf. 
+Storing the permissions at the core [ERC725Account](https://github.com/lukso-network/LIPs/blob/main/LSPs/LSP-0-ERC725Account.md) itself, allows it to survive KeyManager upgrades and opens the door to add additional KeyManager logic in the future, without loosing already set address permissions.
 
 
 ## Specification
 
 
-### Permission Keys on the ERC725Account
+### Permission ERC725Y Keys on the controlled contract
 
-The following keys can be used to get and set permissions of certain addresses on a ERC725 account.   
-These keys are based on the [LSP2-ERC725YJSONSchema](https://github.com/CJ42/LIPs/blob/master/LSPs/LSP-2-ERC725YJSONSchema.md) standard, and use the key type **[AddressMappingWithGrouping](https://github.com/CJ42/LIPs/blob/master/LSPs/LSP-2-ERC725YJSONSchema.md#addressmappingwithgrouping)**
+**The permissions that the KeyManager reads, are stored on the controlled-contracts ERC725Y key value store (for example an [ERC725Account](https://github.com/lukso-network/LIPs/blob/main/LSPs/LSP-0-ERC725Account.md))**
 
-The KeyManager will read the permissions from the ERC725Account key value store, to determine if a key is allowed to perform certain actions.
+The following ERC725Y keys are used to read permissions of certain addresses.
+These keys are based on the [LSP2-ERC725YJSONSchema](https://github.com/lukso-network/LIPs/blob/main/LSPs/LSP-2-ERC725YJSONSchema.md) standard, and use the key type **[Bytes20MappingWithGrouping](https://github.com/lukso-network/LIPs/blob/main/LSPs/LSP-2-ERC725YJSONSchema.md#bytes20mappingwithgrouping)**
+
 
 #### AddressPermissions[]
 
-Holds an array of address, that have permission some permission sets to interact with the ERC725Account.
+Contains an array of addresses, that have some permission set.
+This is mainly useful for interfaces to know which address hold permissions.
 
 ```json
 {
@@ -72,27 +67,28 @@ Holds an array of address, that have permission some permission sets to interact
 
 #### AddressPermissions:Permissions:\<address\>
 
-Holds the permissions for a key. See [Permission Values](#permission-values-in-addresspermissionspermissionsaddress) for details.
+Contains [the permissions](#permission-values-in-addresspermissionspermissionsaddress) for an address.
 
 ```json
 {
     "name": "AddressPermissions:Permissions:<address>",
     "key": "0x4b80742d0000000082ac0000<address>",
-    "keyType": "AddressMappingWithGrouping",
+    "keyType": "Bytes20MappingWithGrouping",
     "valueContent": "BitArray",
-    "valueType": "bytes4"
+    "valueType": "byte32"
 }
 ```
     
 #### AddressPermissions:AllowedAddresses:\<address\>
 
-Holds an array of address, the key is allowed to talk to.
+Contains an array of allowed address a controlling address is allowed to interact with.
+IF no addresses are set, interacting with ALL addresses is allowed. IF one or more addresses is set, the controlling address, is only allowed to interacti with those addresses.
 
 ```json
 {
     "name": "AddressPermissions:AllowedAddresses:<address>",
     "key": "0x4b80742d00000000c6dd0000<address>",
-    "keyType": "AddressMappingWithGrouping",
+    "keyType": "Bytes20MappingWithGrouping",
     "valueContent": "Address",
     "valueType": "address[]"
 }
@@ -100,13 +96,13 @@ Holds an array of address, the key is allowed to talk to.
 
 #### AddressPermissions:AllowedFunctions:\<address\>
 
-Holds an array of bytes4 function signatures, the key is allowed to call on other smart contracts.
+Contains an array of bytes4 function signatures, the controlling address is allowed to call on other smart contracts.
 
 ```json
 {
     "name": "AddressPermissions:AllowedFunctions:<address>",
     "key": "0x4b80742d000000008efe0000<address>",
-    "keyType": "AddressMappingWithGrouping",
+    "keyType": "Bytes20MappingWithGrouping",
     "valueContent": "Bytes4",
     "valueType": "bytes4[]"
 }
@@ -114,13 +110,13 @@ Holds an array of bytes4 function signatures, the key is allowed to call on othe
 
 #### AddressPermissions:AllowedStandards:\<address\>
 
-Holds an array of bytes4 ERC165 standards signatures, other smart contracts should support, for the key to be allowed to talk to the smart contract.
+Contains an array of bytes4 ERC165 interface Ids, other smart contracts MUST support, for the controlling address to be allowed to interact with.
 
 ```json
 {
     "name": "AddressPermissions:AllowedStandards:<address>",
     "key": "0x4b80742d000000003efa0000<address>",
-    "keyType": "AddressMappingWithGrouping",
+    "keyType": "Bytes20MappingWithGrouping",
     "valueContent": "Bytes4",
     "valueType": "bytes4[]"
 }
@@ -128,19 +124,19 @@ Holds an array of bytes4 ERC165 standards signatures, other smart contracts shou
 
 ### Permission Values in AddressPermissions:Permissions:\<address\>
 
-The following permissions are set in the BitArray of the `AddressPermissions:Permissions:<address>` key in the following order:
+The following permissions are allowed in the BitArray of the `AddressPermissions:Permissions:<address>` key for an address. The order can not be changed:
 
-```solidity
-CHANGEOWNER   = 0x01;   // 0000 0001
-CHANGEKEYS    = 0x02;   // 0000 0010
-SETDATA       = 0x04;   // 0000 0100
-CALL          = 0x08;   // 0000 1000
-DELEGATECALL  = 0x10;   // 0001 0000
-DEPLOY        = 0x20;   // 0010 0000
-TRANSFERVALUE = 0x40;   // 0100 0000
-SIGN          = 0x80;   // 1000 0000
+```js
+CHANGEOWNER        = 0x0001;   // 0000 0000 0001 // Allows changing the owner of the controlled contract
+CHANGEPERMISSIONS  = 0x0002;   // 0000 0000 0010 // Allows changing of permissions of addresses
+SETDATA            = 0x0004;   // 0000 0000 0100 // Allows setting data on the controlled contract
+CALL               = 0x0008;   // 0000 0000 1000 // Allows calling other contracts through the controlled contract
+STATICCALL         = 0x0010;   // 0000 0001 0000 // Allows calling other contracts through the controlled contract
+DELEGATECALL       = 0x0020;   // 0000 0010 0000 // Allows delegate calling other contracts through the controlled contract
+DEPLOY             = 0x0040;   // 0000 0100 0000 // Allows deploying other contracts through the controlled contract
+TRANSFERVALUE      = 0x0080;   // 0000 1000 0000 // Allows transfering value to other contracts from the controlled contract
+SIGN               = 0x0100;   // 0001 0000 0000 // Allows signing on behalf of the controlled account, for example for login purposes
 ```
-
 
 ![lsp6-key-manager-permissions-range](https://user-images.githubusercontent.com/31145285/129574070-8aceb32c-edf1-4134-b7c8-ca242a14c9c3.jpeg)
 
@@ -156,7 +152,7 @@ SIGN          = 0x80;   // 1000 0000
 function execute(bytes memory _data) public payable returns (bool)
 ```
 
-Execute a calldata payload on an ERC725 account.
+Execute a payload on an ERC725 account.
 
 MUST fire the [Executed event](#executed).
 
@@ -164,7 +160,7 @@ _Parameters:_
 
 - `_data`: The call data to be executed. The first 4 bytes of the `_data` payload MUST correspond to one of the function selector in the ERC725 account, such as `setData(...)`, `execute(...)` or `transferOwnership(...)`.
 
-_Returns:_ `bool` , `true` if the call on ERC725 account succeeded, `false` otherwise.
+_Returns:_ `bytes` , the returned data as abi-encoded bytes if the call on ERC725 account succeeded, otherwise revert with a reason-string. 
 
 
 
@@ -207,7 +203,7 @@ _Parameters:_
 - `_data`: The call data to be executed.
 - `_signature`: bytes32 ethereum signature.
 
-_Returns:_ `bool` , true if the call on ERC725 account succeeded, false otherwise.
+_Returns:_ `bytes` , the returned data as abi-encoded bytes if the call on ERC725 account succeeded, otherwise revert with a reason-string. 
 
 **Important:** the message to sign MUST be of the following format: `<KeyManager address>` + `<signer nonce>` + `<_data payload>` .
 These 3 parameters MUST be:
@@ -311,28 +307,28 @@ ERC725Y JSON Schema `LSP6KeyManager`, set at the `LSP3Account`:
     {
         "name": "AddressPermissions:Permissions:<address>",
         "key": "0x4b80742d0000000082ac0000<address>",
-        "keyType": "AddressMappingWithGrouping",
+        "keyType": "Bytes20MappingWithGrouping",
         "valueContent": "BitArray",
-        "valueType": "bytes4"
+        "valueType": "byte32"
     },
     {
         "name": "AddressPermissions:AllowedAddresses:<address>",
         "key": "0x4b80742d00000000c6dd0000<address>",
-        "keyType": "AddressMappingWithGrouping",
+        "keyType": "Bytes20MappingWithGrouping",
         "valueContent": "Address",
         "valueType": "address[]"
     },
     {
         "name": "AddressPermissions:AllowedFunctions:<address>",
         "key": "0x4b80742d000000008efe0000<address>",
-        "keyType": "AddressMappingWithGrouping",
+        "keyType": "Bytes20MappingWithGrouping",
         "valueContent": "Bytes4",
         "valueType": "bytes4[]"
     },
     {
         "name": "AddressPermissions:AllowedStandards:<address>",
         "key": "0x4b80742d000000003efa0000<address>",
-        "keyType": "AddressMappingWithGrouping",
+        "keyType": "Bytes20MappingWithGrouping",
         "valueContent": "Bytes4",
         "valueType": "bytes4[]"
     }
