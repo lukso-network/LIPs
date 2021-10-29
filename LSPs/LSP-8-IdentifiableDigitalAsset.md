@@ -361,7 +361,7 @@ _Requirements:_
 #### Transfer
 
 ```solidity
-event Transfer(address operator, address indexed from, address indexed to, bytes32 indexed tokenId, bytes data);
+event Transfer(address operator, address indexed from, address indexed to, bytes32 indexed tokenId, bool force, bytes data);
 ```
 
 MUST be emitted when `tokenId` token is transferred from `from` to `to`.
@@ -439,7 +439,7 @@ interface ILSP8 is /* IERC165 */ {
 
     // LSP8
 
-    event Transfer(address operator, address indexed from, address indexed to, bytes32 indexed tokenId, bytes data);
+    event Transfer(address operator, address indexed from, address indexed to, bytes32 indexed tokenId, bool force, bytes data);
 
     event AuthorizedOperator(address indexed operator, address indexed tokenOwner, bytes32 indexed tokenId);
 

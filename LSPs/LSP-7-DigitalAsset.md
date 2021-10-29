@@ -180,7 +180,7 @@ _Requirements:_
 #### Transfer
 
 ```solidity
-event Transfer(address indexed operator, address indexed from, address indexed to, uint256 amount, bytes data);
+event Transfer(address indexed operator, address indexed from, address indexed to, uint256 amount, bool force, bytes data);
 ```
 
 MUST be emitted when `amount` tokens is transferred from `from` to `to`.
@@ -253,7 +253,7 @@ interface ILSP7 is /* IERC165 */ {
 
     // LSP7
 
-    event Transfer(address indexed operator, address indexed from, address indexed to, uint256 amount, bytes data);
+    event Transfer(address indexed operator, address indexed from, address indexed to, uint256 amount, bool force, bytes data);
 
     event AuthorizedOperator(address indexed operator, address indexed tokenOwner, uint256 indexed amount);
 
