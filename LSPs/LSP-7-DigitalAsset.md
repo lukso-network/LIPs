@@ -139,7 +139,7 @@ _Parameters:_
 - `from` the sending address.
 - `to` the receiving address.
 - `amount` the amount of tokens to transfer.
-- `force` when set to TRUE, `to` may be any address; when set to False `to` must be a contract that supports [LSP1 UniversalReceiver][LSP1] and not revert.
+- `force` when set to TRUE, `to` may be any address; when set to FALSE `to` must be a contract that supports [LSP1 UniversalReceiver][LSP1] and not revert.
 - `data` additional data the caller wants included in the emitted event, and sent in the hooks to `from` and `to` addresses.
 
 _Requirements:_
@@ -164,7 +164,7 @@ _Parameters:_
 - `from` the list of sending addresses.
 - `to` the list of receiving addresses.
 - `amount` the amount of tokens to transfer.
-- `force` when set to true, `to` may be any address; when set to false `to` must be a contract that supports [LSP1 UniversalReceiver][LSP1] and not revert.
+- `force` when set to TRUE, `to` may be any address; when set to FALSE `to` must be a contract that supports [LSP1 UniversalReceiver][LSP1] and not revert.
 - `data` the list of additional data the caller wants included in the emitted event, and sent in the hooks to `from` and `to` addresses.
 
 _Requirements:_

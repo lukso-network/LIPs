@@ -320,7 +320,7 @@ _Parameters:_
 - `from` the sending address.
 - `to` the receiving address.
 - `tokenId` the token to transfer.
-- `force` when set to true, `to` may be any address; when set to false `to` must be a contract that supports [LSP1 UniversalReceiver][LSP1] and successfully processes a call to `universalReceiver(bytes32 typeId, bytes memory data)`.
+- `force` when set to TRUE, `to` may be any address; when set to FALSE `to` must be a contract that supports [LSP1 UniversalReceiver][LSP1] and successfully processes a call to `universalReceiver(bytes32 typeId, bytes memory data)`.
 - `data` additional data the caller wants included in the emitted event, and sent in the hooks to `from` and `to` addresses.
 
 _Requirements:_
@@ -345,7 +345,7 @@ _Parameters:_
 - `from` the list of sending addresses.
 - `to` the list of receiving addresses.
 - `tokenId` the list of tokens to transfer.
-- `force` when set to true, `to` may be any address; when set to false `to` must be a contract that supports [LSP1 UniversalReceiver][LSP1] and successfully processes a call to `universalReceiver(bytes32 typeId, bytes memory data)`.
+- `force` when set to TRUE, `to` may be any address; when set to FALSE `to` must be a contract that supports [LSP1 UniversalReceiver][LSP1] and successfully processes a call to `universalReceiver(bytes32 typeId, bytes memory data)`.
 - `data` the list of additional data the caller wants included in the emitted event, and sent in the hooks to `from` and `to` addresses.
 
 _Requirements:_
