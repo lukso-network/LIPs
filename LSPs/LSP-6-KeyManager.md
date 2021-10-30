@@ -42,7 +42,7 @@ Storing the permissions at the core [ERC725Account](https://github.com/lukso-net
 ## Specification
 
 
-### Permission ERC725Y Keys on the controlled contract
+### ERC725Y Keys
 
 **The permissions that the KeyManager reads, are stored on the controlled-contracts ERC725Y key value store (for example an [ERC725Account](https://github.com/lukso-network/LIPs/blob/main/LSPs/LSP-0-ERC725Account.md))**
 
