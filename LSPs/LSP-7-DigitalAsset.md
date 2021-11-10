@@ -45,7 +45,7 @@ Returns the number of decimals used to get its user representation.
 
 If the token is an NFT then `0` SHOULD be used, otherwise `18` is the common value.
 
-**Returns:** `uint8` the number of decimals to tranfrom a token value when displaying.
+**Returns:** `uint256` the number of decimals to tranfrom a token value when displaying.
 
 #### totalSupply
 
@@ -122,7 +122,7 @@ _Parameters:_
 
 - `operator` the address to query operator status for.
 
-**Returns:** `address` the token owner.
+**Returns:** `uint256`, the amount of tokens `operator` has access to from `tokenOwner`.
 
 #### transfer
 

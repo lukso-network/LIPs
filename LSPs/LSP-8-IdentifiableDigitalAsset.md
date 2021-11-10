@@ -283,7 +283,7 @@ _Requirements:_
 - `tokenId` must exist
 - caller must be current `tokenOwner` of `tokenId`.
 
-**Returns:** `address` the token owner.
+**Returns:** `bool`, TRUE if `operator` address is an operator of `tokenId`, FALSE otherwise. 
 
 #### getOperatorsOf
 
