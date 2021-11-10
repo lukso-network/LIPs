@@ -1,4 +1,4 @@
-****---
+---
 lip: 6
 title: Key Manager
 author: Fabian Vogelsteller <fabian@lukso.network>, Jean Cavallera <contact.cj42@protonmail.com>
