@@ -199,6 +199,44 @@ Known hash functions:
 
 - `0x8019f9b1`: keccak256('keccak256(bytes)')
 
+#### Example
+
+The following shows an example of how to encode an AssetURL:
+
+```js
+const hashFunction = web3.utils.keccak256('keccak256(bytes)').substr(0, 10)
+> '0x8019f9b1'
+
+// Local file read
+let hash = web3.utils.keccak256(fs.readFileSync('./file.png'))
+> '0xd47cf10786205bb08ce508e91c424d413d0f6c48e24dbfde2920d16a9561a723'
+
+// or browser fetch
+const assetBuffer = await fetch('https://ipfs.lukso.network/ipfs/QmW4nUNy3vtvr3DxZHuLfSLnhzKMe2WmgsUsEGPPFh8Ztp').then(async (response) => {
+    return response.arrayBuffer().then((buffer) => new Uint8Array(buffer));
+  });
+
+hash = web3.utils.keccak256(assetBuffer)
+> '0xd47cf10786205bb08ce508e91c424d413d0f6c48e24dbfde2920d16a9561a723'
+
+// store the asset file anywhere and encode the URL
+const url = web3.utils.utf8ToHex('ipfs://QmW4nUNy3vtvr3DxZHuLfSLnhzKMe2WmgsUsEGPPFh8Ztp')
+> '0x697066733a2f2f516d57346e554e7933767476723344785a48754c66534c6e687a4b4d6532576d67735573454750504668385a7470'
+
+// final result (to be stored on chain)
+const AssetURL = hashFunction + hash.substring(2) + url.substring(2)
+               ^              ^                   ^
+               0x8019f9b1   + d47cf10786205bb0... + 697066733a2f2...
+
+// structure of the AssetURL
+0x8019f9b1 +       d47cf10786205bb08ce508e91c424d413d0f6c48e24dbfde2920d16a9561a723 + 697066733a2f2f516d57346e554e7933767476723344785a48754c66534c6e687a4b4d6532576d67735573454750504668385a7470
+^                  ^                                                                  ^
+keccak256(utf8)    hash                                                               encoded URL
+
+// example value
+0x8019f9b1d47cf10786205bb08ce508e91c424d413d0f6c48e24dbfde2920d16a9561a723697066733a2f2f516d57346e554e7933767476723344785a48754c66534c6e687a4b4d6532576d67735573454750504668385a7470
+```
+
 ### JSONURL
 
 The content is bytes containing the following format:     
@@ -213,25 +251,25 @@ Known hash functions:
 The following shows an example of how to encode a JSON object:
 
 ```js
-let json = JSON.stringify({
+const json = JSON.stringify({
     myProperty: 'is a string',
     anotherProperty: {
         sdfsdf: 123456
     }
 })
 
-let hashFunction = web3.utils.keccak256('keccak256(utf8)').substr(0, 10)
+const hashFunction = web3.utils.keccak256('keccak256(utf8)').substr(0, 10)
 > '0x6f357c6a'
 
-let hash = web3.utils.keccak256(json)
+const hash = web3.utils.keccak256(json)
 > '0x820464ddfac1bec070cc14a8daf04129871d458f2ca94368aae8391311af6361'
 
 // store the JSON anywhere and encode the URL
-let url = web3.utils.utf8ToHex('ifps://QmYr1VJLwerg6pEoscdhVGugo39pa6rycEZLjtRPDfW84UAx')
+const url = web3.utils.utf8ToHex('ifps://QmYr1VJLwerg6pEoscdhVGugo39pa6rycEZLjtRPDfW84UAx')
 > '0x696670733a2f2f516d597231564a4c776572673670456f73636468564775676f3339706136727963455a4c6a7452504466573834554178'
 
 // final result (to be stored on chain)
-let JSONURL = hashFunction + hash.substring(2) + url.substring(2)
+const JSONURL = hashFunction + hash.substring(2) + url.substring(2)
               ^              ^                   ^
               0x6f357c6a   + 820464ddfac1be... + 696670733a2f2...
               
@@ -250,18 +288,18 @@ To decode, reverse the process:
 
 ```js
 
-let data = myContract.methods.getData('0xsomeKey..').call()
+const data = myContract.methods.getData('0xsomeKey..').call()
 > '0x6f357c6a820464ddfac1bec070cc14a8daf04129871d458f2ca94368aae8391311af6361696670733a2f2f516d597231564a4c776572673670456f73636468564775676f3339706136727963455a4c6a7452504466573834554178'
 
 // slice the bytes to get its pieces
-let hashFunction = data.slice(0, 10)
-let hash = '0x' + data.slice(0, 74)
-let url = '0x' + data.slice(74)
+const hashFunction = data.slice(0, 10)
+const hash = '0x' + data.slice(0, 74)
+const url = '0x' + data.slice(74)
 
 // check if it uses keccak256
 if(hashFunction === '0x6f357c6a') {
     // download the json file
-    let json = await ipfsMini.catJSON(
+    const json = await ipfsMini.catJSON(
         web3.utils.hexToUtf8(url).replace('ipfs://','')
     );
 
