@@ -127,15 +127,16 @@ Contains an array of bytes4 ERC165 interface Ids, other smart contracts MUST sup
 The following permissions are allowed in the BitArray of the `AddressPermissions:Permissions:<address>` key for an address. The order can not be changed:
 
 ```js
-CHANGEOWNER        = 0x0000000000000000000000000000000000000000000000000000000000000001;   // .... 0000 0000 0001 // Allows changing the owner of the controlled contract
-CHANGEPERMISSIONS  = 0x0000000000000000000000000000000000000000000000000000000000000002;   // .... 0000 0000 0010 // Allows changing of permissions of addresses
-SETDATA            = 0x0000000000000000000000000000000000000000000000000000000000000004;   // .... 0000 0000 0100 // Allows setting data on the controlled contract
-CALL               = 0x0000000000000000000000000000000000000000000000000000000000000008;   // .... 0000 0000 1000 // Allows calling other contracts through the controlled contract
-STATICCALL         = 0x0000000000000000000000000000000000000000000000000000000000000010;   // .... 0000 0001 0000 // Allows calling other contracts through the controlled contract
-DELEGATECALL       = 0x0000000000000000000000000000000000000000000000000000000000000020;   // .... 0000 0010 0000 // Allows delegate calling other contracts through the controlled contract
-DEPLOY             = 0x0000000000000000000000000000000000000000000000000000000000000040;   // .... 0000 0100 0000 // Allows deploying other contracts through the controlled contract
-TRANSFERVALUE      = 0x0000000000000000000000000000000000000000000000000000000000000080;   // .... 0000 1000 0000 // Allows transfering value to other contracts from the controlled contract
-SIGN               = 0x0000000000000000000000000000000000000000000000000000000000000100;   // .... 0001 0000 0000 // Allows signing on behalf of the controlled account, for example for login purposes
+CHANGEOWNER        = 0x0000000000000000000000000000000000000000000000000000000000000001;   // 0000 0000 0000 0001 // Allows changing the owner of the controlled contract
+CHANGEPERMISSIONS  = 0x0000000000000000000000000000000000000000000000000000000000000002;   // .... .... .... 0010 // Allows changing the permissions (adding + removing) of addresses
+ADDPERMISSIONS     = 0x0000000000000000000000000000000000000000000000000000000000000004;   // .... .... .... 0100 // Allows adding new permissions to addresses (removing permission disallowed) 
+SETDATA            = 0x0000000000000000000000000000000000000000000000000000000000000008;   // .... .... .... 1000 // Allows setting data on the controlled contract
+CALL               = 0x0000000000000000000000000000000000000000000000000000000000000010;   // .... .... 0001 .... // Allows calling other contracts through the controlled contract
+STATICCALL         = 0x0000000000000000000000000000000000000000000000000000000000000020;   // .... .... 0010 .... // Allows calling other contracts through the controlled contract
+DELEGATECALL       = 0x0000000000000000000000000000000000000000000000000000000000000040;   // .... .... 0100 .... // Allows delegate calling other contracts through the controlled contract
+DEPLOY             = 0x0000000000000000000000000000000000000000000000000000000000000080;   // .... .... 1000 .... // Allows deploying other contracts through the controlled contract
+TRANSFERVALUE      = 0x0000000000000000000000000000000000000000000000000000000000000100;   // .... 0001 .... .... // Allows transfering value to other contracts from the controlled contract
+SIGN               = 0x0000000000000000000000000000000000000000000000000000000000000200;   // .... 0010 .... .... // Allows signing on behalf of the controlled account, for example for login purposes
 ```
 
 ![lsp6-key-manager-permissions-range](https://user-images.githubusercontent.com/31145285/129574070-8aceb32c-edf1-4134-b7c8-ca242a14c9c3.jpeg)
