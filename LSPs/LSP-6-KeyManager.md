@@ -139,8 +139,8 @@ TRANSFERVALUE      = 0x000000000000000000000000000000000000000000000000000000000
 SIGN               = 0x0000000000000000000000000000000000000000000000000000000000000200;   // .... 0010 .... .... // Allows signing on behalf of the controlled account, for example for login purposes
 ```
 
-![lsp6-key-manager-permissions-range](https://user-images.githubusercontent.com/31145285/129574070-8aceb32c-edf1-4134-b7c8-ca242a14c9c3.jpeg)
 
+![LSP6 - KeyManager-permissions-examples](https://user-images.githubusercontent.com/31145285/141792716-ccebaff5-9d06-4e2d-9c34-6cda51b0dc16.jpeg)
 
 
 ### Methods
