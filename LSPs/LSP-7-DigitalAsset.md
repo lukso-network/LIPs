@@ -55,7 +55,7 @@ function totalSupply() external view returns (uint256);
 
 Returns the number of existing tokens.
 
-**Returns:** `uint256` the number of existing assets.
+**Returns:** `uint256` the number of existing tokens.
 
 #### balanceOf
 ```solidity
@@ -68,7 +68,7 @@ _Parameters:_
 
 - `tokenOwner` the address to query.
 
-**Returns:** `uint256` the number of assets owned by this address.
+**Returns:** `uint256` the number of tokens owned by this address.
 
 #### authorizeOperator
 
