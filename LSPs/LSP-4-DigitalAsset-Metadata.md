@@ -36,10 +36,10 @@ The supported standard SHOULD be `LSP4DigitalCertificate`
 
 ```json
 {
-    "name": "SupportedStandards:LSP4DigitalCertificate",
-    "key": "0xeafec4d89fa9619884b6b89135626455000000000000000000000000abf0613c",
+    "name": "SupportedStandards:LSP4DigitalAsset",
+    "key": "0xeafec4d89fa9619884b6b89135626455000000000000000000000000a4d96624",
     "keyType": "Mapping",
-    "valueContent": "0xabf0613c",
+    "valueContent": "0xa4d96624",
     "valueType": "bytes"
 }
 ```
@@ -199,9 +199,9 @@ ERC725Y JSON Schema `LSP4DigitalCertificate`:
 [
     {
         "name": "SupportedStandards:LSP4DigitalCertificate",
-        "key": "0xeafec4d89fa9619884b6b89135626455000000000000000000000000abf0613c",
+        "key": "0xeafec4d89fa9619884b6b89135626455000000000000000000000000a4d96624",
         "keyType": "Mapping",
-        "valueContent": "0xabf0613c",
+        "valueContent": "0xa4d96624",
         "valueType": "bytes"
     },
     {
