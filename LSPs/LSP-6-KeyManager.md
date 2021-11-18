@@ -306,6 +306,13 @@ ERC725Y JSON Schema `LSP6KeyManager`, set at the `LSP3Account`:
 ```json
 [
     {
+        "name": "AddressPermissions[]",
+        "key": "0xdf30dba06db6a30e65354d9a64c609861f089545ca58c6b4dbe31a5f338cb0e3",
+        "keyType": "Array",
+        "valueContent": "Address",
+        "valueType": "address"
+    },
+    {
         "name": "AddressPermissions:Permissions:<address>",
         "key": "0x4b80742d0000000082ac0000<address>",
         "keyType": "Bytes20MappingWithGrouping",
