@@ -30,16 +30,16 @@ An LSP4 asset is controlled by a single `owner`, expected to be a ERC725 smart c
 
 ### ERC725Y Keys
 
-#### SupportedStandards:LSP4DigitalCertificate
+#### SupportedStandards:LSP4DigitalAsset
 
-The supported standard SHOULD be `LSP4DigitalCertificate`
+The supported standard SHOULD be `LSP4DigitalAsset`
 
 ```json
 {
-    "name": "SupportedStandards:LSP4DigitalCertificate",
-    "key": "0xeafec4d89fa9619884b6b89135626455000000000000000000000000abf0613c",
+    "name": "SupportedStandards:LSP4DigitalAsset",
+    "key": "0xeafec4d89fa9619884b6b89135626455000000000000000000000000a4d96624",
     "keyType": "Mapping",
-    "valueContent": "0xabf0613c",
+    "valueContent": "0xa4d96624",
     "valueType": "bytes"
 }
 ```
@@ -99,14 +99,14 @@ The linked JSON file SHOULD have the following format:
 {
     "LSP4Metadata": {
         "description": "string",
-        "links": [ // links related to DigitalCertificate
+        "links": [ // links related to DigitalAsset
             {
                 "title": "string", // a title for the link.
                 "url": "string" // the link itself
             },
             ...
         ],  
-        "images": [ // multiple images in different sizes, related to the DigitalCertificate, image 0, should be the main image
+        "images": [ // multiple images in different sizes, related to the DigitalAsset, image 0, should be the main image
             [
                 {
                     "width": Number,
@@ -191,17 +191,17 @@ There can be many token implementations, and this standard fills a need for comm
 ## Implementation
 
 A implementation can be found in the [lukso-network/universalprofile-smart-contracts](https://github.com/lukso-network/universalprofile-smart-contracts/blob/main/contracts/LSP4/LSP4.sol);
-The below defines the JSON interface of the `LSP4DigitalCertificate`.
+The below defines the JSON interface of the `LSP4DigitalAsset`.
 
-ERC725Y JSON Schema `LSP4DigitalCertificate`:
+ERC725Y JSON Schema `LSP4DigitalAsset`:
 
 ```json
 [
     {
-        "name": "SupportedStandards:LSP4DigitalCertificate",
-        "key": "0xeafec4d89fa9619884b6b89135626455000000000000000000000000abf0613c",
+        "name": "SupportedStandards:LSP4DigitalAsset",
+        "key": "0xeafec4d89fa9619884b6b89135626455000000000000000000000000a4d96624",
         "keyType": "Mapping",
-        "valueContent": "0xabf0613c",
+        "valueContent": "0xa4d96624",
         "valueType": "bytes"
     },
     {
