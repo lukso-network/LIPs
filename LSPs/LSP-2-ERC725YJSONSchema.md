@@ -163,7 +163,7 @@ Below is an example of an bytes20 mapping key type:
 
 ```js
 {
-    "name": "MyCoolAddress:0xcafecafecafecafecafecafecafecafecafecafe",
+    "name": "MyCoolAddress:cafecafecafecafecafecafecafecafecafecafe",
     "key": "0x22496f48a493035f00000000cafecafecafecafecafecafecafecafecafecafe",
     "keyType": "Bytes20Mapping",
     "valueContent": mixed,
