@@ -91,13 +91,13 @@ Storing an encoded array as a value, will reuqire a set amount of gas, which can
 If you require multiple keys of the same key type they MUST be defined as follows:
 
 - The keytype name MUST have a `[]` add and then hashed
-- The key hash MUST contain the number of all elements, and is required to be updated when a new key element is added.
+- The key hash MUST contain the index of all elements, and is required to be updated when a new key element is added.
 
 For all other elements:
 
 - The first 16 bytes are the first 16 bytes of the key hash
-- The second 16 bytes is a `uint128` of the number of the element
-- Elements start at number `0`
+- The second 16 bytes is a `uint128` of the index of the element
+- Elements start at index `0`
 
 This would looks as follows for `LSP3IssuedAssets[]`:
 
