@@ -19,7 +19,7 @@ Two keys are proposed to reference received asset smart contracts.
 - `LSP5ReceivedAssets[]` to hold an array of addresses.
 - `LSP5ReceivedAssetsMap` to hold:
   - the index in the former array where the received asset address is stored.
-  - an ERC165 interface ID to easily identify the standard used by each asset smart contracts, without the need to query the contracts directly. 
+  - an [ERC165 interface ID](https://eips.ethereum.org/EIPS/eip-165) to easily identify the standard used by each asset smart contracts, without the need to query the contracts directly. 
 
 The key `LSP5ReceivedAssetsMap` also helps to prevent adding duplications to the array, when automatically added via smart contract (e.g. a [LSP1-UniversalReceiverDelegate](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-1-UniversalReceiver.md)).
 
@@ -68,8 +68,7 @@ The `valueContent` MUST be constructed as follows: `bytes8(indexNumber) + bytes4
 
 ## Implementation
 
-A implementation can be found in the [lukso-network/standards-scenarios](https://github.com/lukso-network/standards-scenarios/blob/master/contracts/XXX);
-The below defines the JSON interface of the `LSP5ReceivedAssets`.
+An implementation can be found in the [LSP1UniversalReceiverDelegate](https://github.com/lukso-network/lsp-universalprofile-smart-contracts/blob/develop/contracts/LSP1UniversalReceiver/LSP1UniversalReceiverDelegateUP/LSP1UniversalReceiverDelegateUPCore.sol) smart contract. The below defines the JSON interface of the `LSP5ReceivedAssets`.
 
 ERC725Y JSON Schema `LSP5ReceivedAssets`:
 ```json
