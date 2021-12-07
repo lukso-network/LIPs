@@ -237,7 +237,7 @@ ERC725Y JSON Schema `LSP3UniversalProfile`:
         "keyType": "Array",
         "valueContent": "Address",
         "valueType": "address"
-    }
+    },
 
     // from ERC725Account
     {
