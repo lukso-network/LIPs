@@ -25,14 +25,14 @@ Every contract that supports to the ERC725Account SHOULD have the following keys
 ### ERC725Y Keys
 
 
-#### LSP10ReceivedAssets[]
+#### LSP10Vaults[]
 
 References issued smart contract vaults.
 
 ```json
 {
-    "name": "LSP10ReceivedVaults[]",
-    "key": "0xd8c6ec2b958bbebb976719e1eb233f126e0f355c63843f434220f9753b5ca9e5",
+    "name": "LSP10Vaults[]",
+    "key": "0x55482936e01da86729a45d2b87a6b1d3bc582bea0ec00e38bdb340e3af6f9f06",
     "keyType": "Array",
     "valueContent": "Address",
     "valueType": "address"
@@ -40,7 +40,7 @@ References issued smart contract vaults.
 ```
 
 
-#### LSP10ReceivedVaultsMap
+#### LSP10VaultsMap
 
 References issued smart contract vaults.
 
@@ -48,8 +48,8 @@ The `valueContent` MUST be constructed as follows: `bytes8(indexNumber) + bytes4
 
 ```json
 {
-    "name": "LSP10ReceivedVaultsMap:<address>",
-    "key": "0x5e5a4636eeb20bf100000000<address>",
+    "name": "LSP10VaultsMap:<address>",
+    "key": "0x192448c3c0f88c7f00000000<address>",
     "keyType": "Mapping",
     "valueContent": "Mixed",
     "valueType": "bytes"
@@ -67,15 +67,15 @@ ERC725Y JSON Schema `LSP10ReceivedVaults`:
 ```json
 [
     {
-        "name": "LSP10ReceivedVaultsMap:<address>",
-        "key": "0x5e5a4636eeb20bf100000000<address>",
+        "name": "LSP10VaultsMap:<address>",
+        "key": "0x192448c3c0f88c7f00000000<address>",
         "keyType": "Mapping",
         "valueContent": "Mixed",
         "valueType": "bytes"
     },
     {
-        "name": "LSP10ReceivedVaults[]",
-        "key": "0xd8c6ec2b958bbebb976719e1eb233f126e0f355c63843f434220f9753b5ca9e5",
+        "name": "LSP10Vaults[]",
+        "key": "0x55482936e01da86729a45d2b87a6b1d3bc582bea0ec00e38bdb340e3af6f9f06",
         "keyType": "Array",
         "valueContent": "Address",
         "valueType": "address"
