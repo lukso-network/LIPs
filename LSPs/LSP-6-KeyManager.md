@@ -146,6 +146,24 @@ SIGN               = 0x000000000000000000000000000000000000000000000000000000000
 ### Methods
 
 
+#### getNonce
+
+```solidity
+function getNonce(address _address, uint256 _channel) public view returns (uint256)
+```
+
+Returns the nonce that needs to be signed by a allowed key to be passed into the [executeRelayCall](#executeRelayCall) function. A signer can choose his channel number arbitrarily.
+
+If multiple transactions should be signed, nonces in the same channel can simply be increased by increasing the returned nonce.
+
+Read [what are multi-channel nonces](#what-are-multi-channel-nonces)
+
+_Parameters:_
+
+- `_address`: the address of the signer of the transaction.
+- `_channel` :  the channel which the signer wants to use for executing the transaction.
+
+_Returns:_ `uint256` , the current nonce.
 
 #### execute
 
@@ -166,24 +184,6 @@ _Returns:_ `bytes` , the returned data as abi-encoded bytes if the call on ERC72
 
 
 
-#### getNonce
-
-```solidity
-function getNonce(address _address, uint256 _channel) public view returns (uint256)
-```
-
-Returns the nonce that needs to be signed by a allowed key to be passed into the [executeRelayCall](#executeRelayCall) function. A signer can choose his channel number arbitrarily.
-
-If multiple transactions should be signed, nonces in the same channel can simply be increased by increasing the returned nonce.
-
-Read [what are multi-channel nonces](#what-are-multi-channel-nonces)
-
-_Parameters:_
-
-- `_address`: the address of the signer of the transaction.
-- `_channel` :  the channel which the signer wants to use for executing the transaction.
-
-_Returns:_ `uint256` , the current nonce.
 
 
 
