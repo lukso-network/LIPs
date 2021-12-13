@@ -146,26 +146,6 @@ SIGN               = 0x000000000000000000000000000000000000000000000000000000000
 ### Methods
 
 
-
-#### execute
-
-```solidity
-function execute(bytes memory _data) public payable returns (bool)
-```
-
-Execute a payload on an ERC725 account.
-
-MUST fire the [Executed event](#executed).
-
-_Parameters:_
-
-- `_data`: The call data to be executed. The first 4 bytes of the `_data` payload MUST correspond to one of the function selector in the ERC725 account, such as `setData(...)`, `execute(...)` or `transferOwnership(...)`.
-
-_Returns:_ `bytes` , the returned data as abi-encoded bytes if the call on ERC725 account succeeded, otherwise revert with a reason-string. 
-
-
-
-
 #### getNonce
 
 ```solidity
@@ -185,12 +165,32 @@ _Parameters:_
 
 _Returns:_ `uint256` , the current nonce.
 
+#### execute
+
+```solidity
+function execute(bytes memory _data) public payable returns (bytes memory)
+```
+
+Execute a payload on an ERC725 account.
+
+MUST fire the [Executed event](#executed).
+
+_Parameters:_
+
+- `_data`: The call data to be executed. The first 4 bytes of the `_data` payload MUST correspond to one of the function selector in the ERC725 account, such as `setData(...)`, `execute(...)` or `transferOwnership(...)`.
+
+_Returns:_ `bytes` , the returned data as abi-encoded bytes if the call on ERC725 account succeeded, otherwise revert with a reason-string. 
+
+
+
+
+
 
 
 #### executeRelayCall
 
 ```solidity
-function executeRelayCall(address _signedFor, uint256 _nonce, bytes memory _data, bytes memory _signature) public payable returns (bool)
+function executeRelayCall(address _signedFor, uint256 _nonce, bytes memory _data, bytes memory _signature) public payable returns (bytes memory)
 ```
 
 Allows anybody to execute `_data` payload on a ERC725 account, given they have a signed message from an executor.
@@ -354,9 +354,9 @@ interface ILSP6  /* is ERC165 */ {
     
     function getNonce(address _address, uint256 _channel) external view returns (uint256);
     
-    function execute(bytes memory _data) external payable returns (bool);
+    function execute(bytes memory _data) external payable returns (bytes memory);
     
-    function executeRelayCall(address _signedFor, uint256 _nonce, bytes memory _data, bytes memory _signature) external payable returns (bool);
+    function executeRelayCall(address _signedFor, uint256 _nonce, bytes memory _data, bytes memory _signature) external payable returns (bytes memory);
  
         
     // ERC1271
