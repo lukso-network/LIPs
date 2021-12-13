@@ -13,7 +13,15 @@ requires: LSP2
 This standard describes a set of [ERC725Y](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) key values to store addresses of received assets in a [ERC725Y](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) smart contract.
 
 ## Abstract
-This key value standard describes keys to be added to and [ERC725Y](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) smart contract, that reference received asset smart contracts. Two keys are proposed: `LSP5ReceivedAssets[]` to hold an array of addresses and `LSP5ReceivedAssetsMap` to hold a mapping of the index in the former array and an standards interface ID to be able to quickly tell different assets standards apart without querying each other asset smart contract directly. The key `LSP5ReceivedAssetsMap` also helps to prevent adding duplications to the array, when automatically added via smart contract (e.g. a [LSP1-UniversalReceiverDelegate](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-1-UniversalReceiver.md)).
+This key value standard describes a set of keys that can be added to an [ERC725Y](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) smart contract.
+Two keys are proposed to reference received asset smart contracts.
+
+- `LSP5ReceivedAssets[]` to hold an array of addresses.
+- `LSP5ReceivedAssetsMap` to hold:
+  - the index in the former array where the received asset address is stored.
+  - an [ERC165 interface ID](https://eips.ethereum.org/EIPS/eip-165) to easily identify the standard used by each asset smart contracts, without the need to query the contracts directly. 
+
+The key `LSP5ReceivedAssetsMap` also helps to prevent adding duplications to the array, when automatically added via smart contract (e.g. a [LSP1-UniversalReceiverDelegate](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-1-UniversalReceiver.md)).
 
 ## Motivation
 To be able to display received assets in a profile we need to keep track of all received asset contract addresses. This is important for [LSP3 UniversalProfile](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-3-UniversalProfile.md), but also Vault smart contracts.
@@ -60,8 +68,7 @@ The `valueContent` MUST be constructed as follows: `bytes8(indexNumber) + bytes4
 
 ## Implementation
 
-A implementation can be found in the [lukso-network/standards-scenarios](https://github.com/lukso-network/standards-scenarios/blob/master/contracts/XXX);
-The below defines the JSON interface of the `LSP5ReceivedAssets`.
+An implementation can be found in the [LSP1UniversalReceiverDelegate](https://github.com/lukso-network/lsp-universalprofile-smart-contracts/blob/develop/contracts/LSP1UniversalReceiver/LSP1UniversalReceiverDelegateUP/LSP1UniversalReceiverDelegateUPCore.sol) smart contract. The below defines the JSON interface of the `LSP5ReceivedAssets`.
 
 ERC725Y JSON Schema `LSP5ReceivedAssets`:
 ```json
