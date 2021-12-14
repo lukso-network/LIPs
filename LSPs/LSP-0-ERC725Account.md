@@ -65,7 +65,7 @@ this smart contract address MUST be stored under the following key:
 
 ### Methods
 
-Contains the methods from [ERC173](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-173.md) (Ownable), [ERC725](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) (General value and execution), [ERC1271](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1271.md) and [LSP1](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-1-UniversalReceiver.md), 
+Contains the methods from [ERC173](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-173.md) (Ownable), [ERC725](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) (General key-value store, and general executor), [ERC1271](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1271.md) and [LSP1](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-1-UniversalReceiver.md), 
 See the [Interface Cheat Sheet](#interface-cheat-sheet) for details.
 
 ### Events
@@ -81,7 +81,7 @@ MUST be emitted when a native token transfer was received.
 
 ## Rationale
 
-The ERC725 general key value store allows for the ability to add any kind of information to the the account contract, which allows future use cases. The general execution allows full interactebility with any smart contract or address. And the universal receiver allows the reaction to any future asset.
+The ERC725 general key value store allows for the ability to add any kind of information to the the account contract, which allows future use cases. The general executor allows full interactability with any smart contract or address. And the universal receiver allows the reaction to any future asset.
 
 ## Implementation
 
