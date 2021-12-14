@@ -104,7 +104,6 @@ ERC725Y JSON Schema `ERC725Account`:
 ## Interface Cheat Sheet
 
 ```solidity
-
 interface ILSP0  /* is ERC165 */ {
          
     

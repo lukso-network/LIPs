@@ -422,11 +422,11 @@ interface ILSP8 is /* IERC165 */ {
     event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
 
 
-    function owner() public view returns (address);
+    function owner() external view returns (address);
 
-    function transferOwnership(address newOwner) public override; // onlyOwner
+    function transferOwnership(address newOwner) external override; // onlyOwner
     
-    function renounceOwnership() public virtual; // onlyOwner
+    function renounceOwnership() external virtual; // onlyOwner
 
 
     // ERC725Y
@@ -434,9 +434,9 @@ interface ILSP8 is /* IERC165 */ {
     event DataChanged(bytes32 indexed key, bytes value);
 
 
-    function getData(bytes32 _key) public view override virtual returns (bytes memory _value);
+    function getData(bytes32 _key) external view returns (bytes memory _value);
 
-    function setData(bytes32 _key, bytes memory _value) external override onlyOwner;
+    function setData(bytes32 _key, bytes memory _value) external; // onlyOwner
 
 
     // LSP8
