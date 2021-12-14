@@ -246,6 +246,7 @@ interface ILSP7 is /* IERC165 */ {
 
     event DataChanged(bytes32 indexed key, bytes value);
 
+
     function getData(bytes32 _key) public view override virtual returns (bytes memory _value);
 
     function setData(bytes32 _key, bytes memory _value) external override onlyOwner;
@@ -258,6 +259,7 @@ interface ILSP7 is /* IERC165 */ {
     event AuthorizedOperator(address indexed operator, address indexed tokenOwner, uint256 indexed amount);
 
     event RevokedOperator(address indexed operator, address indexed tokenOwner);
+
 
     function decimals() external view returns (uint256);
 
