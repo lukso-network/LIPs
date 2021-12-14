@@ -422,11 +422,11 @@ interface ILSP8 is /* IERC165 */ {
     event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
 
 
-    function owner() public view virtual returns (address);
+    function owner() public view returns (address);
 
-    function renounceOwnership() public virtual onlyOwner;
-
-    function transferOwnership(address newOwner) public override onlyOwner;
+    function transferOwnership(address newOwner) public override; // onlyOwner
+    
+    function renounceOwnership() public virtual; // onlyOwner
 
 
     // ERC725Y

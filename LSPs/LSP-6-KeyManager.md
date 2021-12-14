@@ -348,6 +348,13 @@ ERC725Y JSON Schema `LSP6KeyManager`, set at the `LSP3Account`:
 ```solidity
 
 interface ILSP6  /* is ERC165 */ {
+
+    // ERC1271
+    
+    function isValidSignature(bytes32 _hash, bytes memory _signature) external view returns (bytes4 magicValue);
+
+    
+    // LSP6
         
     event Executed(uint256 indexed  _value, bytes _data); 
     
@@ -357,11 +364,6 @@ interface ILSP6  /* is ERC165 */ {
     function execute(bytes memory _data) external payable returns (bytes memory);
     
     function executeRelayCall(address _signedFor, uint256 _nonce, bytes memory _data, bytes memory _signature) external payable returns (bytes memory);
- 
-        
-    // ERC1271
-    
-    function isValidSignature(bytes32 _hash, bytes memory _signature) external view returns (bytes4 magicValue);
     
 }
 
