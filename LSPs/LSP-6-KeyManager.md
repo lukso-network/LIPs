@@ -6,7 +6,7 @@ discussions-to:
 status: Draft
 type: LSP
 created: 2021-08-03
-requires: LSP2, ERC165, ERC1271
+requires: ERC165, ERC1271, LSP2
 ---
 
 
