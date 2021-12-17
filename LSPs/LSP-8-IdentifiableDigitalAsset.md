@@ -481,4 +481,4 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 [LSP4#erc725ykeys]: <https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-4-DigitalAsset-Metadata.md#erc725ykeys>
 [LSP7]: <https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-7-DigitalAsset.md>
 [LSP8]: <https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-8-IdentifiableDigitalAsset.md>
-[LSP8Core.sol]: <https://github.com/lukso-network/lsp-smart-contracts/blob/main/contracts/LSP8/LSP8Core.sol>
+[LSP8Core.sol]: <https://github.com/lukso-network/lsp-universalprofile-smart-contracts/blob/develop/contracts/LSP8IdentifiableDigitalAsset/LSP8IdentifiableDigitalAssetCore.sol>
