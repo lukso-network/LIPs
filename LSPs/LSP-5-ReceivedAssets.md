@@ -24,7 +24,7 @@ Two keys are proposed to reference received asset smart contracts.
 The key `LSP5ReceivedAssetsMap` also helps to prevent adding duplications to the array, when automatically added via smart contract (e.g. a [LSP1-UniversalReceiverDelegate](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-1-UniversalReceiver.md)).
 
 ## Motivation
-To be able to display received assets in a profile we need to keep track of all received asset contract addresses. This is important for [LSP3 UniversalProfile](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-3-UniversalProfile-Metadata.md), but also Vault smart contracts.
+To be able to display received assets in a profile we need to keep track of all received asset contract addresses. This is important for [LSP3 UniversalProfile-Metadata](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-3-UniversalProfile-Metadata.md), but also Vault smart contracts.
 
 ## Specification
 

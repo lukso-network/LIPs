@@ -33,7 +33,7 @@ This allows us to:
 - Make security upgradeable via a key manager smart contract (e.g. [LSP6 KeyManager](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-6-KeyManager.md))
 - Allow any action that an EOA can do, and even add the ability to use `create2` through [ERC725X](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md#erc725x)
 - Allow the account to be informed and react to receiving assets through [LSP1 UniversalReciever](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-1-UniversalReceiver.md)
-- Define a number of key values stores to attach profile and other information through additional standards like [LSP3 UniversalProfile](https://github.com/lukso-network/LIPs/blob/main/LSPs/LSP-3-UniversalProfile-Metadata.md)
+- Define a number of key values stores to attach profile and other information through additional standards like [LSP3 UniversalProfile-Metadata](https://github.com/lukso-network/LIPs/blob/main/LSPs/LSP-3-UniversalProfile-Metadata.md)
 - Allow signature verification through [ERC1271](https://eips.ethereum.org/EIPS/eip-1271)
 
 
