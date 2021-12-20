@@ -6,7 +6,7 @@ discussions-to: https://discord.gg/E2rJPP4
 status: Draft
 type: LSP
 created: 2019-07-12
-requires: LSP1, LSP2, LSP5, ERC165, ERC725Y
+requires: ERC165, ERC725Y, LSP1, LSP2, LSP5
 ---
 
 

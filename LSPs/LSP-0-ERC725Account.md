@@ -6,7 +6,7 @@ discussions-to: https://discord.gg/E2rJPP4
 status: Draft
 type: LSP
 created: 2021-09-21
-requires: LSP1, LSP2, ERC165, ERC173, ERC725X, ERC725Y, ERC1271
+requires: ERC165, ERC173, ERC1271, ERC725X, ERC725Y, LSP1, LSP2
 ---
 
 
@@ -65,7 +65,7 @@ this smart contract address MUST be stored under the following key:
 
 ### Methods
 
-Contains the methods from [ERC173](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-173.md) (Ownable), [ERC725](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) (General value and execution), [ERC1271](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1271.md) and [LSP1](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-1-UniversalReceiver.md), 
+Contains the methods from [ERC173](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-173.md) (Ownable), [ERC725](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) (General key-value store, and general executor), [ERC1271](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1271.md) and [LSP1](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-1-UniversalReceiver.md), 
 See the [Interface Cheat Sheet](#interface-cheat-sheet) for details.
 
 ### Events
@@ -81,7 +81,7 @@ MUST be emitted when a native token transfer was received.
 
 ## Rationale
 
-The ERC725 general key value store allows for the ability to add any kind of information to the the account contract, which allows future use cases. The general execution allows full interactebility with any smart contract or address. And the universal receiver allows the reaction to any future asset.
+The ERC725 general key value store allows for the ability to add any kind of information to the the account contract, which allows future use cases. The general executor allows full interactability with any smart contract or address. And the universal receiver allows the reaction to any future asset.
 
 ## Implementation
 
@@ -104,7 +104,6 @@ ERC725Y JSON Schema `ERC725Account`:
 ## Interface Cheat Sheet
 
 ```solidity
-
 interface ILSP0  /* is ERC165 */ {
          
     
@@ -116,37 +115,47 @@ interface ILSP0  /* is ERC165 */ {
     function owner() external view returns (address);
     
     function transferOwnership(address newOwner) external; // onlyOwner
-    
-    
-    // ERC725Account (ERC725X + ERC725Y)
-      
-    event Executed(uint256 indexed _operation, address indexed _to, uint256 indexed  _value, bytes _data);
-    
-    event ValueReceived(address indexed sender, uint256 indexed value);
-    
-    event ContractCreated(uint256 indexed _operation, address indexed contractAddress, uint256 indexed  _value);
-    
-    event DataChanged(bytes32 indexed key, bytes value);
-    
-    
-    function execute(uint256 operationType, address to, uint256 value, bytes memory data) external payable returns (bytes memory); // onlyOwner
-    
-    function getData(bytes32[] memory key) external view returns (bytes[] memory value);
-    
-    // LSP0 possible keys:
-    // LSP1UniversalReceiverDelegate: 0x0cfc51aec37c55a4d0b1a65c6255c4bf2fbdf6277f3cc0730c45b828b6db8b47
-    
-    function setData(bytes32[] memory key, bytes[] memory value) external; // onlyOwner
-    
-    
+
+    function renounceOwnership() external; // onlyOwner
+
+
     // ERC1271
     
     function isValidSignature(bytes32 _hash, bytes memory _signature) external view returns (bytes4 magicValue);
     
     
+    // ERC725X
+
+    event Executed(uint256 indexed _operation, address indexed _to, uint256 indexed  _value, bytes _data);
+
+    event ContractCreated(uint256 indexed _operation, address indexed contractAddress, uint256 indexed  _value);
+    
+    
+    function execute(uint256 operationType, address to, uint256 value, bytes memory data) external payable returns (bytes memory); // onlyOwner
+    
+    
+    // ERC725Y
+
+    event DataChanged(bytes32 indexed key, bytes value);
+
+
+    function getData(bytes32[] memory key) external view returns (bytes[] memory value);
+    
+    function setData(bytes32[] memory key, bytes[] memory value) external; // onlyOwner
+    
+    // LSP0 possible keys:
+    // LSP1UniversalReceiverDelegate: 0x0cfc51aec37c55a4d0b1a65c6255c4bf2fbdf6277f3cc0730c45b828b6db8b47
+
+    
+    // LSP0 (ERC725Account)
+      
+    event ValueReceived(address indexed sender, uint256 indexed value);
+    
+
     // LSP1
 
     event UniversalReceiver(address indexed from, bytes32 indexed typeId, bytes indexed returnedValue, bytes receivedData);
+    
 
     function universalReceiver(bytes32 typeId, bytes memory data) external returns (bytes memory);
     

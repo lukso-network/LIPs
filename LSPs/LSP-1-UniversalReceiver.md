@@ -253,6 +253,7 @@ interface ILSP1  /* is ERC165 */ {
 
     event UniversalReceiver(address indexed from, bytes32 indexed typeId, bytes indexed returnedValue, bytes receivedData);
     
+    
     function universalReceiver(bytes32 typeId, bytes memory data) external returns (bytes memory);
     
 }

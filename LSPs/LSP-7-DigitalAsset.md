@@ -6,7 +6,7 @@ discussions-to: https://discord.gg/E2rJPP4 (LUKSO), https://discord.gg/PQvJQtCV 
 status: Draft
 type: LSP
 created: 2021-09-02
-requires: LSP1, LSP4, ERC165
+requires: ERC165, ERC725Y, LSP1, LSP2, LSP4
 ---
 
 <!--You can leave these HTML comments in your merged LIP and delete the visible duplicate text guides, they will not appear and may be helpful to refer to if you edit it again. This is the suggested template for new LIPs. Note that an LIP number will be assigned by an editor. When opening a pull request to submit your LIP, please use an abbreviated title in the filename, `lip-draft_title_abbrev.md`. The title should be 44 characters or less.-->
@@ -235,20 +235,22 @@ interface ILSP7 is /* IERC165 */ {
 
     event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
 
-    function owner() public view virtual returns (address);
+   
+    function owner() external view returns (address);
 
-    function renounceOwnership() public virtual onlyOwner;
-
-    function transferOwnership(address newOwner) public override onlyOwner;
+    function transferOwnership(address newOwner) external; // onlyOwner
+    
+    function renounceOwnership() external; // onlyOwner
 
 
     // ERC725Y
 
     event DataChanged(bytes32 indexed key, bytes value);
 
-    function getData(bytes32 _key) public view override virtual returns (bytes memory _value);
 
-    function setData(bytes32 _key, bytes memory _value) external override onlyOwner;
+    function getData(bytes32 _key) external view returns (bytes memory _value);
+
+    function setData(bytes32 _key, bytes memory _value) external; // onlyOwner
 
 
     // LSP7
@@ -258,6 +260,7 @@ interface ILSP7 is /* IERC165 */ {
     event AuthorizedOperator(address indexed operator, address indexed tokenOwner, uint256 indexed amount);
 
     event RevokedOperator(address indexed operator, address indexed tokenOwner);
+
 
     function decimals() external view returns (uint256);
 
