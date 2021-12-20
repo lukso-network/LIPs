@@ -223,7 +223,7 @@ The `force` parameter sent during `function transfer` SHOULD be used when notify
 ## Implementation
 <!--The implementations must be completed before any LIP is given status "Final", but it need not be completed before the LIP is accepted. While there is merit to the approach of reaching consensus on the specification and rationale before writing code, the principle of "rough consensus and running code" is still useful when it comes to resolving many discussions of API details.-->
 
-A implementation can be found in the [lukso-network/lsp-smart-contracts][LSP7Core.sol];
+A implementation can be found in the [lukso-network/lsp-smart-contracts][LSP7.sol];
 
 
 ## Interface Cheat Sheet
@@ -290,4 +290,4 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 [LSP1]: <https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-1-UniversalReceiver.md>
 [LSP4#erc725ykeys]: <https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-4-DigitalAsset-Metadata.md#erc725ykeys>
 [LSP8]: <https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-8-IdentifiableDigitalAsset.md>
-[LSP7Core.sol]: <https://github.com/lukso-network/lsp-smart-contracts/blob/main/contracts/LSP7/LSP7Core.sol>
+[LSP7.sol]: <https://github.com/lukso-network/lsp-universalprofile-smart-contracts/blob/main/contracts/LSP7DigitalAsset/LSP7DigitalAsset.sol>

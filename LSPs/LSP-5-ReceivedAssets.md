@@ -24,7 +24,7 @@ Two keys are proposed to reference received asset smart contracts.
 The key `LSP5ReceivedAssetsMap` also helps to prevent adding duplications to the array, when automatically added via smart contract (e.g. a [LSP1-UniversalReceiverDelegate](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-1-UniversalReceiver.md)).
 
 ## Motivation
-To be able to display received assets in a profile we need to keep track of all received asset contract addresses. This is important for [LSP3 UniversalProfile](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-3-UniversalProfile.md), but also Vault smart contracts.
+To be able to display received assets in a profile we need to keep track of all received asset contract addresses. This is important for [LSP3 UniversalProfile](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-3-UniversalProfile-Metadata.md), but also Vault smart contracts.
 
 ## Specification
 
@@ -68,7 +68,7 @@ The `valueContent` MUST be constructed as follows: `bytes8(indexNumber) + bytes4
 
 ## Implementation
 
-An implementation can be found in the [LSP1UniversalReceiverDelegate](https://github.com/lukso-network/lsp-universalprofile-smart-contracts/blob/develop/contracts/LSP1UniversalReceiver/LSP1UniversalReceiverDelegateUP/LSP1UniversalReceiverDelegateUPCore.sol) smart contract. The below defines the JSON interface of the `LSP5ReceivedAssets`.
+An implementation can be found in the [LSP1UniversalReceiverDelegate](https://github.com/lukso-network/lsp-universalprofile-smart-contracts/blob/main/contracts/LSP1UniversalReceiver/LSP1UniversalReceiverDelegateUP/LSP1UniversalReceiverDelegateUP.sol) smart contract. The below defines the JSON interface of the `LSP5ReceivedAssets`.
 
 ERC725Y JSON Schema `LSP5ReceivedAssets`:
 ```json
