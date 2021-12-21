@@ -33,7 +33,7 @@ This allows us to:
 - Make security upgradeable via a key manager smart contract (e.g. [LSP6 KeyManager](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-6-KeyManager.md))
 - Allow any action that an EOA can do, and even add the ability to use `create2` through [ERC725X](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md#erc725x)
 - Allow the account to be informed and react to receiving assets through [LSP1 UniversalReciever](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-1-UniversalReceiver.md)
-- Define a number of key values stores to attach profile and other information through additional standards like [LSP3 UniversalProfile](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-3-UniversalProfile.md)
+- Define a number of key values stores to attach profile and other information through additional standards like [LSP3 UniversalProfile-Metadata](https://github.com/lukso-network/LIPs/blob/main/LSPs/LSP-3-UniversalProfile-Metadata.md)
 - Allow signature verification through [ERC1271](https://eips.ethereum.org/EIPS/eip-1271)
 
 
@@ -85,7 +85,7 @@ The ERC725 general key value store allows for the ability to add any kind of inf
 
 ## Implementation
 
-A implementation can be found in the [ERC725Alliance/ERC725](https://github.com/ERC725Alliance/ERC725/blob/master/implementations/contracts/ERC725/ERC725Account.sol) repository;
+A implementation can be found in the [ERC725Alliance/ERC725](https://github.com/ERC725Alliance/ERC725/blob/main/implementations/contracts/ERC725Account.sol) repository;
 
 ERC725Y JSON Schema `ERC725Account`:
 

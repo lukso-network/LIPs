@@ -24,7 +24,7 @@ This schema allows to standardize the key values that can be used in ERC725Y sub
 This schema defines a way to make those key values automatically parsable, so a interface or smart contract knows how to read and interact with them. 
 
 This schema is for example used in [ERC725](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) based smart contracts like
-[LSP3-UniversalProfile](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-3-UniversalProfile.md) and [LSP4-DigitalCertificate](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-4-DigitalCertificate.md).
+[LSP3-UniversalProfile](https://github.com/lukso-network/LIPs/blob/main/LSPs/LSP-3-UniversalProfile-Metadata.md) and [LSP4-DigitalAsset-Metadata](https://github.com/lukso-network/LIPs/blob/main/LSPs/LSP-4-DigitalAsset-Metadata.md).
 
 
 ## Specification

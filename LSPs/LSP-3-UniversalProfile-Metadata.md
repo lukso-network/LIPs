@@ -187,7 +187,7 @@ or a verifiable public appearance. This metadata dos not need to belong to a rea
 
 ## Implementation
 
-A implementation can be found in the [lukso-network/universalprofile-smart-contracts](https://github.com/lukso-network/universalprofile-smart-contracts/blob/main/contracts/LSP3Account.sol);
+A implementation can be found in the [lukso-network/universalprofile-smart-contracts](https://github.com/lukso-network/lsp-universalprofile-smart-contracts/blob/main/contracts/UniversalProfile.sol);
 The below defines the JSON interface of the `LSP3UniversalProfile`.
 
 ERC725Y JSON Schema `LSP3UniversalProfile`:

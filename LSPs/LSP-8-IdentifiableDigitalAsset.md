@@ -410,7 +410,7 @@ The `force` parameter sent during `function transfer` SHOULD be used when notify
 ## Implementation
 <!--The implementations must be completed before any LIP is given status "Final", but it need not be completed before the LIP is accepted. While there is merit to the approach of reaching consensus on the specification and rationale before writing code, the principle of "rough consensus and running code" is still useful when it comes to resolving many discussions of API details.-->
 
-A implementation can be found in the [lukso-network/lsp-smart-contracts][LSP8Core.sol];
+A implementation can be found in the [lukso-network/lsp-smart-contracts][LSP8.sol];
 
 ## Interface Cheat Sheet
 
@@ -484,4 +484,4 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 [LSP4#erc725ykeys]: <https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-4-DigitalAsset-Metadata.md#erc725ykeys>
 [LSP7]: <https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-7-DigitalAsset.md>
 [LSP8]: <https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-8-IdentifiableDigitalAsset.md>
-[LSP8Core.sol]: <https://github.com/lukso-network/lsp-universalprofile-smart-contracts/blob/develop/contracts/LSP8IdentifiableDigitalAsset/LSP8IdentifiableDigitalAssetCore.sol>
+[LSP8.sol]: <https://github.com/lukso-network/lsp-universalprofile-smart-contracts/blob/develop/contracts/LSP8IdentifiableDigitalAsset/LSP8IdentifiableDigitalAsset.sol>

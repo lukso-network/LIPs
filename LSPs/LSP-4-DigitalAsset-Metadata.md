@@ -190,7 +190,7 @@ There can be many token implementations, and this standard fills a need for comm
 
 ## Implementation
 
-A implementation can be found in the [lukso-network/universalprofile-smart-contracts](https://github.com/lukso-network/universalprofile-smart-contracts/blob/main/contracts/LSP4/LSP4.sol);
+A implementation can be found in the [lukso-network/universalprofile-smart-contracts](https://github.com/lukso-network/lsp-universalprofile-smart-contracts/blob/main/contracts/LSP4DigitalAssetMetadata/LSP4DigitalAssetMetadata.sol);
 The below defines the JSON interface of the `LSP4DigitalAsset`.
 
 ERC725Y JSON Schema `LSP4DigitalAsset`:
