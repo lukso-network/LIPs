@@ -182,7 +182,19 @@ For more infos about accessing each index of the `LSP4Creators[]` array, see: [E
 
 #### LSP4CreatorsMap
 
-TODO: take a look at lsp5 to get the map
+References the creator addresses for this asset.
+
+The `valueContent` MUST be constructed as follows: `bytes8(indexNumber) + bytes4(standardInterfaceId)`. Where `indexNumber` is the index in the [LSP4Creators[] Array](#lsp3issuedassets) and `standardInterfaceId` the interface ID of the creator smart contract standard.
+
+```json
+{
+    "name": "LSP4CreatorsMap:<address>",
+    "key": "0x6de85eaf5d982b4e00000000<address>",
+    "keyType": "Mapping",
+    "valueContent": "Mixed",
+    "valueType": "bytes"
+}
+```
 
 ## Rationale
 
