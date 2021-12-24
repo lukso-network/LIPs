@@ -150,7 +150,7 @@ Example:
 
 #### LSP3IssuedAssets[]
 
-References issued smart contract assets, like tokens and NFTs.
+An array of smart contract assets issued by the Universal Profile, like tokens and NFTs.
 
 ```json
 {
@@ -161,6 +161,8 @@ References issued smart contract assets, like tokens and NFTs.
     "valueType": "address"
 }
 ```
+
+For more infos about accessing each index of the `LSP3IssuedAssets[]` array, see: [ERC725Y JSON Schema > `keyType`: `Array`](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-2-ERC725YJSONSchema.md#array)
 
 #### LSP3IssuedAssetsMap
 
