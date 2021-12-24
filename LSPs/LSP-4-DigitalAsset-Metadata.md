@@ -186,8 +186,8 @@ References the creator addresses for this asset.
 
 The `valueContent` MUST be constructed as follows: `bytes8(indexNumber) + bytes4(standardInterfaceId)`. 
 Where:
-- `indexNumber` = the index in the [LSP4Creators[] Array](#lsp3issuedassets)
-- `standardInterfaceId` = the interface ID of the creator smart contract standard.
+- `indexNumber` = the index in the [`LSP4Creators[]` Array](#lsp3issuedassets)
+- `standardInterfaceId` = if the creator address is a smart contract, the ERC165 interface ID of the standard that the smart contract implements. Otherwise `0x00000000`
 
 ```json
 {
