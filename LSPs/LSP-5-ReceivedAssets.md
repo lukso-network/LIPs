@@ -35,7 +35,8 @@ Every contract that supports to the ERC725Account SHOULD have the following keys
 
 #### LSP5ReceivedAssets[]
 
-References issued smart contract assets, like tokens and NFTs.
+An array of received smart contract assets, tokens and NFTs.
+
 
 ```json
 {
@@ -50,7 +51,7 @@ References issued smart contract assets, like tokens and NFTs.
 
 #### LSP5ReceivedAssetsMap
 
-References issued smart contract assets, like tokens and NFTs.
+References received smart contract assets, like tokens and NFTs.
 
 The `valueContent` MUST be constructed as follows: `bytes8(indexNumber) + bytes4(standardInterfaceId)`. Where `indexNumber` is the index in the [LSP3IssuedAssets[] Array](#lsp3issuedassets) and `standardInterfaceId` the interface ID if the token or asset smart contract standard.
 
