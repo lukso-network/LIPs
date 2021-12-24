@@ -54,7 +54,9 @@ For more infos about accessing each index of the `LSP5ReceivedAssets[]` array, s
 
 References received smart contract assets, like tokens and NFTs.
 
-The `valueContent` MUST be constructed as follows: `bytes8(indexNumber) + bytes4(standardInterfaceId)`. Where `indexNumber` is the index in the [LSP3IssuedAssets[] Array](#lsp3issuedassets) and `standardInterfaceId` the interface ID if the token or asset smart contract standard.
+The `valueContent` MUST be constructed as follows: `bytes8(indexNumber) + bytes4(standardInterfaceId)`. Where: 
+- `indexNumber` = the index in the [LSP3IssuedAssets[] Array](#lsp3issuedassets)
+- `standardInterfaceId` = the interface ID if the token or asset smart contract standard.
 
 ```json
 {

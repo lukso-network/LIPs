@@ -184,7 +184,10 @@ For more infos about accessing each index of the `LSP4Creators[]` array, see [ER
 
 References the creator addresses for this asset.
 
-The `valueContent` MUST be constructed as follows: `bytes8(indexNumber) + bytes4(standardInterfaceId)`. Where `indexNumber` is the index in the [LSP4Creators[] Array](#lsp3issuedassets) and `standardInterfaceId` the interface ID of the creator smart contract standard.
+The `valueContent` MUST be constructed as follows: `bytes8(indexNumber) + bytes4(standardInterfaceId)`. 
+Where:
+- `indexNumber` = the index in the [LSP4Creators[] Array](#lsp3issuedassets)
+- `standardInterfaceId` = the interface ID of the creator smart contract standard.
 
 ```json
 {
@@ -235,6 +238,13 @@ ERC725Y JSON Schema `LSP4DigitalAsset`:
         "key": "0x9afb95cacc9f95858ec44aa8c3b685511002e30ae54415823f406128b85b238e",
         "keyType": "Singleton",
         "valueContent": "JSONURL",
+        "valueType": "bytes"
+    },
+    {
+        "name": "LSP4CreatorsMap:<address>",
+        "key": "0x6de85eaf5d982b4e00000000<address>",
+        "keyType": "Mapping",
+        "valueContent": "Mixed",
         "valueType": "bytes"
     },
     {
