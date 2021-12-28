@@ -150,7 +150,7 @@ Example:
 
 #### LSP3IssuedAssets[]
 
-An array of smart contract assets issued by the Universal Profile, like tokens (_e.g.: [LSP7 Digital Assets](./LSP-7-DigitalAsset)) and NFTs (_e.g.: [LSP8 Identifiable Digital Assets](./LSP-8-IdentifiableDigitalAsset)_).
+An array of smart contract assets issued by the Universal Profile, like tokens (_e.g.: [LSP7 Digital Assets](./LSP-7-DigitalAsset)_) and NFTs (_e.g.: [LSP8 Identifiable Digital Assets](./LSP-8-IdentifiableDigitalAsset)_).
 
 ```json
 {
@@ -166,7 +166,7 @@ For more infos about how to access each index of the `LSP3IssuedAssets[]` array,
 
 #### LSP3IssuedAssetsMap
 
-References issued smart contract assets, like tokens (_e.g.:_ _[LSP7 Digital Assets](./LSP-7-DigitalAsset)_) and NFTs (_e.g.:_ _[LSP8 Identifiable Digital Assets](./LSP-8-IdentifiableDigitalAsset)_).
+References issued smart contract assets, like tokens (_e.g.: [LSP7 Digital Assets](./LSP-7-DigitalAsset)_) and NFTs (_e.g.: [LSP8 Identifiable Digital Assets](./LSP-8-IdentifiableDigitalAsset)_).
 
 The `valueContent` MUST be constructed as follows: `bytes8(indexNumber) + bytes4(standardInterfaceId)`. Where:
 - `indexNumber` = the index in the [`LSP3IssuedAssets[]` Array](#lsp3issuedassets)
