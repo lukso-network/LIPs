@@ -65,6 +65,8 @@ This is mainly useful for interfaces to know which address hold permissions.
 }
 ```
 
+For more infos about how to access each index of the `AddressPermissions[]` array, see: [ERC725Y JSON Schema > `keyType` `Array`](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-2-ERC725YJSONSchema.md#array)
+
 #### AddressPermissions:Permissions:\<address\>
 
 Contains [the permissions](#permission-values-in-addresspermissionspermissionsaddress) for an address.
@@ -110,7 +112,7 @@ Contains an array of bytes4 function signatures, the controlling address is allo
 
 #### AddressPermissions:AllowedStandards:\<address\>
 
-Contains an array of bytes4 ERC165 interface Ids, other smart contracts MUST support, for the controlling address to be allowed to interact with.
+Contains an array of bytes4 [ERC165 interface Ids](https://eips.ethereum.org/EIPS/eip-165), other smart contracts MUST support, for the controlling address to be allowed to interact with.
 
 ```json
 {

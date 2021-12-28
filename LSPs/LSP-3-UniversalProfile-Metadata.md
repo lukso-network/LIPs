@@ -150,7 +150,7 @@ Example:
 
 #### LSP3IssuedAssets[]
 
-References issued smart contract assets, like tokens and NFTs.
+An array of smart contract assets issued by the Universal Profile, like tokens (_e.g.: [LSP7 Digital Assets](./LSP-7-DigitalAsset)_) and NFTs (_e.g.: [LSP8 Identifiable Digital Assets](./LSP-8-IdentifiableDigitalAsset)_).
 
 ```json
 {
@@ -162,11 +162,15 @@ References issued smart contract assets, like tokens and NFTs.
 }
 ```
 
+For more infos about how to access each index of the `LSP3IssuedAssets[]` array, see: [ERC725Y JSON Schema > `keyType`: `Array`](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-2-ERC725YJSONSchema.md#array)
+
 #### LSP3IssuedAssetsMap
 
-References issued smart contract assets, like tokens and NFTs.
+References issued smart contract assets, like tokens (_e.g.: [LSP7 Digital Assets](./LSP-7-DigitalAsset)_) and NFTs (_e.g.: [LSP8 Identifiable Digital Assets](./LSP-8-IdentifiableDigitalAsset)_).
 
-The `valueContent` MUST be constructed as follows: `bytes8(indexNumber) + bytes4(standardInterfaceId)`. Where `indexNumber` is the index in the [LSP3IssuedAssets[] Array](#lsp3issuedassets) and `standardInterfaceId` the interface ID if the token or asset smart contract standard.
+The `valueContent` MUST be constructed as follows: `bytes8(indexNumber) + bytes4(standardInterfaceId)`. Where:
+- `indexNumber` = the index in the [`LSP3IssuedAssets[]` Array](#lsp3issuedassets)
+- `standardInterfaceId` = the [ERC165 interface ID](https://eips.ethereum.org/EIPS/eip-165) of the standard that the token or asset smart contract implements.
 
 ```json
 {
@@ -178,7 +182,7 @@ The `valueContent` MUST be constructed as follows: `bytes8(indexNumber) + bytes4
 }
 ```
 
-For construction of the Asset Keys see: [ERC725Y JSON Schema](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-2-ERC725YJSONSchema.md#array)
+For more infos about how to access each index of the `LSP3IssuedAssets[]` array, see [ERC725Y JSON Schema > `keyType`: `Array`](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-2-ERC725YJSONSchema.md#array)
 
 ## Rationale
 

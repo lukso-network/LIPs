@@ -164,7 +164,7 @@ Example:
 
 #### LSP4Creators[]
 
-An array of (ERC725Account) addresses of creators,
+An array of ([ERC725Account](./LSP-0-ERC725Account.md)) addresses that defines the creators of the digital asset.
 
 ```json
 {
@@ -178,11 +178,26 @@ An array of (ERC725Account) addresses of creators,
 }
 ```
 
-For construction of the Asset Keys see: [ERC725Y JSON Schema](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-2-ERC725YJSONSchema.md#array)
+For more infos about how to access each index of the `LSP4Creators[]` array, see [ERC725Y JSON Schema > `keyType`: `Array`](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-2-ERC725YJSONSchema.md#array)
 
 #### LSP4CreatorsMap
 
-TODO: take a look at lsp5 to get the map
+References the creator addresses for this asset.
+
+The `valueContent` MUST be constructed as follows: `bytes8(indexNumber) + bytes4(standardInterfaceId)`. 
+Where:
+- `indexNumber` = the index in the [`LSP4Creators[]` Array](#lsp3issuedassets)
+- `standardInterfaceId` = if the creator address is a smart contract, the [ERC165 interface ID](https://eips.ethereum.org/EIPS/eip-165) of the standard that the smart contract implements. Otherwise `0x00000000`
+
+```json
+{
+    "name": "LSP4CreatorsMap:<address>",
+    "key": "0x6de85eaf5d982b4e00000000<address>",
+    "keyType": "Mapping",
+    "valueContent": "Mixed",
+    "valueType": "bytes"
+}
+```
 
 ## Rationale
 
@@ -223,6 +238,13 @@ ERC725Y JSON Schema `LSP4DigitalAsset`:
         "key": "0x9afb95cacc9f95858ec44aa8c3b685511002e30ae54415823f406128b85b238e",
         "keyType": "Singleton",
         "valueContent": "JSONURL",
+        "valueType": "bytes"
+    },
+    {
+        "name": "LSP4CreatorsMap:<address>",
+        "key": "0x6de85eaf5d982b4e00000000<address>",
+        "keyType": "Mapping",
+        "valueContent": "Mixed",
         "valueType": "bytes"
     },
     {
