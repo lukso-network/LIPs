@@ -178,7 +178,7 @@ An array of ([ERC725Account](./LSP-0-ERC725Account.md)) addresses that defines t
 }
 ```
 
-For more infos about accessing each index of the `LSP4Creators[]` array, see [ERC725Y JSON Schema > `keyType`: `Array`](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-2-ERC725YJSONSchema.md#array)
+For more infos about how to access each index of the `LSP4Creators[]` array, see [ERC725Y JSON Schema > `keyType`: `Array`](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-2-ERC725YJSONSchema.md#array)
 
 #### LSP4CreatorsMap
 

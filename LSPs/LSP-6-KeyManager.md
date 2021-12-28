@@ -65,7 +65,7 @@ This is mainly useful for interfaces to know which address hold permissions.
 }
 ```
 
-For more infos about accessing each index of the `AddressPermissions[]` array, see: [ERC725Y JSON Schema > `keyType` `Array`](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-2-ERC725YJSONSchema.md#array)
+For more infos about how to access each index of the `AddressPermissions[]` array, see: [ERC725Y JSON Schema > `keyType` `Array`](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-2-ERC725YJSONSchema.md#array)
 
 #### AddressPermissions:Permissions:\<address\>
 
