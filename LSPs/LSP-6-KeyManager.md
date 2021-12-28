@@ -112,7 +112,7 @@ Contains an array of bytes4 function signatures, the controlling address is allo
 
 #### AddressPermissions:AllowedStandards:\<address\>
 
-Contains an array of bytes4 ERC165 interface Ids, other smart contracts MUST support, for the controlling address to be allowed to interact with.
+Contains an array of bytes4 [ERC165 interface Ids](https://eips.ethereum.org/EIPS/eip-165), other smart contracts MUST support, for the controlling address to be allowed to interact with.
 
 ```json
 {

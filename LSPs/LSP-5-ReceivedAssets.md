@@ -56,7 +56,7 @@ References received smart contract assets, like tokens (_e.g.: [LSP7 Digital Ass
 
 The `valueContent` MUST be constructed as follows: `bytes8(indexNumber) + bytes4(standardInterfaceId)`. Where: 
 - `indexNumber` = the index in the [`LSP5ReceivedAssets[]` Array](#lsp3issuedassets)
-- `standardInterfaceId` = the ERC165 interface ID of the standard that the token or asset smart contract implements.
+- `standardInterfaceId` = the [ERC165 interface ID](https://eips.ethereum.org/EIPS/eip-165) of the standard that the token or asset smart contract implements.
 
 ```json
 {
