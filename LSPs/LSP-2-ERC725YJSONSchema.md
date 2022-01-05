@@ -70,7 +70,7 @@ A simple key is constructed using `bytes32(keccak256(KeyName))`,
 
 Below is an example of a Singleton key type:
 
-```js
+```json
 {
     "name": "MyKeyName",
     "key": "0x35e6950bc8d21a1699e58328a3c4066df5803bb0b570d0150cb3819288e764b2",
@@ -142,7 +142,7 @@ A mapping key is constructed using `bytes16(keccak256(FirstWord)) + bytes12(0) +
 
 Below is an example of a mapping key type:
 
-```js
+```json
 {
     "name": "SupportedStandards:ERC725Account",
     "key": "0xeafec4d89fa9619884b6b89135626455000000000000000000000000afdeb5d6",
@@ -161,7 +161,7 @@ e.g. `MyCoolAddress:<address>` > `0x22496f48a493035f 00000000 cafecafecafecafeca
 
 Below is an example of an bytes20 mapping key type:
 
-```js
+```json
 {
     "name": "MyCoolAddress:cafecafecafecafecafecafecafecafecafecafe",
     "key": "0x22496f48a493035f00000000cafecafecafecafecafecafecafecafecafecafe",
@@ -180,7 +180,7 @@ e.g. `AddressPermissions:Permissions:<address>` > `0x4b80742d 00000000 eced 0000
 
 Below is an example of a mapping key type:
 
-```js
+```json
 {
     "name": "AddressPermissions:Permissions:cafecafecafecafecafecafecafecafecafecafe",
     "key": "0x4b80742d0000000082ac0000cafecafecafecafecafecafecafecafecafecafe",
