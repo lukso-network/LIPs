@@ -58,8 +58,8 @@ this smart contract address MUST be stored under the following key:
     "name": "LSP1UniversalReceiverDelegate",
     "key": "0x0cfc51aec37c55a4d0b1a65c6255c4bf2fbdf6277f3cc0730c45b828b6db8b47",
     "keyType": "Singleton",
-    "valueContent": "Address",
-    "valueType": "address"
+    "valueType": "address",
+    "valueContent": "Address"
 }
 ```
 
@@ -95,8 +95,8 @@ ERC725Y JSON Schema `ERC725Account`:
         "name": "LSP1UniversalReceiverDelegate",
         "key": "0x0cfc51aec37c55a4d0b1a65c6255c4bf2fbdf6277f3cc0730c45b828b6db8b47",
         "keyType": "Singleton",
-        "valueContent": "Address",
-        "valueType": "address"
+        "valueType": "address",
+        "valueContent": "Address"
     }
 ]
 ```

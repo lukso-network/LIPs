@@ -43,8 +43,8 @@ An array of received smart contract assets, like tokens (_e.g.: [LSP7 Digital As
     "name": "LSP5ReceivedAssets[]",
     "key": "0x6460ee3c0aac563ccbf76d6e1d07bada78e3a9514e6382b736ed3f478ab7b90b",
     "keyType": "Array",
-    "valueContent": "Address",
-    "valueType": "address"
+    "valueType": "address",
+    "valueContent": "Address"
 }
 ```
 
@@ -63,8 +63,8 @@ The `valueContent` MUST be constructed as follows: `bytes8(indexNumber) + bytes4
     "name": "LSP5ReceivedAssetsMap:<address>",
     "key": "0x812c4334633eb81600000000<address>",
     "keyType": "Mapping",
-    "valueContent": "Mixed",
-    "valueType": "bytes"
+    "valueType": "bytes",
+    "valueContent": "Mixed"
 }
 ```
 
@@ -81,15 +81,15 @@ ERC725Y JSON Schema `LSP5ReceivedAssets`:
         "name": "LSP5ReceivedAssetsMap:<address>",
         "key": "0x812c4334633eb81600000000<address>",
         "keyType": "Mapping",
-        "valueContent": "Mixed",
-        "valueType": "bytes"
+        "valueType": "bytes",
+        "valueContent": "Mixed"
     },
     {
         "name": "LSP5ReceivedAssets[]",
         "key": "0x6460ee3c0aac563ccbf76d6e1d07bada78e3a9514e6382b736ed3f478ab7b90b",
         "keyType": "Array",
-        "valueContent": "Address",
-        "valueType": "address"
+        "valueType": "address",
+        "valueContent": "Address"
     }
 ]
 ```

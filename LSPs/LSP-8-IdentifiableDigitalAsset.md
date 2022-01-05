@@ -54,8 +54,8 @@ Expected values are represented by the enum:
     "name": "LSP8TokenIdType",
     "key": "0x715f248956de7ce65e94d9d836bfead479f7e70d69b718d47bfe7b00e05b4fe4",
     "keyType": "Singleton",
-    "valueContent": "Number",
-    "valueType": "uint256"
+    "valueType": "uint256",
+    "valueContent": "Number"
 }
 ```
 
@@ -70,8 +70,8 @@ When a metadata contract is created for a tokenId, the address COULD be stored i
     "name": "LSP8MetadataAddress:0x20BytesTokenIdHash",
     "key": "0x73dcc7c3c4096cdc00000000cafecafecafecafecafecafecafecafecafecafe",
     "keyType": "Bytes20Mapping",
-    "valueContent": Mixed,
-    "valueType": mixed
+    "valueType": mixed,
+    "valueContent": Mixed
 }
 ```
 
@@ -86,8 +86,8 @@ When metadata JSON is created for a tokenId, the URL COULD be stored in the mint
     "name": "LSP8MetadataJSON:0x20BytesTokenIdHash",
     "key": "0x9a26b4060ae7f7d500000000cafecafecafecafecafecafecafecafecafecafe",
     "keyType": "Bytes20Mapping",
-    "valueContent": JSONURL,
-    "valueType": bytes
+    "valueType": bytes,
+    "valueContent": JSONURL
 }
 ```
 For construction of the Bytes20Mapping key see: [LSP2 ERC725Y JSON Schema][LSP2#bytes20mapping]
@@ -107,8 +107,8 @@ The `address` of the contract which minted this tokenId, to be stored in the [ER
     "name": "LSP8TokenIdMetadata:MintedBy",
     "key": "0xa0093ef0f6788cc87a372bbd12cf83ae7eeb2c85b87e43517ffd5b3978d356c9",
     "keyType": "Singleton",
-    "valueContent": "Address",
-    "valueType": "address"
+    "valueType": "address",
+    "valueContent": "Address"
 }
 ```
 
@@ -121,8 +121,8 @@ The `bytes32` of the `tokenId` this metadata is for, to be stored in the [ERC725
     "name": "LSP8TokenIdMetadata:TokenId",
     "key": "0x51ea539c2c3a29af57cb4b60be9d43689bfa633dba8613743d1be7fb038d36c3",
     "keyType": "Singleton",
-    "valueContent": "Bytes32",
-    "valueType": "bytes32"
+    "valueType": "bytes32",
+    "valueContent": "Bytes32"
 }
 ```
 
@@ -141,8 +141,8 @@ The description of the asset.
     "name": "LSP4Metadata",
     "key": "0x9afb95cacc9f95858ec44aa8c3b685511002e30ae54415823f406128b85b238e",
     "keyType": "Singleton",
-    "valueContent": "JSONURL",
-    "valueType": "bytes"
+    "valueType": "bytes",
+    "valueContent": "JSONURL"
 }
 ```
 

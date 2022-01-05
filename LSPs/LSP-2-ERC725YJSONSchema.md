@@ -75,8 +75,8 @@ Below is an example of a Singleton key type:
     "name": "MyKeyName",
     "key": "0x35e6950bc8d21a1699e58328a3c4066df5803bb0b570d0150cb3819288e764b2",
     "keyType": "Singleton",
-    "valueContent": mixed,
-    "valueType": mixed
+    "valueType": mixed,
+    "valueContent": mixed
 }
 ```
 
@@ -114,8 +114,8 @@ Below is an example of an Array key type:
     "name": "LSP3IssuedAssets[]",
     "key": "0x3a47ab5bd3a594c3a8995f8fa58d0876c96819ca4516bd76100c92462f2f9dc0",
     "keyType": "Array",
-    "valueContent": "Address", // describes the content of the elements
-    "valueType": "address" // describes the content of the elements
+    "valueType": "address", // describes the content of the elements
+    "valueContent": "Address" // describes the content of the elements
 }
 ```
 
@@ -147,8 +147,8 @@ Below is an example of a mapping key type:
     "name": "SupportedStandards:ERC725Account",
     "key": "0xeafec4d89fa9619884b6b89135626455000000000000000000000000afdeb5d6",
     "keyType": "Mapping",
-    "valueContent": mixed,
-    "valueType": mixed
+    "valueType": mixed,
+    "valueContent": mixed
 }
 ```
 
@@ -166,8 +166,8 @@ Below is an example of an bytes20 mapping key type:
     "name": "MyCoolAddress:cafecafecafecafecafecafecafecafecafecafe",
     "key": "0x22496f48a493035f00000000cafecafecafecafecafecafecafecafecafecafe",
     "keyType": "Bytes20Mapping",
-    "valueContent": mixed,
-    "valueType": mixed
+    "valueType": mixed,
+    "valueContent": mixed
 }
 ```
 
@@ -185,8 +185,8 @@ Below is an example of a mapping key type:
     "name": "AddressPermissions:Permissions:cafecafecafecafecafecafecafecafecafecafe",
     "key": "0x4b80742d0000000082ac0000cafecafecafecafecafecafecafecafecafecafe",
     "keyType": "Bytes20MappingWithGrouping",
-    "valueContent": mixed,
-    "valueType": mixed
+    "valueType": mixed,
+    "valueContent": mixed
 }
 ```
 
@@ -328,22 +328,22 @@ To allow interfaces to auto decode an ERC725Y key value store using the ERC725Y 
         "name": "SupportedStandards:ERC725Account",
         "key": "0xeafec4d89fa9619884b6b89135626455000000000000000000000000afdeb5d6",
         "keyType": "Mapping",
-        "valueContent": "0xafdeb5d6",
-        "valueType": "bytes"
+        "valueType": "bytes",
+        "valueContent": "0xafdeb5d6"
     },
     {
         "name": "LSP3Profile",
         "key": "0x5ef83ad9559033e6e941db7d7c495acdce616347d28e90c7ce47cbfcfcad3bc5",
         "keyType": "Singleton",
-        "valueContent": "JSONURL",
-        "valueType": "bytes"
+        "valueType": "bytes",
+        "valueContent": "JSONURL"
     },
     {
         "name": "LSP3IssuedAssets[]",
         "key": "0x3a47ab5bd3a594c3a8995f8fa58d0876c96819ca4516bd76100c92462f2f9dc0",
         "keyType": "Array",
-        "valueContent": "Address",
         "valueType": "address",
+        "valueContent": "Address"
     }
 ]
 ```
