@@ -76,7 +76,7 @@ Contains [the permissions](#permission-values-in-addresspermissionspermissionsad
     "name": "AddressPermissions:Permissions:<address>",
     "key": "0x4b80742d0000000082ac0000<address>",
     "keyType": "Bytes20MappingWithGrouping",
-    "valueType": "byte32",
+    "valueType": "bytes32",
     "valueContent": "BitArray"
 }
 ```
@@ -318,7 +318,7 @@ ERC725Y JSON Schema `LSP6KeyManager`, set at the `LSP3Account`:
         "name": "AddressPermissions:Permissions:<address>",
         "key": "0x4b80742d0000000082ac0000<address>",
         "keyType": "Bytes20MappingWithGrouping",
-        "valueType": "byte32",
+        "valueType": "bytes32",
         "valueContent": "BitArray"
     },
     {
