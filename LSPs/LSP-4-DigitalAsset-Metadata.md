@@ -173,8 +173,6 @@ An array of ([ERC725Account](./LSP-0-ERC725Account.md)) addresses that defines t
     "keyType": "Array",
     "valueContent": "Number",
     "valueType": "uint256",
-    "elementValueContent": "Address",
-    "elementValueType": "address"
 }
 ```
 
@@ -253,8 +251,6 @@ ERC725Y JSON Schema `LSP4DigitalAsset`:
         "keyType": "Array",
         "valueContent": "Number",
         "valueType": "uint256",
-        "elementValueContent": "Address",
-        "elementValueType": "address"
     }
 ]
 ```
