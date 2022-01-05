@@ -75,8 +75,8 @@ Below is an example of a Singleton key type:
     "name": "MyKeyName",
     "key": "0x35e6950bc8d21a1699e58328a3c4066df5803bb0b570d0150cb3819288e764b2",
     "keyType": "Singleton",
-    "valueType": mixed,
-    "valueContent": mixed
+    "valueType": "Mixed",
+    "valueContent": "Mixed"
 }
 ```
 
@@ -147,8 +147,8 @@ Below is an example of a mapping key type:
     "name": "SupportedStandards:ERC725Account",
     "key": "0xeafec4d89fa9619884b6b89135626455000000000000000000000000afdeb5d6",
     "keyType": "Mapping",
-    "valueType": mixed,
-    "valueContent": mixed
+    "valueType": "Mixed",
+    "valueContent": "Mixed"
 }
 ```
 
@@ -166,8 +166,8 @@ Below is an example of an bytes20 mapping key type:
     "name": "MyCoolAddress:cafecafecafecafecafecafecafecafecafecafe",
     "key": "0x22496f48a493035f00000000cafecafecafecafecafecafecafecafecafecafe",
     "keyType": "Bytes20Mapping",
-    "valueType": mixed,
-    "valueContent": mixed
+    "valueType": "Mixed",
+    "valueContent": "Mixed"
 }
 ```
 
@@ -185,8 +185,8 @@ Below is an example of a mapping key type:
     "name": "AddressPermissions:Permissions:cafecafecafecafecafecafecafecafecafecafe",
     "key": "0x4b80742d0000000082ac0000cafecafecafecafecafecafecafecafecafecafe",
     "keyType": "Bytes20MappingWithGrouping",
-    "valueType": mixed,
-    "valueContent": mixed
+    "valueType": "Mixed",
+    "valueContent": "Mixed"
 }
 ```
 

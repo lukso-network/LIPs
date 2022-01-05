@@ -70,8 +70,8 @@ When a metadata contract is created for a tokenId, the address COULD be stored i
     "name": "LSP8MetadataAddress:0x20BytesTokenIdHash",
     "key": "0x73dcc7c3c4096cdc00000000cafecafecafecafecafecafecafecafecafecafe",
     "keyType": "Bytes20Mapping",
-    "valueType": mixed,
-    "valueContent": Mixed
+    "valueType": "Mixed",
+    "valueContent": "Mixed"
 }
 ```
 
