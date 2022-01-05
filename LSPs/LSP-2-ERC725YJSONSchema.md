@@ -328,7 +328,7 @@ To allow interfaces to auto decode an ERC725Y key value store using the ERC725Y 
         "name": "SupportedStandards:ERC725Account",
         "key": "0xeafec4d89fa9619884b6b89135626455000000000000000000000000afdeb5d6",
         "keyType": "Mapping",
-        "valueType": "bytes",
+        "valueType": "bytes4",
         "valueContent": "0xafdeb5d6"
     },
     {
