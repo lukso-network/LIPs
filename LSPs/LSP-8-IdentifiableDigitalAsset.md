@@ -86,8 +86,8 @@ When metadata JSON is created for a tokenId, the URL COULD be stored in the mint
     "name": "LSP8MetadataJSON:0x20BytesTokenIdHash",
     "key": "0x9a26b4060ae7f7d500000000cafecafecafecafecafecafecafecafecafecafe",
     "keyType": "Bytes20Mapping",
-    "valueType": bytes,
-    "valueContent": JSONURL
+    "valueType": "bytes",
+    "valueContent": "JSONURL"
 }
 ```
 For construction of the Bytes20Mapping key see: [LSP2 ERC725Y JSON Schema][LSP2#bytes20mapping]
