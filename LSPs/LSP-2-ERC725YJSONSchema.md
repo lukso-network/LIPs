@@ -29,42 +29,87 @@ This schema is for example used in [ERC725](https://github.com/ethereum/EIPs/blo
 
 ## Specification
 
-To make ERC725Y keys readable we define the following key value types:   
-(Note: this set is not complete yet, and should be extended over time)
+> **Note:** this set might not yet be complete, as it could be extended overtime.
 
-- `name`: Describes the name of the key, SHOULD compromise of the Standards name + sub type. e.g: `LSP2Name`
-- `key`: the keccak256 hash of the name. This is the actual key that MUST be retrievable via `ERC725Y.getData(bytes32 key)`. e.g: `keccack256('LSP2Name') = 0xf9e26448acc9f20625c059a95279675b8f58ba4f06d262f83a32b4dd35dee019`
-- `keyType`: Types that determine how the values should be interpreted. Valid types are:
-    - [`Singleton`](#singleton): A simple key.
-    - [`Array`](#array): An array spanning multiple ERC725Y keys.
-    - [`Mapping`](#mapping): A key that maps two words.
-    - [`Bytes20Mapping`](#bytes20mapping): A key that maps a word to an address.
-    - [`Bytes20MappingWithGrouping`](#bytes20mappingwithgrouping): A key that maps a word, to a grouping word to an address.
-- `valueType`: The type the content MUST be decoded with.
-    - `string`: The bytes are a UTF8 encoded string
-    - `address`: The bytes are an 20 bytes address
-    - `uint256`: The bytes are a uint256
-    - `bytes32`: The bytes are a 32 bytes
-    - `bytes`: The bytes are a bytes
-    - `string[]`: The bytes are a UTF8 encoded string array
-    - `address[]`: The bytes are an 20 bytes address array
-    - `uint256[]`: The bytes are a uint256 array
-    - `bytes[]`: The bytes are a bytes array
-    - `bytesN[]`: The bytes are a N bytes
-- `valueContent`: The content in the returned value. Valid values are:
-    - `Bytes`: The content are bytes. 
-    - `BytesN`: The content are bytes with length N.
-    - `Number`: The content is a number.
-    - `String`: The content is a UTF8 string.
-    - `Address`: The content is an address.
-    - `Keccak256`: The content is an keccak256 32 bytes hash.
-    - [`AssetURL`](#asseturl): The content contains the hash function, hash and link to the asset file.
-    - [`JSONURL`](#jsonurl): The content contains the hash function, hash and link to the JSON file.
-    - `URL`: The content is an URL encoded as UTF8 string.
-    - `Markdown`: The content is structured Markdown mostly encoded as UTF8 string.
-    - `0x1345ABCD...`: If the value content are specific bytes, than the returned value is expected to equal those bytes.
-  
-### Singleton
+To make ERC725Y keys readable we define the following key value types:  
+
+- `name`: describes the name of the key.
+- `key`: the **keccak256** hash of the key `name`.
+- `keyType`
+- `valueType`
+- `valueContent`
+
+
+### `name`
+
+The key name SHOULD be comprised of the following: `LSP{N}{KeyName}`.
+
+- `LSP`: abbreviation for **L**UKSO **S**tandards **P**roposal.
+- `N`: the **Standard Number** this key refers to.
+- `KeyName`: the intent of the key.
+
+*e.g.:* `LSP4TokenName`
+
+
+### `key`
+
+This is the actual key that MUST be retrievable via `ERC725Y.getData(bytes32 key)`.
+
+*e.g.:* `keccack256('LSP2Name') = 0xf9e26448acc9f20625c059a95279675b8f58ba4f06d262f83a32b4dd35dee019`
+
+### `keyType`
+
+The `keyType` determines how the value(s) should be interpreted.
+
+|   |   |
+|---|---|
+| [`Singleton`](#singleton)  | A simple key  |
+| [`Array`](#array)  | an array spanning multiple ERC725Y keys  |
+| [`Mapping`](#mapping)  | a key that map two words  |
+| [`Bytes20Mapping`](#bytes20mapping)  | a key that maps a word to a `bytes20` value, such as (but not restricted to) an `address` |
+| [`Bytes20MappingWithGrouping`](#bytes20mappingwithgrouping)  | a key that maps a word to another word to a `bytes20` value, such as (but not restricted to) an `address`  |
+
+### `valueType`
+
+The type the content MUST be decoded with.
+
+|   |   |
+|---|---|
+| `boolean`  | a value as either **true** or **false** |
+| `string`  | an UTF8 encoded string  |
+| `address`  | a 20 bytes long address |
+| `uintN`  | an **unsigned** integer (= only positive number) of size `N`  |
+| `intN`  |a **signed** integer (= either positive or negative number) of size `N` |
+| `bytesN`  | a fixed-size bytes value of size `N` |
+| `bytes`  | a dynamically size bytes value, more than 32 bytes   |
+| `uintN[]`  | an array of **signed** integers |
+| `intN[]`  | an array of **unsigned** integers |
+| `string[]`  | an array of UTF8 encoded strings |
+| `address[]`  | an array of addresses   |
+| `bytes[]`   | an array of dynamic size bytes  |
+| `bytesN[]`  | an array of fixed size bytes  |
+
+### `valueContent`
+
+The content in the returned value. Valid values are:
+
+|   |   |
+|---|---|
+| `String`  | an UTF8 encoded string |
+| `Address`  | an address |
+| `Number`  | a Number (positive or negative, depending on the `keyType`)  |
+| `BytesN`  | a bytes of **fixed-size** `N`  |
+| `Bytes`  | a bytes |
+| `Keccak256`  | a 32 bytes long hash digest, obtained from the keccak256 hashing algorithm |
+| `BitArray`  | *TBD*  |
+| `URL`  | an URL encoded as UTF8 string  |
+| [`AssetURL`](#asseturl)  | The content contains the hash function, hash and link to the asset file  |
+| [`JSONURL`](#jsonurl)  |  hash function, hash and link to the JSON file |
+| `Markdown`  | a structured Markdown mostly encoded as UTF8 string  |
+| `0x1345ABCD...`  | a **literal** value, when the returned value is expected to equal some specific bytes |
+
+### Key Types explained
+#### Singleton
 
 A simple key is constructed using `bytes32(keccak256(KeyName))`,
 
@@ -80,7 +125,7 @@ Below is an example of a Singleton key type:
 }
 ```
 
-### Array
+#### Array
 
 An initial key of an array containing the array length constructed using `bytes32(keccak256(KeyName))`.
 Subsequent keys consist of `bytes16(keccak256(KeyName)) + bytes16(uint128(ArrayElementIndex))`.
@@ -119,7 +164,7 @@ Below is an example of an Array key type:
 }
 ```
 
-#### Example
+*example:*
 
 ```solidity
 key: keccak256('LSP3IssuedAssets[]') = 0x3a47ab5bd3a594c3a8995f8fa58d0876c96819ca4516bd76100c92462f2f9dc0
@@ -136,7 +181,7 @@ key: 0x3a47ab5bd3a594c3a8995f8fa58d087600000000000000000000000000000001
 value: 0xcafecafecafecafecafecafecafecafecafecafe
 ```
 
-### Mapping
+#### Mapping
 
 A mapping key is constructed using `bytes16(keccak256(FirstWord)) + bytes12(0) + bytes4(keccak256(LastWord))`,    
 
@@ -152,7 +197,7 @@ Below is an example of a mapping key type:
 }
 ```
 
-### Bytes20Mapping
+#### Bytes20Mapping
 
 Bytes 20 mapping could be used to map words to addresses, or other bytes 20 long data.
 An bytes mapping key is constructed using `bytes8(keccak256(FirstWord)) + bytes4(0) + bytes20(address)`.
@@ -171,7 +216,7 @@ Below is an example of an bytes20 mapping key type:
 }
 ```
 
-### Bytes20MappingWithGrouping
+#### Bytes20MappingWithGrouping
 
 Bytes 20 mapping with grouping could be used to map two words to addresses, or other bytes 20 long data.
 A mapping key, constructed using `bytes4(keccak256(FirstWord)) + bytes4(0) + bytes2(keccak256(SecondWord)) + bytes2(0) + bytes20(address)`,     
@@ -190,7 +235,7 @@ Below is an example of a mapping key type:
 }
 ```
 
-### AssetURL
+#### AssetURL
 
 The content is bytes containing the following format:
 `bytes4(keccack256('hashFunction'))` + `bytes32(keccack256(assetBytes))` + `utf8ToHex('AssetURL')`
@@ -199,7 +244,7 @@ Known hash functions:
 
 - `0x8019f9b1`: keccak256('keccak256(bytes)')
 
-#### Example
+*example:*
 
 The following shows an example of how to encode an AssetURL:
 
@@ -237,7 +282,7 @@ keccak256(utf8)    hash                                                         
 0x8019f9b1d47cf10786205bb08ce508e91c424d413d0f6c48e24dbfde2920d16a9561a723697066733a2f2f516d57346e554e7933767476723344785a48754c66534c6e687a4b4d6532576d67735573454750504668385a7470
 ```
 
-### JSONURL
+#### JSONURL
 
 The content is bytes containing the following format:     
 `bytes4(keccack256('hashFunction'))` + `bytes32(keccack256(JSON.stringify(JSON)))` + `utf8ToHex('JSONURL')`
@@ -246,7 +291,7 @@ Known hash functions:
 
 - `0x6f357c6a`: keccak256('keccak256(utf8)')
 
-#### Example
+*example:*
 
 The following shows an example of how to encode a JSON object:
 
