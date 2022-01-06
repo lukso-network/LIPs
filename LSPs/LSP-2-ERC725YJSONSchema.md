@@ -31,13 +31,23 @@ This schema is for example used in [ERC725](https://github.com/ethereum/EIPs/blo
 
 > **Note:** this set might not yet be complete, as it could be extended overtime.
 
-To make ERC725Y keys readable we define the following key value types:  
+To make ERC725Y keys readable, we describe a key-value pair as a JSON object containing the following entries:
+
+```json
+{
+    "name": "...",
+    "key": "...",
+    "keyType": "...",
+    "valueType": "...",
+    "valueContent": "..."
+}
+```
 
 - `name`: describes the name of the key.
-- `key`: the **keccak256** hash of the key `name`.
-- `keyType`
-- `valueType`
-- `valueContent`
+- `key`: the **keccak256** hash of the `name`.
+- `keyType`: describe *how* the key MUST be treated.
+- `valueType`: describe *how* the value MUST be decoded.
+- `valueContent`: describe *how* a value SHOULD be treated.
 
 
 ### `name`
@@ -359,9 +369,7 @@ if(hashFunction === '0x6f357c6a') {
 
 ## Rationale
 
-The structure of the key value layout as JSON allows interfaces to auto decode these key values as they will know how to decode them.   
-`keyType` always describes *how* a key MUST be treated.    
-and `valueType` describes how the value MUST be decoded. And `value` always describes *how* a value SHOULD be treated.
+The structure of the key value layout as JSON allows interfaces to auto decode these key values as they will know how to decode them.
 
 ## Example
 
