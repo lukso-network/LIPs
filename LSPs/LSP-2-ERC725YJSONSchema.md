@@ -57,12 +57,11 @@ The table below describes each entries with their available options.
     </thead>
     <tbody align="center">
         <tr>
+            <td>the name of the key</td>
+            <td>the <code>keccak256</code> hash of the <code>name</code></td>
             <td>
-                <p style="text-align: center">the name of the key</p>
-            </td>
-            <td style="text-align: center"><p>the <code>keccak256</code> hash of the <code>name</code></p></td>
-            <td style="text-align: center">
-                <p><i>How</i> the key MUST be <b>treated</b></p>
+                <i>How</i> the key MUST be <b>treated</b>
+                <hr>
                 <p><a href="#singleton"><code>Singleton</code></a></p>
                 <p><a href="#array"><code>Array</code></a></p>
                 <p><a href="#mapping"><code>Mapping</code></a></p>
@@ -70,7 +69,8 @@ The table below describes each entries with their available options.
                 <p><a href="#bytes20mappingwithgrouping"><code>Bytes20MappingWithGrouping</code></a></p>
             </td>
             <td align="center">
-                <p><i>How</i> a value MUST be <b>decoded</b></p>
+                <i>How</i> a value MUST be <b>decoded</b>
+                <hr>
                 <p><code>boolean</code></p>
                 <p><code>string</code></p>
                 <p><code>address</code></p>
@@ -85,7 +85,8 @@ The table below describes each entries with their available options.
                 <p><code>bytes[]</code></p>
             </td>
             <td style="text-align: center">
-                <p><i>How</i> a value SHOULD be <b>interpreted</b></p>
+                <i>How</i> a value SHOULD be <b>interpreted</b>
+                <hr>
                 <p><code>Boolean</code></p>
                 <p><code>String</code></p>
                 <p><code>Address</code></p>
@@ -194,6 +195,10 @@ Valid `valueContent` are:
 | [`JSONURL`](#jsonurl)  |  hash function, hash and link to the JSON file |
 | `Markdown`  | a structured Markdown mostly encoded as UTF8 string  |
 | `0x1345ABCD...`  | a **literal** value, when the returned value is expected to equal some specific bytes |
+
+
+---
+
 
 ### Singleton
 
