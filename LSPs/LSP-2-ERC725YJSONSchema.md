@@ -43,11 +43,11 @@ To make ERC725Y keys readable, we describe a key-value pair as a JSON object con
 }
 ```
 
-- `name`: describe the name of the key.
-- `key`: the **keccak256** hash of the `name`.
-- `keyType`: describe *how* the key MUST be treated.
-- `valueType`: describe *how* the value MUST be decoded.
-- `valueContent`: describe *how* a value SHOULD be treated.
+- [`name`]: describe the name of the key.
+- [`key`]: the **keccak256** hash of the `name`.
+- [`keyType`]: describe *how* the key MUST be treated.
+- [`valueType`]: describe *how* the value MUST be decoded.
+- [`valueContent`]: describe *how* a value SHOULD be treated.
 
 
 ### `name`
@@ -84,7 +84,12 @@ The `keyType` determines how the value(s) should be interpreted.
 > **Note:** for the Mapping key types, the words MUST NOT contain ":" (colon character), as it is used for the delimiter between both words.
 ### `valueType`
 
-The type the content MUST be decoded with.
+Describes the underlying type for a value stored under a specific ERC725Y key. The `valueType` is relevant for interfaces to know how a value MUST be encoded / decoded. This include:
+
+- how to decode a value fetched via `ERC725Y.getData(...)`
+- how to encode a value that needs to be set via `ERC725Y.setData(...)`. 
+
+The `valueType` can also be useful for type casting. It enables contracts or interfaces to know how to manipulate the data, and the limitations behind its type. To illustrate, an interface could know that it cannot set the value to `300` if its `valueType` is `uint8` (max `uint8` allowed = `255`).
 
 |   |   |
 |---|---|
