@@ -43,11 +43,66 @@ To make ERC725Y keys readable, we describe a key-value pair as a JSON object con
 }
 ```
 
-- [`name`]: describe the name of the key.
-- [`key`]: the **keccak256** hash of the `name`.
-- [`keyType`]: describe *how* the key MUST be treated.
-- [`valueType`]: describe *how* the value MUST be decoded.
-- [`valueContent`]: describe *how* a value SHOULD be treated.
+The table below describes each entries with their available options. 
+
+<table style="text-align: center">
+    <thead>
+        <tr>
+            <th style="text-align: center"><a href="#name"><code>name</code></th>
+            <th style="text-align: center"><a href="#key"><code>key</code></th>
+            <th style="text-align: center"><a href="#keyType"><code>keyType</code></th>
+            <th style="text-align: center"><a href="#valueType"><code>valueType</code></th>
+            <th style="text-align: center"><a href="#valueContent"><code>valueContent</code></th>
+        </tr>
+    </thead>
+    <tbody align="center">
+        <tr>
+            <td>
+                <p style="text-align: center">the name of the key</p>
+            </td>
+            <td style="text-align: center"><p>the <code>keccak256</code> hash of the <code>name</code></p></td>
+            <td style="text-align: center">
+                <p><i>How</i> the key MUST be <b>treated</b></p>
+                <p><a href="#singleton"><code>Singleton</code></a></p>
+                <p><a href="#array"><code>Array</code></a></p>
+                <p><a href="#mapping"><code>Mapping</code></a></p>
+                <p><a href="#bytes20mapping"><code>Bytes20Mapping</code></a></p>
+                <p><a href="#bytes20mappingwithgrouping"><code>Bytes20MappingWithGrouping</code></a></p>
+            </td>
+            <td align="center">
+                <p><i>How</i> a value MUST be <b>decoded</b></p>
+                <p><code>boolean</code></p>
+                <p><code>string</code></p>
+                <p><code>address</code></p>
+                <p><code>uintN</code></p>
+                <p><code>intN</code></p>
+                <p><code>bytesN</code></p>
+                <p><code>bytes</code></p>
+                <p><code>uintN[]</code></p>
+                <p><code>intN[]</code></p>
+                <p><code>string[]</code></p>
+                <p><code>address[]</code></p>
+                <p><code>bytes[]</code></p>
+            </td>
+            <td style="text-align: center">
+                <p><i>How</i> a value SHOULD be <b>interpreted</b></p>
+                <p><code>Boolean</code></p>
+                <p><code>String</code></p>
+                <p><code>Address</code></p>
+                <p><code>Number</code></p>
+                <p><code>BytesN</code></p>
+                <p><code>Bytes</code></p>
+                <p><code>Keccak256</code></p>
+                <p><code>BitArray</code></p>
+                <p><code>URL</code></p>
+                <p><a href="#asseturl"><code>AssetURL</code></a></p>
+                <p><a href="#jsonurl"><code>JSONURL</code></a></p>
+                <p><code>Markdown</code></p>
+                <p><code>Literal</code><br/> (<u>e.g.:</u> <code>0x1345ABCD...</code>)</p>
+            </td>
+        </tr>
+    </tbody>
+</table>
 
 
 ### `name`
@@ -140,8 +195,7 @@ Valid `valueContent` are:
 | `Markdown`  | a structured Markdown mostly encoded as UTF8 string  |
 | `0x1345ABCD...`  | a **literal** value, when the returned value is expected to equal some specific bytes |
 
-### Key Types explained
-#### Singleton
+### Singleton
 
 A simple key is constructed using `bytes32(keccak256("KeyName"))`,
 
@@ -159,7 +213,7 @@ Below is an example of a Singleton key type:
 
 `keccak256("MyKeyName")` = `0x`**`35e6950bc8d21a1699e58328a3c4066df5803bb0b570d0150cb3819288e764b2`**
 
-#### Array
+### Array
 
 An array of elements, where element has the same `valueType`.
 
@@ -220,7 +274,7 @@ key: 0x3a47ab5bd3a594c3a8995f8fa58d087600000000000000000000000000000001
 value: 0xcafecafecafecafecafecafecafecafecafecafe
 ```
 
-#### Mapping
+### Mapping
 
 A **Mapping** key is constructed using `bytes16(keccak256("FirstWord")) + bytes12(0) + bytes4(keccak256("SecondWord"))`.  
 
@@ -239,7 +293,11 @@ A **Mapping** key is constructed using `bytes16(keccak256("FirstWord")) + bytes1
 
 - `keccak256("FirstWord")` = `0x`<mark>`f49648de3734d6c5458244ad87c893b5`</mark>`0e6367d2cfa4670eddec109d1fc952e0` (**first 16 bytes** of the hash)
 - `keccak256("SecondWord")` = `0x`<mark>`53022d37`</mark>`21822ca6332135de9e7b98f9a82eb1051d3095d2e259b45149c9b634` (**first 4 bytes** of the hash)
-#### Bytes20Mapping
+
+<span style="background-color: red">Marked text</span>
+
+
+### Bytes20Mapping
 
 **Bytes20Mapping** could be used to map words to `bytes20` long data, such as `addresses`. Such key type can be useful when the second word in the mapping is too long and makes the key greater than 32 bytes.
 
@@ -257,7 +315,7 @@ A **Bytes20Mapping** mapping key is constructed using `bytes8(keccak256(FirstWor
 }
 ```
 
-#### Bytes20MappingWithGrouping
+### Bytes20MappingWithGrouping
 
 A **Bytes20MappingWithGrouping** key could be used to map two words to addresses, or other bytes 20 long data.
 This key is constructed using `bytes4(keccak256(FirstWord)) + bytes4(0) + bytes2(keccak256(SecondWord)) + bytes2(0) + bytes20(address)`,     
@@ -276,7 +334,7 @@ Below is an example of a mapping key type:
 }
 ```
 
-#### AssetURL
+### AssetURL
 
 The content is bytes containing the following format:
 `bytes4(keccack256('hashFunction'))` + `bytes32(keccack256(assetBytes))` + `utf8ToHex('AssetURL')`
@@ -323,7 +381,7 @@ keccak256(utf8)    hash                                                         
 0x8019f9b1d47cf10786205bb08ce508e91c424d413d0f6c48e24dbfde2920d16a9561a723697066733a2f2f516d57346e554e7933767476723344785a48754c66534c6e687a4b4d6532576d67735573454750504668385a7470
 ```
 
-#### JSONURL
+### JSONURL
 
 The content is bytes containing the following format:     
 `bytes4(keccak256('hashFunction'))` + `bytes32(keccak256(JSON.stringify(JSON)))` + `utf8ToHex('JSONURL')`
