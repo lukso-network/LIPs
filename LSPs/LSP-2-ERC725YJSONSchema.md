@@ -81,10 +81,16 @@ The `keyType` determines how the value(s) should be interpreted.
 | [`Bytes20Mapping`](#bytes20mapping)  | a key that maps a word to a `bytes20` value, such as (but not restricted to) an `address` |
 | [`Bytes20MappingWithGrouping`](#bytes20mappingwithgrouping)  | a key that maps a word to another word to a `bytes20` value, such as (but not restricted to) an `address`  |
 
-> **Note:** for the Mapping key types, the words MUST NOT contain ":" (colon character), as it is used for the delimiter between both words.
+For the mapping key types (`Mapping`, `Bytes20Mapping` and `Bytes20MappingWithGrouping`), the term *"word"* COULD describe:
+- a single word (*e.g.: "SupportedStandards"*)
+- a random string, or sequence of characters (*e.g.: "RG58012-RO-120-Y"*)
+
+For the mapping key types, the *"word"* MUST NOT contain a ":" (colon character), as it is used for the delimiter between both words.
+
+
 ### `valueType`
 
-Describes the underlying type for a value stored under a specific ERC725Y key. The `valueType` is relevant for interfaces to know how a value MUST be encoded / decoded. This include:
+Describes the underlying data type of a value stored under a specific ERC725Y key. The `valueType` is relevant for interfaces to know how a value MUST be encoded / decoded. This include:
 
 - how to decode a value fetched via `ERC725Y.getData(...)`
 - how to encode a value that needs to be set via `ERC725Y.setData(...)`. 
@@ -109,7 +115,13 @@ The `valueType` can also be useful for type casting. It enables contracts or int
 
 ### `valueContent`
 
-The content in the returned value. Valid values are:
+Describes how to interpret the content of the returned value.
+
+To illustrate, a string could be interpreted in multiple ways, such as:
+- a single word, or a sequence of words (*e.g.: "My Custom Token Name"*)
+- an URL (*e.g.: "ipfs://QmW4nUNy3vtvr3DxZHuLfSLnhzKMe2WmgsUsEGPPFh8Ztp"*)
+
+Valid `valueContent` are:
 
 |   |   |
 |---|---|
