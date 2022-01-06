@@ -60,8 +60,8 @@ This is mainly useful for interfaces to know which address hold permissions.
     "name": "AddressPermissions[]",
     "key": "0xdf30dba06db6a30e65354d9a64c609861f089545ca58c6b4dbe31a5f338cb0e3",
     "keyType": "Array",
-    "valueContent": "Address",
-    "valueType": "address"
+    "valueType": "address",
+    "valueContent": "Address"
 }
 ```
 
@@ -76,8 +76,8 @@ Contains [the permissions](#permission-values-in-addresspermissionspermissionsad
     "name": "AddressPermissions:Permissions:<address>",
     "key": "0x4b80742d0000000082ac0000<address>",
     "keyType": "Bytes20MappingWithGrouping",
-    "valueContent": "BitArray",
-    "valueType": "byte32"
+    "valueType": "bytes32",
+    "valueContent": "BitArray"
 }
 ```
     
@@ -91,8 +91,8 @@ IF no addresses are set, interacting with ALL addresses is allowed. IF one or mo
     "name": "AddressPermissions:AllowedAddresses:<address>",
     "key": "0x4b80742d00000000c6dd0000<address>",
     "keyType": "Bytes20MappingWithGrouping",
-    "valueContent": "Address",
-    "valueType": "address[]"
+    "valueType": "address[]",
+    "valueContent": "Address"
 }
 ```
 
@@ -105,8 +105,8 @@ Contains an array of bytes4 function signatures, the controlling address is allo
     "name": "AddressPermissions:AllowedFunctions:<address>",
     "key": "0x4b80742d000000008efe0000<address>",
     "keyType": "Bytes20MappingWithGrouping",
-    "valueContent": "Bytes4",
-    "valueType": "bytes4[]"
+    "valueType": "bytes4[]",
+    "valueContent": "Bytes4"
 }
 ```
 
@@ -119,8 +119,8 @@ Contains an array of bytes4 [ERC165 interface Ids](https://eips.ethereum.org/EIP
     "name": "AddressPermissions:AllowedStandards:<address>",
     "key": "0x4b80742d000000003efa0000<address>",
     "keyType": "Bytes20MappingWithGrouping",
-    "valueContent": "Bytes4",
-    "valueType": "bytes4[]"
+    "valueType": "bytes4[]",
+    "valueContent": "Bytes4"
 }
 ```
 
@@ -311,36 +311,36 @@ ERC725Y JSON Schema `LSP6KeyManager`, set at the `LSP3Account`:
         "name": "AddressPermissions[]",
         "key": "0xdf30dba06db6a30e65354d9a64c609861f089545ca58c6b4dbe31a5f338cb0e3",
         "keyType": "Array",
-        "valueContent": "Address",
-        "valueType": "address"
+        "valueType": "address",
+        "valueContent": "Address"
     },
     {
         "name": "AddressPermissions:Permissions:<address>",
         "key": "0x4b80742d0000000082ac0000<address>",
         "keyType": "Bytes20MappingWithGrouping",
-        "valueContent": "BitArray",
-        "valueType": "byte32"
+        "valueType": "bytes32",
+        "valueContent": "BitArray"
     },
     {
         "name": "AddressPermissions:AllowedAddresses:<address>",
         "key": "0x4b80742d00000000c6dd0000<address>",
         "keyType": "Bytes20MappingWithGrouping",
-        "valueContent": "Address",
-        "valueType": "address[]"
+        "valueType": "address[]",
+        "valueContent": "Address"
     },
     {
         "name": "AddressPermissions:AllowedFunctions:<address>",
         "key": "0x4b80742d000000008efe0000<address>",
         "keyType": "Bytes20MappingWithGrouping",
-        "valueContent": "Bytes4",
-        "valueType": "bytes4[]"
+        "valueType": "bytes4[]",
+        "valueContent": "Bytes4"
     },
     {
         "name": "AddressPermissions:AllowedStandards:<address>",
         "key": "0x4b80742d000000003efa0000<address>",
         "keyType": "Bytes20MappingWithGrouping",
-        "valueContent": "Bytes4",
-        "valueType": "bytes4[]"
+        "valueType": "bytes4[]",
+        "valueContent": "Bytes4"
     }
 ]
 ```

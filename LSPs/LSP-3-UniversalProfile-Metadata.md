@@ -38,8 +38,8 @@ The supported standard SHOULD be `LSP3UniversalProfile`
     "name": "SupportedStandards:LSP3UniversalProfile",
     "key": "0xeafec4d89fa9619884b6b89135626455000000000000000000000000abe425d6",
     "keyType": "Mapping",
-    "valueContent": "0xabe425d6",
-    "valueType": "bytes"
+    "valueType": "bytes",
+    "valueContent": "0xabe425d6"
 }
 ```
 
@@ -53,8 +53,8 @@ A JSON file that describes the profile information, including profile image, bac
     "name": "LSP3Profile",
     "key": "0x5ef83ad9559033e6e941db7d7c495acdce616347d28e90c7ce47cbfcfcad3bc5",
     "keyType": "Singleton",
-    "valueContent": "JSONURL",
-    "valueType": "bytes"
+    "valueType": "bytes",
+    "valueContent": "JSONURL"
 }
 ```
 
@@ -177,8 +177,8 @@ The `valueContent` MUST be constructed as follows: `bytes8(indexNumber) + bytes4
     "name": "LSP3IssuedAssetsMap:<address>",
     "key": "0x83f5e77bfb14241600000000<address>",
     "keyType": "Mapping",
-    "valueContent": "Mixed",
-    "valueType": "bytes"
+    "valueType": "bytes",
+    "valueContent": "Mixed"
 }
 ```
 
@@ -202,29 +202,29 @@ ERC725Y JSON Schema `LSP3UniversalProfile`:
         "name": "SupportedStandards:LSP3UniversalProfile",
         "key": "0xeafec4d89fa9619884b6b89135626455000000000000000000000000abe425d6",
         "keyType": "Mapping",
-        "valueContent": "0xabe425d6",
-        "valueType": "bytes"
+        "valueType": "bytes",
+        "valueContent": "0xabe425d6"
     },
     {
         "name": "LSP3Profile",
         "key": "0x5ef83ad9559033e6e941db7d7c495acdce616347d28e90c7ce47cbfcfcad3bc5",
         "keyType": "Singleton",
-        "valueContent": "JSONURL",
-        "valueType": "bytes"
+        "valueType": "bytes",
+        "valueContent": "JSONURL"
     },
     {
         "name": "LSP3IssuedAssetsMap:<address>",
         "key": "0x83f5e77bfb14241600000000<address>",
         "keyType": "Mapping",
-        "valueContent": "Mixed",
-        "valueType": "bytes"
+        "valueType": "bytes",
+        "valueContent": "Mixed"
     },
     {
         "name": "LSP3IssuedAssets[]",
         "key": "0x3a47ab5bd3a594c3a8995f8fa58d0876c96819ca4516bd76100c92462f2f9dc0",
         "keyType": "Array",
-        "valueContent": "Address",
-        "valueType": "address"
+        "valueType": "address",
+        "valueContent": "Address"
     },
 
     // from LSP5 ReceivedAssets
@@ -232,15 +232,15 @@ ERC725Y JSON Schema `LSP3UniversalProfile`:
         "name": "LSP5ReceivedAssetsMap:<address>",
         "key": "0x812c4334633eb81600000000<address>",
         "keyType": "Mapping",
-        "valueContent": "Mixed",
-        "valueType": "bytes"
+        "valueType": "bytes",
+        "valueContent": "Mixed"
     },
     {
         "name": "LSP5ReceivedAssets[]",
         "key": "0x6460ee3c0aac563ccbf76d6e1d07bada78e3a9514e6382b736ed3f478ab7b90b",
         "keyType": "Array",
-        "valueContent": "Address",
-        "valueType": "address"
+        "valueType": "address",
+        "valueContent": "Address"
     },
 
     // from ERC725Account
@@ -248,8 +248,8 @@ ERC725Y JSON Schema `LSP3UniversalProfile`:
         "name": "LSP1UniversalReceiverDelegate",
         "key": "0x0cfc51aec37c55a4d0b1a65c6255c4bf2fbdf6277f3cc0730c45b828b6db8b47",
         "keyType": "Singleton",
-        "valueContent": "Address",
-        "valueType": "address"
+        "valueType": "address",
+        "valueContent": "Address"
     }
 ]
 ```
