@@ -90,7 +90,9 @@ For the mapping key types, the *"word"* MUST NOT contain a ":" (colon character)
 
 ### `valueType`
 
-Describes the underlying data type of a value stored under a specific ERC725Y key. The `valueType` is relevant for interfaces to know how a value MUST be encoded / decoded. This include:
+Describes the underlying data type of a value stored under a specific ERC725Y key. It refers to the type for the smart contract language like [Solidity](https://docs.soliditylang.org).
+
+The `valueType` is relevant for interfaces to know how a value MUST be encoded / decoded. This include:
 
 - how to decode a value fetched via `ERC725Y.getData(...)`
 - how to encode a value that needs to be set via `ERC725Y.setData(...)`. 
@@ -159,16 +161,21 @@ Below is an example of a Singleton key type:
 
 #### Array
 
+An array of elements, where element has the same `valueType`.
+
+> *The advantage of the `keyType` Array over using simple array elements like `address[]`, is that the amount of elements that can be stored is unlimited.
+> Storing an encoded array as a value, will reuqire a set amount of gas, which can exceed the block gas limit.*
+
+**Requirements**
+
+A key of **Array** type MUST follow the following requirements:
+
+- The `name` of the key MUST have a `[]` (square brackets).
+- The `key` itself MUST be the keccak256 hash digest of the **full key `name`, including the square brackets `[]`**
+- The key hash MUST contain the number of all elements, and is required to be updated when a new key element is added.
+
 An initial key of an array containing the array length constructed using `bytes32(keccak256(KeyName))`.
 Subsequent keys consist of `bytes16(keccak256(KeyName)) + bytes16(uint128(ArrayElementIndex))`.
-
-*The advantage of the `keyType` Array over using simple array elements like `address[]`, is that the amount of elements that can be stored is unlimited.
-Storing an encoded array as a value, will reuqire a set amount of gas, which can exceed the block gas limit.*
-
-If you require multiple keys of the same key type they MUST be defined as follows:
-
-- The keytype name MUST have a `[]` add and then hashed
-- The key hash MUST contain the number of all elements, and is required to be updated when a new key element is added.
 
 For all other elements:
 
@@ -230,9 +237,8 @@ A **Mapping** key is constructed using `bytes16(keccak256("FirstWord")) + bytes1
 ```
 
 
-- `keccak256("FirstWord")` = `0x`**`f49648de3734d6c5458244ad87c893b5`**`0e6367d2cfa4670eddec109d1fc952e0` (**first 16 bytes** of the hash)
-- `keccak256("SecondWord")` = `0x`**`53022d37`**`21822ca6332135de9e7b98f9a82eb1051d3095d2e259b45149c9b634` (**first 4 bytes** of the hash)
-
+- `keccak256("FirstWord")` = `0x`<mark>`f49648de3734d6c5458244ad87c893b5`</mark>`0e6367d2cfa4670eddec109d1fc952e0` (**first 16 bytes** of the hash)
+- `keccak256("SecondWord")` = `0x`<mark>`53022d37`</mark>`21822ca6332135de9e7b98f9a82eb1051d3095d2e259b45149c9b634` (**first 4 bytes** of the hash)
 #### Bytes20Mapping
 
 **Bytes20Mapping** could be used to map words to `bytes20` long data, such as `addresses`. Such key type can be useful when the second word in the mapping is too long and makes the key greater than 32 bytes.
