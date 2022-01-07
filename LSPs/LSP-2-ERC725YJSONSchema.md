@@ -12,16 +12,16 @@ requires: ERC725Y
 
 ## Simple Summary
 
-This schema describes how a set of [ERC725Y](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) key values can be described.
+ERC725Y JSON Schema describes a single key-value pair stored by [ERC725Y](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md).
 
 ## Abstract
 
-ERC725Y allow smart contracts to store key value stores (`bytes32` > `bytes`).
-This schema allows to standardize the key values that can be used in ERC725Y sub standards.
+ERC725Y allows smart contracts to have key-value stores (`bytes32` -> `bytes`).
+The JSON Schema allows to standardize the key-value pairs that can be used in ERC725Y sub standards. 
 
 ## Motivation
 
-This schema defines a way to make those key values automatically parsable, so a interface or smart contract knows how to read and interact with them. 
+This schema defines a way to make those key value automatically parsable, so an interface or smart contract knows how to read and interact with them. 
 
 This schema is for example used in [ERC725](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) based smart contracts like
 [LSP3-UniversalProfile](https://github.com/lukso-network/LIPs/blob/main/LSPs/LSP-3-UniversalProfile-Metadata.md) and [LSP4-DigitalAsset-Metadata](https://github.com/lukso-network/LIPs/blob/main/LSPs/LSP-4-DigitalAsset-Metadata.md).
