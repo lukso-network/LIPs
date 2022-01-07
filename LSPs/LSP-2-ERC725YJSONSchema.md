@@ -58,7 +58,7 @@ The table below describes each entries with their available options.
     <tbody align="center">
         <tr>
             <td>the name of the key</td>
-            <td>the <code>keccak256</code> hash of the <code>name</code></td>
+            <td>the <b>unique identifier</b> of the key</td>
             <td>
                 <i>How</i> the key MUST be <b>treated</b>
                 <hr>
@@ -123,7 +123,14 @@ In scenarios where an ERC725Y key is part of an LSP Standard (Metadata standard)
 
 The `key` is a `bytes32` value that acts as **unique identifier** for the key. It is the actual key that MUST be used to retrieve the value stored in the contract storage, via `ERC725Y.getData(bytes32 key)`.
 
-*e.g.:* `keccak256('LSP2Name') = 0xf9e26448acc9f20625c059a95279675b8f58ba4f06d262f83a32b4dd35dee019`
+The standard `keccak256` hashing algorithm is used to generate this identifier. However, *how* the identifier is constructed varies, depending on the `keyType`:
+
+- for `Singleton` keys: the hash of the key name (*e.g.:* `keccak256('MyKeyName') = 0x35e6950bc8d21a1699e58328a3c4066df5803bb0b570d0150cb3819288e764b2`)
+- for `Array` keys (see [`Array`](#array) section for more details)
+  - an initial key containing the array length.
+  - subsequent keys for array index access.
+- for mapping keys, see each mapping type seperately below.
+
 
 ### `keyType`
 
