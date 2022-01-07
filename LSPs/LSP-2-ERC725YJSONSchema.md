@@ -94,7 +94,7 @@ The table below describes each entries with their available options.
                 <p><code>BytesN</code></p>
                 <p><code>Bytes</code></p>
                 <p><code>Keccak256</code></p>
-                <p><code>BitArray</code></p>
+                <p><a href="#bitarray"><code>BitArray</code></a></p>
                 <p><code>URL</code></p>
                 <p><a href="#asseturl"><code>AssetURL</code></a></p>
                 <p><a href="#jsonurl"><code>JSONURL</code></a></p>
@@ -345,6 +345,14 @@ Below is an example of a mapping key type:
     "valueContent": "..."
 }
 ```
+
+### BitArray
+
+A BitArray describes an array that contains a sequence of bits (`1`s and `0`s).
+
+Each bit can be either set (`1`) or not (`0`). The point of the BitArray `valueContent` is that there are only two possible values, so they can be stored in one bit.
+
+A BitArray can be used as a mapping of values to states (on/off, allowed/disallowed, locked/unlocked, valid/invalid), where the max number of available values that can be mapped is *n* bits.
 
 ### AssetURL
 
