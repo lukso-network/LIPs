@@ -116,7 +116,7 @@ In scenarios where an ERC725Y key is part of an LSP Standard (Metadata standard)
 - `N`: the **Standard Number** this key refers to.
 - `KeyName`: a short name for the ERC725Y key.
 
-*e.g.:* `LSP4TokenName`
+*e.g.:* `MyColourTheme`, `LSP4TokenName`
 
 
 ### `key`
@@ -129,7 +129,7 @@ The `key` is a `bytes32` value that acts as **unique identifier** for the key. I
 
 The `keyType` determines how the value(s) should be interpreted.
 
-|   |   |
+| `keyType` | Description  |
 |---|---|
 | [`Singleton`](#singleton)  | A simple key  |
 | [`Array`](#array)  | an array spanning multiple ERC725Y keys  |
@@ -155,7 +155,7 @@ The `valueType` is relevant for interfaces to know how a value MUST be encoded /
 
 The `valueType` can also be useful for type casting. It enables contracts or interfaces to know how to manipulate the data, and the limitations behind its type. To illustrate, an interface could know that it cannot set the value to `300` if its `valueType` is `uint8` (max `uint8` allowed = `255`).
 
-|   |   |
+| `valueType` | Description |
 |---|---|
 | `boolean`  | a value as either **true** or **false** |
 | `string`  | an UTF8 encoded string  |
@@ -181,7 +181,7 @@ To illustrate, a string could be interpreted in multiple ways, such as:
 
 Valid `valueContent` are:
 
-|   |   |
+| `valueContent` | Description  |
 |---|---|
 | `String`  | an UTF8 encoded string |
 | `Address`  | an address |
@@ -220,18 +220,21 @@ Below is an example of a Singleton key type:
 
 ### Array
 
-An array of elements, where element has the same `valueType`.
+An array of elements, where each element have the same `valueType`.
 
 > *The advantage of the `keyType` Array over using simple array elements like `address[]`, is that the amount of elements that can be stored is unlimited.
 > Storing an encoded array as a value, will reuqire a set amount of gas, which can exceed the block gas limit.*
 
-**Requirements**
+**Requirements:**
 
-A key of **Array** type MUST follow the following requirements:
+A key of **Array** type MUST have the following requirements:
 
 - The `name` of the key MUST have a `[]` (square brackets).
 - The `key` itself MUST be the keccak256 hash digest of the **full key `name`, including the square brackets `[]`**
-- The key hash MUST contain the number of all elements, and is required to be updated when a new key element is added.
+- The value stored under the full key hash MUST contain the total number of elements (= array length). It MUST be updated every time a new element is added to the array.
+- The value stored under the full key hash **MUST be stored as `uint256`** (32 bytes long, padded left with leading zeros).
+
+**Construction:**
 
 An initial key of an array containing the array length constructed using `bytes32(keccak256(KeyName))`.
 Subsequent keys consist of `bytes16(keccak256(KeyName)) + bytes16(uint128(ArrayElementIndex))`.
@@ -242,15 +245,14 @@ For all other elements:
 - The second 16 bytes is a `uint128` of the number of the element
 - Elements start at number `0`
 
-This would looks as follows for `LSP3IssuedAssets[]`:
+*example:*
+
+Below is an example for the **Array** key named `LSP3IssuedAssets[]`.
 
 - element number: key: `0x3a47ab5bd3a594c3a8995f8fa58d0876c96819ca4516bd76100c92462f2f9dc0`, value: `0x0000000000000000000000000000000000000000000000000000000000000002` (2 elements)
 - element 1: key: `0x3a47ab5bd3a594c3a8995f8fa58d087600000000000000000000000000000000`, value: `0x123...` (element 0)
 - element 2: key: `0x3a47ab5bd3a594c3a8995f8fa58d087600000000000000000000000000000001`, value: `0x321...` (element 1)
 ...
-
-
-Below is an example of an Array key type:
 
 ```json
 {
@@ -261,8 +263,6 @@ Below is an example of an Array key type:
     "valueContent": "Address" // describes the value of each elements
 }
 ```
-
-*example:*
 
 ```solidity
 key: keccak256('LSP3IssuedAssets[]') = 0x3a47ab5bd3a594c3a8995f8fa58d0876c96819ca4516bd76100c92462f2f9dc0
