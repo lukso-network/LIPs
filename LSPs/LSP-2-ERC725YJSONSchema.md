@@ -12,20 +12,28 @@ requires: ERC725Y
 
 ## Simple Summary
 
-This schema describes how a set of [ERC725Y](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) key values can be described.
+This schema defines how a set of [ERC725Y](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) key-value pairs can be described. It can be used as an abstract structure over the storage of an ERC725Y smart contract.
 
 ## Abstract
 
-ERC725Y allow smart contracts to store key value stores (`bytes32` > `bytes`).
-This schema allows to standardize the key values that can be used in ERC725Y sub standards.
+ERC725Y enables storing any data in a smart contract as `bytes32` > `bytes` key-value pairs.
+
+Although this improves the way to interact with the data stored, it remains difficult to understand the layout of the contract storage. This is because both the key and the value are addressed in raw bytes.
+
+This schema allows to standardize those keys and values so that they can be more easily accessed and interpreted. It can be used to create ERC725Y sub-standards, made of pre-defined sets of ERC725Y keys (Metadata Standards).
 
 ## Motivation
 
-This schema defines a way to make those key values automatically parsable, so a interface or smart contract knows how to read and interact with them. 
+A schema defines a blueprint for how a data store is constructed.
+
+In the context of smart contracts, it can offer a better view of how the data is organised and structured within the contract storage.
+
+Using a schema over ERC725Y enables those keys and values to be easily readable and automatically parsable. Contracts and interfaces can know how to read and interact with the storage of an ERC725Y smart contract.
+
+The benefit of such schema is to allow interfaces or smart contracts to better decode (read, parse and interpret) the data stored in an ERC725Y contract. On the other hand, it also enables interfaces and contracts to know how to correctly encode data, before being set on an ERC725Y contract.
 
 This schema is for example used in [ERC725](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) based smart contracts like
 [LSP3-UniversalProfile](https://github.com/lukso-network/LIPs/blob/main/LSPs/LSP-3-UniversalProfile-Metadata.md) and [LSP4-DigitalAsset-Metadata](https://github.com/lukso-network/LIPs/blob/main/LSPs/LSP-4-DigitalAsset-Metadata.md).
-
 
 ## Specification
 
