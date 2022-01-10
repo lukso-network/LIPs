@@ -12,20 +12,28 @@ requires: ERC725Y
 
 ## Simple Summary
 
-ERC725Y JSON Schema describes a single key-value pair stored by [ERC725Y](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md).
+ERC725Y JSON Schema describes a single key-value pair stored by [ERC725Y](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md). It is intended to be used as an abstract structure over the storage of an ERC725Y smart contract.
 
 ## Abstract
 
-ERC725Y allows smart contracts to have key-value stores (`bytes32` -> `bytes`).
-The JSON Schema allows to standardize the key-value pairs that can be used in ERC725Y sub standards. 
+ERC725Y enables storing any data in a smart contract as `bytes32` -> `bytes` key-value pairs.
+
+Although this improves the way to interact with the data stored, it remains difficult to understand the layout of the contract storage. This is because both the key and the value are addressed in raw bytes.
+
+This schema allows to standardize those keys and values so that they can be more easily accessed and interpreted. It can be used to create ERC725Y sub-standards, made of pre-defined sets of ERC725Y keys (Metadata Standards).
 
 ## Motivation
 
-This schema defines a way to make those key value automatically parsable, so an interface or smart contract knows how to read and interact with them. 
+A schema defines a blueprint for how a data store is constructed.
+
+In the context of smart contracts, it can offer a better view of how the data is organised and structured within the contract storage.
+
+Using a schema over ERC725Y enables those keys and values to be easily readable and automatically parsable. Contracts and interfaces can know how to read and interact with the storage of an ERC725Y smart contract.
+
+The benefit of such schema is to allow interfaces or smart contracts to better decode (read, parse and interpret) the data stored in an ERC725Y contract. On the other hand, it also enables interfaces and contracts to know how to correctly encode data, before being set on an ERC725Y contract.
 
 This schema is for example used in [ERC725](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) based smart contracts like
 [LSP3-UniversalProfile](https://github.com/lukso-network/LIPs/blob/main/LSPs/LSP-3-UniversalProfile-Metadata.md) and [LSP4-DigitalAsset-Metadata](https://github.com/lukso-network/LIPs/blob/main/LSPs/LSP-4-DigitalAsset-Metadata.md).
-
 
 ## Specification
 
@@ -108,7 +116,7 @@ The table below describes each entries with their available options.
 
 ### `name`
 
-The `name` is the human-readable format of the ERC725Y key. It aims to abstract the representation of the ERC725Y key, and defines what the key represents. In most cases, it SHOULD highlights the intent behind the key.
+The `name` is the human-readable format of the ERC725Y key. It aims to abstract the representation of the ERC725Y key and defines what the key represents. In most cases, it SHOULD highlight the intent behind the key.
 
 In scenarios where an ERC725Y key is part of an LSP Standard (Metadata standard), the key `name` SHOULD be comprised of the following: `LSP{N}{KeyName}`, where
 
@@ -121,7 +129,7 @@ In scenarios where an ERC725Y key is part of an LSP Standard (Metadata standard)
 
 ### `key`
 
-The `key` is a `bytes32` value that acts as **unique identifier** for the key. It is the actual key that MUST be used to retrieve the value stored in the contract storage, via `ERC725Y.getData(bytes32 key)`.
+The `key` is a `bytes32` value that acts as the **unique identifier** for the key. It is the actual key that MUST be used to retrieve the value stored in the contract storage, via `ERC725Y.getData(bytes32 key)`.
 
 The standard `keccak256` hashing algorithm is used to generate this identifier. However, *how* the identifier is constructed varies, depending on the `keyType`:
 
@@ -129,7 +137,7 @@ The standard `keccak256` hashing algorithm is used to generate this identifier. 
 - for `Array` keys (see [`Array`](#array) section for more details)
   - an initial key containing the array length.
   - subsequent keys for array index access.
-- for mapping keys, see each mapping type seperately below.
+- for mapping keys, see each mapping type separately below.
 
 
 ### `keyType`
@@ -155,12 +163,12 @@ For the mapping key types, the *"word"* MUST NOT contain a ":" (colon character)
 
 Describes the underlying data type of a value stored under a specific ERC725Y key. It refers to the type for the smart contract language like [Solidity](https://docs.soliditylang.org).
 
-The `valueType` is relevant for interfaces to know how a value MUST be encoded / decoded. This include:
+The `valueType` is relevant for interfaces to know how a value MUST be encoded/decoded. This include:
 
 - how to decode a value fetched via `ERC725Y.getData(...)`
 - how to encode a value that needs to be set via `ERC725Y.setData(...)`. 
 
-The `valueType` can also be useful for type casting. It enables contracts or interfaces to know how to manipulate the data, and the limitations behind its type. To illustrate, an interface could know that it cannot set the value to `300` if its `valueType` is `uint8` (max `uint8` allowed = `255`).
+The `valueType` can also be useful for typecasting. It enables contracts or interfaces to know how to manipulate the data and the limitations behind its type. To illustrate, an interface could know that it cannot set the value to `300` if its `valueType` is `uint8` (max `uint8` allowed = `255`).
 
 | `valueType` | Description |
 |---|---|
@@ -169,8 +177,8 @@ The `valueType` can also be useful for type casting. It enables contracts or int
 | `address`  | a 20 bytes long address |
 | `uintN`  | an **unsigned** integer (= only positive number) of size `N`  |
 | `intN`  |a **signed** integer (= either positive or negative number) of size `N` |
-| `bytesN`  | a fixed-size bytes value of size `N`, from `bytes1` up to `bytes32` |
-| `bytes`  | a dynamically-size bytes value |
+| `bytesN`  | a bytes value of **fixed-size** `N`, from `bytes1` up to `bytes32` |
+| `bytes`  | a bytes value of **dynamic-size** |
 | `uintN[]`  | an array of **signed** integers |
 | `intN[]`  | an array of **unsigned** integers |
 | `string[]`  | an array of UTF8 encoded strings |
@@ -193,11 +201,11 @@ Valid `valueContent` are:
 | `String`  | an UTF8 encoded string |
 | `Address`  | an address |
 | `Number`  | a Number (positive or negative, depending on the `keyType`)  |
-| `BytesN`  | a bytes of **fixed-size** `N`  |
-| `Bytes`  | a bytes |
+| `BytesN`  | a bytes value of **fixed-size** `N`, from `bytes1` up to `bytes32`  |
+| `Bytes`  | a bytes value of **dynamic-size** |
 | `Keccak256`  | a 32 bytes long hash digest, obtained from the keccak256 hashing algorithm |
-| `BitArray`  | *TBD*  |
-| `URL`  | an URL encoded as UTF8 string  |
+| `BitArray`  | an array of single `1` or `0` bits |
+| `URL`  | an URL encoded as an UTF8 string |
 | [`AssetURL`](#asseturl)  | The content contains the hash function, hash and link to the asset file  |
 | [`JSONURL`](#jsonurl)  |  hash function, hash and link to the JSON file |
 | `Markdown`  | a structured Markdown mostly encoded as UTF8 string  |
@@ -209,7 +217,7 @@ Valid `valueContent` are:
 
 ### Singleton
 
-A simple key is constructed using `bytes32(keccak256("KeyName"))`,
+A **Singleton** key refers to a simple key. It is constructed using `bytes32(keccak256("KeyName"))`,
 
 Below is an example of a Singleton key type:
 
@@ -227,10 +235,10 @@ Below is an example of a Singleton key type:
 
 ### Array
 
-An array of elements, where each element have the same `valueType`.
+An array of elements, where each element has the same `valueType`.
 
-> *The advantage of the `keyType` Array over using simple array elements like `address[]`, is that the amount of elements that can be stored is unlimited.
-> Storing an encoded array as a value, will reuqire a set amount of gas, which can exceed the block gas limit.*
+> *The advantage of the `keyType` Array over a standard array of elements like `address[]`, is that the amount of elements that can be stored is unlimited.
+> Storing an encoded array as a value, will require a set amount of gas, which can exceed the block gas limit.*
 
 **Requirements:**
 
@@ -243,14 +251,13 @@ A key of **Array** type MUST have the following requirements:
 
 **Construction:**
 
-An initial key of an array containing the array length constructed using `bytes32(keccak256(KeyName))`.
-Subsequent keys consist of `bytes16(keccak256(KeyName)) + bytes16(uint128(ArrayElementIndex))`.
+For the **Array** `keyType`, the initial `key` contains the total number of elements stored in the Array (= array length). It is constructed using `bytes32(keccak256(KeyName))`.
 
-For all other elements:
+Each Array element can be accessed through its own `key`. The `key` of an Array element consists of `bytes16(keccak256(KeyName)) + bytes16(uint128(ArrayElementIndex))`, where:
+- `bytes16(keccak256(KeyName))` = The first 16 bytes are the keccak256 hash of the full Array key `name` (including the `[]`) (e.g.: `LSP3IssuedAssets[]`)
+- `bytes16(uint128(ArrayElementIndex))` = the position (= index) of the element in the array (NB: elements index access start at `0`)
 
-- The first 16 bytes are the first 16 bytes of the key hash
-- The second 16 bytes is a `uint128` of the number of the element
-- Elements start at number `0`
+> NB: element index access starts at number `0`
 
 *example:*
 
