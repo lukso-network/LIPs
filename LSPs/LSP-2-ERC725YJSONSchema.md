@@ -146,17 +146,11 @@ The `keyType` determines how the value(s) should be interpreted.
 
 | `keyType` | Description  | Example |
 |---|---|---|
-| [`Singleton`](#singleton)  | A simple key  | e.g.: `bytes32(keccak256("MyKeyName"))`|
-| [`Array`](#array)  | an array spanning multiple ERC725Y keys  | e.g.: `bytes32(keccak256("MyKeyName[]"))`|
-| [`Mapping`](#mapping)  | a key that map two words  | e.g.: `bytes16(keccak256("MyKeyName"))` + `bytes12(0)` + `bytes4(keccak256("MapName"))`|
-| [`Bytes20Mapping`](#bytes20mapping)  | a key that maps a word to a `bytes20` value, such as (but not restricted to) an `address` | e.g.: `bytes8(keccak256("MyKeyName"))` + `bytes4(0)` +  `bytes20(dynamicValue)` |
-| [`Bytes20MappingWithGrouping`](#bytes20mappingwithgrouping)  | a key that maps a word to another word to a `bytes20` value, such as (but not restricted to) an `address`  | e.g.: `bytes4(keccak256("MyKeyName"))` + `bytes4(0)` + `bytes2(keccak256("MapName"))` + `bytes2(0)` +  `bytes20(dynamicValue)` |
-
-For the mapping key types (`Mapping`, `Bytes20Mapping` and `Bytes20MappingWithGrouping`), the term *"word"* COULD describe:
-- a single word (*e.g.: "SupportedStandards"*)
-- a random string, or sequence of characters (*e.g.: "RG58012-RO-120-Y"*)
-
-For the mapping key types, the *"word"* MUST NOT contain a ":" (colon character), as it is used for the delimiter between both words.
+| [`Singleton`](#singleton)  | A simple key  | `bytes32(keccak256("MyKeyName"))`<br> --- <br> `MyKeyName` -->  `0x35e6950bc8d21a1699e58328a3c4066df5803bb0b570d0150cb3819288e764b2` |
+| [`Array`](#array)  | an array spanning multiple ERC725Y keys  | `bytes32(keccak256("MyKeyName[]"))` <br> --- <br> `MyKeyName[]` -->   `0x24f6297f3abd5a8b82f1a48cee167cdecef40aa98fbf14534ea3539f66ca834c`|
+| [`Mapping`](#mapping)  | a key that map two words  | `bytes16(keccak256("MyKeyName"))` + `bytes12(0)` + `bytes4(keccak256("MapName"))` <br> --- <br> `MyKeyName:MapName` -->  `0x24f6297f3abd5a8b82f1a48cee167cde000000000000000000000000e6041813` |
+| [`Bytes20Mapping`](#bytes20mapping)  | a key that maps a word to a `bytes20` value, such as (but not restricted to) an `address` | `bytes8(keccak256("MyKeyName"))` + `bytes4(0)` +  `bytes20(dynamicValue)` <br> --- <br> `MyKeyName:cafecafecafecafecafecafecafecafecafecafe` -->  `0x35e6950bc8d21a1600000000cafecafecafecafecafecafecafecafecafecafe` |
+| [`Bytes20MappingWithGrouping`](#bytes20mappingwithgrouping)  | a key that maps a word to another word to a `bytes20` value, such as (but not restricted to) an `address`  | `bytes4(keccak256("MyKeyName"))` + `bytes4(0)` + `bytes2(keccak256("MapName"))` + `bytes2(0)` +  `bytes20(dynamicValue)` <br> --- <br> `MyKeyName:MapName:cafecafecafecafecafecafecafecafecafecafe` -->  `0x35e6950b00000000e6040000cafecafecafecafecafecafecafecafecafecafe` |
 
 
 ### `valueType`
