@@ -182,7 +182,7 @@ The `valueType` can also be useful for typecasting. It enables contracts or inte
 
 ### `valueContent`
 
-Describes how to interpret the content of the returned value.
+Describes how to interpret the content of the returned *decoded* value.
 
 To illustrate, a string could be interpreted in multiple ways, such as:
 - a single word, or a sequence of words (*e.g.: "My Custom Token Name"*)
