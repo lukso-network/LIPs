@@ -255,9 +255,7 @@ For the **Array** `keyType`, the initial `key` contains the total number of elem
 
 Each Array element can be accessed through its own `key`. The `key` of an Array element consists of `bytes16(keccak256(KeyName)) + bytes16(uint128(ArrayElementIndex))`, where:
 - `bytes16(keccak256(KeyName))` = The first 16 bytes are the keccak256 hash of the full Array key `name` (including the `[]`) (e.g.: `LSP3IssuedAssets[]`)
-- `bytes16(uint128(ArrayElementIndex))` = the position (= index) of the element in the array (NB: elements index access start at `0`)
-
-> NB: element index access starts at number `0`
+- `bytes16(uint128(ArrayElementIndex))` = the position (= index) of the element in the array (**NB**: elements index access start at `0`)
 
 *example:*
 
@@ -310,10 +308,8 @@ A **Mapping** key is constructed using `bytes16(keccak256("FirstWord")) + bytes1
 ```
 
 
-- `keccak256("FirstWord")` = `0x`<mark>`f49648de3734d6c5458244ad87c893b5`</mark>`0e6367d2cfa4670eddec109d1fc952e0` (**first 16 bytes** of the hash)
-- `keccak256("SecondWord")` = `0x`<mark>`53022d37`</mark>`21822ca6332135de9e7b98f9a82eb1051d3095d2e259b45149c9b634` (**first 4 bytes** of the hash)
-
-<span style="background-color: red">Marked text</span>
+- `keccak256("FirstWord")` = `0x`**`f49648de3734d6c5458244ad87c893b5`**`0e6367d2cfa4670eddec109d1fc952e0` (**first 16 bytes** of the hash)
+- `keccak256("SecondWord")` = `0x`**`53022d37`**`21822ca6332135de9e7b98f9a82eb1051d3095d2e259b45149c9b634` (**first 4 bytes** of the hash)
 
 
 ### Bytes20Mapping
