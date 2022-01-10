@@ -351,6 +351,25 @@ Each bit can be either set (`1`) or not (`0`). The point of the BitArray `valueC
 
 A BitArray can be used as a mapping of values to states (on/off, allowed/disallowed, locked/unlocked, valid/invalid), where the max number of available values that can be mapped is *n* bits.
 
+Below is an example of a mapping key type:
+
+```json
+{
+    "name": "MyPermissions",
+    "key": "0xaacedf1d8b2cc85524a881760315208fb03c6c26538760922d6b9dee915fd66a",
+    "keyType": "Singleton",
+    "valueType": "bytes32",
+    "valueContent": "BitArray"
+}
+
+> Permissions set to 0010
+`0x000000000000000000000a`
+
+> Permissions set to 0110
+`0x000000000000000000000a`
+
+```
+
 ### AssetURL
 
 The content is bytes containing the following format:
