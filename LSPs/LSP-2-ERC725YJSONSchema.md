@@ -148,9 +148,9 @@ The `keyType` determines how the value(s) should be interpreted.
 |---|---|---|
 | [`Singleton`](#singleton)  | A simple key  | e.g.: `bytes32(keccak256("MyKeyName"))`|
 | [`Array`](#array)  | an array spanning multiple ERC725Y keys  | e.g.: `bytes32(keccak256("MyKeyName[]"))`|
-| [`Mapping`](#mapping)  | a key that map two words  | e.g.: `bytes16(keccak256("MyKeyName")) + `bytes12(0)` + bytes4(keccak256("MapName"))`|
+| [`Mapping`](#mapping)  | a key that map two words  | e.g.: `bytes16(keccak256("MyKeyName"))` + `bytes12(0)` + `bytes4(keccak256("MapName"))`|
 | [`Bytes20Mapping`](#bytes20mapping)  | a key that maps a word to a `bytes20` value, such as (but not restricted to) an `address` | e.g.: `bytes8(keccak256("MyKeyName")) + `bytes4(0)` +  `bytes20(dynamicValue)` |
-| [`Bytes20MappingWithGrouping`](#bytes20mappingwithgrouping)  | a key that maps a word to another word to a `bytes20` value, such as (but not restricted to) an `address`  | e.g.: `bytes4(keccak256("MyKeyName")) + `bytes4(0)` + bytes2(keccak256("MapName")) + `bytes2(0)` +  `bytes20(dynamicValue)` |
+| [`Bytes20MappingWithGrouping`](#bytes20mappingwithgrouping)  | a key that maps a word to another word to a `bytes20` value, such as (but not restricted to) an `address`  | e.g.: `bytes4(keccak256("MyKeyName"))` + `bytes4(0)` + `bytes2(keccak256("MapName"))` + `bytes2(0)` +  `bytes20(dynamicValue)` |
 
 For the mapping key types (`Mapping`, `Bytes20Mapping` and `Bytes20MappingWithGrouping`), the term *"word"* COULD describe:
 - a single word (*e.g.: "SupportedStandards"*)
