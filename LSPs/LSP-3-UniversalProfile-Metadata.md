@@ -38,7 +38,7 @@ The supported standard SHOULD be `LSP3UniversalProfile`
     "name": "SupportedStandards:LSP3UniversalProfile",
     "key": "0xeafec4d89fa9619884b6b89135626455000000000000000000000000abe425d6",
     "keyType": "Mapping",
-    "valueType": "bytes",
+    "valueType": "bytes4",
     "valueContent": "0xabe425d6"
 }
 ```
@@ -202,7 +202,7 @@ ERC725Y JSON Schema `LSP3UniversalProfile`:
         "name": "SupportedStandards:LSP3UniversalProfile",
         "key": "0xeafec4d89fa9619884b6b89135626455000000000000000000000000abe425d6",
         "keyType": "Mapping",
-        "valueType": "bytes",
+        "valueType": "bytes4",
         "valueContent": "0xabe425d6"
     },
     {
