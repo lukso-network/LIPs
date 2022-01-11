@@ -54,7 +54,7 @@ To make ERC725Y keys readable, we describe a key-value pair as a JSON object con
 The table below describes each entries with their available options. 
 
 | Title | Description |
-|::----:-|::----:-|
+|:----|:----|
 |[`name`](#name)| the name of the key |
 |[`key`](#key)| the **unique identifier** of the key |
 |[`keyType`](#keyType)| *How* the key must be treated <hr> [`Singleton`](#Singleton) <br> [`Array`](#Array) <br> [`Mapping`](#Mapping) <br> [`Bytes20Mapping`](#Bytes20Mapping) <br> [`Bytes20MappingWithGrouping`](#Bytes20MappingWithGrouping) |
