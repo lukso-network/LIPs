@@ -54,7 +54,7 @@ To make ERC725Y keys readable, we describe a key-value pair as a JSON object con
 The table below describes each entries with their available options. 
 
 | Title | Description |
-|:-----|:-----|
+|::----:-|::----:-|
 |[`name`](#name)| the name of the key |
 |[`key`](#key)| the **unique identifier** of the key |
 |[`keyType`](#keyType)| *How* the key must be treated <hr> [`Singleton`](#Singleton) <br> [`Array`](#Array) <br> [`Mapping`](#Mapping) <br> [`Bytes20Mapping`](#Bytes20Mapping) <br> [`Bytes20MappingWithGrouping`](#Bytes20MappingWithGrouping) |
@@ -298,24 +298,56 @@ Each bit can be either set (`1`) or not (`0`). The point of the BitArray `valueC
 
 A BitArray can be used as a mapping of values to states (on/off, allowed/disallowed, locked/unlocked, valid/invalid), where the max number of available values that can be mapped is *n* bits.
 
-Below is an example of a mapping key type:
+*example:*
+
+The example shows how a `BitArray` value can be read and interpreted.
 
 ```json
 {
     "name": "MyPermissions",
     "key": "0xaacedf1d8b2cc85524a881760315208fb03c6c26538760922d6b9dee915fd66a",
     "keyType": "Singleton",
-    "valueType": "bytes32",
+    "valueType": "bytes1",
     "valueContent": "BitArray"
 }
+```
 
-> Permissions set to 0010
-`0x000000000000000000000a`
+As the key `name` suggests, it defines a list of (user-defined) permissions, where each permission maps to a single bit at position `n`.
+- When a bit at position `n` is set (`1`), the permission defined at position `n` will be set.
+- When a bit at position `n` is not set (`0`), the permission defined at position `n` will not be set.
 
-> Permissions set to 0110
-`0x000000000000000000000a`
+Since the `valueType` is of type `bytes1`, this key can hold 8 user-defined permissions.
+
+For instance, for the following permissions:
+
+| `SIGN` | `TRANSFER VALUE` | `DEPLOY` | `DELEGATE CALL` | `STATIC CALL` | `CALL` | `SET DATA` | `CHANGE OWNER` |
+|:----:|:----:|:----:|:----:|:----:|:----:|:----:|:----:|
+| `0` / `1` | `0` / `1` | `0` / `1` | `0` / `1` | `0` / `1` | `0` / `1` | `0` / `1` | `0` / `1` |
+
+Setting only the permission `SET DATA` will result in the following `bytes1` value (and its binary representation)
 
 ```
+> Permission SET DATA = permissions set to 0000 0010
+`0x02` (4 in decimal)
+```
+
+| `SIGN` | `TRANSFER VALUE` | `DEPLOY` | `DELEGATE CALL` | `STATIC CALL` | `CALL` | `SET DATA` | `CHANGE OWNER` |
+|:----:|:----:|:----:|:----:|:----:|:----:|:----:|:----:|
+| `0` | `0` | `0` | `0` | `0` | `0` | `1` | `0` |
+
+Setting multiple permissions like `TRANSFER VALUE + CALL + SET DATA` will result in the following `bytes1` value (and its binary representation)
+
+```
+> Permissions set to 0100 0110
+`0x46` (70 in decimal)
+
+```
+
+| `SIGN` | `TRANSFER VALUE` | `DEPLOY` | `DELEGATE CALL` | `STATIC CALL` | `CALL` | `SET DATA` | `CHANGE OWNER` |
+|:----:|:----:|:----:|:----:|:----:|:----:|:----:|:----:|
+| `0` | `1` | `0` | `0` | `0` | `1` | `1` | `0` |
+
+The idea is to always read the value of a **BitArray** key as binary digits, while its content is always written as a `bytes1` (in hex) in the ERC725Y contract storage.
 
 ### AssetURL
 
