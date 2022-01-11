@@ -53,66 +53,13 @@ To make ERC725Y keys readable, we describe a key-value pair as a JSON object con
 
 The table below describes each entries with their available options. 
 
-<table style="text-align: center">
-    <thead>
-        <tr>
-            <th style="text-align: center"><a href="#name"><code>name</code></th>
-            <th style="text-align: center"><a href="#key"><code>key</code></th>
-            <th style="text-align: center"><a href="#keyType"><code>keyType</code></th>
-            <th style="text-align: center"><a href="#valueType"><code>valueType</code></th>
-            <th style="text-align: center"><a href="#valueContent"><code>valueContent</code></th>
-        </tr>
-    </thead>
-    <tbody align="center">
-        <tr>
-            <td>the name of the key</td>
-            <td>the <b>unique identifier</b> of the key</td>
-            <td>
-                <i>How</i> the key MUST be <b>treated</b>
-                <hr>
-                <p><a href="#singleton"><code>Singleton</code></a></p>
-                <p><a href="#array"><code>Array</code></a></p>
-                <p><a href="#mapping"><code>Mapping</code></a></p>
-                <p><a href="#bytes20mapping"><code>Bytes20Mapping</code></a></p>
-                <p><a href="#bytes20mappingwithgrouping"><code>Bytes20MappingWithGrouping</code></a></p>
-            </td>
-            <td align="center">
-                <i>How</i> a value MUST be <b>decoded</b>
-                <hr>
-                <p><code>boolean</code></p>
-                <p><code>string</code></p>
-                <p><code>address</code></p>
-                <p><code>uintN</code></p>
-                <p><code>intN</code></p>
-                <p><code>bytesN</code></p>
-                <p><code>bytes</code></p>
-                <p><code>uintN[]</code></p>
-                <p><code>intN[]</code></p>
-                <p><code>string[]</code></p>
-                <p><code>address[]</code></p>
-                <p><code>bytes[]</code></p>
-            </td>
-            <td style="text-align: center">
-                <i>How</i> a value SHOULD be <b>interpreted</b>
-                <hr>
-                <p><code>Boolean</code></p>
-                <p><code>String</code></p>
-                <p><code>Address</code></p>
-                <p><code>Number</code></p>
-                <p><code>BytesN</code></p>
-                <p><code>Bytes</code></p>
-                <p><code>Keccak256</code></p>
-                <p><a href="#bitarray"><code>BitArray</code></a></p>
-                <p><code>URL</code></p>
-                <p><a href="#asseturl"><code>AssetURL</code></a></p>
-                <p><a href="#jsonurl"><code>JSONURL</code></a></p>
-                <p><code>Markdown</code></p>
-                <p><code>Literal</code><br/> (<u>e.g.:</u> <code>0x1345ABCD...</code>)</p>
-            </td>
-        </tr>
-    </tbody>
-</table>
-
+| Title | Description |
+|:-----|:-----|
+|[`name`](#name)| the name of the key |
+|[`key`](#key)| the **unique identifier** of the key |
+|[`keyType`](#keyType)| *How* the key must be treated <hr> [`Singleton`](#Singleton) <br> [`Array`](#Array) <br> [`Mapping`](#Mapping) <br> [`Bytes20Mapping`](#Bytes20Mapping) <br> [`Bytes20MappingWithGrouping`](#Bytes20MappingWithGrouping) |
+|[`valueType`](#valueType)| *How* a value MUST be decoded <hr> `boolean` <br> `string` <br> `address` <br> `uintN` <br> `intN` <br> `bytesN` <br> `bytes` <br> `uintN[]` <br> `intN[]` <br> `string[]` <br> `address[]` <br> `bytes[]` |
+|[`valueContent`](#valueContent)| *How* a value SHOULD be interpreted <hr> `Boolean` <br> `String` <br> `Address` <br> `Number` <br> `BytesN` <br> `Bytes` <br> `Keccak256` <br> [`BitArray`](#BitArray) <br> `URL` <br> [`AssetURL`](#AssetURL) <br> [`JSONURL`](#JSONURL) <br> `Markdown` <br> `Literal` (*e.g.:* `0x1345ABCD...`) |
 
 ### `name`
 
