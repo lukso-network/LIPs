@@ -81,7 +81,7 @@ The `key` is a `bytes32` value that acts as the **unique identifier** for the ke
 The standard `keccak256` hashing algorithm is used to generate this identifier. However, *how* the identifier is constructed varies, depending on the `keyType`:
 
 - for `Singleton` keys: the hash of the key name (*e.g.:* `keccak256('MyKeyName') = 0x35e6950bc8d21a1699e58328a3c4066df5803bb0b570d0150cb3819288e764b2`)
-- for `Array` keys (see [`Array`](#array) section for more details)
+- for `Array` keys (see [`Array`](#array) section for more details), **a combination of:**
   - an initial key containing the array length.
   - subsequent keys for array index access.
 - for mapping keys, see each mapping type separately below.
