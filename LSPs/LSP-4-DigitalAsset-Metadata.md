@@ -185,7 +185,9 @@ References the creator addresses for this asset.
 The `valueContent` MUST be constructed as follows: `bytes8(indexNumber) + bytes4(standardInterfaceId)`. 
 Where:
 - `indexNumber` = the index in the [`LSP4Creators[]` Array](#lsp3issuedassets)
-- `standardInterfaceId` = if the creator address is a smart contract, the [ERC165 interface ID](https://eips.ethereum.org/EIPS/eip-165) of the standard that the smart contract implements. Otherwise `0x00000000`
+- `standardInterfaceId` = if the creator address is a smart contract, the [ERC165 interface ID](https://eips.ethereum.org/EIPS/eip-165) of the standard that the smart contract implements. Otherwise `0x00000000` in the case where the creator address is:
+  - an Externally Owned Account, or 
+  - a contract implementing an unknown ERC165 interface ID.
 
 ```json
 {
