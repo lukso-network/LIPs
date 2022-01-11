@@ -12,61 +12,153 @@ requires: ERC725Y
 
 ## Simple Summary
 
-This schema describes how a set of [ERC725Y](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) key values can be described.
+This schema defines how a single [ERC725Y](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) key-value pair can be described. It can be used as an abstract structure over the storage of an ERC725Y smart contract.
 
 ## Abstract
 
-ERC725Y allow smart contracts to store key value stores (`bytes32` > `bytes`).
-This schema allows to standardize the key values that can be used in ERC725Y sub standards.
+ERC725Y enables storing any data in a smart contract as `bytes32 => bytes` key-value pairs.
+
+Although this improves interaction with the data stored, it remains difficult to understand the layout of the contract storage. This is because both the key and the value are addressed in raw bytes.
+
+This schema allows to standardize those keys and values so that they can be more easily accessed and interpreted. It can be used to create ERC725Y sub-standards, made of pre-defined sets of ERC725Y keys.
 
 ## Motivation
 
-This schema defines a way to make those key values automatically parsable, so a interface or smart contract knows how to read and interact with them. 
+A schema defines a blueprint for how a data store is constructed.
+
+In the context of smart contracts, it can offer a better view of how the data is organised and structured within the contract storage.
+
+Using a standardised schema over ERC725Y enables those keys and values to be easily readable and automatically parsable. Contracts and interfaces can know how to read and interact with the storage of an ERC725Y smart contract.
+
+The advantage of such schema is to allow interfaces or smart contracts to better decode (read, parse and interpret) the data stored in an ERC725Y contract. It is less error-prone due to knowing data types upfront. On the other hand, it also enables interfaces and contracts to know how to correctly encode data, before being set on an ERC725Y contract.
 
 This schema is for example used in [ERC725](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) based smart contracts like
 [LSP3-UniversalProfile](https://github.com/lukso-network/LIPs/blob/main/LSPs/LSP-3-UniversalProfile-Metadata.md) and [LSP4-DigitalAsset-Metadata](https://github.com/lukso-network/LIPs/blob/main/LSPs/LSP-4-DigitalAsset-Metadata.md).
 
-
 ## Specification
 
-To make ERC725Y keys readable we define the following key value types:   
-(Note: this set is not complete yet, and should be extended over time)
+> **Note:** described sets might not yet be complete, as they could be extended over time.
 
-- `name`: Describes the name of the key, SHOULD compromise of the Standards name + sub type. e.g: `LSP2Name`
-- `key`: the keccak256 hash of the name. This is the actual key that MUST be retrievable via `ERC725Y.getData(bytes32 key)`. e.g: `keccack256('LSP2Name') = 0xf9e26448acc9f20625c059a95279675b8f58ba4f06d262f83a32b4dd35dee019`
-- `keyType`: Types that determine how the values should be interpreted. Valid types are:
-    - [`Singleton`](#singleton): A simple key.
-    - [`Array`](#array): An array spanning multiple ERC725Y keys.
-    - [`Mapping`](#mapping): A key that maps two words.
-    - [`Bytes20Mapping`](#bytes20mapping): A key that maps a word to an address.
-    - [`Bytes20MappingWithGrouping`](#bytes20mappingwithgrouping): A key that maps a word, to a grouping word to an address.
-- `valueType`: The type the content MUST be decoded with.
-    - `string`: The bytes are a UTF8 encoded string
-    - `address`: The bytes are an 20 bytes address
-    - `uint256`: The bytes are a uint256
-    - `bytes32`: The bytes are a 32 bytes
-    - `bytes`: The bytes are a bytes
-    - `string[]`: The bytes are a UTF8 encoded string array
-    - `address[]`: The bytes are an 20 bytes address array
-    - `uint256[]`: The bytes are a uint256 array
-    - `bytes[]`: The bytes are a bytes array
-    - `bytesN[]`: The bytes are a N bytes
-- `valueContent`: The content in the returned value. Valid values are:
-    - `Bytes`: The content are bytes. 
-    - `BytesN`: The content are bytes with length N.
-    - `Number`: The content is a number.
-    - `String`: The content is a UTF8 string.
-    - `Address`: The content is an address.
-    - `Keccak256`: The content is an keccak256 32 bytes hash.
-    - [`AssetURL`](#asseturl): The content contains the hash function, hash and link to the asset file.
-    - [`JSONURL`](#jsonurl): The content contains the hash function, hash and link to the JSON file.
-    - `URL`: The content is an URL encoded as UTF8 string.
-    - `Markdown`: The content is structured Markdown mostly encoded as UTF8 string.
-    - `0x1345ABCD...`: If the value content are specific bytes, than the returned value is expected to equal those bytes.
-  
+To make ERC725Y keys readable, we describe a key-value pair as a JSON object containing the following entries:
+
+```json
+{
+    "name": "...",
+    "key": "...",
+    "keyType": "...",
+    "valueType": "...",
+    "valueContent": "..."
+}
+```
+
+The table below describes each entries with their available options. 
+
+| Title | Description |
+|:----|:----|
+|[`name`](#name)| the name of the key |
+|[`key`](#key)| the **unique identifier** of the key |
+|[`keyType`](#keyType)| *How* the key must be treated <hr> [`Singleton`](#Singleton) <br> [`Array`](#Array) <br> [`Mapping`](#Mapping) <br> [`Bytes20Mapping`](#Bytes20Mapping) <br> [`Bytes20MappingWithGrouping`](#Bytes20MappingWithGrouping) |
+|[`valueType`](#valueType)| *How* a value MUST be decoded <hr> `boolean` <br> `string` <br> `address` <br> `uintN` <br> `intN` <br> `bytesN` <br> `bytes` <br> `uintN[]` <br> `intN[]` <br> `string[]` <br> `address[]` <br> `bytes[]` |
+|[`valueContent`](#valueContent)| *How* a value SHOULD be interpreted <hr> `Boolean` <br> `String` <br> `Address` <br> `Number` <br> `BytesN` <br> `Bytes` <br> `Keccak256` <br> [`BitArray`](#BitArray) <br> `URL` <br> [`AssetURL`](#AssetURL) <br> [`JSONURL`](#JSONURL) <br> `Markdown` <br> `Literal` (*e.g.:* `0x1345ABCD...`) |
+
+### `name`
+
+The `name` is the human-readable format of the ERC725Y key. It aims to abstract the representation of the ERC725Y key and defines what the key represents. In most cases, it SHOULD highlight the intent behind the key.
+
+In scenarios where an ERC725Y key is part of an LSP Standard, the key `name` SHOULD be comprised of the following: `LSP{N}{KeyName}`, where
+
+- `LSP`: abbreviation for **L**UKSO **S**tandards **P**roposal.
+- `N`: the **Standard Number** this key refers to.
+- `KeyName`: base of the key name. Should represent the meaning of a value stored behind the key.
+
+*e.g.:* `MyColourTheme` (not part of any LSP Standard), `LSP4TokenName` (part of a LSP standard)
+
+
+### `key`
+
+The `key` is a `bytes32` value that acts as the **unique identifier** for the key. It is the actual key that MUST be used to retrieve the value stored in the contract storage, via `ERC725Y.getData(bytes32 key)`.
+
+The standard `keccak256` hashing algorithm is used to generate this identifier. However, *how* the identifier is constructed varies, depending on the `keyType`:
+
+- for `Singleton` keys: the hash of the key name (*e.g.:* `keccak256('MyKeyName') = 0x35e6950bc8d21a1699e58328a3c4066df5803bb0b570d0150cb3819288e764b2`)
+- for `Array` keys (see [`Array`](#array) section for more details), **a combination of:**
+  - an initial key containing the array length.
+  - subsequent keys for array index access.
+- for mapping keys, see each mapping type separately below.
+
+
+### `keyType`
+
+The `keyType` determines how the value(s) should be interpreted.
+
+| `keyType` | Description  | Example |
+|---|---|---|
+| [`Singleton`](#singleton)  | A simple key  | `bytes32(keccak256("MyKeyName"))`<br> --- <br> `MyKeyName` -->  `0x35e6950bc8d21a1699e58328a3c4066df5803bb0b570d0150cb3819288e764b2` |
+| [`Array`](#array)  | an array spanning multiple ERC725Y keys  | `bytes32(keccak256("MyKeyName[]"))` <br> --- <br> `MyKeyName[]` -->   `0x24f6297f3abd5a8b82f1a48cee167cdecef40aa98fbf14534ea3539f66ca834c`|
+| [`Mapping`](#mapping)  | a key that map two words  | `bytes16(keccak256("MyKeyName"))` + `bytes12(0)` + `bytes4(keccak256("MapName"))` <br> --- <br> `MyKeyName:MapName` -->  `0x24f6297f3abd5a8b82f1a48cee167cde000000000000000000000000e6041813` |
+| [`Bytes20Mapping`](#bytes20mapping)  | a key that maps a word to a `bytes20` value, such as (but not restricted to) an `address` | `bytes8(keccak256("MyKeyName"))` + `bytes4(0)` +  `bytes20(dynamicValue)` <br> --- <br> `MyKeyName:cafecafecafecafecafecafecafecafecafecafe` -->  `0x35e6950bc8d21a1600000000cafecafecafecafecafecafecafecafecafecafe` |
+| [`Bytes20MappingWithGrouping`](#bytes20mappingwithgrouping)  | a key that maps a word to another word to a `bytes20` value, such as (but not restricted to) an `address`  | `bytes4(keccak256("MyKeyName"))` + `bytes4(0)` + `bytes2(keccak256("MapName"))` + `bytes2(0)` +  `bytes20(dynamicValue)` <br> --- <br> `MyKeyName:MapName:cafecafecafecafecafecafecafecafecafecafe` -->  `0x35e6950b00000000e6040000cafecafecafecafecafecafecafecafecafecafe` |
+
+
+### `valueType`
+
+Describes the underlying data type of a value stored under a specific ERC725Y key. It refers to the type for the smart contract language like [Solidity](https://docs.soliditylang.org).
+
+The `valueType` is relevant for interfaces to know how a value MUST be encoded/decoded. This include:
+
+- how to decode a value fetched via `ERC725Y.getData(...)`
+- how to encode a value that needs to be set via `ERC725Y.setData(...)`. 
+
+The `valueType` can also be useful for typecasting. It enables contracts or interfaces to know how to manipulate the data and the limitations behind its type. To illustrate, an interface could know that it cannot set the value to `300` if its `valueType` is `uint8` (max `uint8` allowed = `255`).
+
+| `valueType` | Description |
+|---|---|
+| `boolean`  | a value as either **true** or **false** |
+| `string`  | an UTF8 encoded string  |
+| `address`  | a 20 bytes long address |
+| `uintN`  | an **unsigned** integer (= only positive number) of size `N`  |
+| `intN`  |a **signed** integer (= either positive or negative number) of size `N` |
+| `bytesN`  | a bytes value of **fixed-size** `N`, from `bytes1` up to `bytes32` |
+| `bytes`  | a bytes value of **dynamic-size** |
+| `uintN[]`  | an array of **signed** integers |
+| `intN[]`  | an array of **unsigned** integers |
+| `string[]`  | an array of UTF8 encoded strings |
+| `address[]`  | an array of addresses   |
+| `bytes[]`   | an array of dynamic size bytes  |
+| `bytesN[]`  | an array of fixed size bytes  |
+
+### `valueContent`
+
+Describes how to interpret the content of the returned *decoded* value.
+
+To illustrate, a string could be interpreted in multiple ways, such as:
+- a single word, or a sequence of words (*e.g.: "My Custom Token Name"*)
+- an URL (*e.g.: "ipfs://QmW4nUNy3vtvr3DxZHuLfSLnhzKMe2WmgsUsEGPPFh8Ztp"*)
+
+Valid `valueContent` are:
+
+| `valueContent` | Description  |
+|---|---|
+| `String`  | an UTF8 encoded string |
+| `Address`  | an address |
+| `Number`  | a Number (positive or negative, depending on the `keyType`)  |
+| `BytesN`  | a bytes value of **fixed-size** `N`, from `bytes1` up to `bytes32`  |
+| `Bytes`  | a bytes value of **dynamic-size** |
+| `Keccak256`  | a 32 bytes long hash digest, obtained from the keccak256 hashing algorithm |
+| `BitArray`  | an array of single `1` or `0` bits |
+| `URL`  | an URL encoded as an UTF8 string |
+| [`AssetURL`](#asseturl)  | The content contains the hash function, hash and link to the asset file  |
+| [`JSONURL`](#jsonurl)  |  hash function, hash and link to the JSON file |
+| `Markdown`  | a structured Markdown mostly encoded as UTF8 string  |
+| `0x1345ABCD...`  | a **literal** value, when the returned value is expected to equal some specific bytes |
+
+
+---
+
+
 ### Singleton
 
-A simple key is constructed using `bytes32(keccak256(KeyName))`,
+A **Singleton** key refers to a simple key. It is constructed using `bytes32(keccak256("KeyName"))`,
 
 Below is an example of a Singleton key type:
 
@@ -75,51 +167,57 @@ Below is an example of a Singleton key type:
     "name": "MyKeyName",
     "key": "0x35e6950bc8d21a1699e58328a3c4066df5803bb0b570d0150cb3819288e764b2",
     "keyType": "Singleton",
-    "valueType": "Mixed",
-    "valueContent": "Mixed"
+    "valueType": "...",
+    "valueContent": "..."
 }
 ```
 
+`keccak256("MyKeyName")` = `0x`**`35e6950bc8d21a1699e58328a3c4066df5803bb0b570d0150cb3819288e764b2`**
+
 ### Array
 
-An initial key of an array containing the array length constructed using `bytes32(keccak256(KeyName))`.
-Subsequent keys consist of `bytes16(keccak256(KeyName)) + bytes16(uint128(ArrayElementIndex))`.
+An array of elements, where each element has the same `valueType`.
 
-*The advantage of the `keyType` Array over using simple array elements like `address[]`, is that the amount of elements that can be stored is unlimited.
-Storing an encoded array as a value, will reuqire a set amount of gas, which can exceed the block gas limit.*
+> *The advantage of the `keyType` Array over a standard array of elements like `address[]`, is that the amount of elements that can be stored is unlimited.
+> Storing an encoded array as a value, will require a set amount of gas, which can exceed the block gas limit.*
 
-If you require multiple keys of the same key type they MUST be defined as follows:
+**Requirements:**
 
-- The keytype name MUST have a `[]` add and then hashed
-- The key hash MUST contain the number of all elements, and is required to be updated when a new key element is added.
+A key of **Array** type MUST have the following requirements:
 
-For all other elements:
+- The `name` of the key MUST have a `[]` (square brackets).
+- The `key` itself MUST be the keccak256 hash digest of the **full key `name`, including the square brackets `[]`**
+- The value stored under the full key hash MUST contain the total number of elements (= array length). It MUST be updated every time a new element is added to the array.
+- The value stored under the full key hash **MUST be stored as `uint256`** (32 bytes long, padded left with leading zeros).
 
-- The first 16 bytes are the first 16 bytes of the key hash
-- The second 16 bytes is a `uint128` of the number of the element
-- Elements start at number `0`
+**Construction:**
 
-This would looks as follows for `LSP3IssuedAssets[]`:
+For the **Array** `keyType`, the initial `key` contains the total number of elements stored in the Array (= array length). It is constructed using `bytes32(keccak256(KeyName))`.
 
-- element number: key: `0x3a47ab5bd3a594c3a8995f8fa58d0876c96819ca4516bd76100c92462f2f9dc0`, value: `0x0000000000000000000000000000000000000000000000000000000000000002` (2 elements)
-- element 1: key: `0x3a47ab5bd3a594c3a8995f8fa58d087600000000000000000000000000000000`, value: `0x123...` (element 0)
-- element 2: key: `0x3a47ab5bd3a594c3a8995f8fa58d087600000000000000000000000000000001`, value: `0x321...` (element 1)
+Each Array element can be accessed through its own `key`. The `key` of an Array element consists of `bytes16(keccak256(KeyName)) + bytes16(uint128(ArrayElementIndex))`, where:
+- `bytes16(keccak256(KeyName))` = The first 16 bytes are the keccak256 hash of the full Array key `name` (including the `[]`) (e.g.: `LSP3IssuedAssets[]`)
+- `bytes16(uint128(ArrayElementIndex))` = the position (= index) of the element in the array (**NB**: elements index access start at `0`)
+
+*example:*
+
+Below is an example for the **Array** key named `LSP3IssuedAssets[]`.
+
+- total number of elements: 
+  - key: `0x3a47ab5bd3a594c3a8995f8fa58d0876c96819ca4516bd76100c92462f2f9dc0`, 
+  - value: `0x0000000000000000000000000000000000000000000000000000000000000002` (2 elements)
+- element 1: key: `0x3a47ab5bd3a594c3a8995f8fa58d087600000000000000000000000000000000`, value: `0x123...` (index 0)
+- element 2: key: `0x3a47ab5bd3a594c3a8995f8fa58d087600000000000000000000000000000001`, value: `0x321...` (index 1)
 ...
-
-
-Below is an example of an Array key type:
 
 ```json
 {
     "name": "LSP3IssuedAssets[]",
     "key": "0x3a47ab5bd3a594c3a8995f8fa58d0876c96819ca4516bd76100c92462f2f9dc0",
     "keyType": "Array",
-    "valueType": "address", // describes the content of the elements
-    "valueContent": "Address" // describes the content of the elements
+    "valueType": "address", // describes the type of each element
+    "valueContent": "Address" // describes the value of each element
 }
 ```
-
-#### Example
 
 ```solidity
 key: keccak256('LSP3IssuedAssets[]') = 0x3a47ab5bd3a594c3a8995f8fa58d0876c96819ca4516bd76100c92462f2f9dc0
@@ -127,54 +225,58 @@ value: uint256 (array length) e.g. 0x0000000000000000000000000000000000000000000
 
 // array items
 
-// element 0
+// 1st element (index 0)
 key: 0x3a47ab5bd3a594c3a8995f8fa58d087600000000000000000000000000000000
 value: 0xcafecafecafecafecafecafecafecafecafecafe
 
-// element 1
+// 2nd element (index 1)
 key: 0x3a47ab5bd3a594c3a8995f8fa58d087600000000000000000000000000000001
 value: 0xcafecafecafecafecafecafecafecafecafecafe
 ```
 
 ### Mapping
 
-A mapping key is constructed using `bytes16(keccak256(FirstWord)) + bytes12(0) + bytes4(keccak256(LastWord))`,    
+A **Mapping** key is constructed using `bytes16(keccak256("FirstWord")) + bytes12(0) + bytes4(keccak256("SecondWord"))`.  
 
-Below is an example of a mapping key type:
+*example:*
 
 ```json
 {
-    "name": "SupportedStandards:ERC725Account",
-    "key": "0xeafec4d89fa9619884b6b89135626455000000000000000000000000afdeb5d6",
+    "name": "FirstWord:SecondWord",
+    "key": "0xeafec4d89fa9619884b6b89135626455000000000000000000000000abe425d6",
     "keyType": "Mapping",
-    "valueType": "Mixed",
-    "valueContent": "Mixed"
+    "valueType": "...",
+    "valueContent": "..."
 }
 ```
 
+
+- `keccak256("FirstWord")` = `0x`**`f49648de3734d6c5458244ad87c893b5`**`0e6367d2cfa4670eddec109d1fc952e0` (**first 16 bytes** of the hash)
+- `keccak256("SecondWord")` = `0x`**`53022d37`**`21822ca6332135de9e7b98f9a82eb1051d3095d2e259b45149c9b634` (**first 4 bytes** of the hash)
+
+
 ### Bytes20Mapping
 
-Bytes 20 mapping could be used to map words to addresses, or other bytes 20 long data.
-An bytes mapping key is constructed using `bytes8(keccak256(FirstWord)) + bytes4(0) + bytes20(address)`.
+**Bytes20Mapping** could be used to map words to `bytes20` long data, such as `addresses`. Such key type can be useful when the second word in the mapping is too long and makes the key greater than 32 bytes.
 
-e.g. `MyCoolAddress:<address>` > `0x22496f48a493035f 00000000 cafecafecafecafecafecafecafecafecafecafe`.
+A **Bytes20Mapping** mapping key is constructed using `bytes8(keccak256(FirstWord)) + bytes4(0) + bytes20(address)`.
 
-Below is an example of an bytes20 mapping key type:
+*e.g.:* `MyCoolAddress:<address>` > `0x22496f48a493035f 00000000 cafecafecafecafecafecafecafecafecafecafe`
 
 ```json
 {
     "name": "MyCoolAddress:cafecafecafecafecafecafecafecafecafecafe",
     "key": "0x22496f48a493035f00000000cafecafecafecafecafecafecafecafecafecafe",
     "keyType": "Bytes20Mapping",
-    "valueType": "Mixed",
-    "valueContent": "Mixed"
+    "valueType": "...",
+    "valueContent": "..."
 }
 ```
 
 ### Bytes20MappingWithGrouping
 
-Bytes 20 mapping with grouping could be used to map two words to addresses, or other bytes 20 long data.
-A mapping key, constructed using `bytes4(keccak256(FirstWord)) + bytes4(0) + bytes2(keccak256(SecondWord)) + bytes2(0) + bytes20(address)`,     
+A **Bytes20MappingWithGrouping** key could be used to map two words to addresses, or other bytes 20 long data.
+This key is constructed using `bytes4(keccak256(FirstWord)) + bytes4(0) + bytes2(keccak256(SecondWord)) + bytes2(0) + bytes20(address)`,     
 
 e.g. `AddressPermissions:Permissions:<address>` > `0x4b80742d 00000000 eced 0000 cafecafecafecafecafecafecafecafecafecafe`.
 
@@ -185,10 +287,69 @@ Below is an example of a mapping key type:
     "name": "AddressPermissions:Permissions:cafecafecafecafecafecafecafecafecafecafe",
     "key": "0x4b80742d0000000082ac0000cafecafecafecafecafecafecafecafecafecafe",
     "keyType": "Bytes20MappingWithGrouping",
-    "valueType": "Mixed",
-    "valueContent": "Mixed"
+    "valueType": "...",
+    "valueContent": "..."
 }
 ```
+
+### BitArray
+
+A BitArray describes an array that contains a sequence of bits (`1`s and `0`s).
+
+Each bit can be either set (`1`) or not (`0`). The point of the BitArray `valueContent` is that there are only two possible values, so they can be stored in one bit.
+
+A BitArray can be used as a mapping of values to states (on/off, allowed/disallowed, locked/unlocked, valid/invalid), where the max number of available values that can be mapped is *n* bits.
+
+*example:*
+
+The example shows how a `BitArray` value can be read and interpreted.
+
+```json
+{
+    "name": "MyPermissions",
+    "key": "0xaacedf1d8b2cc85524a881760315208fb03c6c26538760922d6b9dee915fd66a",
+    "keyType": "Singleton",
+    "valueType": "bytes1",
+    "valueContent": "BitArray"
+}
+```
+
+As the key `name` suggests, it defines a list of (user-defined) permissions, where each permission maps to a single bit at position `n`.
+- When a bit at position `n` is set (`1`), the permission defined at position `n` will be set.
+- When a bit at position `n` is not set (`0`), the permission defined at position `n` will not be set.
+
+Since the `valueType` is of type `bytes1`, this key can hold 8 user-defined permissions.
+
+For instance, for the following permissions:
+
+| `SIGN` | `TRANSFER VALUE` | `DEPLOY` | `DELEGATE CALL` | `STATIC CALL` | `CALL` | `SET DATA` | `CHANGE OWNER` |
+|:----:|:----:|:----:|:----:|:----:|:----:|:----:|:----:|
+| `0` / `1` | `0` / `1` | `0` / `1` | `0` / `1` | `0` / `1` | `0` / `1` | `0` / `1` | `0` / `1` |
+
+Setting only the permission `SET DATA` will result in the following `bytes1` value (and its binary representation)
+
+```
+> Permission SET DATA = permissions set to 0000 0010
+`0x02` (4 in decimal)
+```
+
+| `SIGN` | `TRANSFER VALUE` | `DEPLOY` | `DELEGATE CALL` | `STATIC CALL` | `CALL` | `SET DATA` | `CHANGE OWNER` |
+|:----:|:----:|:----:|:----:|:----:|:----:|:----:|:----:|
+| `0` | `0` | `0` | `0` | `0` | `0` | `1` | `0` |
+
+Setting multiple permissions like `TRANSFER VALUE + CALL + SET DATA` will result in the following `bytes1` value (and its binary representation)
+
+```
+> Permissions set to 0100 0110
+`0x46` (70 in decimal)
+
+```
+
+| `SIGN` | `TRANSFER VALUE` | `DEPLOY` | `DELEGATE CALL` | `STATIC CALL` | `CALL` | `SET DATA` | `CHANGE OWNER` |
+|:----:|:----:|:----:|:----:|:----:|:----:|:----:|:----:|
+| `0` | `1` | `0` | `0` | `0` | `1` | `1` | `0` |
+
+The idea is to always read the value of a **BitArray** key as binary digits, while its content is always written as a `bytes1` (in hex) in the ERC725Y contract storage.
 
 ### AssetURL
 
@@ -199,7 +360,7 @@ Known hash functions:
 
 - `0x8019f9b1`: keccak256('keccak256(bytes)')
 
-#### Example
+*example:*
 
 The following shows an example of how to encode an AssetURL:
 
@@ -240,13 +401,13 @@ keccak256(utf8)    hash                                                         
 ### JSONURL
 
 The content is bytes containing the following format:     
-`bytes4(keccack256('hashFunction'))` + `bytes32(keccack256(JSON.stringify(JSON)))` + `utf8ToHex('JSONURL')`
+`bytes4(keccak256('hashFunction'))` + `bytes32(keccak256(JSON.stringify(JSON)))` + `utf8ToHex('JSONURL')`
 
 Known hash functions:
 
 - `0x6f357c6a`: keccak256('keccak256(utf8)')
 
-#### Example
+*example:*
 
 The following shows an example of how to encode a JSON object:
 
@@ -314,22 +475,22 @@ if(hashFunction === '0x6f357c6a') {
 
 ## Rationale
 
-The structure of the key value layout as JSON allows interfaces to auto decode these key values as they will know how to decode them.   
-`keyType` always describes *how* a key MUST be treated.    
-and `valueType` describes how the value MUST be decoded. And `value` always describes *how* a value SHOULD be treated.
+The structure of the key value layout as JSON allows interfaces to auto decode these key values as they will know how to decode them.
 
-## Example
+## Implementation
 
-To allow interfaces to auto decode an ERC725Y key value store using the ERC725Y JSON Schema:
+Below is an example of an ERC725Y JSON Schema containing 3 x ERC725Y keys.
+
+Using such schema allows interfaces to auto decode and interpret the values retrieved from the ERC725Y key-value store.
 
 ```json
 [
     {
-        "name": "SupportedStandards:ERC725Account",
-        "key": "0xeafec4d89fa9619884b6b89135626455000000000000000000000000afdeb5d6",
+        "name": "SupportedStandards:LSP3UniversalProfile",
+        "key": "0xeafec4d89fa9619884b6b89135626455000000000000000000000000abe425d6",
         "keyType": "Mapping",
         "valueType": "bytes4",
-        "valueContent": "0xafdeb5d6"
+        "valueContent": "0xabe425d6"
     },
     {
         "name": "LSP3Profile",
