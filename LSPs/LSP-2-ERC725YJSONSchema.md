@@ -12,15 +12,15 @@ requires: ERC725Y
 
 ## Simple Summary
 
-This schema defines how a set of [ERC725Y](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) key-value pairs can be described. It can be used as an abstract structure over the storage of an ERC725Y smart contract.
+This schema defines how a single [ERC725Y](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) key-value pair can be described. It can be used as an abstract structure over the storage of an ERC725Y smart contract.
 
 ## Abstract
 
-ERC725Y enables storing any data in a smart contract as `bytes32` > `bytes` key-value pairs.
+ERC725Y enables storing any data in a smart contract as `bytes32 => bytes` key-value pairs.
 
-Although this improves the way to interact with the data stored, it remains difficult to understand the layout of the contract storage. This is because both the key and the value are addressed in raw bytes.
+Although this improves interaction with the data stored, it remains difficult to understand the layout of the contract storage. This is because both the key and the value are addressed in raw bytes.
 
-This schema allows to standardize those keys and values so that they can be more easily accessed and interpreted. It can be used to create ERC725Y sub-standards, made of pre-defined sets of ERC725Y keys (Metadata Standards).
+This schema allows to standardize those keys and values so that they can be more easily accessed and interpreted. It can be used to create ERC725Y sub-standards, made of pre-defined sets of ERC725Y keys.
 
 ## Motivation
 
@@ -28,16 +28,16 @@ A schema defines a blueprint for how a data store is constructed.
 
 In the context of smart contracts, it can offer a better view of how the data is organised and structured within the contract storage.
 
-Using a schema over ERC725Y enables those keys and values to be easily readable and automatically parsable. Contracts and interfaces can know how to read and interact with the storage of an ERC725Y smart contract.
+Using a standardised schema over ERC725Y enables those keys and values to be easily readable and automatically parsable. Contracts and interfaces can know how to read and interact with the storage of an ERC725Y smart contract.
 
-The benefit of such schema is to allow interfaces or smart contracts to better decode (read, parse and interpret) the data stored in an ERC725Y contract. On the other hand, it also enables interfaces and contracts to know how to correctly encode data, before being set on an ERC725Y contract.
+The advantage of such schema is to allow interfaces or smart contracts to better decode (read, parse and interpret) the data stored in an ERC725Y contract. It is less error-prone due to knowing data types upfront. On the other hand, it also enables interfaces and contracts to know how to correctly encode data, before being set on an ERC725Y contract.
 
 This schema is for example used in [ERC725](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) based smart contracts like
 [LSP3-UniversalProfile](https://github.com/lukso-network/LIPs/blob/main/LSPs/LSP-3-UniversalProfile-Metadata.md) and [LSP4-DigitalAsset-Metadata](https://github.com/lukso-network/LIPs/blob/main/LSPs/LSP-4-DigitalAsset-Metadata.md).
 
 ## Specification
 
-> **Note:** this set might not yet be complete, as it could be extended overtime.
+> **Note:** described sets might not yet be complete, as they could be extended over time.
 
 To make ERC725Y keys readable, we describe a key-value pair as a JSON object containing the following entries:
 
@@ -65,13 +65,13 @@ The table below describes each entries with their available options.
 
 The `name` is the human-readable format of the ERC725Y key. It aims to abstract the representation of the ERC725Y key and defines what the key represents. In most cases, it SHOULD highlight the intent behind the key.
 
-In scenarios where an ERC725Y key is part of an LSP Standard (Metadata standard), the key `name` SHOULD be comprised of the following: `LSP{N}{KeyName}`, where
+In scenarios where an ERC725Y key is part of an LSP Standard, the key `name` SHOULD be comprised of the following: `LSP{N}{KeyName}`, where
 
 - `LSP`: abbreviation for **L**UKSO **S**tandards **P**roposal.
 - `N`: the **Standard Number** this key refers to.
-- `KeyName`: a short name for the ERC725Y key.
+- `KeyName`: base of the key name. Should represent the meaning of a value stored behind the key.
 
-*e.g.:* `MyColourTheme`, `LSP4TokenName`
+*e.g.:* `MyColourTheme` (not part of any LSP Standard), `LSP4TokenName` (part of a LSP standard)
 
 
 ### `key`
