@@ -202,9 +202,11 @@ Each Array element can be accessed through its own `key`. The `key` of an Array 
 
 Below is an example for the **Array** key named `LSP3IssuedAssets[]`.
 
-- element number: key: `0x3a47ab5bd3a594c3a8995f8fa58d0876c96819ca4516bd76100c92462f2f9dc0`, value: `0x0000000000000000000000000000000000000000000000000000000000000002` (2 elements)
-- element 1: key: `0x3a47ab5bd3a594c3a8995f8fa58d087600000000000000000000000000000000`, value: `0x123...` (element 0)
-- element 2: key: `0x3a47ab5bd3a594c3a8995f8fa58d087600000000000000000000000000000001`, value: `0x321...` (element 1)
+- total number of elements: 
+  - key: `0x3a47ab5bd3a594c3a8995f8fa58d0876c96819ca4516bd76100c92462f2f9dc0`, 
+  - value: `0x0000000000000000000000000000000000000000000000000000000000000002` (2 elements)
+- element 1: key: `0x3a47ab5bd3a594c3a8995f8fa58d087600000000000000000000000000000000`, value: `0x123...` (index 0)
+- element 2: key: `0x3a47ab5bd3a594c3a8995f8fa58d087600000000000000000000000000000001`, value: `0x321...` (index 1)
 ...
 
 ```json
@@ -223,11 +225,11 @@ value: uint256 (array length) e.g. 0x0000000000000000000000000000000000000000000
 
 // array items
 
-// element 0
+// 1st element (index 0)
 key: 0x3a47ab5bd3a594c3a8995f8fa58d087600000000000000000000000000000000
 value: 0xcafecafecafecafecafecafecafecafecafecafe
 
-// element 1
+// 2nd element (index 1)
 key: 0x3a47ab5bd3a594c3a8995f8fa58d087600000000000000000000000000000001
 value: 0xcafecafecafecafecafecafecafecafecafecafe
 ```
