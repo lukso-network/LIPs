@@ -173,15 +173,15 @@ _Returns:_ `uint256` , the current nonce.
 function execute(bytes memory _data) public payable returns (bytes memory)
 ```
 
-Execute a payload on an ERC725 account.
+Execute a payload on a set [ERC725 X or Y smart contract](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md).
 
 MUST fire the [Executed event](#executed).
 
 _Parameters:_
 
-- `_data`: The call data to be executed. The first 4 bytes of the `_data` payload MUST correspond to one of the function selector in the ERC725 account, such as `setData(...)`, `execute(...)` or `transferOwnership(...)`.
+- `_data`: The call data to be executed. The first 4 bytes of the `_data` payload MUST correspond to one of the function selector on the ERC725 smart contract, such as `setData(...)`, `execute(...)` or `transferOwnership(...)`.
 
-_Returns:_ `bytes` , the returned data as abi-encoded bytes if the call on ERC725 account succeeded, otherwise revert with a reason-string. 
+_Returns:_ `bytes` , the returned data as abi-encoded bytes if the call on ERC725 smart contract succeeded, otherwise revert with a reason-string. 
 
 
 
@@ -195,7 +195,7 @@ _Returns:_ `bytes` , the returned data as abi-encoded bytes if the call on ERC72
 function executeRelayCall(address _signedFor, uint256 _nonce, bytes memory _data, bytes memory _signature) public payable returns (bytes memory)
 ```
 
-Allows anybody to execute `_data` payload on a ERC725 account, given they have a signed message from an executor.
+Allows anybody to execute `_data` payload on a set [ERC725 X or Y smart contract](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md), given they have a signed message from an executor.
 
 MUST fire the [Executed event](#executed).
 
@@ -206,7 +206,7 @@ _Parameters:_
 - `_data`: The call data to be executed.
 - `_signature`: bytes32 ethereum signature.
 
-_Returns:_ `bytes` , the returned data as abi-encoded bytes if the call on ERC725 account succeeded, otherwise revert with a reason-string. 
+_Returns:_ `bytes` , the returned data as abi-encoded bytes if the call on ERC725 smart contract succeeded, otherwise revert with a reason-string. 
 
 **Important:** the message to sign MUST be of the following format: `<KeyManager address>` + `<signer nonce>` + `<_data payload>` .
 These 3 parameters MUST be:
