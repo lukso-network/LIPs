@@ -124,6 +124,22 @@ Contains an array of bytes4 [ERC165 interface Ids](https://eips.ethereum.org/EIP
 }
 ```
 
+#### AddressPermissions:AllowedERC725YKeys:\<address\>
+
+Contains an array of `bytes32` ERC725Y keys.
+
+This key can be used in combination with the `SETDATA` [permission](#permission-values-in-addresspermissionspermissionsaddress). It enables to restrict which keys an `address` can set or edit on the controlled ERC725Account, by providing a list of ([abi encoded](https://docs.soliditylang.org/en/v0.8.11/units-and-global-variables.html#abi-encoding-and-decoding-functions)) ERC725Y keys.
+
+```json
+{
+    "name": "AddressPermissions:AllowedERC725YKeys:<address>",
+    "key": "0x4b80742d0000000090b80000<address>",
+    "keyType": "Bytes20MappingWithGrouping",
+    "valueType": "bytes32[]",
+    "valueContent": "Bytes32"
+}
+```
+
 ### Permission Values in AddressPermissions:Permissions:\<address\>
 
 The following permissions are allowed in the BitArray of the `AddressPermissions:Permissions:<address>` key for an address. The order can not be changed:
@@ -341,6 +357,13 @@ ERC725Y JSON Schema `LSP6KeyManager`, set at the `LSP3Account`:
         "keyType": "Bytes20MappingWithGrouping",
         "valueType": "bytes4[]",
         "valueContent": "Bytes4"
+    },
+    {
+        "name": "AddressPermissions:AllowedERC725YKeys:<address>",
+        "key": "0x4b80742d0000000090b80000<address>",
+        "keyType": "Bytes20MappingWithGrouping",
+        "valueType": "bytes32[]",
+        "valueContent": "Bytes32"
     }
 ]
 ```
