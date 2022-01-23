@@ -33,7 +33,7 @@ In cases where smart contracts function as a profile or wallet over a long time,
 
 ERC165 interface id: `0x6bb56a14`
 
-Every contract that complies to the Universal Receiver standard MUST implement:
+Every contract that complies with the Universal Receiver standard MUST implement:
 
 ### Methods
 
