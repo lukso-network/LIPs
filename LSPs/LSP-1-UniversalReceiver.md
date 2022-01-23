@@ -16,7 +16,7 @@ An entry function enabling a contract to receive arbitrary information.
 
 ## Abstract
 <!--A short (~200 word) description of the technical issue being addressed.-->
-Similar to a smart contracts fallback function, which allows a contract to be notified of a incoming transaction with value, the Universal Receiver allow for any contract to recevie information about any interaction.
+Similar to a smart contract's fallback function, which allows a contract to be notified of an incoming transaction with a value, the Universal Receiver allows to any contract to receive information about any interaction.
 This allows receiving contracts to react on incoming transfers or other interactions.
 
 
