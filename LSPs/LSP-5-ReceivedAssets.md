@@ -28,7 +28,7 @@ To be able to display received assets in a profile we need to keep track of all 
 
 ## Specification
 
-Every contract that supports to the ERC725Account SHOULD have the following keys:
+Every contract that supports the ERC725Account SHOULD have the following keys:
 
 ### ERC725Y Keys
 
