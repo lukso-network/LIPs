@@ -53,7 +53,7 @@ These keys are based on the [LSP2-ERC725YJSONSchema](https://github.com/lukso-ne
 #### AddressPermissions[]
 
 Contains an array of addresses, that have some permission set.
-This is mainly useful for interfaces to know which address hold permissions.
+This is mainly useful for interfaces to know which address holds permissions.
 
 ```json
 {
