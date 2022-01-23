@@ -16,11 +16,11 @@ ERC725Y JSON Schema describes a single key-value pair stored by [ERC725Y](https:
 
 ## Abstract
 
-ERC725Y enables storing any data in a smart contract as `bytes32` -> `bytes` key-value pairs.
+ERC725Y enables storing any data in a smart contract as `bytes32 => bytes` key-value pairs.
 
-Although this improves the way to interact with the data stored, it remains difficult to understand the layout of the contract storage. This is because both the key and the value are addressed in raw bytes.
+Although this improves interaction with the data stored, it remains difficult to understand the layout of the contract storage. This is because both the key and the value are addressed in raw bytes.
 
-This schema allows to standardize those keys and values so that they can be more easily accessed and interpreted. It can be used to create ERC725Y sub-standards, made of pre-defined sets of ERC725Y keys (Metadata Standards).
+This schema allows to standardize those keys and values so that they can be more easily accessed and interpreted. It can be used to create ERC725Y sub-standards, made of pre-defined sets of ERC725Y keys.
 
 ## Motivation
 
@@ -28,16 +28,16 @@ A schema defines a blueprint for how a data store is constructed.
 
 In the context of smart contracts, it can offer a better view of how the data is organised and structured within the contract storage.
 
-Using a schema over ERC725Y enables those keys and values to be easily readable and automatically parsable. Contracts and interfaces can know how to read and interact with the storage of an ERC725Y smart contract.
+Using a standardised schema over ERC725Y enables those keys and values to be easily readable and automatically parsable. Contracts and interfaces can know how to read and interact with the storage of an ERC725Y smart contract.
 
-The benefit of such schema is to allow interfaces or smart contracts to better decode (read, parse and interpret) the data stored in an ERC725Y contract. On the other hand, it also enables interfaces and contracts to know how to correctly encode data, before being set on an ERC725Y contract.
+The advantage of such schema is to allow interfaces or smart contracts to better decode (read, parse and interpret) the data stored in an ERC725Y contract. It is less error-prone due to knowing data types upfront. On the other hand, it also enables interfaces and contracts to know how to correctly encode data, before being set on an ERC725Y contract.
 
 This schema is for example used in [ERC725](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) based smart contracts like
 [LSP3-UniversalProfile](https://github.com/lukso-network/LIPs/blob/main/LSPs/LSP-3-UniversalProfile-Metadata.md) and [LSP4-DigitalAsset-Metadata](https://github.com/lukso-network/LIPs/blob/main/LSPs/LSP-4-DigitalAsset-Metadata.md).
 
 ## Specification
 
-> **Note:** this set might not yet be complete, as it could be extended overtime.
+> **Note:** described sets might not yet be complete, as they could be extended over time.
 
 To make ERC725Y keys readable, we describe a key-value pair as a JSON object containing the following entries:
 
@@ -53,78 +53,25 @@ To make ERC725Y keys readable, we describe a key-value pair as a JSON object con
 
 The table below describes each entries with their available options. 
 
-<table style="text-align: center">
-    <thead>
-        <tr>
-            <th style="text-align: center"><a href="#name"><code>name</code></th>
-            <th style="text-align: center"><a href="#key"><code>key</code></th>
-            <th style="text-align: center"><a href="#keyType"><code>keyType</code></th>
-            <th style="text-align: center"><a href="#valueType"><code>valueType</code></th>
-            <th style="text-align: center"><a href="#valueContent"><code>valueContent</code></th>
-        </tr>
-    </thead>
-    <tbody align="center">
-        <tr>
-            <td>the name of the key</td>
-            <td>the <b>unique identifier</b> of the key</td>
-            <td>
-                <i>How</i> the key MUST be <b>treated</b>
-                <hr>
-                <p><a href="#singleton"><code>Singleton</code></a></p>
-                <p><a href="#array"><code>Array</code></a></p>
-                <p><a href="#mapping"><code>Mapping</code></a></p>
-                <p><a href="#bytes20mapping"><code>Bytes20Mapping</code></a></p>
-                <p><a href="#bytes20mappingwithgrouping"><code>Bytes20MappingWithGrouping</code></a></p>
-            </td>
-            <td align="center">
-                <i>How</i> a value MUST be <b>decoded</b>
-                <hr>
-                <p><code>boolean</code></p>
-                <p><code>string</code></p>
-                <p><code>address</code></p>
-                <p><code>uintN</code></p>
-                <p><code>intN</code></p>
-                <p><code>bytesN</code></p>
-                <p><code>bytes</code></p>
-                <p><code>uintN[]</code></p>
-                <p><code>intN[]</code></p>
-                <p><code>string[]</code></p>
-                <p><code>address[]</code></p>
-                <p><code>bytes[]</code></p>
-            </td>
-            <td style="text-align: center">
-                <i>How</i> a value SHOULD be <b>interpreted</b>
-                <hr>
-                <p><code>Boolean</code></p>
-                <p><code>String</code></p>
-                <p><code>Address</code></p>
-                <p><code>Number</code></p>
-                <p><code>BytesN</code></p>
-                <p><code>Bytes</code></p>
-                <p><code>Keccak256</code></p>
-                <p><a href="#bitarray"><code>BitArray</code></a></p>
-                <p><code>URL</code></p>
-                <p><a href="#asseturl"><code>AssetURL</code></a></p>
-                <p><a href="#jsonurl"><code>JSONURL</code></a></p>
-                <p><code>Markdown</code></p>
-                <p><code>Literal</code><br/> (<u>e.g.:</u> <code>0x1345ABCD...</code>)</p>
-            </td>
-        </tr>
-    </tbody>
-</table>
-
+| Title | Description |
+|:----|:----|
+|[`name`](#name)| the name of the key |
+|[`key`](#key)| the **unique identifier** of the key |
+|[`keyType`](#keyType)| *How* the key must be treated <hr> [`Singleton`](#Singleton) <br> [`Array`](#Array) <br> [`Mapping`](#Mapping) <br> [`Bytes20Mapping`](#Bytes20Mapping) <br> [`Bytes20MappingWithGrouping`](#Bytes20MappingWithGrouping) |
+|[`valueType`](#valueType)| *How* a value MUST be decoded <hr> `boolean` <br> `string` <br> `address` <br> `uintN` <br> `intN` <br> `bytesN` <br> `bytes` <br> `uintN[]` <br> `intN[]` <br> `string[]` <br> `address[]` <br> `bytes[]` |
+|[`valueContent`](#valueContent)| *How* a value SHOULD be interpreted <hr> `Boolean` <br> `String` <br> `Address` <br> `Number` <br> `BytesN` <br> `Bytes` <br> `Keccak256` <br> [`BitArray`](#BitArray) <br> `URL` <br> [`AssetURL`](#AssetURL) <br> [`JSONURL`](#JSONURL) <br> `Markdown` <br> `Literal` (*e.g.:* `0x1345ABCD...`) |
 
 ### `name`
 
 The `name` is the human-readable format of the ERC725Y key. It aims to abstract the representation of the ERC725Y key and defines what the key represents. In most cases, it SHOULD highlight the intent behind the key.
 
-In scenarios where an ERC725Y key is part of an LSP Standard (Metadata standard), the key `name` SHOULD be comprised of the following: `LSP{N}{KeyName}`, where
+In scenarios where an ERC725Y key is part of an LSP Standard, the key `name` SHOULD be comprised of the following: `LSP{N}{KeyName}`, where
 
 - `LSP`: abbreviation for **L**UKSO **S**tandards **P**roposal.
 - `N`: the **Standard Number** this key refers to.
-- `KeyName`: a short name for the ERC725Y key.
+- `KeyName`: base of the key name. Should represent the meaning of a value stored behind the key.
 
-*e.g.:* `MyColourTheme`, `LSP4TokenName`
+*e.g.:* `MyColourTheme` (not part of any LSP Standard), `LSP4TokenName` (part of a LSP standard)
 
 
 ### `key`
@@ -134,7 +81,7 @@ The `key` is a `bytes32` value that acts as the **unique identifier** for the ke
 The standard `keccak256` hashing algorithm is used to generate this identifier. However, *how* the identifier is constructed varies, depending on the `keyType`:
 
 - for `Singleton` keys: the hash of the key name (*e.g.:* `keccak256('MyKeyName') = 0x35e6950bc8d21a1699e58328a3c4066df5803bb0b570d0150cb3819288e764b2`)
-- for `Array` keys (see [`Array`](#array) section for more details)
+- for `Array` keys (see [`Array`](#array) section for more details), **a combination of:**
   - an initial key containing the array length.
   - subsequent keys for array index access.
 - for mapping keys, see each mapping type separately below.
@@ -144,19 +91,13 @@ The standard `keccak256` hashing algorithm is used to generate this identifier. 
 
 The `keyType` determines how the value(s) should be interpreted.
 
-| `keyType` | Description  |
-|---|---|
-| [`Singleton`](#singleton)  | A simple key  |
-| [`Array`](#array)  | an array spanning multiple ERC725Y keys  |
-| [`Mapping`](#mapping)  | a key that map two words  |
-| [`Bytes20Mapping`](#bytes20mapping)  | a key that maps a word to a `bytes20` value, such as (but not restricted to) an `address` |
-| [`Bytes20MappingWithGrouping`](#bytes20mappingwithgrouping)  | a key that maps a word to another word to a `bytes20` value, such as (but not restricted to) an `address`  |
-
-For the mapping key types (`Mapping`, `Bytes20Mapping` and `Bytes20MappingWithGrouping`), the term *"word"* COULD describe:
-- a single word (*e.g.: "SupportedStandards"*)
-- a random string, or sequence of characters (*e.g.: "RG58012-RO-120-Y"*)
-
-For the mapping key types, the *"word"* MUST NOT contain a ":" (colon character), as it is used for the delimiter between both words.
+| `keyType` | Description  | Example |
+|---|---|---|
+| [`Singleton`](#singleton)  | A simple key  | `bytes32(keccak256("MyKeyName"))`<br> --- <br> `MyKeyName` -->  `0x35e6950bc8d21a1699e58328a3c4066df5803bb0b570d0150cb3819288e764b2` |
+| [`Array`](#array)  | an array spanning multiple ERC725Y keys  | `bytes32(keccak256("MyKeyName[]"))` <br> --- <br> `MyKeyName[]` -->   `0x24f6297f3abd5a8b82f1a48cee167cdecef40aa98fbf14534ea3539f66ca834c`|
+| [`Mapping`](#mapping)  | a key that map two words  | `bytes16(keccak256("MyKeyName"))` + `bytes12(0)` + `bytes4(keccak256("MapName"))` <br> --- <br> `MyKeyName:MapName` -->  `0x24f6297f3abd5a8b82f1a48cee167cde000000000000000000000000e6041813` |
+| [`Bytes20Mapping`](#bytes20mapping)  | a key that maps a word to a `bytes20` value, such as (but not restricted to) an `address` | `bytes8(keccak256("MyKeyName"))` + `bytes4(0)` +  `bytes20(dynamicValue)` <br> --- <br> `MyKeyName:cafecafecafecafecafecafecafecafecafecafe` -->  `0x35e6950bc8d21a1600000000cafecafecafecafecafecafecafecafecafecafe` |
+| [`Bytes20MappingWithGrouping`](#bytes20mappingwithgrouping)  | a key that maps a word to another word to a `bytes20` value, such as (but not restricted to) an `address`  | `bytes4(keccak256("MyKeyName"))` + `bytes4(0)` + `bytes2(keccak256("MapName"))` + `bytes2(0)` +  `bytes20(dynamicValue)` <br> --- <br> `MyKeyName:MapName:cafecafecafecafecafecafecafecafecafecafe` -->  `0x35e6950b00000000e6040000cafecafecafecafecafecafecafecafecafecafe` |
 
 
 ### `valueType`
@@ -188,7 +129,7 @@ The `valueType` can also be useful for typecasting. It enables contracts or inte
 
 ### `valueContent`
 
-Describes how to interpret the content of the returned value.
+Describes how to interpret the content of the returned *decoded* value.
 
 To illustrate, a string could be interpreted in multiple ways, such as:
 - a single word, or a sequence of words (*e.g.: "My Custom Token Name"*)
@@ -255,17 +196,17 @@ For the **Array** `keyType`, the initial `key` contains the total number of elem
 
 Each Array element can be accessed through its own `key`. The `key` of an Array element consists of `bytes16(keccak256(KeyName)) + bytes16(uint128(ArrayElementIndex))`, where:
 - `bytes16(keccak256(KeyName))` = The first 16 bytes are the keccak256 hash of the full Array key `name` (including the `[]`) (e.g.: `LSP3IssuedAssets[]`)
-- `bytes16(uint128(ArrayElementIndex))` = the position (= index) of the element in the array (NB: elements index access start at `0`)
-
-> NB: element index access starts at number `0`
+- `bytes16(uint128(ArrayElementIndex))` = the position (= index) of the element in the array (**NB**: elements index access start at `0`)
 
 *example:*
 
 Below is an example for the **Array** key named `LSP3IssuedAssets[]`.
 
-- element number: key: `0x3a47ab5bd3a594c3a8995f8fa58d0876c96819ca4516bd76100c92462f2f9dc0`, value: `0x0000000000000000000000000000000000000000000000000000000000000002` (2 elements)
-- element 1: key: `0x3a47ab5bd3a594c3a8995f8fa58d087600000000000000000000000000000000`, value: `0x123...` (element 0)
-- element 2: key: `0x3a47ab5bd3a594c3a8995f8fa58d087600000000000000000000000000000001`, value: `0x321...` (element 1)
+- total number of elements: 
+  - key: `0x3a47ab5bd3a594c3a8995f8fa58d0876c96819ca4516bd76100c92462f2f9dc0`, 
+  - value: `0x0000000000000000000000000000000000000000000000000000000000000002` (2 elements)
+- element 1: key: `0x3a47ab5bd3a594c3a8995f8fa58d087600000000000000000000000000000000`, value: `0x123...` (index 0)
+- element 2: key: `0x3a47ab5bd3a594c3a8995f8fa58d087600000000000000000000000000000001`, value: `0x321...` (index 1)
 ...
 
 ```json
@@ -273,8 +214,8 @@ Below is an example for the **Array** key named `LSP3IssuedAssets[]`.
     "name": "LSP3IssuedAssets[]",
     "key": "0x3a47ab5bd3a594c3a8995f8fa58d0876c96819ca4516bd76100c92462f2f9dc0",
     "keyType": "Array",
-    "valueType": "address", // describes the type of each elements
-    "valueContent": "Address" // describes the value of each elements
+    "valueType": "address", // describes the type of each element
+    "valueContent": "Address" // describes the value of each element
 }
 ```
 
@@ -284,11 +225,11 @@ value: uint256 (array length) e.g. 0x0000000000000000000000000000000000000000000
 
 // array items
 
-// element 0
+// 1st element (index 0)
 key: 0x3a47ab5bd3a594c3a8995f8fa58d087600000000000000000000000000000000
 value: 0xcafecafecafecafecafecafecafecafecafecafe
 
-// element 1
+// 2nd element (index 1)
 key: 0x3a47ab5bd3a594c3a8995f8fa58d087600000000000000000000000000000001
 value: 0xcafecafecafecafecafecafecafecafecafecafe
 ```
@@ -310,10 +251,8 @@ A **Mapping** key is constructed using `bytes16(keccak256("FirstWord")) + bytes1
 ```
 
 
-- `keccak256("FirstWord")` = `0x`<mark>`f49648de3734d6c5458244ad87c893b5`</mark>`0e6367d2cfa4670eddec109d1fc952e0` (**first 16 bytes** of the hash)
-- `keccak256("SecondWord")` = `0x`<mark>`53022d37`</mark>`21822ca6332135de9e7b98f9a82eb1051d3095d2e259b45149c9b634` (**first 4 bytes** of the hash)
-
-<span style="background-color: red">Marked text</span>
+- `keccak256("FirstWord")` = `0x`**`f49648de3734d6c5458244ad87c893b5`**`0e6367d2cfa4670eddec109d1fc952e0` (**first 16 bytes** of the hash)
+- `keccak256("SecondWord")` = `0x`**`53022d37`**`21822ca6332135de9e7b98f9a82eb1051d3095d2e259b45149c9b634` (**first 4 bytes** of the hash)
 
 
 ### Bytes20Mapping
@@ -360,6 +299,57 @@ A BitArray describes an array that contains a sequence of bits (`1`s and `0`s).
 Each bit can be either set (`1`) or not (`0`). The point of the BitArray `valueContent` is that there are only two possible values, so they can be stored in one bit.
 
 A BitArray can be used as a mapping of values to states (on/off, allowed/disallowed, locked/unlocked, valid/invalid), where the max number of available values that can be mapped is *n* bits.
+
+*example:*
+
+The example shows how a `BitArray` value can be read and interpreted.
+
+```json
+{
+    "name": "MyPermissions",
+    "key": "0xaacedf1d8b2cc85524a881760315208fb03c6c26538760922d6b9dee915fd66a",
+    "keyType": "Singleton",
+    "valueType": "bytes1",
+    "valueContent": "BitArray"
+}
+```
+
+As the key `name` suggests, it defines a list of (user-defined) permissions, where each permission maps to a single bit at position `n`.
+- When a bit at position `n` is set (`1`), the permission defined at position `n` will be set.
+- When a bit at position `n` is not set (`0`), the permission defined at position `n` will not be set.
+
+Since the `valueType` is of type `bytes1`, this key can hold 8 user-defined permissions.
+
+For instance, for the following permissions:
+
+| `SIGN` | `TRANSFER VALUE` | `DEPLOY` | `DELEGATE CALL` | `STATIC CALL` | `CALL` | `SET DATA` | `CHANGE OWNER` |
+|:----:|:----:|:----:|:----:|:----:|:----:|:----:|:----:|
+| `0` / `1` | `0` / `1` | `0` / `1` | `0` / `1` | `0` / `1` | `0` / `1` | `0` / `1` | `0` / `1` |
+
+Setting only the permission `SET DATA` will result in the following `bytes1` value (and its binary representation)
+
+```
+> Permission SET DATA = permissions set to 0000 0010
+`0x02` (4 in decimal)
+```
+
+| `SIGN` | `TRANSFER VALUE` | `DEPLOY` | `DELEGATE CALL` | `STATIC CALL` | `CALL` | `SET DATA` | `CHANGE OWNER` |
+|:----:|:----:|:----:|:----:|:----:|:----:|:----:|:----:|
+| `0` | `0` | `0` | `0` | `0` | `0` | `1` | `0` |
+
+Setting multiple permissions like `TRANSFER VALUE + CALL + SET DATA` will result in the following `bytes1` value (and its binary representation)
+
+```
+> Permissions set to 0100 0110
+`0x46` (70 in decimal)
+
+```
+
+| `SIGN` | `TRANSFER VALUE` | `DEPLOY` | `DELEGATE CALL` | `STATIC CALL` | `CALL` | `SET DATA` | `CHANGE OWNER` |
+|:----:|:----:|:----:|:----:|:----:|:----:|:----:|:----:|
+| `0` | `1` | `0` | `0` | `0` | `1` | `1` | `0` |
+
+The idea is to always read the value of a **BitArray** key as binary digits, while its content is always written as a `bytes1` (in hex) in the ERC725Y contract storage.
 
 ### AssetURL
 
