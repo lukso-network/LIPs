@@ -154,7 +154,7 @@ SIGN               = 0x000000000000000000000000000000000000000000000000000000000
 function getNonce(address _address, uint256 _channel) public view returns (uint256)
 ```
 
-Returns the nonce that needs to be signed by a allowed key to be passed into the [executeRelayCall](#executeRelayCall) function. A signer can choose his channel number arbitrarily.
+Returns the nonce that needs to be signed by an allowed key to be passed into the [executeRelayCall](#executeRelayCall) function. A signer can choose his channel number arbitrarily.
 
 If multiple transactions should be signed, nonces in the same channel can simply be increased by increasing the returned nonce.
 
