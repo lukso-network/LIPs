@@ -12,7 +12,7 @@ requires: ERC165
 
 ## Simple Summary
 <!--"If you can't explain it simply, you don't understand it well enough." Provide a simplified and layman-accessible explanation of the LIP.-->
-An entry function to allow a contract to be able to receive any arbitrary information.
+An entry function enabling a contract to receive arbitrary information.
 
 ## Abstract
 <!--A short (~200 word) description of the technical issue being addressed.-->
