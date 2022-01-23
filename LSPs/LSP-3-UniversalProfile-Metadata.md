@@ -20,7 +20,7 @@ This standard, defines a set of key value stores that are useful to create a pub
 
 ## Motivation
 
-This standard describes meta data that can be added to a [ERC725Account](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-0-ERC725Account.md), to give it a profile like character.
+This standard describes meta data that can be added to an [ERC725Account](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-0-ERC725Account.md), to give it a profile like character.
 
 ## Specification
 
