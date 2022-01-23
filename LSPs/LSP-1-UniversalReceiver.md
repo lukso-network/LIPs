@@ -49,7 +49,7 @@ _Parameters:_
 
 - `typeId` is the hash of a standard (according to ERC165?)
 
-- `data` is a byteArray of arbitrary data. Reciving contracts should take the `id` in consideration to properly decode the `data`. The function MUST revert if `id` is not accepted or unknown. 
+- `data` is a byteArray of arbitrary data. Receiving contracts should take the `id` in consideration to properly decode the `data`. The function MUST revert if `id` is not accepted or unknown. 
 
 _Returns:_ `bytes`, which can be used to encode response values.
 
@@ -86,7 +86,7 @@ _Parameters:_
 
 - `typeId` is the hash of a standard (according to ERC165?).
 
-- `data` is a byteArray of arbitrary data. Reciving contracts should take the `id` in consideration to properly decode the `data`. The function MUST revert if `id` is not accepted or unknown.
+- `data` is a byteArray of arbitrary data. Receiving contracts should take the `id` in consideration to properly decode the `data`. The function MUST revert if `id` is not accepted or unknown.
 
 _Returns:_ `bytes`, which can be used to encode response values.
 
