@@ -43,7 +43,7 @@ ERC165 interface id: `0x63cb749b`
 
 _This interface id is the XOR of ERC725Y, ERC725X, LSP1-UniversalReceiver, ERC1271-isValidSignature, to allow detection of ERC725Accounts._
 
-Every contract that supports to the ERC725Account SHOULD implement:
+Every contract that supports the ERC725Account SHOULD implement:
 
 ### ERC725Y Keys
 
