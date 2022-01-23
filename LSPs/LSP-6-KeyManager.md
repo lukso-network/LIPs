@@ -84,7 +84,7 @@ Contains [the permissions](#permission-values-in-addresspermissionspermissionsad
 #### AddressPermissions:AllowedAddresses:\<address\>
 
 Contains an array of allowed address a controlling address is allowed to interact with.
-IF no addresses are set, interacting with ALL addresses is allowed. IF one or more addresses is set, the controlling address, is only allowed to interacti with those addresses.
+IF no addresses are set, interacting with ALL addresses is allowed. IF one or more addresses is set, the controlling address, is only allowed to interact with those addresses.
 
 ```json
 {
