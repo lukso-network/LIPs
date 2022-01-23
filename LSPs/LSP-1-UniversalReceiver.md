@@ -27,7 +27,7 @@ A good example are token transfers, where the token smart contract should inform
 
 By creating a universal function that many smart contracts implement, receiving of asset and information can be unified.
 
-In cases where smart contracts function as a profile or wallet over a long time, an upgradable receiver can allow for future assets to be received, without that the interface needs to be changed.
+In cases where smart contracts function as a profile or wallet over a long time, an upgradable receiver can allow for future assets to be received, without the need for the interface to be changed.
 
 ## Specification
 
