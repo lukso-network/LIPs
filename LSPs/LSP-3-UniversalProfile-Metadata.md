@@ -186,7 +186,7 @@ For more infos about how to access each index of the `LSP3IssuedAssets[]` array,
 
 ## Rationale
 
-Universal Profile metadata is important to create verifiable public account that is the source of asset issuance,
+Universal Profile's metadata is important for creating a verifiable public account that is the source of asset issuance,
 or a verifiable public appearance. This metadata does not need to belong to a real world person, but gives the account a "face".
 
 ## Implementation
