@@ -20,11 +20,11 @@ This standard, defines a set of key value stores that are useful to create a pub
 
 ## Motivation
 
-This standard describes meta data that can be added to a [ERC725Account](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-0-ERC725Account.md), to give it a profile like character.
+This standard describes meta data that can be added to an [ERC725Account](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-0-ERC725Account.md), to give it a profile like character.
 
 ## Specification
 
-Every contract that supports to the Universal Profile standard SHOULD add the following [ERC725Y](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) keys:
+Every contract that supports the Universal Profile standard SHOULD add the following [ERC725Y](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) keys:
 
 ### ERC725Y Keys
 
@@ -162,7 +162,7 @@ An array of smart contract assets issued by the Universal Profile, like tokens (
 }
 ```
 
-For more infos about how to access each index of the `LSP3IssuedAssets[]` array, see: [ERC725Y JSON Schema > `keyType`: `Array`](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-2-ERC725YJSONSchema.md#array)
+For more info about how to access each index of the `LSP3IssuedAssets[]` array, see: [ERC725Y JSON Schema > `keyType`: `Array`](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-2-ERC725YJSONSchema.md#array)
 
 #### LSP3IssuedAssetsMap
 
@@ -186,8 +186,8 @@ For more infos about how to access each index of the `LSP3IssuedAssets[]` array,
 
 ## Rationale
 
-Universal Profiles metadata is important to create verifiable public account that are the source of asset issuance,
-or a verifiable public appearance. This metadata dos not need to belong to a real world person, but gives the account a "face".
+Universal Profile's metadata is important for creating a verifiable public account that is the source of asset issuance,
+or a verifiable public appearance. This metadata does not need to belong to a real world person, but gives the account a "recognisable face".
 
 ## Implementation
 
