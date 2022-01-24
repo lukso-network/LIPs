@@ -34,9 +34,9 @@ The flow of a transactions is as follows:
 
 ## Motivation
 
-The benefit of a KeyManager is to externalise permission logic from [ERC725Y and X](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) contracts (such as an [ERC725Account](https://github.com/lukso-network/LIPs/blob/main/LSPs/LSP-0-ERC725Account.md)). This allows for such an logic to be upgraded without needing to change the core [ERC725Account](https://github.com/lukso-network/LIPs/blob/main/LSPs/LSP-0-ERC725Account.md) contract.
+The benefit of a KeyManager is to externalise permission logic from [ERC725Y and X](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) contracts (such as an [ERC725Account](https://github.com/lukso-network/LIPs/blob/main/LSPs/LSP-0-ERC725Account.md)). This allows for such a logic to be upgraded without needing to change the core [ERC725Account](https://github.com/lukso-network/LIPs/blob/main/LSPs/LSP-0-ERC725Account.md) contract.
 
-Storing the permissions at the core [ERC725Account](https://github.com/lukso-network/LIPs/blob/main/LSPs/LSP-0-ERC725Account.md) itself, allows it to survive KeyManager upgrades and opens the door to add additional KeyManager logic in the future, without loosing already set address permissions.
+Storing the permissions at the core [ERC725Account](https://github.com/lukso-network/LIPs/blob/main/LSPs/LSP-0-ERC725Account.md) itself, allows it to survive KeyManager upgrades and opens the door to adding additional KeyManager logic in the future, without loosing already set address permissions.
 
 
 ## Specification
@@ -53,7 +53,7 @@ These keys are based on the [LSP2-ERC725YJSONSchema](https://github.com/lukso-ne
 #### AddressPermissions[]
 
 Contains an array of addresses, that have some permission set.
-This is mainly useful for interfaces to know which address hold permissions.
+This is mainly useful for interfaces to know which address holds permissions.
 
 ```json
 {
@@ -65,7 +65,7 @@ This is mainly useful for interfaces to know which address hold permissions.
 }
 ```
 
-For more infos about how to access each index of the `AddressPermissions[]` array, see: [ERC725Y JSON Schema > `keyType` `Array`](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-2-ERC725YJSONSchema.md#array)
+For more info about how to access each index of the `AddressPermissions[]` array, see: [ERC725Y JSON Schema > `keyType` `Array`](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-2-ERC725YJSONSchema.md#array)
 
 #### AddressPermissions:Permissions:\<address\>
 
@@ -84,7 +84,7 @@ Contains [the permissions](#permission-values-in-addresspermissionspermissionsad
 #### AddressPermissions:AllowedAddresses:\<address\>
 
 Contains an array of allowed address a controlling address is allowed to interact with.
-IF no addresses are set, interacting with ALL addresses is allowed. IF one or more addresses is set, the controlling address, is only allowed to interacti with those addresses.
+IF no addresses are set, interacting with ALL addresses is allowed. IF one or more addresses is set, the controlling address, is only allowed to interact with those addresses.
 
 ```json
 {
@@ -170,7 +170,7 @@ SIGN               = 0x000000000000000000000000000000000000000000000000000000000
 function getNonce(address _address, uint256 _channel) public view returns (uint256)
 ```
 
-Returns the nonce that needs to be signed by a allowed key to be passed into the [executeRelayCall](#executeRelayCall) function. A signer can choose his channel number arbitrarily.
+Returns the nonce that needs to be signed by an allowed key to be passed into the [executeRelayCall](#executeRelayCall) function. A signer can choose his channel number arbitrarily.
 
 If multiple transactions should be signed, nonces in the same channel can simply be increased by increasing the returned nonce.
 
