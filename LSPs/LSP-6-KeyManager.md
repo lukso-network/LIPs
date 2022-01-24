@@ -140,6 +140,19 @@ This key can be used in combination with the `SETDATA` [permission](#permission-
 }
 ```
 
+Each key defined in the array MUST be 32 bytes long. It is possible to set a range of allowed ERC725Y keys (**= partial keys**), by setting:
+- some part of the keys as the exact key bytes
+- the rest of the key bytes as 0 bytes.
+
+The 0 bytes part will represent a part that is dynamic. To illustrate, using the example below for a LSP2 Mapping key, where first word = `SupportedStandards`, and second word = `LSP3UniversalProfile`.
+
+```js
+name: "SupportedStandards:LSP3UniversalProfile"
+key: 0xeafec4d89fa9619884b6b89135626455000000000000000000000000abe425d6
+```
+
+By setting the value to `0xeafec4d89fa9619884b6b8913562645500000000000000000000000000000000` in the list of allowed ERC725Y key, one address can set any key **starting with the first word `SupportedStandards:...`**.
+
 ### Permission Values in AddressPermissions:Permissions:\<address\>
 
 The following permissions are allowed in the BitArray of the `AddressPermissions:Permissions:<address>` key for an address. The order can not be changed:
