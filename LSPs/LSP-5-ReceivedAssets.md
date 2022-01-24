@@ -28,7 +28,7 @@ To be able to display received assets in a profile we need to keep track of all 
 
 ## Specification
 
-Every contract that supports to the ERC725Account SHOULD have the following keys:
+Every contract that supports the ERC725Account SHOULD have the following keys:
 
 ### ERC725Y Keys
 
@@ -48,7 +48,7 @@ An array of received smart contract assets, like tokens (_e.g.: [LSP7 Digital As
 }
 ```
 
-For more infos about how to access each index of the `LSP5ReceivedAssets[]` array, see [ERC725Y JSON Schema > `keyType`: `Array`](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-2-ERC725YJSONSchema.md#array)
+For more info about how to access each index of the `LSP5ReceivedAssets[]` array, see [ERC725Y JSON Schema > `keyType`: `Array`](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-2-ERC725YJSONSchema.md#array)
 
 #### LSP5ReceivedAssetsMap
 
