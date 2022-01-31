@@ -10,7 +10,7 @@ requires: LSP2
 ---
 
 ## Simple Summary
-This standard describes a set of [ERC725Y](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) key values to store addresses of received vaults in a [ERC725Y](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) smart contract.
+This standard describes a set of [ERC725Y](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) key-value pairs that can be used to store addresses of received vaults in a [ERC725Y](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) smart contract.
 
 ## Abstract
 This key value standard describes keys to be added to an [ERC725Y](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) smart contract, that reference received vaults smart contracts. Two keys are proposed: `LSP10ReceivedVaults[]` to hold an array of addresses and `LSP10ReceivedVaultsMap` to hold a mapping of the index in the former array and an standards interface ID to be able to quickly tell different vaults standards apart without querying each other vaults smart contract directly. The key `LSP10ReceivedVaultsMap` also helps to prevent adding duplications to the array, when automatically added via smart contract (e.g. a [LSP1-UniversalReceiverDelegate](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-1-UniversalReceiver.md)).
@@ -20,7 +20,7 @@ To be able to display received vaults in a profile we need to keep track of all 
 
 ## Specification
 
-Every contract that supports to the ERC725Account SHOULD have the following keys:
+Every contract that supports the LSP9Vault standard SHOULD have the following keys:
 
 ### ERC725Y Keys
 
@@ -60,7 +60,7 @@ The `valueContent` MUST be constructed as follows: `bytes8(indexNumber) + bytes4
 
 ## Implementation
 
-A implementation can be found in the [lukso-network/standards-scenarios](https://github.com/lukso-network/lsp-universalprofile-smart-contracts/tree/develop/contracts/LSP1UniversalReceiver/LSP1UniversalReceiverDelegateVault);
+An implementation can be found in the [lukso-network/standards-scenarios](https://github.com/lukso-network/lsp-universalprofile-smart-contracts/tree/develop/contracts/LSP1UniversalReceiver/LSP1UniversalReceiverDelegateVault);
 The below defines the JSON interface of the `LSP10ReceivedVaults`.
 
 ERC725Y JSON Schema `LSP10ReceivedVaults`:
