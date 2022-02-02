@@ -171,8 +171,8 @@ An array of ([ERC725Account](./LSP-0-ERC725Account.md)) addresses that defines t
     "name": "LSP4Creators[]",
     "key": "0x114bd03b3a46d48759680d81ebb2b414fda7d030a7105a851867accf1c2352e7",
     "keyType": "Array",
-    "valueType": "uint256",
-    "valueContent": "Number"
+    "valueType": "address",
+    "valueContent": "Address"
 }
 ```
 
