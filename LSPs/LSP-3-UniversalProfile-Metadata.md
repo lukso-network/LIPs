@@ -16,7 +16,7 @@ This standard describes a set of [ERC725Y](https://github.com/ethereum/EIPs/blob
  
 ## Abstract
 
-This standard, defines a set of key value stores that are useful to create a public on-chain profile, based on an [ERC725Account](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-0-ERC725Account.md).
+This standard, defines a set of key value stores that are useful to create a public on-chain profile, based on an [ERC725Account](./LSP-0-ERC725Account.md).
 
 ## Motivation
 
@@ -58,7 +58,7 @@ A JSON file that describes the profile information, including profile image, bac
 }
 ```
 
-For construction of the JSONURL value see: [ERC725Y JSON Schema](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-2-ERC725YJSONSchema.md#jsonurl-example)
+For construction of the JSONURL value see: [ERC725Y JSON Schema](./LSP-2-ERC725YJSONSchema.md#JSONURL)
 
 The linked JSON file SHOULD have the following format:
 
@@ -162,7 +162,7 @@ An array of smart contract assets issued by the Universal Profile, like tokens (
 }
 ```
 
-For more info about how to access each index of the `LSP3IssuedAssets[]` array, see: [ERC725Y JSON Schema > `keyType`: `Array`](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-2-ERC725YJSONSchema.md#array)
+For more info about how to access each index of the `LSP3IssuedAssets[]` array, see: [ERC725Y JSON Schema > `keyType`: `Array`](./LSP-2-ERC725YJSONSchema.md#Array)
 
 #### LSP3IssuedAssetsMap
 
@@ -182,7 +182,7 @@ The `valueContent` MUST be constructed as follows: `bytes8(indexNumber) + bytes4
 }
 ```
 
-For more infos about how to access each index of the `LSP3IssuedAssets[]` array, see [ERC725Y JSON Schema > `keyType`: `Array`](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-2-ERC725YJSONSchema.md#array)
+For more infos about how to access each index of the `LSP3IssuedAssets[]` array, see [ERC725Y JSON Schema > `keyType`: `Array`](./LSP-2-ERC725YJSONSchema.md#Array)
 
 ## Rationale
 

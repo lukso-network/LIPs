@@ -12,14 +12,14 @@ requires: ERC165, ERC1271, LSP2
 
 ## Simple Summary
 
-This standard describes a `KeyManager` contract with a set of pre-defined permissions for addresses. A KeyManager contract can control an [ERC725Account](https://github.com/lukso-network/LIPs/blob/main/LSPs/LSP-0-ERC725Account.md) like account, or any other [ERC725](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) smart contract.
+This standard describes a `KeyManager` contract with a set of pre-defined permissions for addresses. A KeyManager contract can control an [ERC725Account](./LSP-0-ERC725Account.md) like account, or any other [ERC725](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) smart contract.
 
 
 ## Abstract
 
 This standard allows for controlling addresses to be restricted through multiple permissions, to act on and through this KeyManager on a controlled smart contract (for example an [ERC725Account](https://github.com/lukso-network/LIPs/blob/main/LSPs/LSP-0-ERC725Account.md)).
 
-The KeyManager functions as a gateway for the [ERC725Account](https://github.com/lukso-network/LIPs/blob/main/LSPs/LSP-0-ERC725Account.md) restricting an address actions based on set permissions.
+The KeyManager functions as a gateway for the [ERC725Account](./LSP-0-ERC725Account.md) restricting an address actions based on set permissions.
 
 Permissions are described in the [Permissions values section](#permission-values-in-addresspermissionspermissionsaddress). Furthermore addresses can be restricted to only talk to certain other smart contracts or address, specific functions or smart contracts supporting only specifc standard interfaces.
 
@@ -34,9 +34,9 @@ The flow of a transactions is as follows:
 
 ## Motivation
 
-The benefit of a KeyManager is to externalise permission logic from [ERC725Y and X](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) contracts (such as an [ERC725Account](https://github.com/lukso-network/LIPs/blob/main/LSPs/LSP-0-ERC725Account.md)). This allows for such an logic to be upgraded without needing to change the core [ERC725Account](https://github.com/lukso-network/LIPs/blob/main/LSPs/LSP-0-ERC725Account.md) contract.
+The benefit of a KeyManager is to externalise permission logic from [ERC725Y and X](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) contracts (such as an [ERC725Account](./LSP-0-ERC725Account.md)). This allows for such an logic to be upgraded without needing to change the core [ERC725Account](./LSP-0-ERC725Account.md) contract.
 
-Storing the permissions at the core [ERC725Account](https://github.com/lukso-network/LIPs/blob/main/LSPs/LSP-0-ERC725Account.md) itself, allows it to survive KeyManager upgrades and opens the door to add additional KeyManager logic in the future, without loosing already set address permissions.
+Storing the permissions at the core [ERC725Account](./LSP-0-ERC725Account.md) itself, allows it to survive KeyManager upgrades and opens the door to add additional KeyManager logic in the future, without loosing already set address permissions.
 
 
 ## Specification
@@ -44,10 +44,10 @@ Storing the permissions at the core [ERC725Account](https://github.com/lukso-net
 
 ### ERC725Y Keys
 
-**The permissions that the KeyManager reads, are stored on the controlled-contracts ERC725Y key value store (for example an [ERC725Account](https://github.com/lukso-network/LIPs/blob/main/LSPs/LSP-0-ERC725Account.md))**
+**The permissions that the KeyManager reads, are stored on the controlled-contracts ERC725Y key value store (for example an [ERC725Account](./LSP-0-ERC725Account.md))**
 
 The following ERC725Y keys are used to read permissions of certain addresses.
-These keys are based on the [LSP2-ERC725YJSONSchema](https://github.com/lukso-network/LIPs/blob/main/LSPs/LSP-2-ERC725YJSONSchema.md) standard, and use the key type **[Bytes20MappingWithGrouping](https://github.com/lukso-network/LIPs/blob/main/LSPs/LSP-2-ERC725YJSONSchema.md#bytes20mappingwithgrouping)**
+These keys are based on the [LSP2-ERC725YJSONSchema](./LSP-2-ERC725YJSONSchema.md) standard, and use the key type **[Bytes20MappingWithGrouping](./LSP-2-ERC725YJSONSchema.md#bytes20mappingwithgrouping)**
 
 
 #### AddressPermissions[]
@@ -65,7 +65,7 @@ This is mainly useful for interfaces to know which address hold permissions.
 }
 ```
 
-For more infos about how to access each index of the `AddressPermissions[]` array, see: [ERC725Y JSON Schema > `keyType` `Array`](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-2-ERC725YJSONSchema.md#array)
+For more infos about how to access each index of the `AddressPermissions[]` array, see: [ERC725Y JSON Schema > `keyType` `Array`](./LSP-2-ERC725YJSONSchema.md#array)
 
 #### AddressPermissions:Permissions:\<address\>
 
@@ -148,7 +148,7 @@ Each key defined in the array MUST be 32 bytes long. It is possible to set a ran
 - some part of the keys as the exact key bytes
 - the rest of the key bytes as 0 bytes.
 
-The 0 bytes part will represent a part that is dynamic. To illustrate, using the example below for a [LSP2 Mapping](https://github.com/lukso-network/LIPs/blob/main/LSPs/LSP-2-ERC725YJSONSchema.md#Mapping) key, where first word = `SupportedStandards`, and second word = `LSP3UniversalProfile`.
+The 0 bytes part will represent a part that is dynamic. To illustrate, using the example below for a [LSP2 Mapping](./LSP-2-ERC725YJSONSchema.md#Mapping) key, where first word = `SupportedStandards`, and second word = `LSP3UniversalProfile`.
 
 ```js
 name: "SupportedStandards:LSP3UniversalProfile"
