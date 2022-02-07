@@ -34,9 +34,9 @@ The flow of a transactions is as follows:
 
 ## Motivation
 
-The benefit of a KeyManager is to externalise permission logic from [ERC725Y and X](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) contracts (such as an [ERC725Account](https://github.com/lukso-network/LIPs/blob/main/LSPs/LSP-0-ERC725Account.md)). This allows for such a logic to be upgraded without needing to change the core [ERC725Account](https://github.com/lukso-network/LIPs/blob/main/LSPs/LSP-0-ERC725Account.md) contract.
+The benefit of a KeyManager is to externalise permission logic from [ERC725Y and X](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) contracts (such as an [ERC725Account](https://github.com/lukso-network/LIPs/blob/main/LSPs/LSP-0-ERC725Account.md)). This allows for such an logic to be upgraded without needing to change the core [ERC725Account](https://github.com/lukso-network/LIPs/blob/main/LSPs/LSP-0-ERC725Account.md) contract.
 
-Storing the permissions at the core [ERC725Account](https://github.com/lukso-network/LIPs/blob/main/LSPs/LSP-0-ERC725Account.md) itself, allows it to survive KeyManager upgrades and opens the door to adding additional KeyManager logic in the future, without loosing already set address permissions.
+Storing the permissions at the core [ERC725Account](https://github.com/lukso-network/LIPs/blob/main/LSPs/LSP-0-ERC725Account.md) itself, allows it to survive KeyManager upgrades and opens the door to add additional KeyManager logic in the future, without loosing already set address permissions.
 
 
 ## Specification
@@ -53,7 +53,7 @@ These keys are based on the [LSP2-ERC725YJSONSchema](https://github.com/lukso-ne
 #### AddressPermissions[]
 
 Contains an array of addresses, that have some permission set.
-This is mainly useful for interfaces to know which address holds permissions.
+This is mainly useful for interfaces to know which address hold permissions.
 
 ```json
 {
@@ -65,11 +65,13 @@ This is mainly useful for interfaces to know which address holds permissions.
 }
 ```
 
-For more info about how to access each index of the `AddressPermissions[]` array, see: [ERC725Y JSON Schema > `keyType` `Array`](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-2-ERC725YJSONSchema.md#array)
+For more infos about how to access each index of the `AddressPermissions[]` array, see: [ERC725Y JSON Schema > `keyType` `Array`](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-2-ERC725YJSONSchema.md#array)
 
 #### AddressPermissions:Permissions:\<address\>
 
-Contains [the permissions](#permission-values-in-addresspermissionspermissionsaddress) for an address.
+Contains a set of permissions for an address. Permissions defines what an address **can do on** an ERC725Account (*eg: edit the key-value store via SETDATA*), or **can perform on behalf of** the ERC725Account.
+
+Since the `valueType` of this key is `bytes32`, up to 255 different permissions can be defined. This includes the [ten default permissions](#permission-values-in-addresspermissionspermissionsaddress) defined below. Custom permissions can be defined on top of the default one (starting at `0x0000...0400` (`1024` in decimals)).
 
 ```json
 {
@@ -83,8 +85,8 @@ Contains [the permissions](#permission-values-in-addresspermissionspermissionsad
     
 #### AddressPermissions:AllowedAddresses:\<address\>
 
-Contains an array of allowed address a controlling address is allowed to interact with.
-IF no addresses are set, interacting with ALL addresses is allowed. IF one or more addresses is set, the controlling address, is only allowed to interact with those addresses.
+Contains an array of address (Externally Owned Accounts or smart contracts) a controlling address is allowed to interact with.
+IF no addresses are set, interacting with ANY addresses is allowed. IF one or more addresses is set, the controlling address is restricted to interact only with these addresses.
 
 ```json
 {
@@ -98,7 +100,9 @@ IF no addresses are set, interacting with ALL addresses is allowed. IF one or mo
 
 #### AddressPermissions:AllowedFunctions:\<address\>
 
-Contains an array of bytes4 function signatures, the controlling address is allowed to call on other smart contracts.
+Contains an array of [bytes4 function signatures](https://docs.soliditylang.org/en/v0.5.3/abi-spec.html?highlight=selector#function-selector), the controlling address is allowed to call on other smart contracts.
+
+This permission acts as a restriction mechanism for an interacting with other smart contracts via an ERC725Account. It enables to limit which functions an address can call on a external smart contracts via the ERC725Account.
 
 ```json
 {
@@ -128,7 +132,7 @@ Contains an array of bytes4 [ERC165 interface Ids](https://eips.ethereum.org/EIP
 
 Contains an array of `bytes32` ERC725Y keys.
 
-This key can be used in combination with the `SETDATA` [permission](#permission-values-in-addresspermissionspermissionsaddress). It enables to restrict which keys an `address` can set or edit on the controlled ERC725Account, by providing a list of ([abi encoded](https://docs.soliditylang.org/en/v0.8.11/units-and-global-variables.html#abi-encoding-and-decoding-functions)) ERC725Y keys.
+This key can be used in combination with the `SETDATA` [permission](#permission-values-in-addresspermissionspermissionsaddress). It enables to restrict which keys an `address` can set or edit on the controlled ERC725Account, by providing an [abi encoded](https://docs.soliditylang.org/en/v0.8.11/units-and-global-variables.html#abi-encoding-and-decoding-functions)) array of ERC725Y keys.
 
 ```json
 {
@@ -139,6 +143,19 @@ This key can be used in combination with the `SETDATA` [permission](#permission-
     "valueContent": "Bytes32"
 }
 ```
+
+Each key defined in the array MUST be 32 bytes long. It is possible to set a range of allowed ERC725Y keys (**= partial keys**), by setting:
+- some part of the keys as the exact key bytes
+- the rest of the key bytes as 0 bytes.
+
+The 0 bytes part will represent a part that is dynamic. To illustrate, using the example below for a [LSP2 Mapping](https://github.com/lukso-network/LIPs/blob/main/LSPs/LSP-2-ERC725YJSONSchema.md#Mapping) key, where first word = `SupportedStandards`, and second word = `LSP3UniversalProfile`.
+
+```js
+name: "SupportedStandards:LSP3UniversalProfile"
+key: 0xeafec4d89fa9619884b6b89135626455000000000000000000000000abe425d6
+```
+
+By setting the value to `0xeafec4d89fa9619884b6b8913562645500000000000000000000000000000000` in the list of allowed ERC725Y key, one address can set any key **starting with the first word `SupportedStandards:...`**.
 
 ### Permission Values in AddressPermissions:Permissions:\<address\>
 
@@ -170,7 +187,7 @@ SIGN               = 0x000000000000000000000000000000000000000000000000000000000
 function getNonce(address _address, uint256 _channel) public view returns (uint256)
 ```
 
-Returns the nonce that needs to be signed by an allowed key to be passed into the [executeRelayCall](#executeRelayCall) function. A signer can choose his channel number arbitrarily.
+Returns the nonce that needs to be signed by a allowed key to be passed into the [executeRelayCall](#executeRelayCall) function. A signer can choose his channel number arbitrarily.
 
 If multiple transactions should be signed, nonces in the same channel can simply be increased by increasing the returned nonce.
 
