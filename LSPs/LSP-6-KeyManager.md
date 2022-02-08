@@ -150,7 +150,7 @@ Each key defined in the array MUST be 32 bytes long. It is possible to set a ran
 - some part of the keys as the exact key bytes
 - the rest of the key bytes as 0 bytes.
 
-The 0 bytes part will represent a part that is dynamic. To illustrate, using the example below for a [LSP2 Mapping](./LSP-2-ERC725YJSONSchema.md#Mapping) key, where first word = `SupportedStandards`, and second word = `LSP3UniversalProfile`.
+The 0 bytes part will represent a part that is dynamic. Below is an example based on a [LSP2 Mapping](./LSP-2-ERC725YJSONSchema.md#Mapping) key type, where first word = `SupportedStandards`, and second word = `LSP3UniversalProfile`.
 
 ```js
 name: "SupportedStandards:LSP3UniversalProfile"
