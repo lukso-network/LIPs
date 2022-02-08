@@ -21,10 +21,10 @@ Two keys are proposed to reference received asset smart contracts.
   - the index in the former array where the received asset address is stored.
   - an [ERC165 interface ID](https://eips.ethereum.org/EIPS/eip-165) to easily identify the standard used by each asset smart contracts, without the need to query the contracts directly. 
 
-The key `LSP5ReceivedAssetsMap` also helps to prevent adding duplications to the array, when automatically added via smart contract (e.g. a [LSP1-UniversalReceiverDelegate](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-1-UniversalReceiver.md)).
+The key `LSP5ReceivedAssetsMap` also helps to prevent duplicates from being added to the array, when automatically added via smart contract (e.g. via an [LSP1-UniversalReceiverDelegate](./LSP-1-UniversalReceiver.md)).
 
 ## Motivation
-To be able to display received assets in a profile we need to keep track of all received asset contract addresses. This is important for [LSP3 UniversalProfile-Metadata](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-3-UniversalProfile-Metadata.md), but also Vault smart contracts.
+To be able to display received assets in a profile we need to keep track of all received asset contract addresses. This is important for [UniversalProfile](./LSP-3-UniversalProfile-Metadata.md), but also [Vault](./LSP-9-Vault.md) smart contracts.
 
 ## Specification
 
@@ -52,10 +52,10 @@ For more info about how to access each index of the `LSP5ReceivedAssets[]` array
 
 #### LSP5ReceivedAssetsMap
 
-References received smart contract assets, like tokens (_e.g.: [LSP7 Digital Assets](./LSP-7-DigitalAsset)_) and NFTs (_e.g.: [LSP8 Identifiable Digital Assets](./LSP-8-IdentifiableDigitalAsset)_).
+References received smart contract assets, like tokens (_e.g.: [LSP7 Digital Assets](./LSP-7-DigitalAsset.md)_) and NFTs (_e.g.: [LSP8 Identifiable Digital Assets](./LSP-8-IdentifiableDigitalAsset.md)_).
 
 The `valueContent` MUST be constructed as follows: `bytes8(indexNumber) + bytes4(standardInterfaceId)`. Where: 
-- `indexNumber` = the index in the [`LSP5ReceivedAssets[]` Array](#lsp3issuedassets)
+- `indexNumber` = the index in the [`LSP5ReceivedAssets[]` Array](#lsp5receivedassets)
 - `standardInterfaceId` = the [ERC165 interface ID](https://eips.ethereum.org/EIPS/eip-165) of the standard that the token or asset smart contract implements (if the ERC165 interface ID is unknown, `standardInterfaceId = 0x00000000`).
 
 ```json

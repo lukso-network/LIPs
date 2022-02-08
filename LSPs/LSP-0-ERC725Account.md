@@ -16,7 +16,7 @@ This standard describes a version of an [ERC725](https://github.com/ethereum/EIP
  
 ## Abstract
 
-This standard, defines a blockchain account system to be used by humans, machines, or other smart contracts. It has the ability to **attach information** via [ERC725Y](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md#erc725y) to itself, **execute, deploy or transfer value** to any other smart contract or EOA via [ERC725X](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md#erc725x), is able to **be notified of incoming assets** via the [LSP1-UniversalReceiver](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-1-UniversalReceiver.md) function, and can **verify signatures** via [ERC1271](https://eips.ethereum.org/EIPS/eip-1271).
+This standard, defines a blockchain account system to be used by humans, machines, or other smart contracts. It has the ability to **attach information** via [ERC725Y](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md#erc725y) to itself, **execute, deploy or transfer value** to any other smart contract or EOA via [ERC725X](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md#erc725x), is able to **be notified of incoming assets** via the [LSP1-UniversalReceiver](./LSP-1-UniversalReceiver.md) function, and can **verify signatures** via [ERC1271](https://eips.ethereum.org/EIPS/eip-1271).
 
 
 ## Motivation
@@ -30,10 +30,10 @@ Using EOAs as accounts makes it hard to reason about the actor behind an address
 To make the usage of Blockchain infrastructures easier we need to use a smart contract account, rather that EOAs directly as account system.
 This allows us to:
 
-- Make security upgradeable via a key manager smart contract (e.g. [LSP6 KeyManager](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-6-KeyManager.md))
+- Make security upgradeable via a key manager smart contract (e.g. [LSP6 KeyManager](./LSP-6-KeyManager.md))
 - Allow any action that an EOA can do, and even add the ability to use `create2` through [ERC725X](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md#erc725x)
-- Allow the account to be informed and react to receiving assets through [LSP1 UniversalReciever](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-1-UniversalReceiver.md)
-- Define a number of key values stores to attach profile and other information through additional standards like [LSP3 UniversalProfile-Metadata](https://github.com/lukso-network/LIPs/blob/main/LSPs/LSP-3-UniversalProfile-Metadata.md)
+- Allow the account to be informed and react to receiving assets through [LSP1 UniversalReciever](./LSP-1-UniversalReceiver.md)
+- Define a number of key values stores to attach profile and other information through additional standards like [LSP3 UniversalProfile-Metadata](./LSP-3-UniversalProfile-Metadata.md)
 - Allow signature verification through [ERC1271](https://eips.ethereum.org/EIPS/eip-1271)
 
 
@@ -65,7 +65,7 @@ this smart contract address MUST be stored under the following key:
 
 ### Methods
 
-Contains the methods from [ERC173](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-173.md) (Ownable), [ERC725](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) (General key-value store, and general executor), [ERC1271](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1271.md) and [LSP1](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-1-UniversalReceiver.md), 
+Contains the methods from [ERC173](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-173.md#specification) (Ownable), [ERC725](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md#specification) (General key-value store, and general executor), [ERC1271](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1271.md#specification) and [LSP1](./LSP-1-UniversalReceiver.md#specification), 
 See the [Interface Cheat Sheet](#interface-cheat-sheet) for details.
 
 ### Events
@@ -85,7 +85,7 @@ The ERC725 general key value store allows for the ability to add any kind of inf
 
 ## Implementation
 
-A implementation can be found in the [ERC725Alliance/ERC725](https://github.com/ERC725Alliance/ERC725/blob/main/implementations/contracts/ERC725Account.sol) repository;
+An implementation can be found in the [lukso-network/lsp-smart-contracts](https://github.com/lukso-network/lsp-smart-contracts/blob/develop/contracts/LSP0ERC725Account/LSP0ERC725AccountCore.sol) repository.
 
 ERC725Y JSON Schema `ERC725Account`:
 

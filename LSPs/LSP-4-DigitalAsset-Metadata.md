@@ -15,7 +15,7 @@ This standard describes a set of [ERC725Y](https://github.com/ethereum/EIPs/blob
 
 ## Abstract
 
-This standard, defines a set of key value stores that are useful to create digital asset.
+This standard, defines a set of key-value pairs that are useful to describe a digital asset.
 
 ## Motivation
 
@@ -23,7 +23,7 @@ This standard aims to create a better version of tokens and NFTs to allow more f
 As NFTs mostly have a creator, those creators should be able to improve the assets (link better 3D files, as 3D file standards improve), or change attributes.
 One could even think of a smart contract system that can increase attributes based on certain inputs automatically.
 
-An LSP4 asset is controlled by a single `owner`, expected to be a ERC725 smart contract. This owner is able to `setData`, and therefore change values of keys, and can potentially mint new items.
+An LSP4 Digital Asset is controlled by a single `owner`, expected to be a [ERC725](https://github.com/ERC725Alliance/ERC725/blob/main/docs/ERC-725.md) smart contract. This owner is able to [`setData(...)`](https://github.com/ERC725Alliance/ERC725/blob/main/docs/ERC-725.md#setdata), and therefore change values of keys, and can potentially mint new items.
  
 
 ## Specification
@@ -91,7 +91,7 @@ The description of the asset.
 }
 ```
 
-For construction of the JSONURL value see: [ERC725Y JSON Schema](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-2-ERC725YJSONSchema.md#jsonurl-example)
+For more informations about how to construct the JSONURL, see: [ERC725Y JSON Schema > `valueContent` > `JSONURL`](./LSP-2-ERC725YJSONSchema.md#JSONURL)
 
 The linked JSON file SHOULD have the following format:
 
@@ -176,7 +176,7 @@ An array of ([ERC725Account](./LSP-0-ERC725Account.md)) addresses that defines t
 }
 ```
 
-For more infos about how to access each index of the `LSP4Creators[]` array, see [ERC725Y JSON Schema > `keyType`: `Array`](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-2-ERC725YJSONSchema.md#array)
+For more informations about how to access each index of the `LSP4Creators[]` array, see [ERC725Y JSON Schema > `keyType`: `Array`](./LSP-2-ERC725YJSONSchema.md#Array)
 
 #### LSP4CreatorsMap
 
@@ -184,7 +184,7 @@ References the creator addresses for this asset.
 
 The `valueContent` MUST be constructed as follows: `bytes8(indexNumber) + bytes4(standardInterfaceId)`. 
 Where:
-- `indexNumber` = the index in the [`LSP4Creators[]` Array](#lsp3issuedassets)
+- `indexNumber` = the index in the [`LSP4Creators[]` Array](##lsp4creators)
 - `standardInterfaceId` = if the creator address is a smart contract, the [ERC165 interface ID](https://eips.ethereum.org/EIPS/eip-165) of the standard that the smart contract implements. Otherwise `0x00000000` in the case where the creator address is:
   - an Externally Owned Account, or 
   - a contract implementing no ERC165 interface ID.
@@ -205,7 +205,7 @@ There can be many token implementations, and this standard fills a need for comm
 
 ## Implementation
 
-A implementation can be found in the [lukso-network/universalprofile-smart-contracts](https://github.com/lukso-network/lsp-universalprofile-smart-contracts/blob/main/contracts/LSP4DigitalAssetMetadata/LSP4DigitalAssetMetadata.sol);
+An implementation can be found in the [lukso-network/lsp-smart-contracts](https://github.com/lukso-network/lsp-universalprofile-smart-contracts/blob/main/contracts/LSP4DigitalAssetMetadata/LSP4DigitalAssetMetadata.sol) repository.
 The below defines the JSON interface of the `LSP4DigitalAsset`.
 
 ERC725Y JSON Schema `LSP4DigitalAsset`:
