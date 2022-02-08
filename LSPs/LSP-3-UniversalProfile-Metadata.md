@@ -182,7 +182,7 @@ The `valueContent` MUST be constructed as follows: `bytes8(indexNumber) + bytes4
 }
 ```
 
-For more infos about how to access each index of the `LSP3IssuedAssets[]` array, see [ERC725Y JSON Schema > `keyType`: `Array`](./LSP-2-ERC725YJSONSchema.md#Array)
+For more informations about how to access each index of the `LSP3IssuedAssets[]` array, see [ERC725Y JSON Schema > `keyType`: `Array`](./LSP-2-ERC725YJSONSchema.md#Array)
 
 ## Rationale
 

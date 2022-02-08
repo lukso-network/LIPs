@@ -21,7 +21,7 @@ Two keys are proposed to reference received asset smart contracts.
   - the index in the former array where the received asset address is stored.
   - an [ERC165 interface ID](https://eips.ethereum.org/EIPS/eip-165) to easily identify the standard used by each asset smart contracts, without the need to query the contracts directly. 
 
-The key `LSP5ReceivedAssetsMap` also helps to prevent adding duplications to the array, when automatically added via smart contract (e.g. via an [LSP1-UniversalReceiverDelegate](./LSP-1-UniversalReceiver.md)).
+The key `LSP5ReceivedAssetsMap` also helps to prevent duplicates from being added to the array, when automatically added via smart contract (e.g. via an [LSP1-UniversalReceiverDelegate](./LSP-1-UniversalReceiver.md)).
 
 ## Motivation
 To be able to display received assets in a profile we need to keep track of all received asset contract addresses. This is important for [UniversalProfile](./LSP-3-UniversalProfile-Metadata.md), but also [Vault](./LSP-9-Vault.md) smart contracts.

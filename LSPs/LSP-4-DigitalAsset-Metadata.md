@@ -91,7 +91,7 @@ The description of the asset.
 }
 ```
 
-For more infos about how to construct the JSONURL, see: [ERC725Y JSON Schema > `valueContent` > `JSONURL`](./LSP-2-ERC725YJSONSchema.md#JSONURL)
+For more informations about how to construct the JSONURL, see: [ERC725Y JSON Schema > `valueContent` > `JSONURL`](./LSP-2-ERC725YJSONSchema.md#JSONURL)
 
 The linked JSON file SHOULD have the following format:
 
@@ -176,7 +176,7 @@ An array of ([ERC725Account](./LSP-0-ERC725Account.md)) addresses that defines t
 }
 ```
 
-For more infos about how to access each index of the `LSP4Creators[]` array, see [ERC725Y JSON Schema > `keyType`: `Array`](./LSP-2-ERC725YJSONSchema.md#Array)
+For more informations about how to access each index of the `LSP4Creators[]` array, see [ERC725Y JSON Schema > `keyType`: `Array`](./LSP-2-ERC725YJSONSchema.md#Array)
 
 #### LSP4CreatorsMap
 

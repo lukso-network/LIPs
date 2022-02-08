@@ -34,7 +34,7 @@ The flow of a transactions is as follows:
 
 ## Motivation
 
-The benefit of a KeyManager is to externalise permission logic from [ERC725Y and X](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) contracts (such as an [ERC725Account](./LSP-0-ERC725Account.md)). This allows for such an logic to be upgraded without needing to change the core [ERC725Account](./LSP-0-ERC725Account.md) contract.
+The benefit of a KeyManager is to externalise the permission logic from [ERC725Y and X](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) contracts (such as an [ERC725Account](./LSP-0-ERC725Account.md)). This allows for such logic to be upgraded without needing to change the core [ERC725Account](./LSP-0-ERC725Account.md) contract.
 
 Storing the permissions at the core [ERC725Account](./LSP-0-ERC725Account.md) itself, allows it to survive KeyManager upgrades and opens the door to add additional KeyManager logic in the future, without loosing already set address permissions.
 
@@ -53,7 +53,7 @@ These keys are based on the [LSP2-ERC725YJSONSchema](./LSP-2-ERC725YJSONSchema.m
 #### AddressPermissions[]
 
 Contains an array of addresses, that have some permission set.
-This is mainly useful for interfaces to know which address hold permissions.
+This is mainly useful for interfaces to know which address holds which permissions.
 
 ```json
 {
@@ -65,7 +65,7 @@ This is mainly useful for interfaces to know which address hold permissions.
 }
 ```
 
-For more infos about how to access each index of the `AddressPermissions[]` array, see: [ERC725Y JSON Schema > `keyType` `Array`](./LSP-2-ERC725YJSONSchema.md#array)
+For more informations about how to access each index of the `AddressPermissions[]` array, see: [ERC725Y JSON Schema > `keyType` `Array`](./LSP-2-ERC725YJSONSchema.md#array)
 
 #### AddressPermissions:Permissions:\<address\>
 
@@ -85,8 +85,10 @@ Since the `valueType` of this key is `bytes32`, up to 255 different permissions 
     
 #### AddressPermissions:AllowedAddresses:\<address\>
 
-Contains an array of address (Externally Owned Accounts or smart contracts) a controlling address is allowed to interact with.
-IF no addresses are set, interacting with ANY addresses is allowed. IF one or more addresses is set, the controlling address is restricted to interact only with these addresses.
+Contains an array of addresses (Externally Owned Accounts or smart contracts) a controlling address is allowed to interact with.
+
+- IF **no addresses** are set, interacting with ANY addresses is allowed.
+- IF **one or more addresses** is set, the controlling address is restricted to interact only with these addresses.
 
 ```json
 {
@@ -102,7 +104,7 @@ IF no addresses are set, interacting with ANY addresses is allowed. IF one or mo
 
 Contains an array of [bytes4 function signatures](https://docs.soliditylang.org/en/v0.5.3/abi-spec.html?highlight=selector#function-selector), the controlling address is allowed to call on other smart contracts.
 
-This permission acts as a restriction mechanism for an interacting with other smart contracts via an ERC725Account. It enables to limit which functions an address can call on a external smart contracts via the ERC725Account.
+This permission acts as a restriction mechanism when interacting with other smart contracts via an ERC725Account. It enables to limit which functions an address can call on a external smart contracts via the ERC725Account.
 
 ```json
 {
@@ -187,7 +189,7 @@ SIGN               = 0x000000000000000000000000000000000000000000000000000000000
 function getNonce(address _address, uint256 _channel) public view returns (uint256)
 ```
 
-Returns the nonce that needs to be signed by a allowed key to be passed into the [executeRelayCall](#executeRelayCall) function. A signer can choose his channel number arbitrarily.
+Returns the nonce that needs to be signed by an allowed key to be passed into the [executeRelayCall](#executeRelayCall) function. A signer can choose his channel number arbitrarily.
 
 If multiple transactions should be signed, nonces in the same channel can simply be increased by increasing the returned nonce.
 
