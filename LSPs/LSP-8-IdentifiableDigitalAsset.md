@@ -478,10 +478,10 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 [ERC721]: <https://github.com/ethereum/EIPs/blob/master/EIPS/eip-721.md>
 [ERC725]: <https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md>
 [ERC777]: <https://github.com/ethereum/EIPs/blob/master/EIPS/eip-777.md>
-[LSP1]: <https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-1-UniversalReceiver.md>
-[LSP2#jsonurl]: <https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-2-ERC725YJSONSchema.md#jsonurl>
-[LSP2#bytes20mapping]: <https://github.com/lukso-network/LIPs/blob/main/LSPs/LSP-2-ERC725YJSONSchema.md#bytes20mapping>
-[LSP4#erc725ykeys]: <https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-4-DigitalAsset-Metadata.md#erc725ykeys>
-[LSP7]: <https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-7-DigitalAsset.md>
-[LSP8]: <https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-8-IdentifiableDigitalAsset.md>
+[LSP1]: <./LSP-1-UniversalReceiver.md>
+[LSP2#jsonurl]: <./LSP-2-ERC725YJSONSchema.md#JSONURL>
+[LSP2#bytes20mapping]: <./LSP-2-ERC725YJSONSchema.md#bytes20mapping>
+[LSP4#erc725ykeys]: <./LSP-4-DigitalAsset-Metadata.md#erc725ykeys>
+[LSP7]: <./LSP-7-DigitalAsset.md>
+[LSP8]: <./LSP-8-IdentifiableDigitalAsset.md>
 [LSP8.sol]: <https://github.com/lukso-network/lsp-universalprofile-smart-contracts/blob/develop/contracts/LSP8IdentifiableDigitalAsset/LSP8IdentifiableDigitalAsset.sol>

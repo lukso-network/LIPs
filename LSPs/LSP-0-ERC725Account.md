@@ -6,7 +6,7 @@ discussions-to: https://discord.gg/E2rJPP4
 status: Draft
 type: LSP
 created: 2021-09-21
-requires: ERC165, ERC173, ERC1271, ERC725X, ERC725Y, [LSP1](LSP-1-UniversalReceiver.md), LSP2
+requires: ERC165, ERC173, ERC1271, ERC725X, ERC725Y, LSP1, LSP2
 ---
 
 
