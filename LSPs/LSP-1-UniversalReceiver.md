@@ -12,11 +12,11 @@ requires: ERC165
 
 ## Simple Summary
 <!--"If you can't explain it simply, you don't understand it well enough." Provide a simplified and layman-accessible explanation of the LIP.-->
-A entry function to allow a contract to be able to receive any arbitrary information.
+An entry function enabling a contract to receive arbitrary information.
 
 ## Abstract
 <!--A short (~200 word) description of the technical issue being addressed.-->
-Similar to a smart contracts fallback function, which allows a contract to be notified of a incoming transaction with value, the Universal Receiver allow for any contract to recevie information about any interaction.
+Similar to a smart contract's fallback function, which allows a contract to be notified of an incoming transaction with a value, the Universal Receiver allows for any contract to receive information about any interaction.
 This allows receiving contracts to react on incoming transfers or other interactions.
 
 
@@ -27,13 +27,13 @@ A good example are token transfers, where the token smart contract should inform
 
 By creating a universal function that many smart contracts implement, receiving of asset and information can be unified.
 
-In cases where smart contracts function as a profile or wallet over a long time, an upgradable receiver can allow for future assets to be received, without that the interface needs to be changed.
+In cases where smart contracts function as a profile or wallet over a long time, an upgradable receiver can allow for future assets to be received, without the need for the interface to be changed.
 
 ## Specification
 
 ERC165 interface id: `0x6bb56a14`
 
-Every contract that complies to the Universal Receiver standard MUST implement:
+Every contract that complies with the Universal Receiver standard MUST implement:
 
 ### Methods
 
@@ -49,7 +49,7 @@ _Parameters:_
 
 - `typeId` is the hash of a standard (according to ERC165?)
 
-- `data` is a byteArray of arbitrary data. Reciving contracts should take the `id` in consideration to properly decode the `data`. The function MUST revert if `id` is not accepted or unknown. 
+- `data` is a byteArray of arbitrary data. Receiving contracts should take the `id` in consideration to properly decode the `data`. The function MUST revert if `id` is not accepted or unknown. 
 
 _Returns:_ `bytes`, which can be used to encode response values.
 
@@ -86,7 +86,7 @@ _Parameters:_
 
 - `typeId` is the hash of a standard (according to ERC165?).
 
-- `data` is a byteArray of arbitrary data. Reciving contracts should take the `id` in consideration to properly decode the `data`. The function MUST revert if `id` is not accepted or unknown.
+- `data` is a byteArray of arbitrary data. Receiving contracts should take the `id` in consideration to properly decode the `data`. The function MUST revert if `id` is not accepted or unknown.
 
 _Returns:_ `bytes`, which can be used to encode response values.
 
@@ -95,11 +95,13 @@ _Returns:_ `bytes`, which can be used to encode response values.
 
 ## Rationale
 <!--The rationale fleshes out the specification by describing what motivated the design and why particular design decisions were made. It should describe alternate designs that were considered and related work, e.g. how the feature is supported in other languages. The rationale may also provide evidence of consensus within the community, and should discuss important objections or concerns raised during discussion.-->
-This is an abstraction of the ideas behind Ethereum ERC223 and ERC777, that contracts are called when they are receiving tokens. With this proposal, we can allow contracts to receive any information over a standardised interface.
-This can even be done in an upgradable way, where the receiving code can changed over time to support new standards and assets. 
+This is an abstraction of the ideas behind Ethereum [ERC223](https://github.com/ethereum/EIPs/issues/223) and [ERC777](https://eips.ethereum.org/EIPS/eip-777), that contracts are called when they are receiving tokens. With this proposal, we can allow contracts to receive any information over a standardised interface.
+This can even be done in an upgradable way, where the receiving code can be changed over time to support new standards and assets. 
 
 
 ## Implementation
+
+An implementation can be found in the [lukso-network/lsp-smart-contracts](https://github.com/lukso-network/lsp-smart-contracts/tree/develop/contracts/LSP1UniversalReceiver) repository.
 
 A solidity example of the described interface:
 
@@ -252,6 +254,7 @@ contract UniversalReceiverExample is BasicUniversalReceiver {
 interface ILSP1  /* is ERC165 */ {
 
     event UniversalReceiver(address indexed from, bytes32 indexed typeId, bytes indexed returnedValue, bytes receivedData);
+    
     
     function universalReceiver(bytes32 typeId, bytes memory data) external returns (bytes memory);
     

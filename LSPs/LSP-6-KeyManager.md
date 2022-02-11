@@ -6,25 +6,26 @@ discussions-to:
 status: Draft
 type: LSP
 created: 2021-08-03
-requires: LSP2, ERC165, ERC1271
+requires: ERC165, ERC1271, LSP2
 ---
 
 
 ## Simple Summary
-<!--"If you can't explain it simply, you don't understand it well enough." Provide a simplified and layman-accessible explanation of the LIP.-->
 
-This standard describes a `KeyManager` contract with a set of pre-defined permissions that can be used as a controller for a ERC725 account.
-Such permissions are useful to control actions performed by other addresses when interacting with an [ERC725Account](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md).
+This standard describes a `KeyManager` contract with a set of pre-defined permissions for addresses. A KeyManager contract can control an [ERC725Account](./LSP-0-ERC725Account.md) like account, or any other [ERC725](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) smart contract.
+
 
 ## Abstract
 
-<!--A short (~200 word) description of the technical issue being addressed.-->
+This standard allows for controlling addresses to be restricted through multiple permissions, to act on and through this KeyManager on a controlled smart contract (for example an [ERC725Account](https://github.com/lukso-network/LIPs/blob/main/LSPs/LSP-0-ERC725Account.md)).
 
-This standard allows for a controller and permissioning layer to be set on an ERC725 account.
+The KeyManager functions as a gateway for the [ERC725Account](./LSP-0-ERC725Account.md) restricting an address actions based on set permissions.
 
-It provides functionalities to allow / disallow third parties to perform actions on an ERC725 account, on behalf of its owner.
+Permissions are described in the [Permissions values section](#permission-values-in-addresspermissionspermissionsaddress). Furthermore addresses can be restricted to only talk to certain other smart contracts or address, specific functions or smart contracts supporting only specifc standard interfaces.
 
-Such actions are represented as permissions that can be assigned to any third party address.
+The Permissions are stored at [ERC725Account](https://github.com/lukso-network/LIPs/blob/main/LSPs/LSP-0-ERC725Account.md) ERC725Y key value store, and can therefore survive an upgrade to a new KeyManager contract.
+
+The flow of a transactions is as follows:
 
 ![lsp6-key-manager-flow-chart](https://user-images.githubusercontent.com/31145285/129574099-9eba52d4-4f82-4f11-8ac5-8bfa18ce97d6.jpeg)
 
@@ -33,140 +34,153 @@ Such actions are represented as permissions that can be assigned to any third pa
 
 ## Motivation
 
-ERC725Accounts enable to own a universal profile, that:
-* can hold multiple assets (tokens, NFTs...).
-* many addresses (whether users or contracts) can interact with.
+The benefit of a KeyManager is to externalise the permission logic from [ERC725Y and X](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) contracts (such as an [ERC725Account](./LSP-0-ERC725Account.md)). This allows for such logic to be upgraded without needing to change the core [ERC725Account](./LSP-0-ERC725Account.md) contract.
 
-However, data stored in a ERC725 account (under the JSON schema) can be easily updated by any address, using the function `setData(...)`. 
-Currently, ERC725 accounts do not implement any form of delegate access control, so to grant or restrict third parties to perform action on their behalf.
-
-What is required is a contract design that enable ERC725 account owners to:
-
-* control who can interact with their profile.
-* grant permissions, so to allow third parties to act on their behalf. 
+Storing the permissions at the core [ERC725Account](./LSP-0-ERC725Account.md) itself, allows it to survive KeyManager upgrades and opens the door to add additional KeyManager logic in the future, without loosing already set address permissions.
 
 
 ## Specification
 
 
-### Permission Keys on the ERC725Account
+### ERC725Y Keys
 
-The following keys can be used to get and set permissions of certain addresses on a ERC725 account.   
-These keys are based on the [LSP2-ERC725YJSONSchema](https://github.com/lukso-network/LIPs/blob/main/LSPs/LSP-2-ERC725YJSONSchema.md) standard, and use the key type **[Bytes20MappingWithGrouping](https://github.com/lukso-network/LIPs/blob/main/LSPs/LSP-2-ERC725YJSONSchema.md#bytes20mappingwithgrouping)**
+**The permissions that the KeyManager reads, are stored on the controlled-contracts ERC725Y key value store (for example an [ERC725Account](./LSP-0-ERC725Account.md))**
 
-The KeyManager will read the permissions from the ERC725Account key value store, to determine if a key is allowed to perform certain actions.
+The following ERC725Y keys are used to read permissions of certain addresses.
+These keys are based on the [LSP2-ERC725YJSONSchema](./LSP-2-ERC725YJSONSchema.md) standard, and use the key type **[Bytes20MappingWithGrouping](./LSP-2-ERC725YJSONSchema.md#bytes20mappingwithgrouping)**
+
 
 #### AddressPermissions[]
 
-Holds an array of address, that have permission some permission sets to interact with the ERC725Account.
+Contains an array of addresses, that have some permission set.
+This is mainly useful for interfaces to know which address holds which permissions.
 
 ```json
 {
     "name": "AddressPermissions[]",
     "key": "0xdf30dba06db6a30e65354d9a64c609861f089545ca58c6b4dbe31a5f338cb0e3",
     "keyType": "Array",
-    "valueContent": "Address",
-    "valueType": "address"
+    "valueType": "address",
+    "valueContent": "Address"
 }
 ```
 
+For more informations about how to access each index of the `AddressPermissions[]` array, see: [ERC725Y JSON Schema > `keyType` `Array`](./LSP-2-ERC725YJSONSchema.md#array)
+
 #### AddressPermissions:Permissions:\<address\>
 
-Holds the permissions for a key. See [Permission Values](#permission-values-in-addresspermissionspermissionsaddress) for details.
+Contains a set of permissions for an address. Permissions defines what an address **can do on** an ERC725Account (*eg: edit the key-value store via SETDATA*), or **can perform on behalf of** the ERC725Account.
+
+Since the `valueType` of this key is `bytes32`, up to 255 different permissions can be defined. This includes the [ten default permissions](#permission-values-in-addresspermissionspermissionsaddress) defined below. Custom permissions can be defined on top of the default one (starting at `0x0000...0400` (`1024` in decimals)).
 
 ```json
 {
     "name": "AddressPermissions:Permissions:<address>",
     "key": "0x4b80742d0000000082ac0000<address>",
     "keyType": "Bytes20MappingWithGrouping",
-    "valueContent": "BitArray",
-    "valueType": "bytes4"
+    "valueType": "bytes32",
+    "valueContent": "BitArray"
 }
 ```
     
 #### AddressPermissions:AllowedAddresses:\<address\>
 
-Holds an array of address, the key is allowed to talk to.
+Contains an array of addresses (Externally Owned Accounts or smart contracts) a controlling address is allowed to interact with.
+
+- IF **no addresses** are set, interacting with ANY addresses is allowed.
+- IF **one or more addresses** is set, the controlling address is restricted to interact only with these addresses.
 
 ```json
 {
     "name": "AddressPermissions:AllowedAddresses:<address>",
     "key": "0x4b80742d00000000c6dd0000<address>",
     "keyType": "Bytes20MappingWithGrouping",
-    "valueContent": "Address",
-    "valueType": "address[]"
+    "valueType": "address[]",
+    "valueContent": "Address"
 }
 ```
 
 #### AddressPermissions:AllowedFunctions:\<address\>
 
-Holds an array of bytes4 function signatures, the key is allowed to call on other smart contracts.
+Contains an array of [bytes4 function signatures](https://docs.soliditylang.org/en/v0.5.3/abi-spec.html?highlight=selector#function-selector), the controlling address is allowed to call on other smart contracts.
+
+This permission acts as a restriction mechanism when interacting with other smart contracts via an ERC725Account. It enables to limit which functions an address can call on a external smart contracts via the ERC725Account.
 
 ```json
 {
     "name": "AddressPermissions:AllowedFunctions:<address>",
     "key": "0x4b80742d000000008efe0000<address>",
     "keyType": "Bytes20MappingWithGrouping",
-    "valueContent": "Bytes4",
-    "valueType": "bytes4[]"
+    "valueType": "bytes4[]",
+    "valueContent": "Bytes4"
 }
 ```
 
 #### AddressPermissions:AllowedStandards:\<address\>
 
-Holds an array of bytes4 ERC165 standards signatures, other smart contracts should support, for the key to be allowed to talk to the smart contract.
+Contains an array of bytes4 [ERC165 interface Ids](https://eips.ethereum.org/EIPS/eip-165), other smart contracts MUST support, for the controlling address to be allowed to interact with.
 
 ```json
 {
     "name": "AddressPermissions:AllowedStandards:<address>",
     "key": "0x4b80742d000000003efa0000<address>",
     "keyType": "Bytes20MappingWithGrouping",
-    "valueContent": "Bytes4",
-    "valueType": "bytes4[]"
+    "valueType": "bytes4[]",
+    "valueContent": "Bytes4"
 }
 ```
 
+#### AddressPermissions:AllowedERC725YKeys:\<address\>
+
+Contains an array of `bytes32` ERC725Y keys.
+
+This key can be used in combination with the `SETDATA` [permission](#permission-values-in-addresspermissionspermissionsaddress). It enables to restrict which keys an `address` can set or edit on the controlled ERC725Account, by providing an [abi encoded](https://docs.soliditylang.org/en/v0.8.11/units-and-global-variables.html#abi-encoding-and-decoding-functions)) array of ERC725Y keys.
+
+```json
+{
+    "name": "AddressPermissions:AllowedERC725YKeys:<address>",
+    "key": "0x4b80742d0000000090b80000<address>",
+    "keyType": "Bytes20MappingWithGrouping",
+    "valueType": "bytes32[]",
+    "valueContent": "Bytes32"
+}
+```
+
+Each key defined in the array MUST be 32 bytes long. It is possible to set a range of allowed ERC725Y keys (**= partial keys**), by setting:
+- some part of the keys as the exact key bytes
+- the rest of the key bytes as 0 bytes.
+
+The 0 bytes part will represent a part that is dynamic. Below is an example based on a [LSP2 Mapping](./LSP-2-ERC725YJSONSchema.md#Mapping) key type, where first word = `SupportedStandards`, and second word = `LSP3UniversalProfile`.
+
+```js
+name: "SupportedStandards:LSP3UniversalProfile"
+key: 0xeafec4d89fa9619884b6b89135626455000000000000000000000000abe425d6
+```
+
+By setting the value to `0xeafec4d89fa9619884b6b8913562645500000000000000000000000000000000` in the list of allowed ERC725Y key, one address can set any key **starting with the first word `SupportedStandards:...`**.
+
 ### Permission Values in AddressPermissions:Permissions:\<address\>
 
-The following permissions are set in the BitArray of the `AddressPermissions:Permissions:<address>` key in the following order:
+The following permissions are allowed in the BitArray of the `AddressPermissions:Permissions:<address>` key for an address. The order can not be changed:
 
-```solidity
-CHANGEOWNER   = 0x01;   // 0000 0001
-CHANGEKEYS    = 0x02;   // 0000 0010
-SETDATA       = 0x04;   // 0000 0100
-CALL          = 0x08;   // 0000 1000
-DELEGATECALL  = 0x10;   // 0001 0000
-DEPLOY        = 0x20;   // 0010 0000
-TRANSFERVALUE = 0x40;   // 0100 0000
-SIGN          = 0x80;   // 1000 0000
+```js
+CHANGEOWNER        = 0x0000000000000000000000000000000000000000000000000000000000000001;   // 0000 0000 0000 0001 // Allows changing the owner of the controlled contract
+CHANGEPERMISSIONS  = 0x0000000000000000000000000000000000000000000000000000000000000002;   // .... .... .... 0010 // Allows changing the permissions (adding + removing) of addresses
+ADDPERMISSIONS     = 0x0000000000000000000000000000000000000000000000000000000000000004;   // .... .... .... 0100 // Allows adding new permissions to addresses (removing permission disallowed) 
+SETDATA            = 0x0000000000000000000000000000000000000000000000000000000000000008;   // .... .... .... 1000 // Allows setting data on the controlled contract
+CALL               = 0x0000000000000000000000000000000000000000000000000000000000000010;   // .... .... 0001 .... // Allows calling other contracts through the controlled contract
+STATICCALL         = 0x0000000000000000000000000000000000000000000000000000000000000020;   // .... .... 0010 .... // Allows calling other contracts through the controlled contract
+DELEGATECALL       = 0x0000000000000000000000000000000000000000000000000000000000000040;   // .... .... 0100 .... // Allows delegate calling other contracts through the controlled contract
+DEPLOY             = 0x0000000000000000000000000000000000000000000000000000000000000080;   // .... .... 1000 .... // Allows deploying other contracts through the controlled contract
+TRANSFERVALUE      = 0x0000000000000000000000000000000000000000000000000000000000000100;   // .... 0001 .... .... // Allows transfering value to other contracts from the controlled contract
+SIGN               = 0x0000000000000000000000000000000000000000000000000000000000000200;   // .... 0010 .... .... // Allows signing on behalf of the controlled account, for example for login purposes
 ```
 
 
-![lsp6-key-manager-permissions-range](https://user-images.githubusercontent.com/31145285/129574070-8aceb32c-edf1-4134-b7c8-ca242a14c9c3.jpeg)
-
+![LSP6 - KeyManager-permissions-examples](https://user-images.githubusercontent.com/31145285/141792716-ccebaff5-9d06-4e2d-9c34-6cda51b0dc16.jpeg)
 
 
 ### Methods
-
-
-
-#### execute
-
-```solidity
-function execute(bytes memory _data) public payable returns (bool)
-```
-
-Execute a calldata payload on an ERC725 account.
-
-MUST fire the [Executed event](#executed).
-
-_Parameters:_
-
-- `_data`: The call data to be executed. The first 4 bytes of the `_data` payload MUST correspond to one of the function selector in the ERC725 account, such as `setData(...)`, `execute(...)` or `transferOwnership(...)`.
-
-_Returns:_ `bool` , `true` if the call on ERC725 account succeeded, `false` otherwise.
-
-
 
 
 #### getNonce
@@ -175,7 +189,7 @@ _Returns:_ `bool` , `true` if the call on ERC725 account succeeded, `false` othe
 function getNonce(address _address, uint256 _channel) public view returns (uint256)
 ```
 
-Returns the nonce that needs to be signed by a allowed key to be passed into the [executeRelayCall](#executeRelayCall) function. A signer can choose his channel number arbitrarily.
+Returns the nonce that needs to be signed by an allowed key to be passed into the [executeRelayCall](#executeRelayCall) function. A signer can choose his channel number arbitrarily.
 
 If multiple transactions should be signed, nonces in the same channel can simply be increased by increasing the returned nonce.
 
@@ -188,15 +202,35 @@ _Parameters:_
 
 _Returns:_ `uint256` , the current nonce.
 
+#### execute
+
+```solidity
+function execute(bytes memory _data) public payable returns (bytes memory)
+```
+
+Execute a payload on a set [ERC725 X or Y smart contract](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md).
+
+MUST fire the [Executed event](#executed).
+
+_Parameters:_
+
+- `_data`: The call data to be executed. The first 4 bytes of the `_data` payload MUST correspond to one of the function selector on the ERC725 smart contract, such as `setData(...)`, `execute(...)` or `transferOwnership(...)`.
+
+_Returns:_ `bytes` , the returned data as abi-encoded bytes if the call on ERC725 smart contract succeeded, otherwise revert with a reason-string. 
+
+
+
+
+
 
 
 #### executeRelayCall
 
 ```solidity
-function executeRelayCall(address _signedFor, uint256 _nonce, bytes memory _data, bytes memory _signature) public payable returns (bool)
+function executeRelayCall(address _signedFor, uint256 _nonce, bytes memory _data, bytes memory _signature) public payable returns (bytes memory)
 ```
 
-Allows anybody to execute `_data` payload on a ERC725 account, given they have a signed message from an executor.
+Allows anybody to execute `_data` payload on a set [ERC725 X or Y smart contract](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md), given they have a signed message from an executor.
 
 MUST fire the [Executed event](#executed).
 
@@ -207,7 +241,7 @@ _Parameters:_
 - `_data`: The call data to be executed.
 - `_signature`: bytes32 ethereum signature.
 
-_Returns:_ `bool` , true if the call on ERC725 account succeeded, false otherwise.
+_Returns:_ `bytes` , the returned data as abi-encoded bytes if the call on ERC725 smart contract succeeded, otherwise revert with a reason-string. 
 
 **Important:** the message to sign MUST be of the following format: `<KeyManager address>` + `<signer nonce>` + `<_data payload>` .
 These 3 parameters MUST be:
@@ -301,7 +335,7 @@ To illustrate, for a file set with permission `755`, the group permission (secon
 ## Implementation
 <!--The implementations must be completed before any LIP is given status "Final", but it need not be completed before the LIP is accepted. While there is merit to the approach of reaching consensus on the specification and rationale before writing code, the principle of "rough consensus and running code" is still useful when it comes to resolving many discussions of API details.-->
 
-A implementation can be found in the [lukso-network/universalprofile-smart-contracts](https://github.com/lukso-network/universalprofile-smart-contracts/blob/main/contracts/LSP3Account.sol);
+A implementation can be found in the [lukso-network/universalprofile-smart-contracts](https://github.com/lukso-network/lsp-universalprofile-smart-contracts/blob/main/contracts/LSP6KeyManager/LSP6KeyManager.sol);
 The below defines the JSON interface of the `LSP3Account`.
 
 ERC725Y JSON Schema `LSP6KeyManager`, set at the `LSP3Account`:
@@ -309,32 +343,46 @@ ERC725Y JSON Schema `LSP6KeyManager`, set at the `LSP3Account`:
 ```json
 [
     {
+        "name": "AddressPermissions[]",
+        "key": "0xdf30dba06db6a30e65354d9a64c609861f089545ca58c6b4dbe31a5f338cb0e3",
+        "keyType": "Array",
+        "valueType": "address",
+        "valueContent": "Address"
+    },
+    {
         "name": "AddressPermissions:Permissions:<address>",
         "key": "0x4b80742d0000000082ac0000<address>",
         "keyType": "Bytes20MappingWithGrouping",
-        "valueContent": "BitArray",
-        "valueType": "bytes4"
+        "valueType": "bytes32",
+        "valueContent": "BitArray"
     },
     {
         "name": "AddressPermissions:AllowedAddresses:<address>",
         "key": "0x4b80742d00000000c6dd0000<address>",
         "keyType": "Bytes20MappingWithGrouping",
-        "valueContent": "Address",
-        "valueType": "address[]"
+        "valueType": "address[]",
+        "valueContent": "Address"
     },
     {
         "name": "AddressPermissions:AllowedFunctions:<address>",
         "key": "0x4b80742d000000008efe0000<address>",
         "keyType": "Bytes20MappingWithGrouping",
-        "valueContent": "Bytes4",
-        "valueType": "bytes4[]"
+        "valueType": "bytes4[]",
+        "valueContent": "Bytes4"
     },
     {
         "name": "AddressPermissions:AllowedStandards:<address>",
         "key": "0x4b80742d000000003efa0000<address>",
         "keyType": "Bytes20MappingWithGrouping",
-        "valueContent": "Bytes4",
-        "valueType": "bytes4[]"
+        "valueType": "bytes4[]",
+        "valueContent": "Bytes4"
+    },
+    {
+        "name": "AddressPermissions:AllowedERC725YKeys:<address>",
+        "key": "0x4b80742d0000000090b80000<address>",
+        "keyType": "Bytes20MappingWithGrouping",
+        "valueType": "bytes32[]",
+        "valueContent": "Bytes32"
     }
 ]
 ```
@@ -344,20 +392,22 @@ ERC725Y JSON Schema `LSP6KeyManager`, set at the `LSP3Account`:
 ```solidity
 
 interface ILSP6  /* is ERC165 */ {
+
+    // ERC1271
+    
+    function isValidSignature(bytes32 _hash, bytes memory _signature) external view returns (bytes4 magicValue);
+
+    
+    // LSP6
         
     event Executed(uint256 indexed  _value, bytes _data); 
     
     
     function getNonce(address _address, uint256 _channel) external view returns (uint256);
     
-    function execute(bytes memory _data) external payable returns (bool);
+    function execute(bytes memory _data) external payable returns (bytes memory);
     
-    function executeRelayCall(address _signedFor, uint256 _nonce, bytes memory _data, bytes memory _signature) external payable returns (bool);
- 
-        
-    // ERC1271
-    
-    function isValidSignature(bytes32 _hash, bytes memory _signature) external view returns (bytes4 magicValue);
+    function executeRelayCall(address _signedFor, uint256 _nonce, bytes memory _data, bytes memory _signature) external payable returns (bytes memory);
     
 }
 
