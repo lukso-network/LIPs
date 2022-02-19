@@ -105,9 +105,19 @@ The linked JSON file SHOULD have the following format:
                 "url": "string" // the link itself
             },
             ...
-        ],  
+        ],
+        "icon": [  // multiple sizes of the same icon
+            {
+                "width": Number,
+                "height": Number,
+                "hashFunction": 'keccak256(bytes)',
+                "hash": 'string', // bytes32 hex string of the image hash
+                "url": 'string'
+            },
+            ...
+        ],
         "images": [ // multiple images in different sizes, related to the DigitalAsset, image 0, should be the main image
-            [
+            [ // array of different sizes of the same image
                 {
                     "width": Number,
                     "height": Number,
@@ -139,6 +149,15 @@ Example:
             { title: 'Twitter', url: 'https://twitter.com/goldenpig123' },
             { title: 'goldenpig.org', url: 'https://goldenpig.org' }
         ],
+        icon: [
+            {
+                width: 256,
+                height: 256,
+                hashFunction: 'keccak256(bytes)',
+                hash: '0x01299df007997de92a820c6c2ec1cb2d3f5aa5fc1adf294157de563eba39bb6f',
+                url: 'ifps://QmW5cF4r9yWeY1gUCtt7c6v3ve7Fzdg8CKvTS96NU9Uiwr'
+            }
+        ]
         images: [
             [
                 {
