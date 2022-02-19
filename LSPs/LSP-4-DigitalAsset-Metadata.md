@@ -157,7 +157,7 @@ Example:
                 hash: '0x01299df007997de92a820c6c2ec1cb2d3f5aa5fc1adf294157de563eba39bb6f',
                 url: 'ifps://QmW5cF4r9yWeY1gUCtt7c6v3ve7Fzdg8CKvTS96NU9Uiwr'
             }
-        ]
+        ],
         images: [
             [
                 {
