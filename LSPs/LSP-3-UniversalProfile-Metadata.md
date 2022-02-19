@@ -75,6 +75,14 @@ The linked JSON file SHOULD have the following format:
             ...
         ],
         "tags": [ "string", "string", ... ], // tags related to the profile
+        "avatar": [ // a 3D file avatar mostly in FBX and/or OBJ format, multiple file formats of an avatar can be added
+            {
+                "hashFunction": 'keccak256(bytes)',
+                "hash": 'string',
+                "url": 'string',
+                "fileType": 'string'
+            }
+        ]
         // below each image type SHOULD have different size of the same image, so that interfaces can choose which one to load for better loading performance
         "profileImage": [ // One image in different sizes, representing the profile.
             {  
@@ -85,6 +93,11 @@ The linked JSON file SHOULD have the following format:
                 "url": 'string'
             },
             ...
+            // OR link a DigitalAsset (NFT)
+            {  
+                "address": Address, // the address of an LSP7 or LSP8
+                "tokenId": 32bytes  // (optional) if token contract is an LSP7
+            },
         ],
         "backgroundImage": [ // Image in different sizes, that can be used in conjunction with profile image to give a more personal look to a profile.
             { 
@@ -95,6 +108,11 @@ The linked JSON file SHOULD have the following format:
                 "url": 'string'
             },
             ...
+             // OR link a DigitalAsset (NFT)
+            {  
+                "address": Address, // the address of an LSP7 or LSP8
+                "tokenId": 32bytes  // (optional) if token contract is an LSP7
+            },
         ]
     }
 }
@@ -112,21 +130,19 @@ Example:
             { title: 'lukso.network', url: 'https://lukso.network' }
         ],
         tags: [ 'brand', 'public profile' ],
-        profileImage: [
+        avatar: [
             {
-                width: 1024,
-                height: 974,
-                hashFunction: 'keccak256(bytes)',
-                hash: '0xa9399df007997de92a820c6c2ec1cb2d3f5aa5fc1adf294157de563eba39bb6e',
-                url: 'ifps://QmW4wM4r9yWeY1gUCtt7c6v3ve7Fzdg8CKvTS96NU9Uiwr'
-            },
-            {
-                width: 640,
-                height: 609,
-                hashFunction: 'keccak256(bytes)',
-                hash: '0xb316a695125cb0566da252266cfc9d5750a740bbdffa86712bb17508e70e6a31',
-                url: 'ifps://QmXGELsqGidAHMwYRsEv6Z4emzMggtc5GXZYGFK7r6zFBg'
+              hashFunction: 'keccak256(bytes)',
+              hash: '0x98fe032f81c43426fbcfb21c780c879667a08e2a65e8ae38027d4d61cdfe6f55',
+              url: 'ifps://QmPJESHbVkPtSaHntNVY5F6JDLW8v69M2d6khXEYGUMn7N',
+              fileType: 'fbx'
             }
+        ],
+        profileImage: [
+            {  
+                "address": 0x1231c7436a77a009a97e48e4e10c92e89fd95fe15, // the address of an LSP7 or LSP8
+                "tokenId": 0xdDe1c7436a77a009a97e48e4e10c92e89fd95fe1556fc5c62ecef57cea51aa37  // (optional) if token contract is an LSP7
+            },
         ],
         backgroundImage: [
             {
