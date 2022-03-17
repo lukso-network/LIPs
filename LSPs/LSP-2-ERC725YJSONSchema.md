@@ -243,7 +243,7 @@ A **Mapping** key is constructed using `bytes16(keccak256("FirstWord")) + bytes1
 ```json
 {
     "name": "FirstWord:SecondWord",
-    "key": "0xeafec4d89fa9619884b6b89135626455000000000000000000000000abe425d6",
+    "key": "0xf49648de3734d6c5458244ad87c893b500000000000000000000000053022d37",
     "keyType": "Mapping",
     "valueType": "...",
     "valueContent": "..."
