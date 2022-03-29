@@ -434,9 +434,13 @@ interface ILSP8 is /* IERC165 */ {
     event DataChanged(bytes32 indexed key, bytes value);
 
 
-    function getData(bytes32 _key) external view returns (bytes memory _value);
+    function getData(bytes32 key) external view returns (bytes memory value);
+    
+    function setData(bytes32 key, bytes memory value) external; // onlyOwner
 
-    function setData(bytes32 _key, bytes memory _value) external; // onlyOwner
+    function getData(bytes32[] memory keys) external view returns (bytes[] memory values);
+
+    function setData(bytes32[] memory keys, bytes[] memory values) external; // onlyOwner
 
 
     // LSP8
