@@ -139,6 +139,14 @@ Example:
             }
         ],
         profileImage: [
+            {
+                width: 1800,
+                height: 1013,
+                hashFunction: 'keccak256(bytes)',
+                hash: '0x98fe032f81c43426fbcfb21c780c879667a08e2a65e8ae38027d4d61cdfe6f55',
+                url: 'ifps://QmPJESHbVkPtSaHntNVY5F6JDLW8v69M2d6khXEYGUMn7N'
+            },
+            // OR use an NFT as profile image
             {  
                 "address": 0x1231c7436a77a009a97e48e4e10c92e89fd95fe15, // the address of an LSP7 or LSP8
                 "tokenId": 0xdDe1c7436a77a009a97e48e4e10c92e89fd95fe1556fc5c62ecef57cea51aa37  // (optional) if token contract is an LSP7
