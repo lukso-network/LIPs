@@ -39,7 +39,7 @@ This allows us to:
 
 ## Specification
 
-ERC165 interface id: `0x63cb749b`
+ERC165 interface id: `0x481e0fe8`
 
 _This interface id is the XOR of ERC725Y, ERC725X, LSP1-UniversalReceiver, ERC1271-isValidSignature, to allow detection of ERC725Accounts._
 
@@ -139,9 +139,14 @@ interface ILSP0  /* is ERC165 */ {
     event DataChanged(bytes32 indexed key, bytes value);
 
 
-    function getData(bytes32[] memory key) external view returns (bytes[] memory value);
+    function getData(bytes32 key) external view returns (bytes memory value);
     
-    function setData(bytes32[] memory key, bytes[] memory value) external; // onlyOwner
+    function setData(bytes32 key, bytes memory value) external; // onlyOwner
+
+    function getData(bytes32[] memory keys) external view returns (bytes[] memory values);
+
+    function setData(bytes32[] memory keys, bytes[] memory values) external; // onlyOwner
+    
     
     // LSP0 possible keys:
     // LSP1UniversalReceiverDelegate: 0x0cfc51aec37c55a4d0b1a65c6255c4bf2fbdf6277f3cc0730c45b828b6db8b47

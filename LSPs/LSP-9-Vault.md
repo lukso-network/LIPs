@@ -25,7 +25,7 @@ This standard defines a vault that can hold assets and interact with other contr
 
 ## Specification
 
-ERC165 interface id: `0x75edcee5`
+ERC165 interface id: `0x5e38b596`
 
 _This interface id is the XOR of ERC725Y, ERC725X, LSP1-UniversalReceiver, to allow detection of Vaults._
 
@@ -116,14 +116,17 @@ interface ILSP9  /* is ERC165 */ {
     
     
     function execute(uint256 operationType, address to, uint256 value, bytes memory data) external payable returns (bytes memory); // onlyOwner
+
+    function getData(bytes32 key) external view returns (bytes memory value);
     
-    function getData(bytes32[] memory key) external view returns (bytes[] memory value);
+    function setData(bytes32 key, bytes memory value) external; // onlyAllowed (UniversalReceiverDelegate and Owner)
     
+    function getData(bytes32[] memory keys) external view returns (bytes[] memory values);
+    
+    function setData(bytes32[] memory keys, bytes[] memory values) external; // onlyAllowed (UniversalReceiverDelegate and Owner)
+        
     // LSP0 possible keys:
     // LSP1UniversalReceiverDelegate: 0x0cfc51aec37c55a4d0b1a65c6255c4bf2fbdf6277f3cc0730c45b828b6db8b47
-    
-    function setData(bytes32[] memory key, bytes[] memory value) external; // onlyAllowed (UniversalReceiverDelegate and Owner)
-        
     
     // LSP1
 
