@@ -410,8 +410,10 @@ interface ILSP6  /* is ERC165 */ {
     
     // LSP6
         
-    event Executed(uint256 indexed  _value, bytes _data); 
-    
+    event Executed(uint256 indexed  _value, bytes _data);
+
+
+    function account() external view returns (address);
     
     function getNonce(address _address, uint256 _channel) external view returns (uint256);
     
