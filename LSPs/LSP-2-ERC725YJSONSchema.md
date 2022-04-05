@@ -12,7 +12,7 @@ requires: ERC725Y
 
 ## Simple Summary
 
-This schema defines how a single [ERC725Y](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) key-value pair can be described. It can be used as an abstract structure over the storage of an ERC725Y smart contract.
+ERC725Y JSON Schema describes a single key-value pair stored by [ERC725Y](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md). It is intended to be used as an abstract structure over the storage of an ERC725Y smart contract.
 
 ## Abstract
 
