@@ -182,6 +182,16 @@ SIGN               = 0x000000000000000000000000000000000000000000000000000000000
 
 ### Methods
 
+#### account
+
+```solidity
+function account() external view returns (uint256)
+```
+
+Returns the `address` of the ERC725 Account linked with this Key Manager. The linked account can be one of the following:
+- ERC725X contract
+- ERC725Y contract
+- an ERC725 contract, implementing both ERC725X and ERC725Y.
 
 #### getNonce
 
