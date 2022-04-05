@@ -430,4 +430,4 @@ interface ILSP6  /* is ERC165 */ {
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
 
 
-[ERC725Account]: <./LSP-0-ERC725Account.md)>
+[ERC725Account]: <../LSP-0-ERC725Account.md)>
