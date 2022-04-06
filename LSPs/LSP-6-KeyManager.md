@@ -6,7 +6,7 @@ discussions-to:
 status: Draft
 type: LSP
 created: 2021-08-03
-requires: ERC165, ERC1271, LSP2
+requires: [ERC165], ERC1271, LSP2
 ---
 
 
@@ -40,6 +40,10 @@ Storing the permissions at the core [ERC725Account] itself, allows it to survive
 
 
 ## Specification
+
+[ERC165] interface id: `0x32e6d0ab`
+
+Every contract that supports the LSP6 standard SHOULD implement:
 
 
 ### ERC725Y Keys
@@ -430,4 +434,5 @@ interface ILSP6  /* is ERC165 */ {
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
 
 
+[ERC165]: <https://eips.ethereum.org/EIPS/eip-165>
 [ERC725Account]: <./LSP-0-ERC725Account.md>
