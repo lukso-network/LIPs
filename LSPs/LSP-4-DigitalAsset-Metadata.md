@@ -11,11 +11,11 @@ requires: ERC725Y, LSP2
  
 ## Simple Summary
 
-This standard describes a set of [ERC725Y](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) key value stores that describe a digital asset.
+This standard describes a set of [ERC725Y](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) data key value stores that describe a digital asset.
 
 ## Abstract
 
-This standard, defines a set of key-value pairs that are useful to describe a digital asset.
+This standard, defines a set of data key-value pairs that are useful to describe a digital asset.
 
 ## Motivation
 
@@ -23,12 +23,12 @@ This standard aims to create a better version of tokens and NFTs to allow more f
 As NFTs mostly have a creator, those creators should be able to improve the assets (link better 3D files, as 3D file standards improve), or change attributes.
 One could even think of a smart contract system that can increase attributes based on certain inputs automatically.
 
-An LSP4 Digital Asset is controlled by a single `owner`, expected to be a [ERC725](https://github.com/ERC725Alliance/ERC725/blob/main/docs/ERC-725.md) smart contract. This owner is able to [`setData(...)`](https://github.com/ERC725Alliance/ERC725/blob/main/docs/ERC-725.md#setdata), and therefore change values of keys, and can potentially mint new items.
+An LSP4 Digital Asset is controlled by a single `owner`, expected to be a [ERC725](https://github.com/ERC725Alliance/ERC725/blob/main/docs/ERC-725.md) smart contract. This owner is able to [`setData(...)`](https://github.com/ERC725Alliance/ERC725/blob/main/docs/ERC-725.md#setdata), and therefore change values of data keys, and can potentially mint new items.
  
 
 ## Specification
 
-### ERC725Y Keys
+### ERC725Y Data Keys
 
 #### SupportedStandards:LSP4DigitalAsset
 

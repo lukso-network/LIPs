@@ -16,7 +16,7 @@ This standard describes a set of [ERC725Y](https://github.com/ethereum/EIPs/blob
  
 ## Abstract
 
-This standard, defines a set of key value stores that are useful to create a public on-chain profile, based on an [ERC725Account](./LSP-0-ERC725Account.md).
+This standard, defines a set of data key value stores that are useful to create a public on-chain profile, based on an [ERC725Account](./LSP-0-ERC725Account.md).
 
 ## Motivation
 
@@ -24,9 +24,9 @@ This standard describes meta data that can be added to an [ERC725Account](https:
 
 ## Specification
 
-Every contract that supports the Universal Profile standard SHOULD add the following [ERC725Y](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) keys:
+Every contract that supports the Universal Profile standard SHOULD add the following [ERC725Y](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) data keys:
 
-### ERC725Y Keys
+### ERC725Y Data Keys
 
 
 #### SupportedStandards:LSP3UniversalProfile
