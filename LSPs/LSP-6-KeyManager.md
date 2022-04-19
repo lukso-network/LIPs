@@ -257,10 +257,12 @@ The final message MUST be signed using ethereum specific signature, based on [EI
 #### Executed
 
 ```solidity
-event Executed(uint256 indexed  _value, bytes _data);
+event Executed(uint256 indexed  _value, bytes4 _selector);
 ```
 
 MUST be fired when a transaction was successfully executed.
+
+The second parameter `_selector` in the `Executed` event corresponds to the `bytes4` selector of the function being executed in the linked [account](#account)
 
 
 ### What are multi-channel nonces
@@ -400,7 +402,7 @@ interface ILSP6  /* is ERC165 */ {
     
     // LSP6
         
-    event Executed(uint256 indexed  _value, bytes _data); 
+    event Executed(uint256 indexed  _value, bytes4 _selector); 
     
     
     function getNonce(address _address, uint256 _channel) external view returns (uint256);
