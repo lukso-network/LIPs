@@ -32,8 +32,8 @@ This allows us to:
 
 - Make security upgradeable via a key manager smart contract (e.g. [LSP6 KeyManager](./LSP-6-KeyManager.md))
 - Allow any action that an EOA can do, and even add the ability to use `create2` through [ERC725X](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md#erc725x)
-- Allow the account to be informed and react to receiving assets through [LSP1 UniversalReciever](./LSP-1-UniversalReceiver.md)
-- Define a number of data key values stores to attach profile and other information through additional standards like [LSP3 UniversalProfile-Metadata](./LSP-3-UniversalProfile-Metadata.md)
+- Allow the account to be informed and react to receiving assets through [LSP1 UniversalReceiver](./LSP-1-UniversalReceiver.md)
+- Define a number of data key-values pairs to attach profile and other information through additional standards like [LSP3 UniversalProfile-Metadata](./LSP-3-UniversalProfile-Metadata.md)
 - Allow signature verification through [ERC1271](https://eips.ethereum.org/EIPS/eip-1271)
 
 
@@ -81,7 +81,7 @@ MUST be emitted when a native token transfer was received.
 
 ## Rationale
 
-The ERC725 general data key value store allows for the ability to add any kind of information to the the account contract, which allows future use cases. The general executor allows full interactability with any smart contract or address. And the universal receiver allows the reaction to any future asset.
+The ERC725Y general data key-value store allows for the ability to add any kind of information to the the account contract, which allows future use cases. The general executor allows full interactability with any smart contract or address. And the universal receiver allows reacting to any future asset received.
 
 ## Implementation
 

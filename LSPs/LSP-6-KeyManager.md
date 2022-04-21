@@ -22,7 +22,7 @@ The KeyManager functions as a gateway for the [ERC725Account](./LSP-0-ERC725Acco
 
 Permissions are described in the [Permissions values section](#permission-values-in-addresspermissionspermissionsaddress). Furthermore addresses can be restricted to only talk to certain other smart contracts or address, specific functions or smart contracts supporting only specifc standard interfaces.
 
-The Permissions are stored at [ERC725Account](https://github.com/lukso-network/LIPs/blob/main/LSPs/LSP-0-ERC725Account.md) ERC725Y data key value store, and can therefore survive an upgrade to a new KeyManager contract.
+The Permissions are stored under the ERC725Y data key-value store of the linked [ERC725Account](https://github.com/lukso-network/LIPs/blob/main/LSPs/LSP-0-ERC725Account.md), and can therefore survive an upgrade to a new KeyManager contract.
 
 The flow of a transactions is as follows:
 
@@ -156,7 +156,7 @@ name: "SupportedStandards:LSP3UniversalProfile"
 key: 0xeafec4d89fa9619884b6b89135626455000000000000000000000000abe425d6
 ```
 
-By setting the value to `0xeafec4d89fa9619884b6b8913562645500000000000000000000000000000000` in the list of allowed ERC725Y data key, one address can set any data key **starting with the first word `SupportedStandards:...`**.
+By setting the value to `0xeafec4d89fa9619884b6b8913562645500000000000000000000000000000000` in the list of allowed ERC725Y data keys, one address can set any data key **starting with the first word `SupportedStandards:...`**.
 
 ### Permission Values in AddressPermissions:Permissions:\<address\>
 

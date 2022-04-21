@@ -11,7 +11,7 @@ requires: ERC725Y, LSP2
  
 ## Simple Summary
 
-This standard describes a set of [ERC725Y](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) data key value stores that describe a digital asset.
+This standard describes a set of [ERC725Y](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) data key-value pairs that describe a digital asset.
 
 ## Abstract
 

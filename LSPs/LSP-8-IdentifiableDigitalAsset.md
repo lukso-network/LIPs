@@ -19,7 +19,7 @@ A standard interface for identifiable digital assets, allowing for tokens to be 
 <!--A short (~200 word) description of the technical issue being addressed.-->
 This standard defines an interface for tokens that are identified with a `tokenId`, based on [ERC721][ERC721]. A `bytes32` value is used for `tokenId` to allow many uses of token identification including numbers, contract addresses, and hashed values (ie. serial numbers).
 
-This standard defines a set of data key value stores that are useful to know what the `tokenId` represents, and metadata for each `tokenId`.
+This standard defines a set of data-key value pairs that are useful to know what the `tokenId` represents, and the associated metadata for each `tokenId`.
 
 ## Motivation
 <!--The motivation is critical for LIPs that want to change the Lukso protocol. It should clearly explain why the existing protocol specification is inadequate to address the problem that the LIP solves. LIP submissions without sufficient motivation may be rejected outright.-->

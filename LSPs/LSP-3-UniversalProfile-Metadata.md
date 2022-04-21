@@ -16,7 +16,7 @@ This standard describes a set of [ERC725Y](https://github.com/ethereum/EIPs/blob
  
 ## Abstract
 
-This standard, defines a set of data key value stores that are useful to create a public on-chain profile, based on an [ERC725Account](./LSP-0-ERC725Account.md).
+This standard, defines a set of data key-value pairs that are useful to create a public on-chain profile, based on an [ERC725Account](./LSP-0-ERC725Account.md).
 
 ## Motivation
 
