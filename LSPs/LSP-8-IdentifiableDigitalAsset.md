@@ -19,7 +19,7 @@ A standard interface for identifiable digital assets, allowing for tokens to be 
 <!--A short (~200 word) description of the technical issue being addressed.-->
 This standard defines an interface for tokens that are identified with a `tokenId`, based on [ERC721][ERC721]. A `bytes32` value is used for `tokenId` to allow many uses of token identification including numbers, contract addresses, and hashed values (ie. serial numbers).
 
-This standard defines a set of key value stores that are useful to know what the `tokenId` represents, and metadata for each `tokenId`.
+This standard defines a set of data-key value pairs that are useful to know what the `tokenId` represents, and the associated metadata for each `tokenId`.
 
 ## Motivation
 <!--The motivation is critical for LIPs that want to change the Lukso protocol. It should clearly explain why the existing protocol specification is inadequate to address the problem that the LIP solves. LIP submissions without sufficient motivation may be rejected outright.-->
@@ -31,15 +31,11 @@ A commonality with [LSP7 DigitalAsset][LSP7] is desired so that the two token im
 ## Specification
 <!--The technical specification should describe the syntax and semantics of any new feature. The specification should be detailed enough to allow competing, interoperable implementations for any of the current Ethereum platforms (go-ethereum, parity, cpp-ethereum, ethereumj, ethereumjs, and [others](https://github.com/ethereum/wikwi/wiki/Clients)).-->
 
-[ERC165] interface id: `0x49399145`
+### ERC725Y Data Keys
 
-Every contract that supports the LSP8 standard SHOULD implement:
+These are the expected data keys for an LSP8 contract that can mints identifiable tokens (NFTs).
 
-### ERC725Y Keys
-
-These are the expected keys for the LSP8 contract which mints tokens.
-
-This standard expects the keys from [LSP4 DigitalAsset-Metadata.][LSP4#erc725ykeys].
+This standard also expects the data keys from [LSP4 DigitalAsset-Metadata.][LSP4#erc725ykeys].
 
 #### LSP8TokenIdType
 
@@ -79,7 +75,7 @@ When a metadata contract is created for a tokenId, the address COULD be stored i
 }
 ```
 
-For construction of the Bytes20Mapping key see: [LSP2 ERC725Y JSON Schema][LSP2#bytes20mapping]
+For construction of the Bytes20Mapping data key see: [LSP2 ERC725Y JSON Schema][LSP2#bytes20mapping]
 
 #### LSP8MetadataJSON:TokenId
 
@@ -94,11 +90,11 @@ When metadata JSON is created for a tokenId, the URL COULD be stored in the mint
     "valueContent": "JSONURL"
 }
 ```
-For construction of the Bytes20Mapping key see: [LSP2 ERC725Y JSON Schema][LSP2#bytes20mapping]
+For construction of the Bytes20Mapping data key see: [LSP2 ERC725Y JSON Schema][LSP2#bytes20mapping]
 For construction of the JSONURL value see: [LSP2 ERC725Y JSON Schema][LSP2#jsonurl]
 
 ---
-(TODO: discussion if there are other keys to include in the standard for the contract which mints tokens)
+(TODO: discussion if there are other data keys to include in the standard for the contract which mints tokens)
 ---
 
 
@@ -131,10 +127,10 @@ The `bytes32` of the `tokenId` this metadata is for, to be stored in the [ERC725
 ```
 
 ---
-(TODO: discussion if there are other TokenIdMetadata keys to include in the standard)
+(TODO: discussion if there are other TokenIdMetadata data keys to include in the standard)
 ---
 
-### ERC725Y keys for off-chain tokenId metadata
+### ERC725Y Data keys for off-chain tokenId metadata
 
 #### LSP8TokenIdMetadata
 
@@ -164,10 +160,12 @@ The linked JSON file SHOULD have the following format:
 ```
 
 ---
-(TODO: discussion if there are other TokenIdMetadata keys to include in the JSON document standard)
+(TODO: discussion if there are other TokenIdMetadata data keys to include in the JSON document standard)
 ---
 
 ### Methods
+
+[ERC165] interface id: `0x49399145`
 
 #### totalSupply
 
@@ -435,16 +433,16 @@ interface ILSP8 is /* IERC165 */ {
 
     // ERC725Y
 
-    event DataChanged(bytes32 indexed key, bytes value);
+    event DataChanged(bytes32 indexed dataKey, bytes value);
 
 
-    function getData(bytes32 key) external view returns (bytes memory value);
+    function getData(bytes32 dataKey) external view returns (bytes memory value);
     
-    function setData(bytes32 key, bytes memory value) external; // onlyOwner
+    function setData(bytes32 dataKey, bytes memory value) external; // onlyOwner
 
-    function getData(bytes32[] memory keys) external view returns (bytes[] memory values);
+    function getData(bytes32[] memory dataKeys) external view returns (bytes[] memory values);
 
-    function setData(bytes32[] memory keys, bytes[] memory values) external; // onlyOwner
+    function setData(bytes32[] memory dataKeys, bytes[] memory values) external; // onlyOwner
 
 
     // LSP8

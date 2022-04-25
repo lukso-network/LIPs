@@ -32,8 +32,8 @@ This allows us to:
 
 - Make security upgradeable via a key manager smart contract (e.g. [LSP6 KeyManager](./LSP-6-KeyManager.md))
 - Allow any action that an EOA can do, and even add the ability to use `create2` through [ERC725X](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md#erc725x)
-- Allow the account to be informed and react to receiving assets through [LSP1 UniversalReciever](./LSP-1-UniversalReceiver.md)
-- Define a number of key values stores to attach profile and other information through additional standards like [LSP3 UniversalProfile-Metadata](./LSP-3-UniversalProfile-Metadata.md)
+- Allow the account to be informed and react to receiving assets through [LSP1 UniversalReceiver](./LSP-1-UniversalReceiver.md)
+- Define a number of data key-values pairs to attach profile and other information through additional standards like [LSP3 UniversalProfile-Metadata](./LSP-3-UniversalProfile-Metadata.md)
 - Allow signature verification through [ERC1271](https://eips.ethereum.org/EIPS/eip-1271)
 
 
@@ -45,13 +45,13 @@ _This interface id is the XOR of ERC725Y, ERC725X, LSP1-UniversalReceiver, ERC12
 
 Every contract that supports the LSP0 standard (ERC725Account) SHOULD implement:
 
-### ERC725Y Keys
+### ERC725Y Data Keys
 
 
 #### LSP1UniversalReceiverDelegate
 
 If the account delegates its universal receiver to another smart contract,
-this smart contract address MUST be stored under the following key:
+this smart contract address MUST be stored under the following data key:
 
 ```json
 {
@@ -65,7 +65,7 @@ this smart contract address MUST be stored under the following key:
 
 ### Methods
 
-Contains the methods from [ERC173](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-173.md#specification) (Ownable), [ERC725](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md#specification) (General key-value store, and general executor), [ERC1271](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1271.md#specification) and [LSP1](./LSP-1-UniversalReceiver.md#specification), 
+Contains the methods from [ERC173](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-173.md#specification) (Ownable), [ERC725](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md#specification) (General data key-value store, and general executor), [ERC1271](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1271.md#specification) and [LSP1](./LSP-1-UniversalReceiver.md#specification), 
 See the [Interface Cheat Sheet](#interface-cheat-sheet) for details.
 
 ### Events
@@ -81,7 +81,7 @@ MUST be emitted when a native token transfer was received.
 
 ## Rationale
 
-The ERC725 general key value store allows for the ability to add any kind of information to the the account contract, which allows future use cases. The general executor allows full interactability with any smart contract or address. And the universal receiver allows the reaction to any future asset.
+The ERC725Y general data key-value store allows for the ability to add any kind of information to the the account contract, which allows future use cases. The general executor allows full interactability with any smart contract or address. And the universal receiver allows reacting to any future asset received.
 
 ## Implementation
 
@@ -136,19 +136,19 @@ interface ILSP0  /* is ERC165 */ {
     
     // ERC725Y
 
-    event DataChanged(bytes32 indexed key, bytes value);
+    event DataChanged(bytes32 indexed dataKey, bytes value);
 
 
-    function getData(bytes32 key) external view returns (bytes memory value);
+    function getData(bytes32 dataKey) external view returns (bytes memory value);
     
-    function setData(bytes32 key, bytes memory value) external; // onlyOwner
+    function setData(bytes32 dataKey, bytes memory value) external; // onlyOwner
 
-    function getData(bytes32[] memory keys) external view returns (bytes[] memory values);
+    function getData(bytes32[] memory dataKeys) external view returns (bytes[] memory values);
 
-    function setData(bytes32[] memory keys, bytes[] memory values) external; // onlyOwner
+    function setData(bytes32[] memory dataKeys, bytes[] memory values) external; // onlyOwner
     
     
-    // LSP0 possible keys:
+    // LSP0 possible data keys:
     // LSP1UniversalReceiverDelegate: 0x0cfc51aec37c55a4d0b1a65c6255c4bf2fbdf6277f3cc0730c45b828b6db8b47
 
     
@@ -164,7 +164,7 @@ interface ILSP0  /* is ERC165 */ {
 
     function universalReceiver(bytes32 typeId, bytes memory data) external returns (bytes memory);
     
-    // IF LSP1UniversalReceiverDelegate key is set
+    // IF LSP1UniversalReceiverDelegate data key is set
     // THEN calls will be forwarded to the address given (UniversalReceiver even MUST still be fired)
 }
 

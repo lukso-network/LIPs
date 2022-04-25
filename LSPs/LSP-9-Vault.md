@@ -31,13 +31,13 @@ _This interface id is the XOR of ERC725Y, ERC725X, LSP1-UniversalReceiver, to al
 
 Every contract that supports the LSP9 standard SHOULD implement:
 
-### ERC725Y Keys
+### ERC725Y Data Keys
 
 
 #### LSP1UniversalReceiverDelegate
 
 If the contract delegates its universal receiver to another smart contract,
-this smart contract address MUST be stored under the following key:
+this smart contract address MUST be stored under the following data key:
 
 ```json
 {
@@ -67,7 +67,7 @@ MUST be emitted when a native token transfer was received.
 
 ## Rationale
 
-The ERC725 general key value store allows for the ability to add any kind of information to the the contract, which allows future use cases. The general execution allows full interactebility with any smart contract or address. And the universal receiver allows the reaction to any future asset.
+The ERC725Y general data key value store allows for the ability to add any kind of information to the the contract, which allows future use cases. The general execution allows full interactability with any smart contract or address. And the universal receiver allows the reaction to any future asset.
 
 ## Implementation
 
@@ -112,20 +112,20 @@ interface ILSP9  /* is ERC165 */ {
         
     event ContractCreated(uint256 indexed _operation, address indexed contractAddress, uint256 indexed  _value);
     
-    event DataChanged(bytes32 indexed key, bytes value);
+    event DataChanged(bytes32 indexed dataKey, bytes value);
     
     
     function execute(uint256 operationType, address to, uint256 value, bytes memory data) external payable returns (bytes memory); // onlyOwner
 
-    function getData(bytes32 key) external view returns (bytes memory value);
+    function getData(bytes32 dataKey) external view returns (bytes memory value);
     
-    function setData(bytes32 key, bytes memory value) external; // onlyAllowed (UniversalReceiverDelegate and Owner)
+    function setData(bytes32 dataKey, bytes memory value) external; // onlyAllowed (UniversalReceiverDelegate and Owner)
     
-    function getData(bytes32[] memory keys) external view returns (bytes[] memory values);
+    function getData(bytes32[] memory dataKeys) external view returns (bytes[] memory values);
     
-    function setData(bytes32[] memory keys, bytes[] memory values) external; // onlyAllowed (UniversalReceiverDelegate and Owner)
+    function setData(bytes32[] memory dataKeys, bytes[] memory values) external; // onlyAllowed (UniversalReceiverDelegate and Owner)
         
-    // LSP0 possible keys:
+    // LSP0 possible data keys:
     // LSP1UniversalReceiverDelegate: 0x0cfc51aec37c55a4d0b1a65c6255c4bf2fbdf6277f3cc0730c45b828b6db8b47
     
     // LSP1
@@ -134,7 +134,7 @@ interface ILSP9  /* is ERC165 */ {
 
     function universalReceiver(bytes32 typeId, bytes memory data) external returns (bytes memory);
     
-    // IF LSP1UniversalReceiverDelegate key is set
+    // IF LSP1UniversalReceiverDelegate data key is set
     // THEN calls will be forwarded to the address given (UniversalReceiver even MUST still be fired)
 }
 

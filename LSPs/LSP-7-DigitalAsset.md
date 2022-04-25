@@ -29,15 +29,14 @@ A commonality with [LSP8 IdentifiableDigitalAsset][LSP8] is desired so that the 
 ## Specification
 <!--The technical specification should describe the syntax and semantics of any new feature. The specification should be detailed enough to allow competing, interoperable implementations for any of the current Ethereum platforms (go-ethereum, parity, cpp-ethereum, ethereumj, ethereumjs, and [others](https://github.com/ethereum/wikwi/wiki/Clients)).-->
 
-[ERC165] interface id: `0xe33f65c3`
+### ERC725Y Data Keys
 
-Every contract that supports the LSP7 standard SHOULD implement:
-
-### ERC725Y Keys
-
-This standard expects the keys from [LSP4 DigitalAsset-Metadata][LSP4#erc725ykeys].
+This standard also expects data keys from [LSP4 DigitalAsset-Metadata][LSP4#erc725ykeys].
 
 ### Methods
+
+[ERC165] interface id: `0xe33f65c3`
+
 
 #### decimals
 
@@ -249,16 +248,16 @@ interface ILSP7 is /* IERC165 */ {
 
     // ERC725Y
 
-    event DataChanged(bytes32 indexed key, bytes value);
+    event DataChanged(bytes32 indexed dataKey, bytes value);
 
 
-    function getData(bytes32 key) external view returns (bytes memory value);
+    function getData(bytes32 dataKey) external view returns (bytes memory value);
     
-    function setData(bytes32 key, bytes memory value) external; // onlyOwner
+    function setData(bytes32 dataKey, bytes memory value) external; // onlyOwner
 
-    function getData(bytes32[] memory keys) external view returns (bytes[] memory values);
+    function getData(bytes32[] memory dataKeys) external view returns (bytes[] memory values);
 
-    function setData(bytes32[] memory keys, bytes[] memory values) external; // onlyOwner
+    function setData(bytes32[] memory dataKeys, bytes[] memory values) external; // onlyOwner
 
 
     // LSP7
