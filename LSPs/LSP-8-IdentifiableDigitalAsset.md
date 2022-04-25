@@ -33,9 +33,9 @@ A commonality with [LSP7 DigitalAsset][LSP7] is desired so that the two token im
 
 ### ERC725Y Data Keys
 
-These are the expected data keys for the LSP8 contract which mints tokens.
+These are the expected data keys for an LSP8 contract that can mints identifiable tokens (NFTs).
 
-This standard expects the data keys from [LSP4 DigitalAsset-Metadata.][LSP4#erc725ykeys].
+This standard also expects the data keys from [LSP4 DigitalAsset-Metadata.][LSP4#erc725ykeys].
 
 #### LSP8TokenIdType
 
@@ -164,6 +164,8 @@ The linked JSON file SHOULD have the following format:
 ---
 
 ### Methods
+
+[ERC165] interface id: `0x49399145`
 
 #### totalSupply
 
@@ -478,7 +480,7 @@ interface ILSP8 is /* IERC165 */ {
 ## Copyright
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
 
-
+[ERC165]: <https://eips.ethereum.org/EIPS/eip-165>
 [ERC721]: <https://github.com/ethereum/EIPs/blob/master/EIPS/eip-721.md>
 [ERC725]: <https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md>
 [ERC777]: <https://github.com/ethereum/EIPs/blob/master/EIPS/eip-777.md>

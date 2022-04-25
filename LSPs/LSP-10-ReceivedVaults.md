@@ -54,7 +54,7 @@ The `valueContent` MUST be constructed as follows: `bytes8(indexNumber) + bytes4
 {
     "name": "LSP10VaultsMap:<address>",
     "key": "0x192448c3c0f88c7f00000000<address>",
-    "keyType": "Mapping",
+    "keyType": "Bytes20Mapping",
     "valueContent": "Mixed",
     "valueType": "bytes"
 }
@@ -73,7 +73,7 @@ ERC725Y JSON Schema `LSP10ReceivedVaults`:
     {
         "name": "LSP10VaultsMap:<address>",
         "key": "0x192448c3c0f88c7f00000000<address>",
-        "keyType": "Mapping",
+        "keyType": "Bytes20Mapping",
         "valueContent": "Mixed",
         "valueType": "bytes"
     },

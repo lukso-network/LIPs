@@ -31,9 +31,12 @@ A commonality with [LSP8 IdentifiableDigitalAsset][LSP8] is desired so that the 
 
 ### ERC725Y Data Keys
 
-This standard expects the data keys from [LSP4 DigitalAsset-Metadata][LSP4#erc725ykeys].
+This standard also expects data keys from [LSP4 DigitalAsset-Metadata][LSP4#erc725ykeys].
 
 ### Methods
+
+[ERC165] interface id: `0xe33f65c3`
+
 
 #### decimals
 
@@ -289,6 +292,7 @@ interface ILSP7 is /* IERC165 */ {
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
 
 
+[ERC165]: <https://eips.ethereum.org/EIPS/eip-165>
 [ERC20]: <https://github.com/ethereum/EIPs/blob/master/EIPS/eip-20.md>
 [ERC777]: <https://github.com/ethereum/EIPs/blob/master/EIPS/eip-777.md>
 [LSP1]: <./LSP-1-UniversalReceiver.md>

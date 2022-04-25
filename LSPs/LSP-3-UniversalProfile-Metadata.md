@@ -200,7 +200,7 @@ The `valueContent` MUST be constructed as follows: `bytes8(indexNumber) + bytes4
 {
     "name": "LSP3IssuedAssetsMap:<address>",
     "key": "0x83f5e77bfb14241600000000<address>",
-    "keyType": "Mapping",
+    "keyType": "Bytes20Mapping",
     "valueType": "bytes",
     "valueContent": "Mixed"
 }
@@ -239,7 +239,7 @@ ERC725Y JSON Schema `LSP3UniversalProfile`:
     {
         "name": "LSP3IssuedAssetsMap:<address>",
         "key": "0x83f5e77bfb14241600000000<address>",
-        "keyType": "Mapping",
+        "keyType": "Bytes20Mapping",
         "valueType": "bytes",
         "valueContent": "Mixed"
     },
@@ -255,7 +255,7 @@ ERC725Y JSON Schema `LSP3UniversalProfile`:
     {
         "name": "LSP5ReceivedAssetsMap:<address>",
         "key": "0x812c4334633eb81600000000<address>",
-        "keyType": "Mapping",
+        "keyType": "Bytes20Mapping",
         "valueType": "bytes",
         "valueContent": "Mixed"
     },

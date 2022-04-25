@@ -212,7 +212,7 @@ Where:
 {
     "name": "LSP4CreatorsMap:<address>",
     "key": "0x6de85eaf5d982b4e00000000<address>",
-    "keyType": "Mapping",
+    "keyType": "Bytes20Mapping",
     "valueType": "bytes",
     "valueContent": "Mixed"
 }
@@ -262,7 +262,7 @@ ERC725Y JSON Schema `LSP4DigitalAsset`:
     {
         "name": "LSP4CreatorsMap:<address>",
         "key": "0x6de85eaf5d982b4e00000000<address>",
-        "keyType": "Mapping",
+        "keyType": "Bytes20Mapping",
         "valueType": "bytes",
         "valueContent": "Mixed"
     },

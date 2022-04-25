@@ -31,7 +31,7 @@ In cases where smart contracts function as a profile or wallet over a long time,
 
 ## Specification
 
-ERC165 interface id: `0x6bb56a14`
+[ERC165] interface id: `0x6bb56a14`
 
 Every contract that complies with the Universal Receiver standard MUST implement:
 
@@ -270,3 +270,5 @@ interface ILSP1Delegate  /* is ERC165 */ {
 ## Copyright
 
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
+
+[ERC165]: <https://eips.ethereum.org/EIPS/eip-165>

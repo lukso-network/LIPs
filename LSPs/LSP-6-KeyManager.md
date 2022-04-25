@@ -12,13 +12,13 @@ requires: ERC165, ERC1271, LSP2
 
 ## Simple Summary
 
-This standard describes a `KeyManager` contract with a set of pre-defined permissions for addresses. A KeyManager contract can control an [ERC725Account](./LSP-0-ERC725Account.md) like account, or any other [ERC725](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) smart contract.
+This standard describes a `KeyManager` contract with a set of pre-defined permissions for addresses. A KeyManager contract can control an [ERC725Account] like account, or any other [ERC725](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) smart contract.
 
 ## Abstract
 
-This standard allows for controlling addresses to be restricted through multiple permissions, to act on and through this KeyManager on a controlled smart contract (for example an [ERC725Account](https://github.com/lukso-network/LIPs/blob/main/LSPs/LSP-0-ERC725Account.md)).
+This standard allows for controlling addresses to be restricted through multiple permissions, to act on and through this KeyManager on a controlled smart contract (for example an [ERC725Account]).
 
-The KeyManager functions as a gateway for the [ERC725Account](./LSP-0-ERC725Account.md) restricting an address actions based on set permissions.
+The KeyManager functions as a gateway for the [ERC725Account] restricting an address actions based on set permissions.
 
 Permissions are described in the [Permissions values section](#permission-values-in-addresspermissionspermissionsaddress). Furthermore addresses can be restricted to only talk to certain other smart contracts or address, specific functions or smart contracts supporting only specifc standard interfaces.
 
@@ -33,12 +33,16 @@ The flow of a transactions is as follows:
 
 ## Motivation
 
-The benefit of a KeyManager is to externalise the permission logic from [ERC725Y and X](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) contracts (such as an [ERC725Account](./LSP-0-ERC725Account.md)). This allows for such logic to be upgraded without needing to change the core [ERC725Account](./LSP-0-ERC725Account.md) contract.
+The benefit of a KeyManager is to externalise the permission logic from [ERC725Y and X](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) contracts (such as an [ERC725Account]). This allows for such logic to be upgraded without needing to change the core [ERC725Account] contract.
 
-Storing the permissions at the core [ERC725Account](./LSP-0-ERC725Account.md) itself, allows it to survive KeyManager upgrades and opens the door to add additional KeyManager logic in the future, without loosing already set address permissions.
+Storing the permissions at the core [ERC725Account] itself, allows it to survive KeyManager upgrades and opens the door to add additional KeyManager logic in the future, without loosing already set address permissions.
 
 
 ## Specification
+
+[ERC165] interface id: `0x32e6d0ab`
+
+Every contract that supports the LSP6 standard SHOULD implement:
 
 
 ### ERC725Y Data Keys
@@ -181,6 +185,16 @@ SIGN               = 0x000000000000000000000000000000000000000000000000000000000
 
 ### Methods
 
+#### account
+
+```solidity
+function account() external view returns (address)
+```
+
+Returns the `address` of the account linked with this Key Manager. The linked account can be one of the following:
+- ERC725X contract
+- ERC725Y contract
+- an ERC725 contract, implementing both ERC725X and ERC725Y (e.g: an [ERC725Account]).
 
 #### getNonce
 
@@ -399,8 +413,10 @@ interface ILSP6  /* is ERC165 */ {
     
     // LSP6
         
-    event Executed(uint256 indexed  _value, bytes _data); 
-    
+    event Executed(uint256 indexed  _value, bytes _data);
+
+
+    function account() external view returns (address);
     
     function getNonce(address _address, uint256 _channel) external view returns (uint256);
     
@@ -415,3 +431,7 @@ interface ILSP6  /* is ERC165 */ {
 ## Copyright
 
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
+
+
+[ERC165]: <https://eips.ethereum.org/EIPS/eip-165>
+[ERC725Account]: <./LSP-0-ERC725Account.md>
