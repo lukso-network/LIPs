@@ -39,11 +39,11 @@ This allows us to:
 
 ## Specification
 
-ERC165 interface id: `0x481e0fe8`
+[ERC165] interface id: `0x481e0fe8`
 
 _This interface id is the XOR of ERC725Y, ERC725X, LSP1-UniversalReceiver, ERC1271-isValidSignature, to allow detection of ERC725Accounts._
 
-Every contract that supports the ERC725Account SHOULD implement:
+Every contract that supports the LSP0 standard (ERC725Account) SHOULD implement:
 
 ### ERC725Y Keys
 
@@ -174,3 +174,5 @@ interface ILSP0  /* is ERC165 */ {
 ## Copyright
 
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
+
+[ERC165]: <https://eips.ethereum.org/EIPS/eip-165>

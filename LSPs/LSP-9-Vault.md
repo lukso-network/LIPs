@@ -25,11 +25,11 @@ This standard defines a vault that can hold assets and interact with other contr
 
 ## Specification
 
-ERC165 interface id: `0x5e38b596`
+[ERC165] interface id: `0x5e38b596`
 
 _This interface id is the XOR of ERC725Y, ERC725X, LSP1-UniversalReceiver, to allow detection of Vaults._
 
-Every contract that supports to the Vaults SHOULD implement:
+Every contract that supports the LSP9 standard SHOULD implement:
 
 ### ERC725Y Keys
 
@@ -144,3 +144,5 @@ interface ILSP9  /* is ERC165 */ {
 ## Copyright
 
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
+
+[ERC165]: <https://eips.ethereum.org/EIPS/eip-165>

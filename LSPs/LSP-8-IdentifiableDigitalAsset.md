@@ -31,6 +31,10 @@ A commonality with [LSP7 DigitalAsset][LSP7] is desired so that the two token im
 ## Specification
 <!--The technical specification should describe the syntax and semantics of any new feature. The specification should be detailed enough to allow competing, interoperable implementations for any of the current Ethereum platforms (go-ethereum, parity, cpp-ethereum, ethereumj, ethereumjs, and [others](https://github.com/ethereum/wikwi/wiki/Clients)).-->
 
+[ERC165] interface id: `0x49399145`
+
+Every contract that supports the LSP8 standard SHOULD implement:
+
 ### ERC725Y Keys
 
 These are the expected keys for the LSP8 contract which mints tokens.
@@ -478,7 +482,7 @@ interface ILSP8 is /* IERC165 */ {
 ## Copyright
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
 
-
+[ERC165]: <https://eips.ethereum.org/EIPS/eip-165>
 [ERC721]: <https://github.com/ethereum/EIPs/blob/master/EIPS/eip-721.md>
 [ERC725]: <https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md>
 [ERC777]: <https://github.com/ethereum/EIPs/blob/master/EIPS/eip-777.md>
