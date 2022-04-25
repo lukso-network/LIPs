@@ -22,7 +22,7 @@ The KeyManager functions as a gateway for the [ERC725Account] restricting an add
 
 Permissions are described in the [Permissions values section](#permission-values-in-addresspermissionspermissionsaddress). Furthermore addresses can be restricted to only talk to certain other smart contracts or address, specific functions or smart contracts supporting only specifc standard interfaces.
 
-The Permissions are stored under the ERC725Y data key-value store of the linked [ERC725Account](https://github.com/lukso-network/LIPs/blob/main/LSPs/LSP-0-ERC725Account.md), and can therefore survive an upgrade to a new KeyManager contract.
+The Permissions are stored under the ERC725Y data key-value store of the linked [ERC725Account], and can therefore survive an upgrade to a new KeyManager contract.
 
 The flow of a transactions is as follows:
 
@@ -185,13 +185,13 @@ SIGN               = 0x000000000000000000000000000000000000000000000000000000000
 
 ### Methods
 
-#### account
+#### target
 
 ```solidity
-function account() external view returns (address)
+function target() external view returns (address)
 ```
 
-Returns the `address` of the account linked with this Key Manager. The linked account can be one of the following:
+Returns the `address` of the target smart contract controlled by this Key Manager. The controlled smart contract can be one of the following:
 - ERC725X contract
 - ERC725Y contract
 - an ERC725 contract, implementing both ERC725X and ERC725Y (e.g: an [ERC725Account]).
