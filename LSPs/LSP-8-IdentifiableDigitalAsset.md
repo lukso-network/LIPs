@@ -29,7 +29,8 @@ This standard aims to support use cases not covered by [LSP7 DigitalAsset][LSP7]
 A commonality with [LSP7 DigitalAsset][LSP7] is desired so that the two token implementations use similar naming for functions, events, and using hooks to notify token senders and receivers using LSP1.
 
 ## Specification
-<!--The technical specification should describe the syntax and semantics of any new feature. The specification should be detailed enough to allow competing, interoperable implementations for any of the current Ethereum platforms (go-ethereum, parity, cpp-ethereum, ethereumj, ethereumjs, and [others](https://github.com/ethereum/wikwi/wiki/Clients)).-->
+
+[ERC165] interface id: `0x49399145`
 
 ### ERC725Y Data Keys
 
@@ -165,7 +166,6 @@ The linked JSON file SHOULD have the following format:
 
 ### Methods
 
-[ERC165] interface id: `0x49399145`
 
 #### totalSupply
 
