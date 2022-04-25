@@ -251,7 +251,7 @@ ERC725Y JSON Schema `LSP4DigitalAsset`:
         "keyType": "Singleton",
         "valueType": "string",
         "valueContent": "String"
-    }
+    },
     {
         "name": "LSP4Metadata",
         "key": "0x9afb95cacc9f95858ec44aa8c3b685511002e30ae54415823f406128b85b238e",
