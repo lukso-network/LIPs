@@ -27,15 +27,14 @@ This standard aims to support many token use cases, both fungible and non-fungib
 A commonality with [LSP8 IdentifiableDigitalAsset][LSP8] is desired so that the two token implementations use similar naming for functions, events, and using hooks to notify token senders and receivers using [LSP1 UniversalReceiver][LSP1].
 
 ## Specification
-<!--The technical specification should describe the syntax and semantics of any new feature. The specification should be detailed enough to allow competing, interoperable implementations for any of the current Ethereum platforms (go-ethereum, parity, cpp-ethereum, ethereumj, ethereumjs, and [others](https://github.com/ethereum/wikwi/wiki/Clients)).-->
+
+[ERC165] interface id: `0xe33f65c3`
 
 ### ERC725Y Data Keys
 
 This standard also expects data keys from [LSP4 DigitalAsset-Metadata][LSP4#erc725ykeys].
 
 ### Methods
-
-[ERC165] interface id: `0xe33f65c3`
 
 
 #### decimals
