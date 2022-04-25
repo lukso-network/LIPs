@@ -126,7 +126,7 @@ interface ILSP0  /* is ERC165 */ {
     
     // ERC725X
 
-    event Executed(uint256 indexed _operation, address indexed _to, uint256 indexed  _value, bytes _data);
+    event Executed(uint256 indexed _operation, address indexed _to, uint256 indexed  _value, bytes4 _selector);
 
     event ContractCreated(uint256 indexed _operation, address indexed contractAddress, uint256 indexed  _value);
     
