@@ -10,27 +10,27 @@ requires: LSP2
 ---
 
 ## Simple Summary
-This standard describes a set of [ERC725Y](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) key values to store addresses of received assets in a [ERC725Y](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) smart contract.
+This standard describes a set of [ERC725Y](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) data key values to store addresses of received assets in a [ERC725Y](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) smart contract.
 
 ## Abstract
-This key value standard describes a set of keys that can be added to an [ERC725Y](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) smart contract.
-Two keys are proposed to reference received asset smart contracts.
+This data key value standard describes a set of data keys that can be added to an [ERC725Y](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) smart contract.
+Two data keys are proposed to reference received asset smart contracts.
 
 - `LSP5ReceivedAssets[]` to hold an array of addresses.
 - `LSP5ReceivedAssetsMap` to hold:
   - the index in the former array where the received asset address is stored.
   - an [ERC165 interface ID](https://eips.ethereum.org/EIPS/eip-165) to easily identify the standard used by each asset smart contracts, without the need to query the contracts directly. 
 
-The key `LSP5ReceivedAssetsMap` also helps to prevent duplicates from being added to the array, when automatically added via smart contract (e.g. via an [LSP1-UniversalReceiverDelegate](./LSP-1-UniversalReceiver.md)).
+The data key `LSP5ReceivedAssetsMap` also helps to prevent duplicates from being added to the array, when automatically added via smart contract (e.g. via an [LSP1-UniversalReceiverDelegate](./LSP-1-UniversalReceiver.md)).
 
 ## Motivation
 To be able to display received assets in a profile we need to keep track of all received asset contract addresses. This is important for [UniversalProfile](./LSP-3-UniversalProfile-Metadata.md), but also [Vault](./LSP-9-Vault.md) smart contracts.
 
 ## Specification
 
-Every contract that supports the ERC725Account SHOULD have the following keys:
+Every contract that supports the ERC725Account SHOULD have the following data keys:
 
-### ERC725Y Keys
+### ERC725Y Data Keys
 
 
 #### LSP5ReceivedAssets[]
@@ -62,7 +62,7 @@ The `valueContent` MUST be constructed as follows: `bytes8(indexNumber) + bytes4
 {
     "name": "LSP5ReceivedAssetsMap:<address>",
     "key": "0x812c4334633eb81600000000<address>",
-    "keyType": "Mapping",
+    "keyType": "Bytes20Mapping",
     "valueType": "bytes",
     "valueContent": "Mixed"
 }
@@ -80,7 +80,7 @@ ERC725Y JSON Schema `LSP5ReceivedAssets`:
     {
         "name": "LSP5ReceivedAssetsMap:<address>",
         "key": "0x812c4334633eb81600000000<address>",
-        "keyType": "Mapping",
+        "keyType": "Bytes20Mapping",
         "valueType": "bytes",
         "valueContent": "Mixed"
     },

@@ -12,18 +12,17 @@ requires: ERC165, ERC1271, LSP2
 
 ## Simple Summary
 
-This standard describes a `KeyManager` contract with a set of pre-defined permissions for addresses. A KeyManager contract can control an [ERC725Account](./LSP-0-ERC725Account.md) like account, or any other [ERC725](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) smart contract.
-
+This standard describes a `KeyManager` contract with a set of pre-defined permissions for addresses. A KeyManager contract can control an [ERC725Account] like account, or any other [ERC725](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) smart contract.
 
 ## Abstract
 
-This standard allows for controlling addresses to be restricted through multiple permissions, to act on and through this KeyManager on a controlled smart contract (for example an [ERC725Account](https://github.com/lukso-network/LIPs/blob/main/LSPs/LSP-0-ERC725Account.md)).
+This standard allows for controlling addresses to be restricted through multiple permissions, to act on and through this KeyManager on a controlled smart contract (for example an [ERC725Account]).
 
-The KeyManager functions as a gateway for the [ERC725Account](./LSP-0-ERC725Account.md) restricting an address actions based on set permissions.
+The KeyManager functions as a gateway for the [ERC725Account] restricting an address actions based on set permissions.
 
 Permissions are described in the [Permissions values section](#permission-values-in-addresspermissionspermissionsaddress). Furthermore addresses can be restricted to only talk to certain other smart contracts or address, specific functions or smart contracts supporting only specifc standard interfaces.
 
-The Permissions are stored at [ERC725Account](https://github.com/lukso-network/LIPs/blob/main/LSPs/LSP-0-ERC725Account.md) ERC725Y key value store, and can therefore survive an upgrade to a new KeyManager contract.
+The Permissions are stored under the ERC725Y data key-value store of the linked [ERC725Account](https://github.com/lukso-network/LIPs/blob/main/LSPs/LSP-0-ERC725Account.md), and can therefore survive an upgrade to a new KeyManager contract.
 
 The flow of a transactions is as follows:
 
@@ -34,20 +33,24 @@ The flow of a transactions is as follows:
 
 ## Motivation
 
-The benefit of a KeyManager is to externalise the permission logic from [ERC725Y and X](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) contracts (such as an [ERC725Account](./LSP-0-ERC725Account.md)). This allows for such logic to be upgraded without needing to change the core [ERC725Account](./LSP-0-ERC725Account.md) contract.
+The benefit of a KeyManager is to externalise the permission logic from [ERC725Y and X](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) contracts (such as an [ERC725Account]). This allows for such logic to be upgraded without needing to change the core [ERC725Account] contract.
 
-Storing the permissions at the core [ERC725Account](./LSP-0-ERC725Account.md) itself, allows it to survive KeyManager upgrades and opens the door to add additional KeyManager logic in the future, without loosing already set address permissions.
+Storing the permissions at the core [ERC725Account] itself, allows it to survive KeyManager upgrades and opens the door to add additional KeyManager logic in the future, without loosing already set address permissions.
 
 
 ## Specification
 
+[ERC165] interface id: `0x32e6d0ab`
 
-### ERC725Y Keys
+Every contract that supports the LSP6 standard SHOULD implement:
 
-**The permissions that the KeyManager reads, are stored on the controlled-contracts ERC725Y key value store (for example an [ERC725Account](./LSP-0-ERC725Account.md))**
 
-The following ERC725Y keys are used to read permissions of certain addresses.
-These keys are based on the [LSP2-ERC725YJSONSchema](./LSP-2-ERC725YJSONSchema.md) standard, and use the key type **[Bytes20MappingWithGrouping](./LSP-2-ERC725YJSONSchema.md#bytes20mappingwithgrouping)**
+### ERC725Y Data Keys
+
+**The permissions that the KeyManager reads, are stored on the controlled-contracts ERC725Y data key value store (for example an [ERC725Account](./LSP-0-ERC725Account.md))**
+
+The following ERC725Y data keys are used to read permissions of certain addresses.
+These data keys are based on the [LSP2-ERC725YJSONSchema](./LSP-2-ERC725YJSONSchema.md) standard, and use the key type **[Bytes20MappingWithGrouping](./LSP-2-ERC725YJSONSchema.md#bytes20mappingwithgrouping)**
 
 
 #### AddressPermissions[]
@@ -69,9 +72,9 @@ For more informations about how to access each index of the `AddressPermissions[
 
 #### AddressPermissions:Permissions:\<address\>
 
-Contains a set of permissions for an address. Permissions defines what an address **can do on** an ERC725Account (*eg: edit the key-value store via SETDATA*), or **can perform on behalf of** the ERC725Account.
+Contains a set of permissions for an address. Permissions defines what an address **can do on** an ERC725Account (*eg: edit the data key-value store via SETDATA*), or **can perform on behalf of** the ERC725Account.
 
-Since the `valueType` of this key is `bytes32`, up to 255 different permissions can be defined. This includes the [ten default permissions](#permission-values-in-addresspermissionspermissionsaddress) defined below. Custom permissions can be defined on top of the default one (starting at `0x0000...0400` (`1024` in decimals)).
+Since the `valueType` of this data key is `bytes32`, up to 255 different permissions can be defined. This includes the [ten default permissions](#permission-values-in-addresspermissionspermissionsaddress) defined below. Custom permissions can be defined on top of the default one (starting at `0x0000...0400` (`1024` in decimals)).
 
 ```json
 {
@@ -132,9 +135,9 @@ Contains an array of bytes4 [ERC165 interface Ids](https://eips.ethereum.org/EIP
 
 #### AddressPermissions:AllowedERC725YKeys:\<address\>
 
-Contains an array of `bytes32` ERC725Y keys.
+Contains an array of `bytes32` ERC725Y data keys.
 
-This key can be used in combination with the `SETDATA` [permission](#permission-values-in-addresspermissionspermissionsaddress). It enables to restrict which keys an `address` can set or edit on the controlled ERC725Account, by providing an [abi encoded](https://docs.soliditylang.org/en/v0.8.11/units-and-global-variables.html#abi-encoding-and-decoding-functions)) array of ERC725Y keys.
+This data key can be used in combination with the `SETDATA` [permission](#permission-values-in-addresspermissionspermissionsaddress). It enables to restrict which data keys an `address` can set or edit on the controlled ERC725Account, by providing an [abi encoded](https://docs.soliditylang.org/en/v0.8.11/units-and-global-variables.html#abi-encoding-and-decoding-functions)) array of ERC725Y data keys.
 
 ```json
 {
@@ -146,9 +149,9 @@ This key can be used in combination with the `SETDATA` [permission](#permission-
 }
 ```
 
-Each key defined in the array MUST be 32 bytes long. It is possible to set a range of allowed ERC725Y keys (**= partial keys**), by setting:
-- some part of the keys as the exact key bytes
-- the rest of the key bytes as 0 bytes.
+Each data key defined in the array MUST be 32 bytes long. It is possible to set a range of allowed ERC725Y data keys (**= partial data keys**), by setting:
+- some part of the data keys as the exact data key bytes
+- the rest of the data key bytes as 0 bytes.
 
 The 0 bytes part will represent a part that is dynamic. Below is an example based on a [LSP2 Mapping](./LSP-2-ERC725YJSONSchema.md#Mapping) key type, where first word = `SupportedStandards`, and second word = `LSP3UniversalProfile`.
 
@@ -157,11 +160,11 @@ name: "SupportedStandards:LSP3UniversalProfile"
 key: 0xeafec4d89fa9619884b6b89135626455000000000000000000000000abe425d6
 ```
 
-By setting the value to `0xeafec4d89fa9619884b6b8913562645500000000000000000000000000000000` in the list of allowed ERC725Y key, one address can set any key **starting with the first word `SupportedStandards:...`**.
+By setting the value to `0xeafec4d89fa9619884b6b8913562645500000000000000000000000000000000` in the list of allowed ERC725Y data keys, one address can set any data key **starting with the first word `SupportedStandards:...`**.
 
 ### Permission Values in AddressPermissions:Permissions:\<address\>
 
-The following permissions are allowed in the BitArray of the `AddressPermissions:Permissions:<address>` key for an address. The order can not be changed:
+The following permissions are allowed in the BitArray of the `AddressPermissions:Permissions:<address>` data key for an address. The order can not be changed:
 
 ```js
 CHANGEOWNER        = 0x0000000000000000000000000000000000000000000000000000000000000001;   // 0000 0000 0000 0001 // Allows changing the owner of the controlled contract
@@ -182,6 +185,16 @@ SIGN               = 0x000000000000000000000000000000000000000000000000000000000
 
 ### Methods
 
+#### account
+
+```solidity
+function account() external view returns (address)
+```
+
+Returns the `address` of the account linked with this Key Manager. The linked account can be one of the following:
+- ERC725X contract
+- ERC725Y contract
+- an ERC725 contract, implementing both ERC725X and ERC725Y (e.g: an [ERC725Account]).
 
 #### getNonce
 
@@ -217,10 +230,6 @@ _Parameters:_
 - `_data`: The call data to be executed. The first 4 bytes of the `_data` payload MUST correspond to one of the function selector on the ERC725 smart contract, such as `setData(...)`, `execute(...)` or `transferOwnership(...)`.
 
 _Returns:_ `bytes` , the returned data as abi-encoded bytes if the call on ERC725 smart contract succeeded, otherwise revert with a reason-string. 
-
-
-
-
 
 
 
@@ -403,7 +412,9 @@ interface ILSP6  /* is ERC165 */ {
     // LSP6
         
     event Executed(uint256 indexed  _value, bytes4 _selector); 
-    
+   
+
+    function target() external view returns (address);
     
     function getNonce(address _address, uint256 _channel) external view returns (uint256);
     
@@ -411,10 +422,13 @@ interface ILSP6  /* is ERC165 */ {
     
     function executeRelayCall(address _signedFor, uint256 _nonce, bytes memory _data, bytes memory _signature) external payable returns (bytes memory);
     
-}
 
 ```
 
 ## Copyright
 
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
+
+
+[ERC165]: <https://eips.ethereum.org/EIPS/eip-165>
+[ERC725Account]: <./LSP-0-ERC725Account.md>
