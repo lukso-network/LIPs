@@ -258,7 +258,7 @@ These 3 parameters MUST be:
 - packed encoded (not zero padded, leading `0`s are removed)
 - hashed with `keccak256`
 
-The final message MUST be signed using ethereum specific signature, based on [EIP712](https://eips.ethereum.org/EIPS/eip-712).
+The final message MUST be signed using ethereum specific signature, based on [EIP191].
 
 
 ### Events
@@ -432,3 +432,4 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 
 [ERC165]: <https://eips.ethereum.org/EIPS/eip-165>
 [ERC725Account]: <./LSP-0-ERC725Account.md>
+[EIP191]: <https://eips.ethereum.org/EIPS/eip-191>
