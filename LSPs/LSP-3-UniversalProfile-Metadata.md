@@ -192,9 +192,11 @@ For more info about how to access each index of the `LSP3IssuedAssets[]` array, 
 
 References issued smart contract assets, like tokens (_e.g.: [LSP7 Digital Assets](./LSP-7-DigitalAsset)_) and NFTs (_e.g.: [LSP8 Identifiable Digital Assets](./LSP-8-IdentifiableDigitalAsset)_).
 
-The `valueContent` MUST be constructed as follows: `bytes8(indexNumber) + bytes4(standardInterfaceId)`. Where:
+The data value MUST be constructed as follows: `bytes8(indexNumber) + bytes4(standardInterfaceId)`. Where:
 - `indexNumber` = the index in the [`LSP3IssuedAssets[]` Array](#lsp3issuedassets)
 - `standardInterfaceId` = the [ERC165 interface ID](https://eips.ethereum.org/EIPS/eip-165) of the standard that the token or asset smart contract implements (if the ERC165 interface ID is unknown, `standardInterfaceId = 0x00000000`).
+
+Example: `0x000000000000000ce33f65c3` (index position `0x000000000000000c = 16`, interfaceId: `0xce33f65c3`).
 
 ```json
 {
