@@ -252,7 +252,7 @@ _Parameters:_
 _Returns:_ `bytes` , the returned data as abi-encoded bytes if the call on ERC725 smart contract succeeded, otherwise revert with a reason-string. 
 
 **Important:** the message to sign MUST be of the following format: `<block.chainid>` + `<KeyManager address>` + `<signer nonce>` + `<_calldata payload>` .
-These 3 parameters MUST be:
+These 4 parameters MUST be:
 
 - packed encoded (not zero padded, leading `0`s are removed)
 - hashed with `keccak256`
