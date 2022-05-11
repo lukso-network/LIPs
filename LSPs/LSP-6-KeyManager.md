@@ -40,7 +40,7 @@ Storing the permissions at the core [ERC725Account] itself, allows it to survive
 
 ## Specification
 
-[ERC165] interface id: `0x32e6d0ab`
+[ERC165] interface id: `0xc403d48f`
 
 Every contract that supports the LSP6 standard SHOULD implement:
 
