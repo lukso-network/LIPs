@@ -236,7 +236,7 @@ _Returns:_ `bytes` , the returned data as abi-encoded bytes if the call on ERC72
 #### executeRelayCall
 
 ```solidity
-function executeRelayCall(uint256 _nonce, bytes memory _calldata, bytes memory _signature) public payable returns (bytes memory)
+function executeRelayCall(bytes memory _signature, uint256 _nonce, bytes memory _calldata) public payable returns (bytes memory)
 ```
 
 Allows anybody to execute `_calldata` payload on a set [ERC725 X or Y smart contract](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md), given they have a signed message from an executor.
@@ -244,10 +244,10 @@ Allows anybody to execute `_calldata` payload on a set [ERC725 X or Y smart cont
 MUST fire the [Executed event](#executed).
 
 _Parameters:_
-
+- `_signature`: bytes65 ethereum signature.
 - `_nonce`: MUST be the nonce of the address that signed the message. This can be obtained via the `getNonce(address _address, uint256 _channel)` function.
 - `_calldata`: The call data to be executed.
-- `_signature`: bytes32 ethereum signature.
+
 
 _Returns:_ `bytes` , the returned data as abi-encoded bytes if the call on ERC725 smart contract succeeded, otherwise revert with a reason-string. 
 
@@ -419,7 +419,7 @@ interface ILSP6  /* is ERC165 */ {
     
     function execute(bytes memory _calldata) external payable returns (bytes memory);
     
-    function executeRelayCall(uint256 _nonce, bytes memory _calldata, bytes memory _signature) external payable returns (bytes memory);
+    function executeRelayCall(bytes memory _signature, uint256 _nonce, bytes memory _calldata) external payable returns (bytes memory);
     
 
 ```
