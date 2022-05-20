@@ -39,7 +39,7 @@ This allows us to:
 
 ## Specification
 
-[ERC165] interface id: `0x481e0fe8`
+[ERC165] interface id: `0x9a3bfe88`
 
 _This interface id is the XOR of ERC725Y, ERC725X, LSP1-UniversalReceiver, ERC1271-isValidSignature, to allow detection of ERC725Accounts._
 
