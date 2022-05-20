@@ -61,9 +61,9 @@ See the [Interface Cheat Sheet](#interface-cheat-sheet) for details.
 function pendingOwner() external view returns (address);
 ```
 
-Return the `address` that ownership of the contract is being transferred to.
+Return the `address` of the pending owner, of a ownership transfer, that was initiated with `transferOwnership(address)`. MUST be `0x0000000000000000000000000000000000000000` if no ownership transfer is in progress.
 
-MUST be set when transferring ownership of the contract to a new `address`.
+MUST be set when transferring ownership of the contract via `transferOwnership(address)` to a new `address`.
 
 SHOULD be cleared once the [`pendingOwner`](#pendingowner) has claim ownership of the contract.
 
@@ -74,12 +74,11 @@ SHOULD be cleared once the [`pendingOwner`](#pendingowner) has claim ownership o
 function claimOwnership() external;
 ```
 
-Allow an `address` to become the new owner of the contract.
+Allow an `address` to become the new owner of the contract. MUST only be called by the pending owner.
 
-Only the pending owner MUST be allowed to claim ownership.
+MUST be called after `transferOwnership` by the current `pendingOwner` to finalize the ownership transfer.
 
 MUST emit a [`OwnershipTransferred`](https://eips.ethereum.org/EIPS/eip-173#specification) event once the new owner has claimed ownership of the contract.
-
 
 ### Events
 
