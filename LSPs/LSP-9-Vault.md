@@ -25,7 +25,7 @@ This standard defines a vault that can hold assets and interact with other contr
 
 ## Specification
 
-[ERC165] interface id: `0x5e38b596`
+[ERC165] interface id: `0x8c1d44f6`
 
 _This interface id is the XOR of ERC725Y, ERC725X, LSP1-UniversalReceiver, to allow detection of Vaults._
 
