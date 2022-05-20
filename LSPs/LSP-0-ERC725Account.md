@@ -68,6 +68,30 @@ this smart contract address MUST be stored under the following data key:
 Contains the methods from [ERC173](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-173.md#specification) (Ownable), [ERC725](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md#specification) (General data key-value store, and general executor), [ERC1271](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1271.md#specification) and [LSP1](./LSP-1-UniversalReceiver.md#specification), 
 See the [Interface Cheat Sheet](#interface-cheat-sheet) for details.
 
+#### pendingOwner
+
+```solidity
+function pendingOwner() external view returns (address);
+```
+
+Return the `address` that ownership of the contract is being transferred to.
+
+MUST be set when transferring ownership of the contract to a new `address`.
+
+SHOULD be cleared once the [`pendingOwner`](#pendingowner) has claim ownership of the contract.
+
+
+#### claimOwnership
+
+```
+function claimOwnership() external;
+```
+
+Allow an `address` to become the new owner of the contract.
+
+Only the pending owner MUST be allowed to claim ownership.
+
+
 ### Events
 
 #### ValueReceived
@@ -166,6 +190,13 @@ interface ILSP0  /* is ERC165 */ {
     
     // IF LSP1UniversalReceiverDelegate data key is set
     // THEN calls will be forwarded to the address given (UniversalReceiver even MUST still be fired)
+
+
+    // Claim Ownership
+    
+    function pendingOwner() external view returns (address);
+    
+    function claimOwnership() external;
 }
 
 
