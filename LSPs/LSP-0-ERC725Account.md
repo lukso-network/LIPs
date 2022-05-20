@@ -101,7 +101,7 @@ MUST set the `newOwner` as the `pendingOwner`.
 
 #### claimOwnership
 
-```
+```solidity
 function claimOwnership() external;
 ```
 
@@ -151,16 +151,21 @@ ERC725Y JSON Schema `ERC725Account`:
 interface ILSP0  /* is ERC165 */ {
          
     
-    // ERC173
+    // Modified ERC173 (ClaimOwnership)
     
     event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
 
 
     function owner() external view returns (address);
     
+    function pendingOwner() external view returns (address);
+
     function transferOwnership(address newOwner) external; // onlyOwner
 
+    function claimOwnership() external;
+    
     function renounceOwnership() external; // onlyOwner
+        
 
 
     // ERC1271
@@ -211,16 +216,6 @@ interface ILSP0  /* is ERC165 */ {
     // IF LSP1UniversalReceiverDelegate data key is set
     // THEN calls will be forwarded to the address given (UniversalReceiver even MUST still be fired)
 
-
-    // Claim Ownership
-
-    function owner() external view returns (address);
-    
-    function pendingOwner() external view returns (address);
-    
-    function transferOwnership(address newOwner) external;
-    
-    function claimOwnership() external;
 }
 
 
