@@ -91,6 +91,8 @@ Allow an `address` to become the new owner of the contract.
 
 Only the pending owner MUST be allowed to claim ownership.
 
+MUST emit a [`OwnershipTransferred`](https://eips.ethereum.org/EIPS/eip-173#specification) event once the new owner has claimed ownership of the contract.
+
 
 ### Events
 
