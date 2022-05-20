@@ -65,8 +65,16 @@ this smart contract address MUST be stored under the following data key:
 
 ### Methods
 
-Contains the methods from [ERC173](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-173.md#specification) (Ownable), [ERC725](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md#specification) (General data key-value store, and general executor), [ERC1271](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1271.md#specification) and [LSP1](./LSP-1-UniversalReceiver.md#specification), 
+Contains the methods from [ERC725](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md#specification) (General data key-value store, and general executor), [ERC1271](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1271.md#specification) and [LSP1](./LSP-1-UniversalReceiver.md#specification), 
 See the [Interface Cheat Sheet](#interface-cheat-sheet) for details.
+
+#### owner
+
+```solidity
+function owner() external view returns (address);
+```
+
+Returns the `address` of the current contract owner.
 
 #### pendingOwner
 
@@ -80,6 +88,16 @@ MUST be set when transferring ownership of the contract via `transferOwnership(a
 
 SHOULD be cleared once the [`pendingOwner`](#pendingowner) has claim ownership of the contract.
 
+
+#### transferOwnership
+
+```solidity
+function transferOwnership(address newOwner) external;
+```
+
+Transfers ownership of the contract to a `newOwner`.
+
+MUST set the `newOwner` as the `pendingOwner`.
 
 #### claimOwnership
 
@@ -195,8 +213,12 @@ interface ILSP0  /* is ERC165 */ {
 
 
     // Claim Ownership
+
+    function owner() external view returns (address);
     
     function pendingOwner() external view returns (address);
+    
+    function transferOwnership(address newOwner) external;
     
     function claimOwnership() external;
 }
