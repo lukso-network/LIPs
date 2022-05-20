@@ -51,9 +51,13 @@ this smart contract address MUST be stored under the following data key:
 
 ### Methods
 
-Contains the methods from [ERC725](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) (General value and execution) and [LSP1](./LSP-1-UniversalReceiver.md), 
 See the [Interface Cheat Sheet](#interface-cheat-sheet) for details.
 
+Contains the methods from:
+- [ERC725](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md#specification) (General data key-value store, and general executor)
+- [ERC1271](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1271.md#specification)
+- [LSP1](./LSP-1-UniversalReceiver.md#specification), 
+- Claim Ownership, a modified version of [ERC173](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-173.md#specification) (Ownable). *See below for details*
 
 #### owner
 
