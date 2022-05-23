@@ -39,9 +39,11 @@ This allows us to:
 
 ## Specification
 
-[ERC165] interface id: `0x481e0fe8`
+[ERC165] interface id: `0x9a3bfe88`
 
-_This interface id is the XOR of ERC725Y, ERC725X, LSP1-UniversalReceiver, ERC1271-isValidSignature, to allow detection of ERC725Accounts._
+_This interface id can be used to detect ERC725Account contracts._
+
+_This `bytes4` interface id is calculated as the XOR of the function selectors from the following interface standards: ERC725Y, ERC725X, LSP1-UniversalReceiver, ERC1271-isValidSignature and ClaimOwnership._
 
 Every contract that supports the LSP0 standard (ERC725Account) SHOULD implement:
 
@@ -65,8 +67,57 @@ this smart contract address MUST be stored under the following data key:
 
 ### Methods
 
-Contains the methods from [ERC173](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-173.md#specification) (Ownable), [ERC725](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md#specification) (General data key-value store, and general executor), [ERC1271](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1271.md#specification) and [LSP1](./LSP-1-UniversalReceiver.md#specification), 
 See the [Interface Cheat Sheet](#interface-cheat-sheet) for details.
+
+Contains the methods from:
+- [ERC725](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md#specification) (General data key-value store, and general executor)
+- [ERC1271](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1271.md#specification)
+- [LSP1](./LSP-1-UniversalReceiver.md#specification)
+- Claim Ownership, a modified version of [ERC173](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-173.md#specification) (Ownable). *See below for details*
+
+#### owner
+
+```solidity
+function owner() external view returns (address);
+```
+
+Returns the `address` of the current contract owner.
+
+#### pendingOwner
+
+```solidity
+function pendingOwner() external view returns (address);
+```
+
+Return the `address` of the pending owner, of a ownership transfer, that was initiated with `transferOwnership(address)`. MUST be `0x0000000000000000000000000000000000000000` if no ownership transfer is in progress.
+
+MUST be set when transferring ownership of the contract via `transferOwnership(address)` to a new `address`.
+
+SHOULD be cleared once the [`pendingOwner`](#pendingowner) has claim ownership of the contract.
+
+
+#### transferOwnership
+
+```solidity
+function transferOwnership(address newOwner) external;
+```
+
+Transfers ownership of the contract to a `newOwner`.
+
+MUST set the `newOwner` as the `pendingOwner`.
+
+#### claimOwnership
+
+```solidity
+function claimOwnership() external;
+```
+
+Allow an `address` to become the new owner of the contract. MUST only be called by the pending owner.
+
+MUST be called after `transferOwnership` by the current `pendingOwner` to finalize the ownership transfer.
+
+MUST emit a [`OwnershipTransferred`](https://eips.ethereum.org/EIPS/eip-173#specification) event once the new owner has claimed ownership of the contract.
+
 
 ### Events
 
@@ -107,16 +158,21 @@ ERC725Y JSON Schema `ERC725Account`:
 interface ILSP0  /* is ERC165 */ {
          
     
-    // ERC173
+    // Modified ERC173 (ClaimOwnership)
     
     event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
 
 
     function owner() external view returns (address);
     
+    function pendingOwner() external view returns (address);
+
     function transferOwnership(address newOwner) external; // onlyOwner
 
+    function claimOwnership() external;
+    
     function renounceOwnership() external; // onlyOwner
+        
 
 
     // ERC1271
@@ -166,6 +222,7 @@ interface ILSP0  /* is ERC165 */ {
     
     // IF LSP1UniversalReceiverDelegate data key is set
     // THEN calls will be forwarded to the address given (UniversalReceiver even MUST still be fired)
+
 }
 
 
