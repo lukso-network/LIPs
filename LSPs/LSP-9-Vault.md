@@ -27,7 +27,9 @@ This standard defines a vault that can hold assets and interact with other contr
 
 [ERC165] interface id: `0x8c1d44f6`
 
-_This interface id is the XOR of ERC725Y, ERC725X, LSP1-UniversalReceiver, to allow detection of Vaults._
+_This interface id can be used to detect Vault contracts._
+
+_This `bytes4` interface id is calculated as the XOR of the function selectors from the following interface standards: ERC725Y, ERC725X, LSP1-UniversalReceiver and ClaimOwnership._
 
 Every contract that supports the LSP9 standard SHOULD implement:
 

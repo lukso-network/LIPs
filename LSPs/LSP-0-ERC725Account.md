@@ -41,7 +41,9 @@ This allows us to:
 
 [ERC165] interface id: `0x9a3bfe88`
 
-_This interface id is the XOR of ERC725Y, ERC725X, LSP1-UniversalReceiver, ERC1271-isValidSignature, to allow detection of ERC725Accounts._
+_This interface id can be used to detect ERC725Account contracts._
+
+_This `bytes4` interface id is calculated as the XOR of the function selectors from the following interface standards: ERC725Y, ERC725X, LSP1-UniversalReceiver, ERC1271-isValidSignature and ClaimOwnership._
 
 Every contract that supports the LSP0 standard (ERC725Account) SHOULD implement:
 
