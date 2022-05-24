@@ -284,8 +284,8 @@ Below is an example of a mapping data key type:
 
 ```json
 {
-    "name": "AddressPermissions:Permissions:cafecafecafecafecafecafecafecafecafecafe",
-    "key": "0x4b80742d0000000082ac0000cafecafecafecafecafecafecafecafecafecafe",
+    "name": "AddressPermissions:Permissions:<address>",
+    "key": "0x4b80742d0000000082ac0000<address>",
     "keyType": "Bytes20MappingWithGrouping",
     "valueType": "...",
     "valueContent": "..."
