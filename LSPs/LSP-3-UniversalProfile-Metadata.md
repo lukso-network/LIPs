@@ -6,7 +6,7 @@ discussions-to: https://discord.gg/E2rJPP4
 status: Draft
 type: LSP
 created: 2019-07-12
-requires: ERC165, ERC725Y, LSP1, LSP2, LSP5
+requires: ERC165, ERC725Y, LSP1, LSP2, LSP5, LSP12
 ---
 
 
@@ -171,44 +171,6 @@ Example:
     }
 }
 ```
-
-#### LSP3IssuedAssets[]
-
-An array of smart contract assets issued by the Universal Profile, like tokens (_e.g.: [LSP7 Digital Assets](./LSP-7-DigitalAsset)_) and NFTs (_e.g.: [LSP8 Identifiable Digital Assets](./LSP-8-IdentifiableDigitalAsset)_).
-
-```json
-{
-    "name": "LSP3IssuedAssets[]",
-    "key": "0x3a47ab5bd3a594c3a8995f8fa58d0876c96819ca4516bd76100c92462f2f9dc0",
-    "keyType": "Array",
-    "valueContent": "Address",
-    "valueType": "address"
-}
-```
-
-For more info about how to access each index of the `LSP3IssuedAssets[]` array, see: [ERC725Y JSON Schema > `keyType`: `Array`](./LSP-2-ERC725YJSONSchema.md#Array)
-
-#### LSP3IssuedAssetsMap
-
-References issued smart contract assets, like tokens (_e.g.: [LSP7 Digital Assets](./LSP-7-DigitalAsset)_) and NFTs (_e.g.: [LSP8 Identifiable Digital Assets](./LSP-8-IdentifiableDigitalAsset)_).
-
-The data value MUST be constructed as follows: `bytes4(standardInterfaceId) + bytes8(indexNumber)`. Where:
-- `standardInterfaceId` = the [ERC165 interface ID](https://eips.ethereum.org/EIPS/eip-165) of the standard that the token or asset smart contract implements (if the ERC165 interface ID is unknown, `standardInterfaceId = 0x00000000`).
-- `indexNumber` = the index in the [`LSP3IssuedAssets[]` Array](#lsp3issuedassets)
-
-Value example: `0xe33f65c3000000000000000c` (interfaceId: `0xce33f65c3`, index position `0x000000000000000c = 16`).
-
-```json
-{
-    "name": "LSP3IssuedAssetsMap:<address>",
-    "key": "0x83f5e77bfb14241600000000<address>",
-    "keyType": "Bytes20Mapping",
-    "valueType": "bytes",
-    "valueContent": "Mixed"
-}
-```
-
-For more informations about how to access each index of the `LSP3IssuedAssets[]` array, see [ERC725Y JSON Schema > `keyType`: `Array`](./LSP-2-ERC725YJSONSchema.md#Array)
 
 ## Rationale
 
