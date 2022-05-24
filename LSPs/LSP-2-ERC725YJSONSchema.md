@@ -265,8 +265,8 @@ A **Bytes20Mapping** mapping data key is constructed using `bytes8(keccak256(Fir
 
 ```json
 {
-    "name": "MyCoolAddress:cafecafecafecafecafecafecafecafecafecafe",
-    "key": "0x22496f48a493035f00000000cafecafecafecafecafecafecafecafecafecafe",
+    "name": "MyCoolAddress:<address>",
+    "key": "0x22496f48a493035f00000000<address>",
     "keyType": "Bytes20Mapping",
     "valueType": "...",
     "valueContent": "..."
