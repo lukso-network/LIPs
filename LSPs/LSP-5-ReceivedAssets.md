@@ -13,18 +13,17 @@ requires: LSP2
 This standard describes a set of [ERC725Y](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) data key values to store addresses of received assets in a [ERC725Y](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) smart contract.
 
 ## Abstract
-This data key value standard describes a set of data keys that can be added to an [ERC725Y](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) smart contract.
-Two data keys are proposed to reference received asset smart contracts.
+This data key value standard describes a set of data keys that can be added to an [ERC725Y](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) smart contract to describe received assets:
 
-- `LSP5ReceivedAssets[]` to hold an array of addresses.
-- `LSP5ReceivedAssetsMap` to hold:
-  - the index in the former array where the received asset address is stored.
-  - an [ERC165 interface ID](https://eips.ethereum.org/EIPS/eip-165) to easily identify the standard used by each asset smart contracts, without the need to query the contracts directly. 
+- `LSP5ReceivedAssets[]` is an [LSP2 array](./LSP-2-ERC725YJSONSchema.md) of addresses.
+- `LSP5ReceivedAssetsMap` is a dynamic address mapping, which contains:
+  - an [ERC165 interface ID](https://eips.ethereum.org/EIPS/eip-165) to easily identify the standard used by the mapped asset smart contract
+  - and the index in the `LSP5ReceivedAssets[]` array.
 
-The data key `LSP5ReceivedAssetsMap` also helps to prevent duplicates from being added to the array, when automatically added via smart contract (e.g. via an [LSP1-UniversalReceiverDelegate](./LSP-1-UniversalReceiver.md)).
+The data key `LSP5ReceivedAssetsMap` exists so that smart contracts can detect if an address is present in the array (e.g. as done in the  [LSP1-UniversalReceiverDelegate](./LSP-1-UniversalReceiver.md)).
 
 ## Motivation
-To be able to display received assets in a profile we need to keep track of all received asset contract addresses. This is important for [UniversalProfile](./LSP-3-UniversalProfile-Metadata.md), but also [Vault](./LSP-9-Vault.md) smart contracts.
+This standard allows to create a decentralised portfolio of owned assets by a smart contract. See [LSP3 - UniversalProfile Metadata](./LSP-3-UniversalProfile-Metadata.md), or [LSP9 Vault](./LSP-9-Vault.md).
 
 ## Specification
 
@@ -55,7 +54,7 @@ For more info about how to access each index of the `LSP5ReceivedAssets[]` array
 References received smart contract assets, like tokens (_e.g.: [LSP7 Digital Assets](./LSP-7-DigitalAsset)_) and NFTs (_e.g.: [LSP8 Identifiable Digital Assets](./LSP-8-IdentifiableDigitalAsset)_).
 
 The data value MUST be constructed as follows: `bytes4(standardInterfaceId) + bytes8(indexNumber)`. Where:
-- `standardInterfaceId` = the [ERC165 interface ID](https://eips.ethereum.org/EIPS/eip-165) of the standard that the token or asset smart contract implements (if the ERC165 interface ID is unknown, `standardInterfaceId = 0x00000000`).
+- `standardInterfaceId` = the [ERC165 interface ID](https://eips.ethereum.org/EIPS/eip-165) of the standard that the token or asset smart contract implements (if the ERC165 interface ID is unknown, `standardInterfaceId = 0xffffffff`).
 - `indexNumber` = the index in the [`LSP5ReceivedAssets[]` Array](#lsp5receivedassets)
 
 Value example: `0xe33f65c3000000000000000c` (interfaceId: `0xe33f65c3`, index position `0x000000000000000c = 16`).
@@ -74,7 +73,7 @@ Value example: `0xe33f65c3000000000000000c` (interfaceId: `0xe33f65c3`, index po
 
 ## Implementation
 
-An implementation can be found in the [LSP1UniversalReceiverDelegate](https://github.com/lukso-network/lsp-universalprofile-smart-contracts/blob/main/contracts/LSP1UniversalReceiver/LSP1UniversalReceiverDelegateUP/LSP1UniversalReceiverDelegateUP.sol) smart contract. The below defines the JSON interface of the `LSP5ReceivedAssets`.
+An implementation of setting received assets from a smart contract can be found in the [LSP1UniversalReceiverDelegate](https://github.com/lukso-network/lsp-universalprofile-smart-contracts/blob/main/contracts/LSP1UniversalReceiver/LSP1UniversalReceiverDelegateUP/LSP1UniversalReceiverDelegateUP.sol) smart contract.
 
 ERC725Y JSON Schema `LSP5ReceivedAssets`:
 ```json
