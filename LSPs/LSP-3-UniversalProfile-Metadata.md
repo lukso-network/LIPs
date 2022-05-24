@@ -200,35 +200,36 @@ ERC725Y JSON Schema `LSP3UniversalProfile`:
         "valueType": "bytes",
         "valueContent": "JSONURL"
     },
+    // from LSP12 IssuedAssets
     {
-        "name": "LSP3IssuedAssetsMap:<address>",
-        "key": "0x83f5e77bfb14241600000000<address>",
-        "keyType": "Bytes20Mapping",
-        "valueType": "bytes",
-        "valueContent": "Mixed"
-    },
-    {
-        "name": "LSP3IssuedAssets[]",
-        "key": "0x3a47ab5bd3a594c3a8995f8fa58d0876c96819ca4516bd76100c92462f2f9dc0",
+        "name": "LSP12IssuedAssets[]",
+        "key": "0x7c8c3416d6cda87cd42c71ea1843df28ac4850354f988d55ee2eaa47b6dc05cd",
         "keyType": "Array",
         "valueType": "address",
         "valueContent": "Address"
     },
-
-    // from LSP5 ReceivedAssets
     {
-        "name": "LSP5ReceivedAssetsMap:<address>",
-        "key": "0x812c4334633eb81600000000<address>",
+        "name": "LSP12IssuedAssetsMap:<address>",
+        "key": "0x74ac2555c10b934900000000<address>",
         "keyType": "Bytes20Mapping",
         "valueType": "bytes",
         "valueContent": "Mixed"
     },
+
+    // from LSP5 ReceivedAssets
     {
         "name": "LSP5ReceivedAssets[]",
         "key": "0x6460ee3c0aac563ccbf76d6e1d07bada78e3a9514e6382b736ed3f478ab7b90b",
         "keyType": "Array",
         "valueType": "address",
         "valueContent": "Address"
+    },
+    {
+        "name": "LSP5ReceivedAssetsMap:<address>",
+        "key": "0x812c4334633eb81600000000<address>",
+        "keyType": "Bytes20Mapping",
+        "valueType": "bytes",
+        "valueContent": "Mixed"
     },
 
     // from ERC725Account
