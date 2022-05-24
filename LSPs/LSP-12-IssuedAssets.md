@@ -60,10 +60,10 @@ For more info about how to access each index of the `LSP12IssuedAssets[]` array,
 References issued smart contract assets, like tokens (_e.g.: [LSP7 Digital Assets](./LSP-7-DigitalAsset)_) and NFTs (_e.g.: [LSP8 Identifiable Digital Assets](./LSP-8-IdentifiableDigitalAsset)_).
 
 The data value MUST be constructed as follows: `bytes4(standardInterfaceId) + bytes8(indexNumber)`. Where:
-- `standardInterfaceId` = the [ERC165 interface ID](https://eips.ethereum.org/EIPS/eip-165) of the standard that the token or asset smart contract implements (if the ERC165 interface ID is unknown, `standardInterfaceId = 0x00000000`).
+- `standardInterfaceId` = the [ERC165 interface ID](https://eips.ethereum.org/EIPS/eip-165) of the standard that the token or asset smart contract implements (if the ERC165 interface ID is unknown, `standardInterfaceId = 0xffffffff`).
 - `indexNumber` = the index in the [`LSP12IssuedAssets[]` Array](#LSP12Issuedassets)
 
-Value example: `0xe33f65c3000000000000000c` (interfaceId: `0xce33f65c3`, index position `0x000000000000000c = 16`).
+Value example: `0xe33f65c3000000000000000c` (interfaceId: `0xe33f65c3`, index position `0x000000000000000c = 16`).
 
 ```json
 {
