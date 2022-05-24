@@ -46,9 +46,15 @@ References issued smart contract vaults.
 
 #### LSP10VaultsMap
 
-References issued smart contract vaults.
+References owned [LSP9Vaults](./LSP-9-Vault.md).
 
 The `valueContent` MUST be constructed as follows: `bytes8(indexNumber) + bytes4(standardInterfaceId)`. 
+
+The data value MUST be constructed as follows: `bytes4(standardInterfaceId) + bytes8(indexNumber)`. Where:
+- `standardInterfaceId` = the [ERC165 interface ID](https://eips.ethereum.org/EIPS/eip-165) of a [LSP9Vaults](./LSP-9-Vault.md): `0x8c1d44f6`.
+- `indexNumber` = the index in the [`LSP10Vaults[]` Array](#lsp10vaults)
+
+Value example: `0x8c1d44f6000000000000000c` (interfaceId: `0xce33f65c3`, index position `0x000000000000000c = 16`).
 
 ```json
 {
