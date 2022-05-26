@@ -301,7 +301,6 @@ MyKeyName:MyMapName:<address>
 MyKeyName:<bytes2>:<uint8> // ffff 4081242941
 "0x35e6950bc8d20000ffff000000000000000000000000000000000000f342d33d"
 
-
 MyKeyName:<address>:<address> // 0xabcdef11abcdef11abcdef11abcdef11ffffffff, 0xcafecafecafecafecafecafecafecafecafecafe
 "0x35e6950bc8d2abcdef110000cafecafecafecafecafecafecafecafecafecafe"
 
