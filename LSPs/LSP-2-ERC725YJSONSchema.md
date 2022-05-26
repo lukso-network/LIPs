@@ -273,11 +273,6 @@ MyKeyName:<bool> // true
 }
 ```
 
-
-- `keccak256("FirstWord")` = `0x`**`f49648de3734d6c5458244ad87c893b5`**`0e6367d2cfa4670eddec109d1fc952e0` (**first 16 bytes** of the hash)
-- `keccak256("SecondWord")` = `0x`**`53022d37`**`21822ca6332135de9e7b98f9a82eb1051d3095d2e259b45149c9b634` (**first 4 bytes** of the hash)
-
-
 ### MappingWithGrouping
 
 A **MappingWithGrouping** data key is constructed using:
