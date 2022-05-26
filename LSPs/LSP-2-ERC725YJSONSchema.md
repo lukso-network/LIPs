@@ -235,9 +235,9 @@ A **Mapping** data key is constructed using:
 `bytes10(keccak256("MyKeyName"))` + `bytes2(0)` + `bytes20(keccak256("MyMapName") or <mixed type>)`.
 
 `<mixed type>` can `uint<M>`, `int<M>`, `address`, `bool` or `bytes<M>`.
-Everything but `bytes<M>` will be left padded and left-cut if larger than `20 bytes`.
 
-`bytes<M>` and static word hashes (`bytes32`) will be left padded, but right-cut, if larger than `20 bytes`.
+- Everything but `bytes<M>` and `address` will be left padded and left-cut if larger than `20 bytes`.
+- `bytes<M>` and `address` and static word hashes (`bytes32`) will be left padded, but right-cut, if larger than `20 bytes`.
 
 *example:*
 
@@ -280,9 +280,9 @@ A **MappingWithGrouping** data key is constructed using:
 `bytes6(keccak256("MyKeyName"))` + `bytes4(keccak256("MyMapName") or <mixed type>)` + `bytes2(0)` + `bytes20(keccak256("MySubMapName") or <mixed type>)`.
 
 `<mixed type>` can `uint<M>`, `int<M>`, `address`, `bool` or `bytes<M>`.
-Everything but `bytes<M>` and `address` will be left padded and left-cut if larger than `20 bytes`.
 
-`bytes<M>` and `address` and static word hashes (`bytes32`) will be left padded, but right-cut, if larger than `20 bytes`.
+- Everything but `bytes<M>` and `address` will be left padded and left-cut if larger than `20 bytes`.
+- `bytes<M>` and `address` and static word hashes (`bytes32`) will be left padded, but right-cut, if larger than `20 bytes`.
 
 
 e.g. `AddressPermissions:Permissions:<address>` > `0x4b80742d 00000000 eced 0000 cafecafecafecafecafecafecafecafecafecafe`.
