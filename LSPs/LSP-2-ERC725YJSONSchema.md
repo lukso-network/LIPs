@@ -41,7 +41,7 @@ This schema is for example used in [ERC725](https://github.com/ethereum/EIPs/blo
 
 To make ERC725Y data keys readable, we describe a data key-value pair as a JSON object containing the following entries:
 
-```json
+```js
 {
     "name": "...",
     "key": "...",
@@ -156,7 +156,7 @@ A **Singleton** data key refers to a simple data key. It is constructed using `b
 
 Below is an example of a Singleton data key type:
 
-```json
+```js
 {
     "name": "MyKeyName",
     "key": "0x35e6950bc8d21a1699e58328a3c4066df5803bb0b570d0150cb3819288e764b2",
@@ -203,7 +203,7 @@ Below is an example for the **Array** data key named `LSP3IssuedAssets[]`.
 - element 2: key: `0x3a47ab5bd3a594c3a8995f8fa58d087600000000000000000000000000000001`, value: `0x321...` (index 1)
 ...
 
-```json
+```js
 {
     "name": "LSP3IssuedAssets[]",
     "key": "0x3a47ab5bd3a594c3a8995f8fa58d0876c96819ca4516bd76100c92462f2f9dc0",
@@ -293,8 +293,7 @@ Everything but `bytes<M>` and `address` will be left padded and left-cut if larg
 e.g. `AddressPermissions:Permissions:<address>` > `0x4b80742d 00000000 eced 0000 cafecafecafecafecafecafecafecafecafecafe`.
 
 *example:*
-```json
-
+```js
 // Examples:
 MyKeyName:MyMapName:MySubMapName // 0x35e6950bc8d21a1699e58328a3c4066df5803bb0b570d0150cb3819288e764b2 + 0x75060e3cd7d40450e94d415fb5992ced9ad8f058649e805951f558364152f9ed + 0x221cba00b07da22c3775601ffea5d3406df100dbb7b1c86cb2fe3739f0fe79a1
 "0x35e6950bc8d275060e3c0000221cba00b07da22c3775601ffea5d3406df100db"
@@ -340,7 +339,7 @@ A BitArray can be used as a mapping of values to states (on/off, allowed/disallo
 
 The example shows how a `BitArray` value can be read and interpreted.
 
-```json
+```js
 {
     "name": "MyPermissions",
     "key": "0xaacedf1d8b2cc85524a881760315208fb03c6c26538760922d6b9dee915fd66a",
@@ -519,7 +518,7 @@ Below is an example of an ERC725Y JSON Schema containing 3 x ERC725Y data keys.
 
 Using such schema allows interfaces to auto decode and interpret the values retrieved from the ERC725Y data key-value store.
 
-```json
+```js
 [
     {
         "name": "SupportedStandards:LSP3UniversalProfile",
