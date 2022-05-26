@@ -297,6 +297,7 @@ MyKeyName:MyMapName:<address>
 "0x35e6950bc8d275060e3c0000cafecafecafecafecafecafecafecafecafecafe"
 
 // For more examples static examples see the "Mapping" examples
+
 MyKeyName:<bytes2>:<uint8> // ffff 4081242941
 "0x35e6950bc8d20000ffff000000000000000000000000000000000000f342d33d"
 
