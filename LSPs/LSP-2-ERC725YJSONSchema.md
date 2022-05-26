@@ -90,7 +90,7 @@ The `keyType` determines the format of the data key(s).
 | [`Singleton`](#singleton)     | A simple data key                     | `bytes32(keccak256("MyKeyName"))`<br> --- <br> `MyKeyName` -->  `0x35e6950bc8d21a1699e58328a3c4066df5803bb0b570d0150cb3819288e764b2` |
 | [`Array`](#array)             | An array spanning multiple ERC725Y data keys  | `bytes32(keccak256("MyKeyName[]"))` <br> --- <br> `MyKeyName[]` -->   `0x24f6297f3abd5a8b82f1a48cee167cdecef40aa98fbf14534ea3539f66ca834c`|
 | [`Mapping`](#mapping)         | A data key that consist of 2 sections, where the last section can also be a dynamic value         | `bytes10(keccak256("MyKeyName"))` +<br>`bytes2(0)` +<br>`bytes20(keccak256("MyMapName") or <mixed type>)` <br> --- <br> `MyKeyName:MyMapName` -->  `0x35e6950bc8d21a1699e5000075060e3cd7d40450e94d415fb5992ced9ad8f058` |
-| [`MappingWithGrouping`](#mappingwithgrouping)  | A data key that consist of 3 sections, where the last two sections can also be dynamic values | `bytes6(keccak256("MyKeyName"))` +<br>`bytes4(keccak256("MapName") or <mixed type>)` +<br>`bytes2(0)` +<br>`bytes20(keccak256("MapName") or <mixed type>)` <br> --- <br> `MyKeyName:MapName:<address>` -->  `0x35e6950bc8d2e60418130000cafecafecafecafecafecafecafecafecafecafe` |
+| [`MappingWithGrouping`](#mappingwithgrouping)  | A data key that consist of 3 sections, where the last two sections can also be dynamic values | `bytes6(keccak256("MyKeyName"))` +<br>`bytes4(keccak256("MyMapName") or <mixed type>)` +<br>`bytes2(0)` +<br>`bytes20(keccak256("MySubMapName") or <mixed type>)` <br> --- <br> `MyKeyName:MyMapName:<address>` -->  `0x35e6950bc8d275060e3c0000cafecafecafecafecafecafecafecafecafecafe` |
 
 
 ### `valueType`
