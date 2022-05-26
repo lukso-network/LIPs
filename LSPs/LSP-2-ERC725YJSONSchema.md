@@ -61,9 +61,9 @@ The table below describes each entries with their available options.
 |[`valueType`](#valueType)| *How* a value MUST be decoded <hr> `boolean` <br> `string` <br> `address` <br> `uintN` <br> `intN` <br> `bytesN` <br> `bytes` <br> `uintN[]` <br> `intN[]` <br> `string[]` <br> `address[]` <br> `bytes[]` |
 |[`valueContent`](#valueContent)| *How* a value SHOULD be interpreted <hr> `Boolean` <br> `String` <br> `Address` <br> `Number` <br> `BytesN` <br> `Bytes` <br> `Keccak256` <br> [`BitArray`](#BitArray) <br> `URL` <br> [`AssetURL`](#AssetURL) <br> [`JSONURL`](#JSONURL) <br> `Markdown` <br> `Literal` (*e.g.:* `0x1345ABCD...`) |
 
-### `name`
+### Data Key Name
 
-The `name` is the human-readable format of the ERC725Y data key. It aims to abstract the representation of the ERC725Y data key and defines what the data key represents. In most cases, it SHOULD highlight the intent behind the data key.
+The `name` is the human-readable format of a ERC725Y data key. Its the basis which are used to generate the `32 bytes` key hash. Names can be arbitrarily choose, but SHOULD highlight the content behind the data value.
 
 In scenarios where an ERC725Y data key is part of an LSP Standard, the data key `name` SHOULD be comprised of the following: `LSP{N}{KeyName}`, where
 
@@ -71,33 +71,26 @@ In scenarios where an ERC725Y data key is part of an LSP Standard, the data key 
 - `N`: the **Standard Number** this data key refers to.
 - `KeyName`: base of the data key name. Should represent the meaning of a value stored behind the data key.
 
-*e.g.:* `MyColourTheme` (not part of any LSP Standard), `LSP4TokenName` (part of a LSP standard)
+*e.g.:* `MyCustomKeyName` or `LSP4TokenName`
 
 
-### `key`
+### Data Key Hash
 
-The `key` is a `bytes32` value that acts as the **unique identifier** for the data key. It is the actual data key that MUST be used to retrieve the value stored in the contract storage, via `ERC725Y.getData(bytes32 dataKey)`.
+The `key` is a `bytes32` value that acts as the **unique identifier** for the data key, and is what is used to retrive the data value from a ERC725Y smart contract via `ERC725Y.getData(bytes32 dataKey)` or `ERC725Y.getData(bytes32[] dataKeys)`.
 
-The standard `keccak256` hashing algorithm is used to generate this identifier. However, *how* the identifier is constructed varies, depending on the `keyType`:
-
-- for `Singleton` data keys: the hash of the data key name (*e.g.:* `keccak256('MyKeyName') = 0x35e6950bc8d21a1699e58328a3c4066df5803bb0b570d0150cb3819288e764b2`)
-- for `Array` data keys (see [`Array`](#array) section for more details), **a combination of:**
-  - an initial data key containing the array length.
-  - subsequent data keys for array index access.
-- for mapping data keys, see each mapping type separately below.
+Usually `keccak256` hashing algorithm is used to generate the `bytes32` data key. However, *how* the data key is constructed varies, depending on the `keyType`.
 
 
 ### `keyType`
 
-The `keyType` determines how the value(s) should be interpreted.
+The `keyType` determines the format of the data key(s).
 
-| `keyType` | Description  | Example |
-|---|---|---|
-| [`Singleton`](#singleton)  | A simple data key  | `bytes32(keccak256("MyKeyName"))`<br> --- <br> `MyKeyName` -->  `0x35e6950bc8d21a1699e58328a3c4066df5803bb0b570d0150cb3819288e764b2` |
-| [`Array`](#array)  | an array spanning multiple ERC725Y data keys  | `bytes32(keccak256("MyKeyName[]"))` <br> --- <br> `MyKeyName[]` -->   `0x24f6297f3abd5a8b82f1a48cee167cdecef40aa98fbf14534ea3539f66ca834c`|
-| [`Mapping`](#mapping)  | a data key that map two words  | `bytes16(keccak256("MyKeyName"))` + `bytes12(0)` + `bytes4(keccak256("MapName"))` <br> --- <br> `MyKeyName:MapName` -->  `0x24f6297f3abd5a8b82f1a48cee167cde000000000000000000000000e6041813` |
-| [`Bytes20Mapping`](#bytes20mapping)  | a data key that maps a word to a `bytes20` value, such as (but not restricted to) an `address` | `bytes8(keccak256("MyKeyName"))` + `bytes4(0)` +  `bytes20(dynamicValue)` <br> --- <br> `MyKeyName:cafecafecafecafecafecafecafecafecafecafe` -->  `0x35e6950bc8d21a1600000000cafecafecafecafecafecafecafecafecafecafe` |
-| [`Bytes20MappingWithGrouping`](#bytes20mappingwithgrouping)  | a data key that maps a word to another word to a `bytes20` value, such as (but not restricted to) an `address`  | `bytes4(keccak256("MyKeyName"))` + `bytes4(0)` + `bytes2(keccak256("MapName"))` + `bytes2(0)` +  `bytes20(dynamicValue)` <br> --- <br> `MyKeyName:MapName:cafecafecafecafecafecafecafecafecafecafe` -->  `0x35e6950b00000000e6040000cafecafecafecafecafecafecafecafecafecafe` |
+| `keyType`                     | Description                           | Example                        |
+|-------------------------------|---------------------------------------|--------------------------------|
+| [`Singleton`](#singleton)     | A simple data key                     | `bytes32(keccak256("MyKeyName"))`<br> --- <br> `MyKeyName` -->  `0x35e6950bc8d21a1699e58328a3c4066df5803bb0b570d0150cb3819288e764b2` |
+| [`Array`](#array)             | An array spanning multiple ERC725Y data keys  | `bytes32(keccak256("MyKeyName[]"))` <br> --- <br> `MyKeyName[]` -->   `0x24f6297f3abd5a8b82f1a48cee167cdecef40aa98fbf14534ea3539f66ca834c`|
+| [`Mapping`](#mapping)         | A data key that consist of 2 sections, where the last section can also be a dynamic value         | `bytes10(keccak256("MyKeyName"))` +<br>`bytes2(0)` +<br>`bytes20(keccak256("MyMapName") or <mixed type>)` <br> --- <br> `MyKeyName:MyMapName` -->  `0x35e6950bc8d21a1699e5000075060e3cd7d40450e94d415fb5992ced9ad8f058` |
+| [`MappingWithGrouping`](#mappingwithgrouping)  | A data key that consist of 3 sections, where the last two sections can also be dynamic values | `bytes6(keccak256("MyKeyName"))` +<br>`bytes4(keccak256("MapName") or <mixed type>)` +<br>`bytes2(0)` +<br>`bytes20(keccak256("MapName") or <mixed type>)` <br> --- <br> `MyKeyName:MapName:<address>` -->  `0x35e6950bc8d2e60418130000cafecafecafecafecafecafecafecafecafecafe` |
 
 
 ### `valueType`
@@ -113,19 +106,19 @@ The `valueType` can also be useful for typecasting. It enables contracts or inte
 
 | `valueType` | Description |
 |---|---|
-| `boolean`  | a value as either **true** or **false** |
-| `string`  | an UTF8 encoded string  |
-| `address`  | a 20 bytes long address |
-| `uintN`  | an **unsigned** integer (= only positive number) of size `N`  |
-| `intN`  |a **signed** integer (= either positive or negative number) of size `N` |
-| `bytesN`  | a bytes value of **fixed-size** `N`, from `bytes1` up to `bytes32` |
-| `bytes`  | a bytes value of **dynamic-size** |
-| `uintN[]`  | an array of **signed** integers |
-| `intN[]`  | an array of **unsigned** integers |
-| `string[]`  | an array of UTF8 encoded strings |
-| `address[]`  | an array of addresses   |
-| `bytes[]`   | an array of dynamic size bytes  |
-| `bytesN[]`  | an array of fixed size bytes  |
+| `boolean`     | a value as either **true** or **false** |
+| `string`      | an UTF8 encoded string  |
+| `address`     | a 20 bytes long address |
+| `uintN`       | an **unsigned** integer (= only positive number) of size `N`  |
+| `intN`        |a **signed** integer (= either positive or negative number) of size `N` |
+| `bytesN`      | a bytes value of **fixed-size** `N`, from `bytes1` up to `bytes32` |
+| `bytes`       | a bytes value of **dynamic-size** |
+| `uintN[]`     | an array of **signed** integers |
+| `intN[]`      | an array of **unsigned** integers |
+| `string[]`    | an array of UTF8 encoded strings |
+| `address[]`   | an array of addresses |
+| `bytes[]`     | an array of dynamic size bytes  |
+| `bytesN[]`    | an array of fixed size bytes  |
 
 ### `valueContent`
 
@@ -137,20 +130,21 @@ To illustrate, a string could be interpreted in multiple ways, such as:
 
 Valid `valueContent` are:
 
-| `valueContent` | Description  |
+| `valueContent`    | Description  |
 |---|---|
-| `String`  | an UTF8 encoded string |
-| `Address`  | an address |
-| `Number`  | a Number (positive or negative, depending on the `keyType`)  |
-| `BytesN`  | a bytes value of **fixed-size** `N`, from `bytes1` up to `bytes32`  |
-| `Bytes`  | a bytes value of **dynamic-size** |
-| `Keccak256`  | a 32 bytes long hash digest, obtained from the keccak256 hashing algorithm |
-| `BitArray`  | an array of single `1` or `0` bits |
-| `URL`  | an URL encoded as an UTF8 string |
-| [`AssetURL`](#asseturl)  | The content contains the hash function, hash and link to the asset file  |
-| [`JSONURL`](#jsonurl)  |  hash function, hash and link to the JSON file |
-| `Markdown`  | a structured Markdown mostly encoded as UTF8 string  |
-| `0x1345ABCD...`  | a **literal** value, when the returned value is expected to equal some specific bytes |
+| `String`          | an UTF8 encoded string |
+| `Address`         | an address |
+| `Number`          | a Number (positive or negative, depending on the `keyType`)  |
+| `BytesN`          | a bytes value of **fixed-size** `N`, from `bytes1` up to `bytes32`  |
+| `Bytes`           | a bytes value of **dynamic-size** |
+| `Keccak256`       | a 32 bytes long hash digest, obtained from the keccak256 hashing algorithm |
+| `BitArray`        | an array of single `1` or `0` bits |
+| `URL`             | an URL encoded as an UTF8 string |
+| [`AssetURL`](#asseturl)   | The content contains the hash function, hash and link to the asset file  |
+| [`JSONURL`](#jsonurl)     |  hash function, hash and link to the JSON file |
+| `Markdown`        | a structured Markdown mostly encoded as UTF8 string  |
+| `0x1345ABCD...`   | a **literal** value, when the returned value is expected to equal some specific bytes |
+| `Mixed`           | bytes that are a mixture of multiple types or encoding concatenated together |
 
 
 ---
@@ -236,14 +230,43 @@ value: 0xcafecafecafecafecafecafecafecafecafecafe
 
 ### Mapping
 
-A **Mapping** data key is constructed using `bytes16(keccak256("FirstWord")) + bytes12(0) + bytes4(keccak256("SecondWord"))`.  
+A **Mapping** data key is constructed using:
+
+`bytes10(keccak256("MyKeyName"))` + `bytes2(0)` + `bytes20(keccak256("MyMapName") or <mixed type>)`.
+
+`<mixed type>` can `uint<M>`, `int<M>`, `address`, `bool` or `bytes<M>`.
+Everything but `bytes<M>` will be left padded and left-cut if larger than `20 bytes`.
+
+`bytes<M>` and static word hashes (`bytes32`) will be left padded, but right-cut, if larger than `20 bytes`.
 
 *example:*
 
-```json
+```js
+// Examples:
+MyKeyName:MyMapName // 0x35e6950bc8d21a1699e58328a3c4066df5803bb0b570d0150cb3819288e764b2 + 0x75060e3cd7d40450e94d415fb5992ced9ad8f058649e805951f558364152f9ed
+"0x35e6950bc8d21a1699e5000075060e3cd7d40450e94d415fb5992ced9ad8f058"
+
+MyKeyName:<address> // 0xcafecafecafecafecafecafecafecafecafecafe
+"0x35e6950bc8d21a1699e50000cafecafecafecafecafecafecafecafecafecafe"
+
+MyKeyName:<uint8> // 4081242941
+"0x35e6950bc8d21a1699e5000000000000000000000000000000000000f342d33d"
+
+
+MyKeyName:<bytes4> // 0xabcd1234
+"0x35e6950bc8d21a1699e5000000000000000000000000000000000000abcd1234"
+
+MyKeyName:<bytes32> // 0xaaaabbbbccccddddeeeeffff111122223333444455556666777788889999aaaa
+"0x35e6950bc8d21a1699e50000aaaabbbbccccddddeeeeffff1111222233334444"
+
+MyKeyName:<bool> // true
+"0x35e6950bc8d21a1699e500000000000000000000000000000000000000000001"
+
+
+// ERC725Y JSON schema
 {
-    "name": "FirstWord:SecondWord",
-    "key": "0xf49648de3734d6c5458244ad87c893b500000000000000000000000053022d37",
+    "name": "FirstWord:<bytes4>",
+    "key": "0xf49648de3734d6c545820000<bytes4>",
     "keyType": "Mapping",
     "valueType": "...",
     "valueContent": "..."
@@ -255,42 +278,55 @@ A **Mapping** data key is constructed using `bytes16(keccak256("FirstWord")) + b
 - `keccak256("SecondWord")` = `0x`**`53022d37`**`21822ca6332135de9e7b98f9a82eb1051d3095d2e259b45149c9b634` (**first 4 bytes** of the hash)
 
 
-### Bytes20Mapping
+### MappingWithGrouping
 
-**Bytes20Mapping** could be used to map words to `bytes20` long data, such as `addresses`. Such key type can be useful when the second word in the mapping is too long and makes the data key greater than 32 bytes.
+A **MappingWithGrouping** data key is constructed using:
 
-A **Bytes20Mapping** mapping data key is constructed using `bytes8(keccak256(FirstWord)) + bytes4(0) + bytes20(address)`.
+`bytes6(keccak256("MyKeyName"))` + `bytes4(keccak256("MyMapName") or <mixed type>)` + `bytes2(0)` + `bytes20(keccak256("MySubMapName") or <mixed type>)`.
 
-*e.g.:* `MyCoolAddress:<address>` > `0x22496f48a493035f 00000000 cafecafecafecafecafecafecafecafecafecafe`
+`<mixed type>` can `uint<M>`, `int<M>`, `address`, `bool` or `bytes<M>`.
+Everything but `bytes<M>` and `address` will be left padded and left-cut if larger than `20 bytes`.
 
-```json
-{
-    "name": "MyCoolAddress:<address>",
-    "key": "0x22496f48a493035f00000000<address>",
-    "keyType": "Bytes20Mapping",
-    "valueType": "...",
-    "valueContent": "..."
-}
-```
+`bytes<M>` and `address` and static word hashes (`bytes32`) will be left padded, but right-cut, if larger than `20 bytes`.
 
-### Bytes20MappingWithGrouping
-
-A **Bytes20MappingWithGrouping** data key could be used to map two words to addresses, or other bytes 20 long data.
-This data key is constructed using `bytes4(keccak256(FirstWord)) + bytes4(0) + bytes2(keccak256(SecondWord)) + bytes2(0) + bytes20(address)`,     
 
 e.g. `AddressPermissions:Permissions:<address>` > `0x4b80742d 00000000 eced 0000 cafecafecafecafecafecafecafecafecafecafe`.
 
-Below is an example of a mapping data key type:
-
+*example:*
 ```json
+
+// Examples:
+MyKeyName:MyMapName:MySubMapName // 0x35e6950bc8d21a1699e58328a3c4066df5803bb0b570d0150cb3819288e764b2 + 0x75060e3cd7d40450e94d415fb5992ced9ad8f058649e805951f558364152f9ed + 0x221cba00b07da22c3775601ffea5d3406df100dbb7b1c86cb2fe3739f0fe79a1
+"0x35e6950bc8d275060e3c0000221cba00b07da22c3775601ffea5d3406df100db"
+
+MyKeyName:MyMapName:<address>
+"0x35e6950bc8d275060e3c0000cafecafecafecafecafecafecafecafecafecafe"
+
+// For more examples static examples see the "Mapping" examples
+MyKeyName:<bytes2>:<uint8> // ffff 4081242941
+"0x35e6950bc8d20000ffff000000000000000000000000000000000000f342d33d"
+
+
+MyKeyName:<address>:<address> // 0xabcdef11abcdef11abcdef11abcdef11ffffffff, 0xcafecafecafecafecafecafecafecafecafecafe
+"0x35e6950bc8d2abcdef110000cafecafecafecafecafecafecafecafecafecafe"
+
+MyKeyName:MyMapName:<bytes32> // 0xaaaabbbbccccddddeeeeffff111122223333444455556666777788889999aaaa
+"0x35e6950bc8d275060e3c0000aaaabbbbccccddddeeeeffff1111222233334444"
+
+MyKeyName:<bytes32>:<bool> // 0xaaaabbbbccccddddeeeeffff111122223333444455556666777788889999aaaa
+"0x35e6950bc8d2aaaabbbb00000000000000000000000000000000000000000001"
+
+
+// ERC725Y JSON schema
 {
     "name": "AddressPermissions:Permissions:<address>",
-    "key": "0x4b80742d0000000082ac0000<address>",
-    "keyType": "Bytes20MappingWithGrouping",
+    "key": "0x4b80742de2bf82acb3630000<address>",
+    "keyType": "MappingWithGrouping",
     "valueType": "...",
     "valueContent": "..."
 }
 ```
+
 
 ### BitArray
 
