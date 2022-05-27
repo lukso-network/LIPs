@@ -249,7 +249,7 @@ MyKeyName:MyMapName // 0x35e6950bc8d21a1699e58328a3c4066df5803bb0b570d0150cb3819
 MyKeyName:<address> // 0xcafecafecafecafecafecafecafecafecafecafe
 "0x35e6950bc8d21a1699e50000cafecafecafecafecafecafecafecafecafecafe"
 
-MyKeyName:<uint8> // 4081242941
+MyKeyName:<uint32> // 4081242941
 "0x35e6950bc8d21a1699e5000000000000000000000000000000000000f342d33d"
 
 
@@ -298,7 +298,7 @@ MyKeyName:MyMapName:<address>
 
 // For more examples static examples see the "Mapping" examples
 
-MyKeyName:<bytes2>:<uint8> // ffff 4081242941
+MyKeyName:<bytes2>:<uint32> // ffff 4081242941
 "0x35e6950bc8d20000ffff000000000000000000000000000000000000f342d33d"
 
 MyKeyName:<address>:<address> // 0xabcdef11abcdef11abcdef11abcdef11ffffffff, 0xcafecafecafecafecafecafecafecafecafecafe
