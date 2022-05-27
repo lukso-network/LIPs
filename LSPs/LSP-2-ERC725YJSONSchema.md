@@ -236,7 +236,7 @@ A **Mapping** data key is constructed using:
 
 `<mixed type>` can `uint<M>`, `int<M>`, `address`, `bool` or `bytes<M>`.
 
-- Everything but `bytes<M>` and `address` will be left padded and left-cut if larger than `20 bytes`.
+- `uint<M>`, `int<M>`, `bool`  will be left padded and left-cut, if larger than `20 bytes`.
 - `bytes<M>` and `address` and static word hashes (`bytes32`) will be left padded, but right-cut, if larger than `20 bytes`.
 
 *example:*
@@ -281,7 +281,7 @@ A **MappingWithGrouping** data key is constructed using:
 
 `<mixed type>` can `uint<M>`, `int<M>`, `address`, `bool` or `bytes<M>`.
 
-- Everything but `bytes<M>` and `address` will be left padded and left-cut if larger than `20 bytes`.
+- `uint<M>`, `int<M>`, `bool`  will be left padded and left-cut, if larger than `20 bytes`.
 - `bytes<M>` and `address` and static word hashes (`bytes32`) will be left padded, but right-cut, if larger than `20 bytes`.
 
 
