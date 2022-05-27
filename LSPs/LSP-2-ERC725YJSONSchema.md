@@ -281,8 +281,8 @@ A **MappingWithGrouping** data key is constructed using:
 
 `<mixed type>` can `uint<M>`, `int<M>`, `address`, `bool` or `bytes<M>`.
 
-- `uint<M>`, `int<M>`, `bool`  will be left padded and left-cut, if larger than `20 bytes`.
-- `bytes<M>` and `address` and static word hashes (`bytes32`) will be left padded, but right-cut, if larger than `20 bytes`.
+- `uint<M>`, `int<M>`, `bool`  will be left padded and left-cut, if its larger than the max bytes of that section.
+- `bytes<M>` and `address` and static word hashes (`bytes32`) will be left padded, but right-cut, if its larger than the max bytes of that section.
 
 
 e.g. `AddressPermissions:Permissions:<address>` > `0x4b80742d 00000000 eced 0000 cafecafecafecafecafecafecafecafecafecafe`.
