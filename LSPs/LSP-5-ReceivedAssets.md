@@ -59,11 +59,13 @@ The data value MUST be constructed as follows: `bytes4(standardInterfaceId) + by
 
 Value example: `0xe33f65c3000000000000000c` (interfaceId: `0xe33f65c3`, index position `0x000000000000000c = 16`).
 
+// 812c4334633eb816c80deebfa5fb7d2509eb438ca1b6418106442cb5ccc62f6c
+
 ```json
 {
     "name": "LSP5ReceivedAssetsMap:<address>",
-    "key": "0x812c4334633eb81600000000<address>",
-    "keyType": "Bytes20Mapping",
+    "key": "0x812c4334633eb816c80d0000<address>",
+    "keyType": "Mapping",
     "valueType": "bytes",
     "valueContent": "Mixed"
 }
@@ -80,8 +82,8 @@ ERC725Y JSON Schema `LSP5ReceivedAssets`:
 [
     {
         "name": "LSP5ReceivedAssetsMap:<address>",
-        "key": "0x812c4334633eb81600000000<address>",
-        "keyType": "Bytes20Mapping",
+        "key": "0x812c4334633eb816c80d0000<address>",
+        "keyType": "Mapping",
         "valueType": "bytes",
         "valueContent": "Mixed"
     },
