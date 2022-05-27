@@ -65,7 +65,7 @@ This SHOULD not be changeable, and set only during initialization of the token.
 
 When a metadata contract is created for a tokenId, the address COULD be stored in the minting contract storage.
 
-For construction of the Mapping data key see: [LSP2 ERC725Y JSON Schema][LSP2#mapping]
+For construction of the Mapping data key see: [LSP2 ERC725Y JSON Schema > `keyType = Mapping`][LSP2#mapping]
 
 ```json
 {
@@ -81,8 +81,9 @@ For construction of the Mapping data key see: [LSP2 ERC725Y JSON Schema][LSP2#ma
 
 When metadata JSON is created for a tokenId, the URL COULD be stored in the minting contract storage.
 
-For construction of the Mapping data key see: [LSP2 ERC725Y JSON Schema][LSP2#mapping]
-For construction of the JSONURL value see: [LSP2 ERC725Y JSON Schema][LSP2#jsonurl]
+For construction of the Mapping data key see: [LSP2 ERC725Y JSON Schema > `keyType = Mapping`][LSP2#mapping]
+
+For construction of the JSONURL value see: [LSP2 ERC725Y JSON Schema > `valueContent = JSONURL`][LSP2#jsonurl]
 
 ```json
 {
@@ -147,7 +148,7 @@ The description of the asset.
 }
 ```
 
-For construction of the JSONURL value see: [LSP2 ERC725Y JSON Schema][LSP2#jsonurl]
+For construction of the JSONURL value see: [LSP2 ERC725Y JSON Schema > `valueContent = JSONURL`][LSP2#jsonurl]
 
 The linked JSON file SHOULD have the following format:
 
@@ -486,7 +487,7 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 [ERC777]: <https://github.com/ethereum/EIPs/blob/master/EIPS/eip-777.md>
 [LSP1]: <./LSP-1-UniversalReceiver.md>
 [LSP2#jsonurl]: <./LSP-2-ERC725YJSONSchema.md#JSONURL>
-[LSP2#bytes20mapping]: <./LSP-2-ERC725YJSONSchema.md#bytes20mapping>
+[LSP2#mapping]: <./LSP-2-ERC725YJSONSchema.md#mapping>
 [LSP4#erc725ykeys]: <./LSP-4-DigitalAsset-Metadata.md#erc725ykeys>
 [LSP7]: <./LSP-7-DigitalAsset.md>
 [LSP8]: <./LSP-8-IdentifiableDigitalAsset.md>
