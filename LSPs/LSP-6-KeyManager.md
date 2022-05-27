@@ -50,7 +50,7 @@ Every contract that supports the LSP6 standard SHOULD implement:
 **The permissions that the KeyManager reads, are stored on the controlled-contracts ERC725Y data key value store (for example an [ERC725Account](./LSP-0-ERC725Account.md))**
 
 The following ERC725Y data keys are used to read permissions of certain addresses.
-These data keys are based on the [LSP2-ERC725YJSONSchema](./LSP-2-ERC725YJSONSchema.md) standard, and use the key type **[Bytes20MappingWithGrouping](./LSP-2-ERC725YJSONSchema.md#bytes20mappingwithgrouping)**
+These data keys are based on the [LSP2-ERC725YJSONSchema](./LSP-2-ERC725YJSONSchema.md) standard, and use the key type **[`MappingWithGrouping`](./LSP-2-ERC725YJSONSchema.md#mappingwithgrouping)**
 
 
 #### AddressPermissions[]
@@ -79,8 +79,8 @@ Since the `valueType` of this data key is `bytes32`, up to 255 different permiss
 ```json
 {
     "name": "AddressPermissions:Permissions:<address>",
-    "key": "0x4b80742d0000000082ac0000<address>",
-    "keyType": "Bytes20MappingWithGrouping",
+    "key": "0x4b80742de2bf82acb3630000<address>",
+    "keyType": "MappingWithGrouping",
     "valueType": "bytes32",
     "valueContent": "BitArray"
 }
@@ -96,8 +96,8 @@ Contains an array of addresses (Externally Owned Accounts or smart contracts) a 
 ```json
 {
     "name": "AddressPermissions:AllowedAddresses:<address>",
-    "key": "0x4b80742d00000000c6dd0000<address>",
-    "keyType": "Bytes20MappingWithGrouping",
+    "key": "0x4b80742de2bfc6dd6b3c0000<address>",
+    "keyType": "MappingWithGrouping",
     "valueType": "address[]",
     "valueContent": "Address"
 }
@@ -112,8 +112,8 @@ This permission acts as a restriction mechanism when interacting with other smar
 ```json
 {
     "name": "AddressPermissions:AllowedFunctions:<address>",
-    "key": "0x4b80742d000000008efe0000<address>",
-    "keyType": "Bytes20MappingWithGrouping",
+    "key": "0x4b80742de2bf8efea1e80000<address>",
+    "keyType": "MappingWithGrouping",
     "valueType": "bytes4[]",
     "valueContent": "Bytes4"
 }
@@ -126,8 +126,8 @@ Contains an array of bytes4 [ERC165 interface Ids](https://eips.ethereum.org/EIP
 ```json
 {
     "name": "AddressPermissions:AllowedStandards:<address>",
-    "key": "0x4b80742d000000003efa0000<address>",
-    "keyType": "Bytes20MappingWithGrouping",
+    "key": "0x4b80742de2bf3efa94a30000<address>",
+    "keyType": "MappingWithGrouping",
     "valueType": "bytes4[]",
     "valueContent": "Bytes4"
 }
@@ -142,8 +142,8 @@ This data key can be used in combination with the `SETDATA` [permission](#permis
 ```json
 {
     "name": "AddressPermissions:AllowedERC725YKeys:<address>",
-    "key": "0x4b80742d0000000090b80000<address>",
-    "keyType": "Bytes20MappingWithGrouping",
+    "key": "0x4b80742de2bf90b8b4850000<address>",
+    "keyType": "MappingWithGrouping",
     "valueType": "bytes32[]",
     "valueContent": "Bytes32"
 }
@@ -361,36 +361,36 @@ ERC725Y JSON Schema `LSP6KeyManager`, set at the `LSP3Account`:
     },
     {
         "name": "AddressPermissions:Permissions:<address>",
-        "key": "0x4b80742d0000000082ac0000<address>",
-        "keyType": "Bytes20MappingWithGrouping",
+        "key": "0x4b80742de2bf82acb3630000<address>",
+        "keyType": "MappingWithGrouping",
         "valueType": "bytes32",
         "valueContent": "BitArray"
     },
     {
         "name": "AddressPermissions:AllowedAddresses:<address>",
-        "key": "0x4b80742d00000000c6dd0000<address>",
-        "keyType": "Bytes20MappingWithGrouping",
+        "key": "0x4b80742de2bfc6dd6b3c0000<address>",
+        "keyType": "MappingWithGrouping",
         "valueType": "address[]",
         "valueContent": "Address"
     },
     {
         "name": "AddressPermissions:AllowedFunctions:<address>",
-        "key": "0x4b80742d000000008efe0000<address>",
-        "keyType": "Bytes20MappingWithGrouping",
+        "key": "0x4b80742de2bf8efea1e80000<address>",
+        "keyType": "MappingWithGrouping",
         "valueType": "bytes4[]",
         "valueContent": "Bytes4"
     },
     {
         "name": "AddressPermissions:AllowedStandards:<address>",
-        "key": "0x4b80742d000000003efa0000<address>",
-        "keyType": "Bytes20MappingWithGrouping",
+        "key": "0x4b80742de2bf3efa94a30000<address>",
+        "keyType": "MappingWithGrouping",
         "valueType": "bytes4[]",
         "valueContent": "Bytes4"
     },
     {
         "name": "AddressPermissions:AllowedERC725YKeys:<address>",
-        "key": "0x4b80742d0000000090b80000<address>",
-        "keyType": "Bytes20MappingWithGrouping",
+        "key": "0x4b80742de2bf90b8b4850000<address>",
+        "keyType": "MappingWithGrouping",
         "valueType": "bytes32[]",
         "valueContent": "Bytes32"
     }
