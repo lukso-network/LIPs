@@ -36,18 +36,17 @@ A commonality with [LSP7 DigitalAsset][LSP7] is desired so that the two token im
 
 These are the expected data keys for an LSP8 contract that can mints identifiable tokens (NFTs).
 
-This standard also expects the data keys from [LSP4 DigitalAsset-Metadata.][LSP4#erc725ykeys].
+This standard can also be combined with the data keys from [LSP4 DigitalAsset-Metadata.][LSP4#erc725ykeys].
+
 
 #### LSP8TokenIdType
 
-TODO: make this look like an enum
-
-What the `tokenId` represents in this contract, to be stored in the [ERC725Y][ERC725] of the contract which mints tokens.
+What the `tokenId` represents in this contract.
 
 Expected values are represented by the enum:
 
-- 1 -> `uint256`: a number, which may be an incrementing count where each minted token is assigned the next number.
-- 2 -> `address`: another contract.
+- 1 -> `address`: another contract.
+- 2 -> `uint256`: a number, which may be an incrementing count where each minted token is assigned the next number.
 - 3 -> `bytes32`: a hashed value (ie. serial number).
 
 ```json
@@ -66,33 +65,34 @@ This SHOULD not be changeable, and set only during initialization of the token.
 
 When a metadata contract is created for a tokenId, the address COULD be stored in the minting contract storage.
 
+For construction of the Mapping data key see: [LSP2 ERC725Y JSON Schema][LSP2#mapping]
+
 ```json
 {
-    "name": "LSP8MetadataAddress:0x20BytesTokenIdHash",
-    "key": "0x73dcc7c3c4096cdc00000000cafecafecafecafecafecafecafecafecafecafe",
-    "keyType": "Bytes20Mapping",
+    "name": "LSP8MetadataAddress:<address|uint256|bytes32>",
+    "key": "0x73dcc7c3c4096cdc7f8a0000<address|uint256|bytes32>",
+    "keyType": "Mapping",
     "valueType": "Mixed",
     "valueContent": "Mixed"
 }
 ```
 
-For construction of the Bytes20Mapping data key see: [LSP2 ERC725Y JSON Schema][LSP2#bytes20mapping]
-
 #### LSP8MetadataJSON:TokenId
 
 When metadata JSON is created for a tokenId, the URL COULD be stored in the minting contract storage.
 
+For construction of the Mapping data key see: [LSP2 ERC725Y JSON Schema][LSP2#mapping]
+For construction of the JSONURL value see: [LSP2 ERC725Y JSON Schema][LSP2#jsonurl]
+
 ```json
 {
-    "name": "LSP8MetadataJSON:0x20BytesTokenIdHash",
-    "key": "0x9a26b4060ae7f7d500000000cafecafecafecafecafecafecafecafecafecafe",
-    "keyType": "Bytes20Mapping",
+    "name": "LSP8MetadataJSON:<address|uint256|bytes32>",
+    "key": "0x9a26b4060ae7f7d5e3cd0000<address|uint256|bytes32>",
+    "keyType": "Mapping",
     "valueType": "bytes",
     "valueContent": "JSONURL"
 }
 ```
-For construction of the Bytes20Mapping data key see: [LSP2 ERC725Y JSON Schema][LSP2#bytes20mapping]
-For construction of the JSONURL value see: [LSP2 ERC725Y JSON Schema][LSP2#jsonurl]
 
 ---
 (TODO: discussion if there are other data keys to include in the standard for the contract which mints tokens)
