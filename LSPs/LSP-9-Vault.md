@@ -170,7 +170,7 @@ interface ILSP9  /* is ERC165 */ {
         
     event ContractCreated(uint256 indexed _operation, address indexed contractAddress, uint256 indexed  _value);
     
-    event DataChanged(bytes32 indexed dataKey, bytes value);
+    event DataChanged(bytes32 indexed dataKey);
     
     
     function execute(uint256 operationType, address to, uint256 value, bytes memory data) external payable returns (bytes memory); // onlyOwner
