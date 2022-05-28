@@ -157,10 +157,10 @@ The 0 bytes part will represent a part that is dynamic. Below is an example base
 
 ```js
 name: "SupportedStandards:LSP3UniversalProfile"
-key: 0xeafec4d89fa9619884b6b89135626455000000000000000000000000abe425d6
+key: 0xeafec4d89fa9619884b60000abe425d64acd861a49b8ddf5c0b6962110481f38
 ```
 
-By setting the value to `0xeafec4d89fa9619884b6b8913562645500000000000000000000000000000000` in the list of allowed ERC725Y data keys, one address can set any data key **starting with the first word `SupportedStandards:...`**.
+By setting the value to `0xeafec4d89fa9619884b600000000000000000000000000000000000000000000` in the list of allowed ERC725Y data keys, one address can set any data key **starting with the first word `SupportedStandards:...`**.
 
 ### Permission Values in AddressPermissions:Permissions:\<address\>
 
