@@ -37,7 +37,7 @@ The supported standard SHOULD be `LSP4DigitalAsset`
 ```json
 {
     "name": "SupportedStandards:LSP4DigitalAsset",
-    "key": "0xeafec4d89fa9619884b6b89135626455000000000000000000000000a4d96624",
+    "key": "0xeafec4d89fa9619884b60000a4d96624a38f7ac2d8d9a604ecf07c12c77e480c",
     "keyType": "Mapping",
     "valueType": "bytes4",
     "valueContent": "0xa4d96624"
@@ -233,7 +233,7 @@ ERC725Y JSON Schema `LSP4DigitalAsset`:
 [
     {
         "name": "SupportedStandards:LSP4DigitalAsset",
-        "key": "0xeafec4d89fa9619884b6b89135626455000000000000000000000000a4d96624",
+        "key": "0xeafec4d89fa9619884b60000a4d96624a38f7ac2d8d9a604ecf07c12c77e480c",
         "keyType": "Mapping",
         "valueType": "bytes4",
         "valueContent": "0xa4d96624"
