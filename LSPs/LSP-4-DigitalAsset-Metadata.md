@@ -201,18 +201,18 @@ For more informations about how to access each index of the `LSP4Creators[]` arr
 
 References the creator addresses for this asset.
 
-The `valueContent` MUST be constructed as follows: `bytes8(indexNumber) + bytes4(standardInterfaceId)`. 
+The `valueContent` MUST be constructed as follows: `bytes4(standardInterfaceId) + bytes8(indexNumber)`. 
 Where:
-- `indexNumber` = the index in the [`LSP4Creators[]` Array](##lsp4creators)
-- `standardInterfaceId` = if the creator address is a smart contract, the [ERC165 interface ID](https://eips.ethereum.org/EIPS/eip-165) of the standard that the smart contract implements. Otherwise `0x00000000` in the case where the creator address is:
+- `standardInterfaceId` = if the creator address is a smart contract, the [ERC165 interface ID](https://eips.ethereum.org/EIPS/eip-165) of the standard that the smart contract implements. Otherwise `0xffffffff` in the case where the creator address is:
   - an Externally Owned Account, or 
   - a contract implementing no ERC165 interface ID.
+- `indexNumber` = the index in the [`LSP4Creators[]` Array](##lsp4creators)
 
 ```json
 {
     "name": "LSP4CreatorsMap:<address>",
-    "key": "0x6de85eaf5d982b4e00000000<address>",
-    "keyType": "Bytes20Mapping",
+    "key": "0x6de85eaf5d982b4e5da00000<address>",
+    "keyType": "Mapping",
     "valueType": "bytes",
     "valueContent": "Mixed"
 }
@@ -261,8 +261,8 @@ ERC725Y JSON Schema `LSP4DigitalAsset`:
     },
     {
         "name": "LSP4CreatorsMap:<address>",
-        "key": "0x6de85eaf5d982b4e00000000<address>",
-        "keyType": "Bytes20Mapping",
+        "key": "0x6de85eaf5d982b4e5da00000<address>",
+        "keyType": "Mapping",
         "valueType": "bytes",
         "valueContent": "Mixed"
     },

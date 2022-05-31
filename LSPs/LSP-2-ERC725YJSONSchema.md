@@ -285,7 +285,7 @@ A **MappingWithGrouping** data key is constructed using:
 - `bytes<M>` and `address` and static word hashes (`bytes32`) will be left padded, but right-cut, if its larger than the max bytes of that section.
 
 
-e.g. `AddressPermissions:Permissions:<address>` > `0x4b80742d 00000000 eced 0000 cafecafecafecafecafecafecafecafecafecafe`.
+e.g. `AddressPermissions:Permissions:<address>` > `0x4b80742de2bf 82acb363 0000 cafecafecafecafecafecafecafecafecafecafe`.
 
 *example:*
 ```js

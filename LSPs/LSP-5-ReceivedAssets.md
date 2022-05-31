@@ -62,8 +62,8 @@ Value example: `0xe33f65c3000000000000000c` (interfaceId: `0xe33f65c3`, index po
 ```json
 {
     "name": "LSP5ReceivedAssetsMap:<address>",
-    "key": "0x812c4334633eb81600000000<address>",
-    "keyType": "Bytes20Mapping",
+    "key": "0x812c4334633eb816c80d0000<address>",
+    "keyType": "Mapping",
     "valueType": "bytes",
     "valueContent": "Mixed"
 }
@@ -80,8 +80,8 @@ ERC725Y JSON Schema `LSP5ReceivedAssets`:
 [
     {
         "name": "LSP5ReceivedAssetsMap:<address>",
-        "key": "0x812c4334633eb81600000000<address>",
-        "keyType": "Bytes20Mapping",
+        "key": "0x812c4334633eb816c80d0000<address>",
+        "keyType": "Mapping",
         "valueType": "bytes",
         "valueContent": "Mixed"
     },
