@@ -192,7 +192,7 @@ interface ILSP0  /* is ERC165 */ {
     
     // ERC725Y
 
-    event DataChanged(bytes32 indexed dataKey, bytes value);
+    event DataChanged(bytes32 indexed dataKey);
 
 
     function getData(bytes32 dataKey) external view returns (bytes memory value);
