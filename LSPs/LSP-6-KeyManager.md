@@ -177,8 +177,12 @@ DELEGATECALL       = 0x000000000000000000000000000000000000000000000000000000000
 DEPLOY             = 0x0000000000000000000000000000000000000000000000000000000000000080;   // .... .... 1000 .... // Allows deploying other contracts through the controlled contract
 TRANSFERVALUE      = 0x0000000000000000000000000000000000000000000000000000000000000100;   // .... 0001 .... .... // Allows transfering value to other contracts from the controlled contract
 SIGN               = 0x0000000000000000000000000000000000000000000000000000000000000200;   // .... 0010 .... .... // Allows signing on behalf of the controlled account, for example for login purposes
+SUPER_SETDATA       = 0x0000000000000000000000000000000000000000000000000000000000000400, // .... 0100 .... .... // same as SETDATA, but without restricting to specific data keys
+SUPER_TRANSFERVALUE = 0x0000000000000000000000000000000000000000000000000000000000000800, // .... 1000 .... .... // same as TRANSFERVALUE, but without restricting to specific addresses, functions or standards
+SUPER_CALL          = 0x0000000000000000000000000000000000000000000000000000000000001000, // 0001 .... .... .... // same as CALL, but without restricting to specific addresses, functions or standards
+SUPER_STATICCALL    = 0x0000000000000000000000000000000000000000000000000000000000002000, // 0010 .... .... .... // same as STATICCALL, but without restricting to specific addresses, functions or standards
+SUPER_DELEGATECALL  = 0x0000000000000000000000000000000000000000000000000000000000004000, // 0100 .... .... .... // same as DELEGATECALL, but without restricting to specific addresses, functions or standards
 ```
-
 
 ![LSP6 - KeyManager-permissions-examples](https://user-images.githubusercontent.com/31145285/141792716-ccebaff5-9d06-4e2d-9c34-6cda51b0dc16.jpeg)
 
