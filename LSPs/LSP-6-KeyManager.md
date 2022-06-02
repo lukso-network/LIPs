@@ -240,7 +240,7 @@ _Returns:_ `bytes` , the returned data as abi-encoded bytes if the call on ERC72
 #### executeRelayCall
 
 ```solidity
-function executeRelayCall(bytes memory _signature, uint256 _nonce, bytes memory _calldata) public payable returns (bytes memory)
+function executeRelayCall(bytes memory signature, uint256 nonce, bytes memory _calldata) public payable returns (bytes memory)
 ```
 
 Allows anybody to execute `_calldata` payload on a set [ERC725 X or Y smart contract](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md), given they have a signed message from an executor.
@@ -248,8 +248,8 @@ Allows anybody to execute `_calldata` payload on a set [ERC725 X or Y smart cont
 MUST fire the [Executed event](#executed).
 
 _Parameters:_
-- `_signature`: bytes65 ethereum signature.
-- `_nonce`: MUST be the nonce of the address that signed the message. This can be obtained via the `getNonce(address _address, uint256 _channel)` function.
+- `signature`: bytes65 ethereum signature.
+- `nonce`: MUST be the nonce of the address that signed the message. This can be obtained via the `getNonce(address address, uint256 channel)` function.
 - `_calldata`: The call data to be executed.
 
 
@@ -409,21 +409,21 @@ interface ILSP6  /* is ERC165 */ {
 
     // ERC1271
     
-    function isValidSignature(bytes32 _hash, bytes memory _signature) external view returns (bytes4 magicValue);
+    function isValidSignature(bytes32 hash, bytes memory signature) external view returns (bytes4 magicValue);
 
     
     // LSP6
         
-    event Executed(uint256 indexed  _value, bytes4 _selector); 
+    event Executed(uint256 indexed  value, bytes4 selector); 
    
 
     function target() external view returns (address);
     
-    function getNonce(address _address, uint256 _channel) external view returns (uint256);
+    function getNonce(address address, uint256 channel) external view returns (uint256);
     
-    function execute(bytes memory _calldata) external payable returns (bytes memory);
+    function execute(bytes memory calldata) external payable returns (bytes memory);
     
-    function executeRelayCall(bytes memory _signature, uint256 _nonce, bytes memory _calldata) external payable returns (bytes memory);
+    function executeRelayCall(bytes memory signature, uint256 nonce, bytes memory _calldata) external payable returns (bytes memory);
     
 
 ```
