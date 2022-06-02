@@ -110,11 +110,9 @@ The `valueType` can also be useful for typecasting. It enables contracts or inte
 | `string`      | an UTF8 encoded string  |
 | `address`     | a 20 bytes long address |
 | `uintN`       | an **unsigned** integer (= only positive number) of size `N`  |
-| `intN`        |a **signed** integer (= either positive or negative number) of size `N` |
 | `bytesN`      | a bytes value of **fixed-size** `N`, from `bytes1` up to `bytes32` |
 | `bytes`       | a bytes value of **dynamic-size** |
 | `uintN[]`     | an array of **signed** integers |
-| `intN[]`      | an array of **unsigned** integers |
 | `string[]`    | an array of UTF8 encoded strings |
 | `address[]`   | an array of addresses |
 | `bytes[]`     | an array of dynamic size bytes  |
@@ -234,9 +232,9 @@ A **Mapping** data key is constructed using:
 
 `bytes10(keccak256("MyKeyName"))` + `bytes2(0)` + `bytes20(keccak256("MyMapName") or <mixed type>)`.
 
-`<mixed type>` can `uint<M>`, `int<M>`, `address`, `bool` or `bytes<M>`.
+`<mixed type>` can `uint<M>`, `address`, `bool` or `bytes<M>`.
 
-- `uint<M>`, `int<M>`, `bool`  will be left padded and left-cut, if larger than `20 bytes`.
+- `uint<M>`, `bool`  will be left padded and left-cut, if larger than `20 bytes`.
 - `bytes<M>` and `address` and static word hashes (`bytes32`) will be left padded, but right-cut, if larger than `20 bytes`.
 
 *example:*
@@ -279,9 +277,9 @@ A **MappingWithGrouping** data key is constructed using:
 
 `bytes6(keccak256("MyKeyName"))` + `bytes4(keccak256("MyMapName") or <mixed type>)` + `bytes2(0)` + `bytes20(keccak256("MySubMapName") or <mixed type>)`.
 
-`<mixed type>` can `uint<M>`, `int<M>`, `address`, `bool` or `bytes<M>`.
+`<mixed type>` can `uint<M>`, `address`, `bool` or `bytes<M>`.
 
-- `uint<M>`, `int<M>`, `bool`  will be left padded and left-cut, if its larger than the max bytes of that section.
+- `uint<M>`, `bool`  will be left padded and left-cut, if its larger than the max bytes of that section.
 - `bytes<M>` and `address` and static word hashes (`bytes32`) will be left padded, but right-cut, if its larger than the max bytes of that section.
 
 
