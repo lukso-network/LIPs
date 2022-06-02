@@ -128,7 +128,8 @@ contract TokenABC {
 
     bytes4 _INTERFACE_ID_LSP1 = 0x6bb56a14;
 
-    function sendToken(address to, uint256 amount) public onlyOwner {
+    function sendToken(address to, uint256 amount) public {
+        balance[msg.sender] -= amount;
         balance[to] += amount;
         _informTheReceiver(to, amount); 
     }
