@@ -100,6 +100,7 @@ _Parameters:_
 - `typeId` is the hash of a standard, or the type relative to the `data` received.
 
 - `data` is a byteArray of arbitrary data. Receiving contracts should take the `typeId` in consideration to properly decode the `data`. 
+
 _Returns:_ `bytes`, which can be used to encode response values.
 
 ## Rationale
