@@ -76,9 +76,9 @@ _Values:_
 
 ## UniversalReceiverDelegate
 
-The UniversalReceiverDelegate is an optional extension that could be used with the `universalReceiver(..)` function, where the `typeId` and `data` received to the function is forwarded to a contract that can be customize to react on certain combination of `typeId` and `data`.
+The UniversalReceiverDelegate is an optional extension that could be used with the `universalReceiver(..)` function, where the `typeId` and `data` received to the function is forwarded to the UniversalReceiverDelegate contract that can be customized to react on certain combination of `typeId` and `data`.
 
-The address of the UniversalReceiverDelegate MUST be changable in the contract implementing the `unviersalReceiver(..)` function to have the option to change how the contract react on upcoming information and assets transfers in the future.
+The address of the UniversalReceiverDelegate **MUST** be changable in the contract implementing the `unviersalReceiver(..)` function to have the option to change how the contract react on upcoming information and assets transfers in the future.
 
 _Could be done by having a setter function for the UniversalReceiverDelegate address._
 
@@ -133,7 +133,7 @@ contract TokenABC {
     function _informTheReceiver(address receiver, uint256 amount) internal {
         // If the contract receiving the tokens supports LSP1 InterfaceID then call the unviersalReceiver function
         if(ERC165Checker.supportsInterface(receiver,_INTERFACE_ID_LSP1)){
-            ILSP1(receiver).universalReceiver(_TOKEN_RECEIVING_HASH, abi.encodePacked(address(this),amount));
+            ILSP1(receiver).universalReceiver(_TOKEN_RECEIVING_HASH, abi.encodePacked(msg.sender, amount));
         }
     }
 }
@@ -153,10 +153,9 @@ contract MyWallet is ERC165, ILSP1 {
 }
 ```
 
-After transfering token from `TokenABC` contract to `MyWallet` contract, the owner of the MyWallet contract can know looking at the UniversalReceiver event emitted that the `typeId` is `_TOKEN_RECEIVING_HASH` and then he could look into the `data` to know the token sender address and the amount sent.
+After transfering token from `TokenABC` to `MyWallet`, the owner of `MyWallet` contract can know looking at the UniversalReceiver event emitted that the `typeId` is `_TOKEN_RECEIVING_HASH` and then he could look into the `data` to know the token sender address and the amount sent.
 
 ### UniversalReceiverDelegate Example:
-
 
 ```solidity
 // SPDX-License-Identifier: CC0-1.0
@@ -233,7 +232,7 @@ contract UniversalReceiverDelegate is ERC165, ILSP1Delegate {
 ```
 
 This example is the same example written above except that `MyWallet` contract now supports UniversalReceiverDelegate.
-The `TokenABC` contract will inform `MyWallet` contract about the transfer by calling the `universalReceiver(..)` function and this function will call the `universalReceiverDelegate(..)` function to react on the transfer.
+The `TokenABC` contract will inform `MyWallet` contract about the transfer by calling the `universalReceiver(..)` function and this function will call the `universalReceiverDelegate(..)` function on the UniversalReceiverDelegate address set by the owner, to react on the transfer accordingly.
 
 ## Interface Cheat Sheet
 
