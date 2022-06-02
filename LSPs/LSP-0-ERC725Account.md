@@ -65,6 +65,8 @@ this smart contract address MUST be stored under the following data key:
 }
 ```
 
+Check [LSP1-UniversalReceiver] and [LSP2-ERC725YJSONSchema] for more information.
+
 ### Methods
 
 See the [Interface Cheat Sheet](#interface-cheat-sheet) for details.
@@ -89,7 +91,7 @@ Returns the `address` of the current contract owner.
 function pendingOwner() external view returns (address);
 ```
 
-Return the `address` of the pending owner, of a ownership transfer, that was initiated with `transferOwnership(address)`. MUST be `0x0000000000000000000000000000000000000000` if no ownership transfer is in progress.
+Return the `address` of the pending owner, of a ownership transfer, that was initiated with `transferOwnership(address)`. MUST be `address(0)` if no ownership transfer is in progress.
 
 MUST be set when transferring ownership of the contract via `transferOwnership(address)` to a new `address`.
 
@@ -102,9 +104,9 @@ SHOULD be cleared once the [`pendingOwner`](#pendingowner) has claim ownership o
 function transferOwnership(address newOwner) external;
 ```
 
-Transfers ownership of the contract to a `newOwner`.
+Sets the `newOwner` as `pendingOwner`.
 
-MUST set the `newOwner` as the `pendingOwner`.
+MUST be called only by `owner()`.
 
 #### claimOwnership
 
@@ -174,17 +176,12 @@ interface ILSP0  /* is ERC165 */ {
     function renounceOwnership() external; // onlyOwner
         
 
-
-    // ERC1271
-    
-    function isValidSignature(bytes32 _hash, bytes memory _signature) external view returns (bytes4 magicValue);
-    
     
     // ERC725X
 
-    event Executed(uint256 indexed _operation, address indexed _to, uint256 indexed  _value, bytes4 _selector);
+    event Executed(uint256 indexed operation, address indexed to, uint256 indexed  value, bytes4 selector);
 
-    event ContractCreated(uint256 indexed _operation, address indexed contractAddress, uint256 indexed  _value);
+    event ContractCreated(uint256 indexed operation, address indexed contractAddress, uint256 indexed value);
     
     
     function execute(uint256 operationType, address to, uint256 value, bytes memory data) external payable returns (bytes memory); // onlyOwner
@@ -195,18 +192,19 @@ interface ILSP0  /* is ERC165 */ {
     event DataChanged(bytes32 indexed dataKey);
 
 
-    function getData(bytes32 dataKey) external view returns (bytes memory value);
+    function getData(bytes32 dataKey) external view returns (bytes memory dataValue);
     
-    function setData(bytes32 dataKey, bytes memory value) external; // onlyOwner
+    function setData(bytes32 dataKey, bytes memory dataValue) external; // onlyOwner
 
-    function getData(bytes32[] memory dataKeys) external view returns (bytes[] memory values);
+    function getData(bytes32[] memory dataKeys) external view returns (bytes[] memory dataValues);
 
-    function setData(bytes32[] memory dataKeys, bytes[] memory values) external; // onlyOwner
+    function setData(bytes32[] memory dataKeys, bytes[] memory dataValues) external; // onlyOwner
+
+        
+    // ERC1271
     
+    function isValidSignature(bytes32 hash, bytes memory signature) external view returns (bytes4 magicValue);
     
-    // LSP0 possible data keys:
-    // LSP1UniversalReceiverDelegate: 0x0cfc51aec37c55a4d0b1a65c6255c4bf2fbdf6277f3cc0730c45b828b6db8b47
-
     
     // LSP0 (ERC725Account)
       
@@ -219,9 +217,6 @@ interface ILSP0  /* is ERC165 */ {
     
 
     function universalReceiver(bytes32 typeId, bytes memory data) external returns (bytes memory);
-    
-    // IF LSP1UniversalReceiverDelegate data key is set
-    // THEN calls will be forwarded to the address given (UniversalReceiver even MUST still be fired)
 
 }
 
@@ -233,3 +228,5 @@ interface ILSP0  /* is ERC165 */ {
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
 
 [ERC165]: <https://eips.ethereum.org/EIPS/eip-165>
+[LSP1-UniversalReceiver]: <./LSP-1-UniversalReceiver.md>
+[LSP2-ERC725YJSONSchema]: <./LSP-2-ERC725YJSONSchema.md>
