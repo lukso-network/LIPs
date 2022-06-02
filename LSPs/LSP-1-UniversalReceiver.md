@@ -114,6 +114,8 @@ An implementation can be found in the [lukso-network/lsp-smart-contracts](https:
 
 ### UniversalReceiver Example:
 
+After transfering token from `TokenABC` to `MyWallet`, the owner of `MyWallet` contract can know looking at the UniversalReceiver event emitted that the `typeId` is `_TOKEN_RECEIVING_HASH` and then he could look into the `data` to know the token sender address and the amount sent.
+
 ```solidity
 // SPDX-License-Identifier: CC0-1.0
 pragma solidity ^0.8.0;
@@ -154,9 +156,10 @@ contract MyWallet is ERC165, ILSP1 {
 }
 ```
 
-After transfering token from `TokenABC` to `MyWallet`, the owner of `MyWallet` contract can know looking at the UniversalReceiver event emitted that the `typeId` is `_TOKEN_RECEIVING_HASH` and then he could look into the `data` to know the token sender address and the amount sent.
-
 ### UniversalReceiverDelegate Example:
+
+This example is the same example written above except that `MyWallet` contract now supports UniversalReceiverDelegate.
+The `TokenABC` contract will inform `MyWallet` contract about the transfer by calling the `universalReceiver(..)` function and this function will call the `universalReceiverDelegate(..)` function on the UniversalReceiverDelegate address set by the owner, to react on the transfer accordingly.
 
 ```solidity
 // SPDX-License-Identifier: CC0-1.0
@@ -231,9 +234,6 @@ contract UniversalReceiverDelegate is ERC165, ILSP1Delegate {
     }
 }
 ```
-
-This example is the same example written above except that `MyWallet` contract now supports UniversalReceiverDelegate.
-The `TokenABC` contract will inform `MyWallet` contract about the transfer by calling the `universalReceiver(..)` function and this function will call the `universalReceiverDelegate(..)` function on the UniversalReceiverDelegate address set by the owner, to react on the transfer accordingly.
 
 ## Interface Cheat Sheet
 
