@@ -184,7 +184,7 @@ SUPER_STATICCALL    = 0x00000000000000000000000000000000000000000000000000000000
 SUPER_DELEGATECALL  = 0x0000000000000000000000000000000000000000000000000000000000004000, // 0100 .... .... .... // same as DELEGATECALL, but without restricting to specific addresses, functions or standards
 ```
 
-![LSP6 - KeyManager-permissions-examples](https://user-images.githubusercontent.com/31145285/141792716-ccebaff5-9d06-4e2d-9c34-6cda51b0dc16.jpeg)
+![LSP6 - KeyManager-permissions-examples](../assets/LSP-6/lsp6-default-permissions-range.jpeg)
 
 
 ### Methods
