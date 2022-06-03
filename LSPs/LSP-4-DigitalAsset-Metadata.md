@@ -260,18 +260,18 @@ ERC725Y JSON Schema `LSP4DigitalAsset`:
         "valueContent": "JSONURL"
     },
     {
-        "name": "LSP4CreatorsMap:<address>",
-        "key": "0x6de85eaf5d982b4e5da00000<address>",
-        "keyType": "Mapping",
-        "valueType": "bytes",
-        "valueContent": "Mixed"
-    },
-    {
         "name": "LSP4Creators[]",
         "key": "0x114bd03b3a46d48759680d81ebb2b414fda7d030a7105a851867accf1c2352e7",
         "keyType": "Array",
         "valueType": "address",
         "valueContent": "Address"
+    },
+    {
+        "name": "LSP4CreatorsMap:<address>",
+        "key": "0x6de85eaf5d982b4e5da00000<address>",
+        "keyType": "Mapping",
+        "valueType": "bytes",
+        "valueContent": "Mixed"
     }
 ]
 ```

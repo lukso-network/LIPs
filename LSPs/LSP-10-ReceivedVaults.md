@@ -77,18 +77,18 @@ ERC725Y JSON Schema `LSP10ReceivedVaults`:
 ```json
 [
     {
-        "name": "LSP10VaultsMap:<address>",
-        "key": "0x192448c3c0f88c7f238c0000<address>",
-        "keyType": "Mapping",
-        "valueContent": "Mixed",
-        "valueType": "bytes"
-    },
-    {
         "name": "LSP10Vaults[]",
         "key": "0x55482936e01da86729a45d2b87a6b1d3bc582bea0ec00e38bdb340e3af6f9f06",
         "keyType": "Array",
         "valueContent": "Address",
         "valueType": "address"
+    },
+    {
+        "name": "LSP10VaultsMap:<address>",
+        "key": "0x192448c3c0f88c7f238c0000<address>",
+        "keyType": "Mapping",
+        "valueContent": "Mixed",
+        "valueType": "bytes"
     }
 ]
 ```
