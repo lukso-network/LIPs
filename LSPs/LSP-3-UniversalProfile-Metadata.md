@@ -212,8 +212,8 @@ ERC725Y JSON Schema `LSP3UniversalProfile`:
         "name": "LSP12IssuedAssetsMap:<address>",
         "key": "0x74ac2555c10b9349e78f0000<address>",
         "keyType": "Mapping",
-        "valueType": "bytes",
-        "valueContent": "Mixed"
+        "valueType": "(bytes4,bytes8)",
+        "valueContent": "(Bytes4,Number)"
     },
 
     // from LSP5 ReceivedAssets
@@ -228,8 +228,8 @@ ERC725Y JSON Schema `LSP3UniversalProfile`:
         "name": "LSP5ReceivedAssetsMap:<address>",
         "key": "0x812c4334633eb816c80d0000<address>",
         "keyType": "Mapping",
-        "valueType": "bytes",
-        "valueContent": "Mixed"
+        "valueType": "(bytes4,bytes8)",
+        "valueContent": "(Bytes4,Number)"
     },
 
     // from ERC725Account
