@@ -213,8 +213,8 @@ Where:
     "name": "LSP4CreatorsMap:<address>",
     "key": "0x6de85eaf5d982b4e5da00000<address>",
     "keyType": "Mapping",
-    "valueType": "bytes",
-    "valueContent": "Mixed"
+    "valueType": "(bytes4,bytes8)",
+    "valueContent": "(Bytes4,Number)"
 }
 ```
 
@@ -270,8 +270,8 @@ ERC725Y JSON Schema `LSP4DigitalAsset`:
         "name": "LSP4CreatorsMap:<address>",
         "key": "0x6de85eaf5d982b4e5da00000<address>",
         "keyType": "Mapping",
-        "valueType": "bytes",
-        "valueContent": "Mixed"
+        "valueType": "(bytes4,bytes8)",
+        "valueContent": "(Bytes4,Number)"
     }
 ]
 ```
