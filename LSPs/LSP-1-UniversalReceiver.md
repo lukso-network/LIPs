@@ -40,7 +40,7 @@ Every contract that complies with the Universal Receiver standard MUST implement
 #### universalReceiver
 
 ```solidity
-universalReceiver(bytes32 typeId, bytes memory data) public returns (bytes memory)
+universalReceiver(bytes32 typeId, bytes memory data) public payable returns (bytes memory)
 ```
 
 Allows to be called by any external contract to inform the contract about any incoming transfers, interactions or simple information.
@@ -58,7 +58,7 @@ _Returns:_ `bytes`, which can be used to encode response values.
 #### UniversalReceiver
 
 ```solidity
-event UniversalReceiver(address indexed from, bytes32 indexed typeId, bytes indexed returnedValue, bytes receivedData)
+event UniversalReceiver(address indexed from, uint256 value, bytes32 indexed typeId, bytes indexed returnedValue, bytes receivedData)
 ```
 
 This event MUST be emitted when the `universalReceiver` function is succesfully executed.
@@ -66,6 +66,8 @@ This event MUST be emitted when the `universalReceiver` function is succesfully 
 _Values:_
 
 - `from` is the address calling the `universalReceiver(..)` function.
+
+- `value` is the amount of value sent to the `universalReceiver(..)` function.
 
 - `typeId` is the hash of a standard, or the type relative to the `data` received.
 
@@ -84,18 +86,20 @@ _Could be done by having a setter function for the UniversalReceiverDelegate add
 
 ### Specification
 
-ERC165 interface id: `0xc2d7bcc1`
+ERC165 interface id: `0xa245bbda`
 
 
 ```solidity
-universalReceiverDelegate(address caller, bytes32 typeId, bytes memory data) public returns (bytes memory);
+universalReceiverDelegate(address caller, uint256 value, bytes32 typeId, bytes memory data) public returns (bytes memory);
 ```
 
 Allows to be called by any external contract when an address wants to delegate its universalReceiver functionality to another smart contract.
 
 _Parameters:_
 
-- `caller` is the address calling the original `universalReceiver` function.
+- `caller` is the address calling the `universalReceiver` function.
+
+- `value` is the amount of value sent to the `universalReceiver` function.
 
 - `typeId` is the hash of a standard, or the type relative to the `data` received.
 
@@ -150,8 +154,8 @@ contract MyWallet is ERC165, ILSP1 {
         _registerInterface(_INTERFACE_ID_LSP1);
     }
 
-    function universalReceiver(bytes32 typeId, bytes memory data) public returns (bytes memory) {
-        emit UniversalReceiver(msg.sender, typeId, 0x0, data);
+    function universalReceiver(bytes32 typeId, bytes memory data) public payable returns (bytes memory) {
+        emit UniversalReceiver(msg.sender, msg.value, typeId, 0x0, data);
         return 0x0;
     }
 }
@@ -190,7 +194,7 @@ contract TokenABC {
 contract MyWallet is ERC165, ILSP1 {
 
     bytes4 _INTERFACE_ID_LSP1 = 0x6bb56a14;
-    bytes4 _INTERFACE_ID_LSP1_DELEGATE = 0xc2d7bcc1;
+    bytes4 _INTERFACE_ID_LSP1_DELEGATE = 0xa245bbda;
 
     address public universalReceiverDelegate;
 
@@ -203,16 +207,16 @@ contract MyWallet is ERC165, ILSP1 {
         universalReceiverDelegate = _newUniversalReceiverDelegate;
     }
 
-    function universalReceiver(bytes32 typeId, bytes memory data) public returns (bytes memory) {
+    function universalReceiver(bytes32 typeId, bytes memory data) public payable returns (bytes memory) {
 
         // if the address set as universalReceiverDelegate supports LSP1Delegate then call the universalReceiverDelegate function
         if(ERC165Checker.supportsInterface(universalReceiverDelegate,_INTERFACE_ID_LSP1_DELEGATE)){
 
             // Call the universalReceiverDelegate function on universalReceiverDelegate address
-            returneddata = ILSP1Delegate(universalReceiverDelegate).universalReceiverDelegate(typeId, data);
+            returneddata = ILSP1Delegate(universalReceiverDelegate).universalReceiverDelegate(msg.sender, msg.value, typeId, data);
         }
 
-        emit UniversalReceiver(msg.sender, typeId, returneddata, data);
+        emit UniversalReceiver(msg.sender, msg.value, typeId, returneddata, data);
         return returneddata;
     }
 }
@@ -220,13 +224,13 @@ contract MyWallet is ERC165, ILSP1 {
 
 contract UniversalReceiverDelegate is ERC165, ILSP1Delegate {
 
-    bytes4 _INTERFACE_ID_LSP1_DELEGATE = 0xc2d7bcc1;
+    bytes4 _INTERFACE_ID_LSP1_DELEGATE = 0xa245bbda;
 
     constructor() public {
         _registerInterface(_INTERFACE_ID_LSP1_DELEGATE);
     }
 
-    function universalReceiverDelegate(address caller, bytes32 typeId, bytes memory data) public returns (bytes memory) {
+    function universalReceiverDelegate(address caller, uint256 value, bytes32 typeId, bytes memory data) public returns (bytes memory) {
         // Any logic could be written here:
         // - Interfact with DeFi protocol contract to sell the new tokens received automatically.
         // - Register the token received on other registery contract
@@ -242,16 +246,16 @@ contract UniversalReceiverDelegate is ERC165, ILSP1Delegate {
 
 interface ILSP1  /* is ERC165 */ {
 
-    event UniversalReceiver(address indexed from, bytes32 indexed typeId, bytes indexed returnedValue, bytes receivedData);
+    event UniversalReceiver(address indexed from, uint256 value, bytes32 indexed typeId, bytes indexed returnedValue, bytes receivedData);
     
     
-    function universalReceiver(bytes32 typeId, bytes memory data) external returns (bytes memory);
+    function universalReceiver(bytes32 typeId, bytes memory data) external payable returns (bytes memory);
     
 }
     
 interface ILSP1Delegate  /* is ERC165 */ {
     
-    function universalReceiverDelegate(address caller, bytes32 typeId, bytes memory data) external returns (bytes memory);
+    function universalReceiverDelegate(address caller, uint256 value, bytes32 typeId, bytes memory data) external returns (bytes memory);
 
 }
 ```
