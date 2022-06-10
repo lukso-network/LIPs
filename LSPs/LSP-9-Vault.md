@@ -30,9 +30,23 @@ _This interface id can be used to detect Vault contracts._
 
 _This `bytes4` interface id is calculated as the XOR of the function selectors from the following interface standards: ERC725Y, ERC725X, LSP1-UniversalReceiver and ClaimOwnership._
 
+### ERC725Y Data Keys
+
 Every contract that supports the LSP9 standard SHOULD implement:
 
-### ERC725Y Data Keys
+#### SupportedStandards:LSP9Vault
+
+The supported standard SHOULD be `LSP9Vault`
+
+```json
+{
+    "name": "SupportedStandards:LSP9Vault",
+    "key": "0xeafec4d89fa9619884b600007c0334a14085fefa8b51ae5a40895018882bdb90",
+    "keyType": "Mapping",
+    "valueType": "bytes4",
+    "valueContent": "0x7c0334a1"
+}
+```
 
 #### LSP1UniversalReceiverDelegate
 
