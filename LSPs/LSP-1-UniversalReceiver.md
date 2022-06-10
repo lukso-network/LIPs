@@ -213,11 +213,11 @@ contract MyWallet is ERC165, ILSP1 {
         if(ERC165Checker.supportsInterface(universalReceiverDelegate,_INTERFACE_ID_LSP1_DELEGATE)){
 
             // Call the universalReceiverDelegate function on universalReceiverDelegate address
-            returneddata = ILSP1Delegate(universalReceiverDelegate).universalReceiverDelegate(msg.sender, msg.value, typeId, data);
+            returnedData = ILSP1Delegate(universalReceiverDelegate).universalReceiverDelegate(msg.sender, msg.value, typeId, data);
         }
 
-        emit UniversalReceiver(msg.sender, msg.value, typeId, returneddata, data);
-        return returneddata;
+        emit UniversalReceiver(msg.sender, msg.value, typeId, returnedData, data);
+        return returnedData;
     }
 }
 
