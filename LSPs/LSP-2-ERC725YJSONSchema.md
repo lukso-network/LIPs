@@ -95,7 +95,7 @@ The `keyType` determines the format of the data key(s).
 
 ### `valueType`
 
-Describes the underlying data type of a value stored under a specific ERC725Y data key. It refers to the type for the smart contract language like [Solidity](https://docs.soliditylang.org).
+Describes the underlying data type(s) of a value stored under a specific ERC725Y data key. It refers to the type for the smart contract language like [Solidity](https://docs.soliditylang.org).
 
 The `valueType` is relevant for interfaces to know how a value MUST be encoded/decoded. This include:
 
@@ -117,6 +117,8 @@ The `valueType` can also be useful for typecasting. It enables contracts or inte
 | `address[]`   | an array of addresses |
 | `bytes[]`     | an array of dynamic size bytes  |
 | `bytesN[]`    | an array of fixed size bytes  |
+
+The `valueType` can also be a **tuple of types**, meaning the value stored under the ERC725Y data key is a mixture of multiple value types concatenated together. In such case, the types MUST be defined between parentheses. For instance: `(bytes4,bytes8)` or `(bytes8,address)`
 
 ### `valueContent`
 
@@ -142,8 +144,10 @@ Valid `valueContent` are:
 | [`JSONURL`](#jsonurl)     |  hash function, hash and link to the JSON file |
 | `Markdown`        | a structured Markdown mostly encoded as UTF8 string  |
 | `0x1345ABCD...`   | a **literal** value, when the returned value is expected to equal some specific bytes |
-| `Mixed`           | bytes that are a mixture of multiple types or encoding concatenated together |
 
+The `valueContent` field can also define a tuple of value contents (for instance, when the `valueType` is a tuple of types, as described above). In this case, each value content MUST be defined between parentheses. For instance: `(Bytes4,Number)`.
+
+This is useful for decoding tools, to know how to interpret each value type in the tuple.
 
 ---
 
