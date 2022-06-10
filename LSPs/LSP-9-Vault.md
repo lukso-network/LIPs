@@ -196,6 +196,8 @@ interface ILSP9  /* is ERC165 */ {
       
     event ValueReceived(address indexed sender, uint256 indexed value);
 
+    fallback() external payable;
+
 }
 
 

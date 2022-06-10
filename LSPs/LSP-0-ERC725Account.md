@@ -209,6 +209,8 @@ interface ILSP0  /* is ERC165 */ {
     // LSP0 (ERC725Account)
       
     event ValueReceived(address indexed sender, uint256 indexed value);
+
+    fallback() external payable;
     
 
     // LSP1
