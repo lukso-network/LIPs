@@ -167,21 +167,21 @@ By setting the value to `0xeafec4d89fa9619884b6000000000000000000000000000000000
 The following permissions are allowed in the BitArray of the `AddressPermissions:Permissions:<address>` data key for an address. The order can not be changed:
 
 ```js
-CHANGEOWNER        = 0x0000000000000000000000000000000000000000000000000000000000000001;   // 0000 0000 0000 0001 // Allows changing the owner of the controlled contract
-CHANGEPERMISSIONS  = 0x0000000000000000000000000000000000000000000000000000000000000002;   // .... .... .... 0010 // Allows changing the permissions (adding + removing) of addresses
-ADDPERMISSIONS     = 0x0000000000000000000000000000000000000000000000000000000000000004;   // .... .... .... 0100 // Allows adding new permissions to addresses (removing permission disallowed) 
-SETDATA            = 0x0000000000000000000000000000000000000000000000000000000000000008;   // .... .... .... 1000 // Allows setting data on the controlled contract
-CALL               = 0x0000000000000000000000000000000000000000000000000000000000000010;   // .... .... 0001 .... // Allows calling other contracts through the controlled contract
-STATICCALL         = 0x0000000000000000000000000000000000000000000000000000000000000020;   // .... .... 0010 .... // Allows calling other contracts through the controlled contract
-DELEGATECALL       = 0x0000000000000000000000000000000000000000000000000000000000000040;   // .... .... 0100 .... // Allows delegate calling other contracts through the controlled contract
-DEPLOY             = 0x0000000000000000000000000000000000000000000000000000000000000080;   // .... .... 1000 .... // Allows deploying other contracts through the controlled contract
-TRANSFERVALUE      = 0x0000000000000000000000000000000000000000000000000000000000000100;   // .... 0001 .... .... // Allows transfering value to other contracts from the controlled contract
-SIGN               = 0x0000000000000000000000000000000000000000000000000000000000000200;   // .... 0010 .... .... // Allows signing on behalf of the controlled account, for example for login purposes
-SUPER_SETDATA       = 0x0000000000000000000000000000000000000000000000000000000000000400, // .... 0100 .... .... // same as SETDATA, but without restricting to specific data keys
-SUPER_TRANSFERVALUE = 0x0000000000000000000000000000000000000000000000000000000000000800, // .... 1000 .... .... // same as TRANSFERVALUE, but without restricting to specific addresses, functions or standards
-SUPER_CALL          = 0x0000000000000000000000000000000000000000000000000000000000001000, // 0001 .... .... .... // same as CALL, but without restricting to specific addresses, functions or standards
-SUPER_STATICCALL    = 0x0000000000000000000000000000000000000000000000000000000000002000, // 0010 .... .... .... // same as STATICCALL, but without restricting to specific addresses, functions or standards
-SUPER_DELEGATECALL  = 0x0000000000000000000000000000000000000000000000000000000000004000, // 0100 .... .... .... // same as DELEGATECALL, but without restricting to specific addresses, functions or standards
+CHANGEOWNER         = 0x0000000000000000000000000000000000000000000000000000000000000001;   // 0000 0000 0000 0001 // Allows changing the owner of the controlled contract
+CHANGEPERMISSIONS   = 0x0000000000000000000000000000000000000000000000000000000000000002;   // .... .... .... 0010 // Allows changing the permissions (adding + removing) of addresses
+ADDPERMISSIONS      = 0x0000000000000000000000000000000000000000000000000000000000000004;   // .... .... .... 0100 // Allows adding new permissions to addresses (removing permission disallowed) 
+SETDATA             = 0x0000000000000000000000000000000000000000000000000000000000000008;   // .... .... .... 1000 // Allows setting data on the controlled contract
+CALL                = 0x0000000000000000000000000000000000000000000000000000000000000010;   // .... .... 0001 .... // Allows calling other contracts through the controlled contract
+STATICCALL          = 0x0000000000000000000000000000000000000000000000000000000000000020;   // .... .... 0010 .... // Allows calling other contracts through the controlled contract
+DELEGATECALL        = 0x0000000000000000000000000000000000000000000000000000000000000040;   // .... .... 0100 .... // Allows delegate calling other contracts through the controlled contract
+DEPLOY              = 0x0000000000000000000000000000000000000000000000000000000000000080;   // .... .... 1000 .... // Allows deploying other contracts through the controlled contract
+TRANSFERVALUE       = 0x0000000000000000000000000000000000000000000000000000000000000100;   // .... 0001 .... .... // Allows transfering value to other contracts from the controlled contract
+SIGN                = 0x0000000000000000000000000000000000000000000000000000000000000200;   // .... 0010 .... .... // Allows signing on behalf of the controlled account, for example for login purposes
+SUPER_SETDATA       = 0x0000000000000000000000000000000000000000000000000000000000000400; // .... 0100 .... .... // same as SETDATA, but without restricting to specific data keys
+SUPER_TRANSFERVALUE = 0x0000000000000000000000000000000000000000000000000000000000000800; // .... 1000 .... .... // same as TRANSFERVALUE, but without restricting to specific addresses, functions or standards
+SUPER_CALL          = 0x0000000000000000000000000000000000000000000000000000000000001000; // 0001 .... .... .... // same as CALL, but without restricting to specific addresses, functions or standards
+SUPER_STATICCALL    = 0x0000000000000000000000000000000000000000000000000000000000002000; // 0010 .... .... .... // same as STATICCALL, but without restricting to specific addresses, functions or standards
+SUPER_DELEGATECALL  = 0x0000000000000000000000000000000000000000000000000000000000004000; // 0100 .... .... .... // same as DELEGATECALL, but without restricting to specific addresses, functions or standards
 ```
 
 ![LSP6 - KeyManager-permissions-examples](../assets/LSP-6/lsp6-default-permissions-range.jpeg)
