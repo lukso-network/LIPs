@@ -141,6 +141,13 @@ ERC725Y JSON Schema:
 ```json
 [
     {
+        "name": "SupportedStandards:LSP9Vault",
+        "key": "0xeafec4d89fa9619884b600007c0334a14085fefa8b51ae5a40895018882bdb90",
+        "keyType": "Mapping",
+        "valueType": "bytes4",
+        "valueContent": "0x7c0334a1"
+    },
+    {
         "name": "LSP1UniversalReceiverDelegate",
         "key": "0x0cfc51aec37c55a4d0b1a65c6255c4bf2fbdf6277f3cc0730c45b828b6db8b47",
         "keyType": "Singleton",
