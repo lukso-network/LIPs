@@ -82,11 +82,24 @@ The UniversalReceiverDelegate is an optional extension that could be used with t
 
 The address of the UniversalReceiverDelegate **MUST** be changable in the contract implementing the `unviersalReceiver(..)` function to have the option to change how the contract react on upcoming information and assets transfers in the future.
 
-_Could be done by having a setter function for the UniversalReceiverDelegate address._
+_Could be done by having a setter function for the UniversalReceiverDelegate address, or if the contract supports [ERC725Y](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) the address should be stored under this Key:_
+
+```json
+{
+    "name": "LSP1UniversalReceiverDelegate",
+    "key": "0x0cfc51aec37c55a4d0b1a65c6255c4bf2fbdf6277f3cc0730c45b828b6db8b47",
+    "keyType": "Singleton",
+    "valueType": "address",
+    "valueContent": "Address"
+}
+```
+Check [LSP2- ERC725YJSONSchema](./LSP-2-ERC725YJSONSchema.md) for more information. 
 
 ### Specification
 
 ERC165 interface id: `0xa245bbda`
+
+The UniversalReceiverDelegate contract should support the InterfaceId, otherwise the call should not be forwarded from the `universalReceiver(...)` function.
 
 
 ```solidity
