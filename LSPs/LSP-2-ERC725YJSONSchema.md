@@ -132,6 +132,7 @@ Valid `valueContent` are:
 
 | `valueContent`    | Description  |
 |---|---|
+| `Boolean`         | a boolean |
 | `String`          | an UTF8 encoded string |
 | `Address`         | an address |
 | `Number`          | a Number (positive or negative, depending on the `keyType`)  |
