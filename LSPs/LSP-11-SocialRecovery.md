@@ -29,7 +29,7 @@ There are many possible choices for whom to select as a guardian. The three most
 
 ## Specification
 
-ERC165 interface id: `0xffffffff`
+ERC165 interface id: `0xcb81043b`
 
 It's advised when deploying the contract and setting it up to start with the following order of functions:
 
@@ -47,15 +47,82 @@ Every contract that supports the LSP11SocialRecovery SHOULD implement:
 
 #### addGuardian
 
+```solidity
+function addGuardian(address newGuardian) public
+```
+
+Adds a new guardian.
+
+_Parameters:_
+
+- `newGuardian`: the address of the guardian to set.
+
+
 #### removeGuardian
 
-#### voteToRecover
+```solidity
+function removeGuardian(address currentGuardian) public
+```
 
-#### setSecret
+Removes an existing guardian.
+
+_Parameters:_
+
+- `currentGuardian`: the address of the guardian to remove.
 
 #### setThreshold
 
+```solidity
+function setThreshold(uint256 newThreshold) public
+```
+
+Sets the number of guardian votes required to recover the linked account.
+
+The number should be greater than 0 and less than the guardians count.
+
+_Parameters:_
+
+- `newThreshold`: the number of guardian votes required to recover the linked account.
+
+#### setSecret
+
+```solidity
+function setSecret(bytes32 newHash) public
+```
+
+Sets the hash of the plainSecret needed to recover the account after reaching the recoverThreshold.
+
+_Parameters:_
+
+- `newHash`: the hash of the plainSecret.
+
+#### voteToRecover
+
+```solidity
+function voteToRecover(bytes32 recoverProcessId, address addressToRecover) public
+```
+
+Votes to a `addressToRecover` address in a specific recoverProcessId.
+
+Once the `addressToRecover` reach the recoverThreshold it will be able to call `recoverOwnership(..)` function and recover the linked account.
+
+Should only be called by guardians.
+
+_Parameters:_
+
+- `recoverProcessId`: the recover Process Id in which the `addressToRecover` has been voted for.
+
+- `addressToRecover`: the address to vote for in order to recover the linked account.
+
 #### recoverOwnership
+
+```solidity
+   function recoverOwnership(bytes32 recoverProcessId, string memory plainSecret, bytes32 newHash) public 
+```
+
+Recover the linked account by setting in permissions for the msg.sender after it reached the recoverThreshold and given the right plainSecret that produce the `secretHash`.
+
+
 
 #### allGuardians
 
@@ -65,7 +132,11 @@ Every contract that supports the LSP11SocialRecovery SHOULD implement:
 
 #### guardians
 
-#### universalReceiver
+### Setup
+
+In order to allow this smart contract to recover the linked account and add new permissions, this contract should have permissions set inside the linked account.
+
+
 
 
 ### Events
