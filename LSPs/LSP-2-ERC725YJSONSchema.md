@@ -63,7 +63,7 @@ The table below describes each entries with their available options.
 
 ### Data Key Name
 
-The `name` is the human-readable format of a ERC725Y data key. Its the basis which are used to generate the `32 bytes` key hash. Names can be arbitrarily choose, but SHOULD highlight the content behind the data value.
+The `name` is the human-readable format of a ERC725Y data key. It's the basis which are used to generate the `32 bytes` key hash. Names can be arbitrarily choose, but SHOULD highlight the content behind the data value.
 
 In scenarios where an ERC725Y data key is part of an LSP Standard, the data key `name` SHOULD be comprised of the following: `LSP{N}{KeyName}`, where
 
@@ -236,7 +236,7 @@ A **Mapping** data key is constructed using:
 
 `bytes10(keccak256("MyKeyName"))` + `bytes2(0)` + `bytes20(keccak256("MyMapName") or <mixed type>)`.
 
-`<mixed type>` can `uint<M>`, `address`, `bool` or `bytes<M>`.
+`<mixed type>` can be one of `uint<M>`, `address`, `bool` or `bytes<M>` types.
 
 - `uint<M>`, `bool`  will be left padded and left-cut, if larger than `20 bytes`.
 - `bytes<M>` and `address` and static word hashes (`bytes32`) will be left padded, but right-cut, if larger than `20 bytes`.
@@ -281,10 +281,10 @@ A **MappingWithGrouping** data key is constructed using:
 
 `bytes6(keccak256("MyKeyName"))` + `bytes4(keccak256("MyMapName") or <mixed type>)` + `bytes2(0)` + `bytes20(keccak256("MySubMapName") or <mixed type>)`.
 
-`<mixed type>` can `uint<M>`, `address`, `bool` or `bytes<M>`.
+`<mixed type>` can be one of `uint<M>`, `address`, `bool` or `bytes<M>` types.
 
-- `uint<M>`, `bool`  will be left padded and left-cut, if its larger than the max bytes of that section.
-- `bytes<M>` and `address` and static word hashes (`bytes32`) will be left padded, but right-cut, if its larger than the max bytes of that section.
+- `uint<M>`, `bool`  will be left padded and left-cut, if it's larger than the max bytes of that section.
+- `bytes<M>` and `address` and static word hashes (`bytes32`) will be left padded, but right-cut, if it's larger than the max bytes of that section.
 
 
 e.g. `AddressPermissions:Permissions:<address>` > `0x4b80742de2bf 82acb363 0000 cafecafecafecafecafecafecafecafecafecafe`.
