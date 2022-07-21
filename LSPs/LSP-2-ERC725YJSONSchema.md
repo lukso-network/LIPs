@@ -63,7 +63,7 @@ The table below describes each entries with their available options.
 
 ### Data Key Name
 
-The `name` is the human-readable format of an ERC725Y data key. It's the basis which is used to generate the `32 bytes` key hash. Names can be arbitrarily chosen, but SHOULD highlight the content behind the data value.
+The `name` is the human-readable format of an ERC725Y data key. It's the basis which is used to generate the `32 bytes` key hash. Names can be arbitrarily chosen, but SHOULD highlight the meaning of content behind the data value.
 
 In scenarios where an ERC725Y data key is part of an LSP Standard, the data key `name` SHOULD be comprised of the following: `LSP{N}{KeyName}`, where
 
