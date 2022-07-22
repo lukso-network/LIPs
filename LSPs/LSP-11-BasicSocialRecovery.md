@@ -1,6 +1,6 @@
 ---
 lip: 11
-title: SocialRecovery
+title: BasicSocialRecovery
 author: 
 discussions-to: https://discord.gg/E2rJPP4
 status: Draft
@@ -10,7 +10,7 @@ requires: ERC725, LSP0, LSP2, LSP6
 ---
 
 ## Simple Summary
-This standard describes a `SocialRecovery` contract that can recover access to [ERC725](#) contracts through the [LSP6-KeyManager](#).
+This standard describes a **basic social recovery** contract that can recover access to [ERC725](https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md) contracts through the [LSP6-KeyManager](./LSP-6-KeyManager.md).
 
 ## Abstract
 This standard allows for recovering access to ERC725 contracts such as tokens, NFTs, and Universal Profiles by adding a new address to control them through the Key Manager after a recovery process.
@@ -45,6 +45,70 @@ Every contract that supports the LSP11SocialRecovery SHOULD implement:
 
 ### Methods
 
+#### account
+
+```solidity
+function account() public view returns (address)
+```
+
+Returns the address of the linked account to recover.
+
+
+#### isGuardian
+
+```solidity
+function isGuardian(address _address) public view returns (bool)
+```
+
+Returns _true_ if the provided address is a guardian, _false_ otherwise.
+
+_Parameters:_
+
+- `_address`: the address to query.
+
+
+#### getGuardians
+
+```solidity
+function getGuardians() public view returns (address[] memory)
+```
+
+Returns the array of guardian addresses set.
+
+
+
+#### getGuardiansThreshold
+
+```solidity
+function getGuardiansThreshold() public view returns (uint256)
+```
+
+Returns the minimum number of guardian votes needed for an address to recover the linked account.
+
+
+
+#### getRecoverProcessesIds
+
+```solidity
+function getRecoverProcessesIds() public view returns (bytes32[] memory)
+```
+
+Returns all the recover processes ids that the guardians has voted in.
+
+#### getGuardianVote
+
+```solidity
+function getGuardianVote(bytes32 recoverProcessId, address guardian) public view returns (address)
+```
+
+Returns the address for which the `guardian` has voted in the provided recoverProcessId.
+
+_Parameters:_
+
+- `recoverProcessId`: the recover process id in which the guardian has voted.
+
+- `guardian`: the address of the guardian who voted.
+
 #### addGuardian
 
 ```solidity
@@ -52,6 +116,8 @@ function addGuardian(address newGuardian) public
 ```
 
 Adds a new guardian.
+
+SHOULD be called only by the owner.
 
 _Parameters:_
 
@@ -65,6 +131,8 @@ function removeGuardian(address currentGuardian) public
 ```
 
 Removes an existing guardian.
+
+SHOULD be called only by the owner.
 
 _Parameters:_
 
@@ -80,6 +148,8 @@ Sets the number of guardian votes required to recover the linked account.
 
 The number should be greater than 0 and less than the guardians count.
 
+SHOULD be called only by the owner.
+
 _Parameters:_
 
 - `newThreshold`: the number of guardian votes required to recover the linked account.
@@ -91,6 +161,8 @@ function setSecret(bytes32 newHash) public
 ```
 
 Sets the hash of the plainSecret needed to recover the account after reaching the recoverThreshold.
+
+SHOULD be called only by the owner.
 
 _Parameters:_
 
@@ -106,7 +178,7 @@ Votes to a `addressToRecover` address in a specific recoverProcessId.
 
 Once the `addressToRecover` reach the recoverThreshold it will be able to call `recoverOwnership(..)` function and recover the linked account.
 
-Should only be called by guardians.
+SHOULD be called only by the guardians.
 
 _Parameters:_
 
@@ -117,33 +189,39 @@ _Parameters:_
 #### recoverOwnership
 
 ```solidity
-   function recoverOwnership(bytes32 recoverProcessId, string memory plainSecret, bytes32 newHash) public 
+function recoverOwnership(bytes32 recoverProcessId, string memory plainSecret, bytes32 newHash) public 
 ```
 
-Recover the linked account by setting in permissions for the msg.sender after it reached the recoverThreshold and given the right plainSecret that produce the `secretHash`.
+Recover the linked account by setting in All Permissions (combined) for the msg.sender after it reached the recoverThreshold and given the right plainSecret that produce the `secretHash`.
 
+_Parameters:_
 
+- `recoverProcessId`: the recover process id in which the `msg.sender` should have reached the threshold.
 
-#### allGuardians
+- `plainSecret`: the plain secret that should produce the `secretHash` with _keccak256_ function.
 
-#### isGuardian
+- `newHash`: the new secret hash to set.
 
-#### guardiansCount
-
-#### guardians
 
 ### Setup
 
-In order to allow this smart contract to recover the linked account and add new permissions, this contract should have permissions set inside the linked account.
+In order to allow the social recovery contract to recover the linked account and add new permissions, this contract should have `ADDPERMISSIONS` and `CHANGEPERMISSIONS` set inside the **linked account** under this ERC725Y Data Key.
 
-
-
+```json
+{
+    "name": "AddressPermissions:Permissions:<address>",
+    "key": "0x4b80742de2bf82acb3630000<address>",
+    "keyType": "MappingWithGrouping",
+    "valueType": "bytes32",
+    "valueContent": "BitArray"
+}
+```
 
 ### Events
 
 ## Rationale
 
-This standard was inspired by the current recovery process in some crypto wallets but this recovery process is a balance between a secret word and guardians.
+This standard was inspired by the current recovery process in some crypto wallets but this recovery process is a balance between a secret hash and guardians.
 
 In this case, you can ensure that you're guardians can't act maliciously and would need a secret word to recover. The same goes for the secret word if it's exposed, only addresses who reached the guardiansThreshold can recover using it.
 
@@ -151,14 +229,36 @@ A recoverProcessId is also created to ensure flexibility when recovering, so if 
 
 ## Implementation
 
-An implementation can be found in the [lukso-network/lsp-smart-contracts](https://github.com/lukso-network/lsp-smart-contracts/tree/main/contracts/LSP11SocialRecovery/) repo.
+An implementation can be found in the [lukso-network/lsp-smart-contracts](https://github.com/lukso-network/lsp-smart-contracts/pull/114) repo.
 
 ## Interface Cheat Sheet
 
 ```solidity
 interface ILSP11  /* is ERC165 */ {
          
+    function account() external view returns (address);
+
+    function isGuardian(address _address) external view returns (bool);
+
+    function getGuardians() external view returns (address[] memory);
     
+    function getGuardiansThreshold() external view returns (uint256);
+
+    function getRecoverProcessesIds() external view returns (bytes32[] memory);
+
+    function getGuardianVote(bytes32 recoverProcessId, address guardian) external view returns (address);
+
+    function addGuardian(address newGuardian) external;  // onlyOwner
+
+    function removeGuardian(address currentGuardian) external;  // onlyOwner
+    
+    function setThreshold(uint256 _guardiansThreshold) external;  // onlyOwner
+
+    function setSecret(bytes32 secretHash) external;  // onlyOwner
+
+    function voteToRecover(bytes32 recoverProcessId, address newOwner) external;  // onlyGuardians
+
+    function recoverOwnership(bytes32 recoverProcessId, string memory plainSecret, bytes32 newHash) external;
     
 }
 ```
