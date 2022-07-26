@@ -15,7 +15,7 @@ This standard describes a **basic social recovery** contract that can recover ac
 ## Abstract
 This standard provides a mechanism for recovering access to ERC725 contracts such as tokens, NFTs, and Universal Profiles by adding a new controller address through the Key Manager after a recovery process.
 
-The social recovery contract should provide the most flexible and secure process, where the guardians, set originally by the owner, can vote to one address in each recoverProcessId. The address willing to recover can choose a recoverProcessId where he reached the guardiansThreshold and after successfully providing the right secret word, that produces the hash already set by the owner, he will be granted the owner permissions in the account recovered and a new hash will be set and all previous recoverProcessId will be invalidated.
+The social recovery contract should ensure a flexible and secure process where guardians, nominated by the owner, can vote for one address in each `recoverProcessId`. The address requesting recovery can choose a `recoverProcessId` where he reached the `guardiansThreshold` and after successfully providing the secret word which produces the same hash as the secret hash set by the owner, he will be granted the owner permissions in the recovered account and a new hash will be set and all previous `recoverProcessId` will be invalidated.
 
 ## Motivation
 Any Key could be lost or leaked due to a certain accident, so it's not advised to rely on one singular key to control ERC725 contracts through the Key Manager and a social recovery contract is needed in this case.
@@ -23,9 +23,9 @@ Any Key could be lost or leaked due to a certain accident, so it's not advised t
 In the case above, the user can simply reach out to his guardians and ask them to vote for a certain address. 
 There are many possible choices for whom to select as a guardian. The three most common choices are:
 
-- Other devices (or paper mnemonics) owned by the wallet holder themselves
+- EOAs controlled by the wallet holder themselves (via paper mnemonics or cold storage devices)
 - Friends and family members (EOAs or Universal Profiles)
-- Institutions, which would vote for the address provided if they get a confirmation of your phone number or email or perhaps in high-value cases to verify you personally by video call
+- Institutions, which could vote for a provided address if they get a valid confirmation via phone number, email or video call
 
 ## Specification
 
@@ -223,7 +223,7 @@ In order to allow the social recovery contract to recover the linked account and
 
 This standard was inspired by the current recovery process in some crypto wallets but this recovery process is a balance between a secret hash and guardians.
 
-In this case, you can ensure that you're guardians can't act maliciously and would need a secret word to recover. The same goes for the secret word if it's exposed, only addresses who reached the guardiansThreshold can recover using it.
+In this case, it is ensured that guardians can't act maliciously and would need a secret word to recover. The same goes for the secret word if it is exposed, only addresses who reached the guardiansThreshold can use it to recover an account.
 
 A recoverProcessId is also created to ensure flexibility when recovering, so if guardians didn't reach consensus in a recoverProcessId, they can switch to another one. 
 
