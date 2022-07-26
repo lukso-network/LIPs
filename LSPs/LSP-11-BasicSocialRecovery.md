@@ -205,7 +205,7 @@ _Parameters:_
 
 ### Setup
 
-In order to allow the social recovery contract to recover the linked account and add new permissions, this contract should have `ADDPERMISSIONS` and `CHANGEPERMISSIONS` set inside the **linked account** under this ERC725Y Data Key.
+In order to allow the social recovery contract to recover the linked account and add new permissions, the linked account should have an [LSP6-KeyManager](./LSP-6-KeyManager.md) as owner and the social recovery contract should have `ADDPERMISSIONS` and `CHANGEPERMISSIONS` permissions set inside the **linked account** under this ERC725Y Data Key.
 
 ```json
 {
