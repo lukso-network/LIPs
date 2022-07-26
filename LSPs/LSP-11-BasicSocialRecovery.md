@@ -13,7 +13,7 @@ requires: ERC725, LSP0, LSP2, LSP6
 This standard describes a **basic social recovery** contract that can recover access to [ERC725](https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md) contracts through the [LSP6-KeyManager](./LSP-6-KeyManager.md).
 
 ## Abstract
-This standard allows for recovering access to ERC725 contracts such as tokens, NFTs, and Universal Profiles by adding a new address to control them through the Key Manager after a recovery process.
+This standard provides a mechanism for recovering access to ERC725 contracts such as tokens, NFTs, and Universal Profiles by adding a new controller address through the Key Manager after a recovery process.
 
 The social recovery contract should provide the most flexible and secure process, where the guardians, set originally by the owner, can vote to one address in each recoverProcessId. The address willing to recover can choose a recoverProcessId where he reached the guardiansThreshold and after successfully providing the right secret word, that produces the hash already set by the owner, he will be granted the owner permissions in the account recovered and a new hash will be set and all previous recoverProcessId will be invalidated.
 
