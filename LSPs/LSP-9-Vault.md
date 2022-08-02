@@ -130,7 +130,7 @@ MUST be emitted when a native token transfer was received.
 
 ## Rationale
 
-The ERC725Y general data key value store allows for the ability to add any kind of information to the the contract, which allows future use cases. The general execution allows full interactability with any smart contract or address. And the universal receiver allows the reaction to any future asset.
+The ERC725Y general data key value store allows for the ability to add any kind of information to the contract, which allows future use cases. The general execution allows full interactability with any smart contract or address. And the universal receiver allows the reaction to any future asset.
 
 ## Implementation
 
