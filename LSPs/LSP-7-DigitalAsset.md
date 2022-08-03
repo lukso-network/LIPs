@@ -220,7 +220,7 @@ Calls the `universalReceiver(..)` function on the sender address when transferri
 Calls the `universalReceiver(..)` function on the receiver address when transferring or minting tokens, if it supports LSP1 InterfaceID, with the parameters below:
 
 - `typeId`: keccak256('LSP7TokensRecipient')
-- `data`: The data sent SHOULD be encodePacked containing the `sender` (address), `receiver` (address), `amount` (uint256) and the `data` (bytes) respectively.
+- `data`: The data sent SHOULD be packed encoded and contain the `sender` (address), `receiver` (address), `amount` (uint256) and the `data` (bytes) respectively.
 
 ## Rationale
 <!--The rationale fleshes out the specification by describing what motivated the design and why particular design decisions were made. It should describe alternate designs that were considered and related work, e.g. how the feature is supported in other languages. The rationale may also provide evidence of consensus within the community, and should discuss important objections or concerns raised during discussion.-->
