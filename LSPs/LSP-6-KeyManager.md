@@ -74,7 +74,7 @@ For more informations about how to access each index of the `AddressPermissions[
 
 Contains a set of permissions for an address. Permissions defines what an address **can do on** an ERC725Account (*eg: edit the data key-value store via SETDATA*), or **can perform on behalf of** the ERC725Account.
 
-Since the `valueType` of this data key is `bytes32`, up to 255 different permissions can be defined. This includes the [ten default permissions](#permission-values-in-addresspermissionspermissionsaddress) defined below. Custom permissions can be defined on top of the default one (starting at `0x0000...0400` (`1024` in decimals)).
+Since the `valueType` of this data key is `bytes32`, up to 255 different permissions can be defined. This includes the [ten default permissions](#permission-values-in-addresspermissionspermissionsaddress) defined below. Custom permissions can be defined on top of the default one (starting at `0x0000...8000` (`32768` in decimals)).
 
 ```json
 {
