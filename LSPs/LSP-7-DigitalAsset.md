@@ -213,7 +213,7 @@ Every contract that supports the LSP7 standard SHOULD implement these hooks:
 Calls the `universalReceiver(..)` function on the sender address when transferring or burning tokens, if it supports LSP1 InterfaceID, with the parameters below:
 
 - `typeId`: keccak256('LSP7TokensSender')
-- `data`: The data sent SHOULD be encodePacked containing the `sender` (address), `receiver` (address), `amount` (uint256) and the `data` (bytes) respectively. 
+- `data`: The data sent SHOULD be packed encoded and contain the `sender` (address), `receiver` (address), `amount` (uint256) and the `data` (bytes) respectively. 
 
 #### _notifyTokenReceiver
 
