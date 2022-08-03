@@ -191,24 +191,24 @@ A data key of **Array** type MUST have the following requirements:
 For the **Array** `keyType`, the initial `key` contains the total number of elements stored in the Array (= array length). It is constructed using `bytes32(keccak256(KeyName))`.
 
 Each Array element can be accessed through its own `key`. The `key` of an Array element consists of `bytes16(keccak256(KeyName)) + bytes16(uint128(ArrayElementIndex))`, where:
-- `bytes16(keccak256(KeyName))` = The first 16 bytes are the keccak256 hash of the full Array data key `name` (including the `[]`) (e.g.: `LSP3IssuedAssets[]`)
+- `bytes16(keccak256(KeyName))` = The first 16 bytes are the keccak256 hash of the full Array data key `name` (including the `[]`) (e.g.: `LSP12IssuedAssets[]`)
 - `bytes16(uint128(ArrayElementIndex))` = the position (= index) of the element in the array (**NB**: elements index access start at `0`)
 
 *example:*
 
-Below is an example for the **Array** data key named `LSP3IssuedAssets[]`.
+Below is an example for the **Array** data key named `LSP12IssuedAssets[]`.
 
 - total number of elements: 
-  - key: `0x3a47ab5bd3a594c3a8995f8fa58d0876c96819ca4516bd76100c92462f2f9dc0`, 
+  - key: `0x7c8c3416d6cda87cd42c71ea1843df28ac4850354f988d55ee2eaa47b6dc05cd`, 
   - value: `0x0000000000000000000000000000000000000000000000000000000000000002` (2 elements)
-- element 1: key: `0x3a47ab5bd3a594c3a8995f8fa58d087600000000000000000000000000000000`, value: `0x123...` (index 0)
-- element 2: key: `0x3a47ab5bd3a594c3a8995f8fa58d087600000000000000000000000000000001`, value: `0x321...` (index 1)
+- element 1: key: `0x7c8c3416d6cda87cd42c71ea1843df2800000000000000000000000000000000`, value: `0x123...` (index 0)
+- element 2: key: `0x7c8c3416d6cda87cd42c71ea1843df2800000000000000000000000000000001`, value: `0x321...` (index 1)
 ...
 
 ```js
 {
-    "name": "LSP3IssuedAssets[]",
-    "key": "0x3a47ab5bd3a594c3a8995f8fa58d0876c96819ca4516bd76100c92462f2f9dc0",
+    "name": "LSP12IssuedAssets[]",
+    "key": "0x7c8c3416d6cda87cd42c71ea1843df28ac4850354f988d55ee2eaa47b6dc05cd",
     "keyType": "Array",
     "valueType": "address", // describes the type of each element
     "valueContent": "Address" // describes the value of each element
@@ -216,17 +216,17 @@ Below is an example for the **Array** data key named `LSP3IssuedAssets[]`.
 ```
 
 ```solidity
-key: keccak256('LSP3IssuedAssets[]') = 0x3a47ab5bd3a594c3a8995f8fa58d0876c96819ca4516bd76100c92462f2f9dc0
+key: keccak256('LSP12IssuedAssets[]') = 0x7c8c3416d6cda87cd42c71ea1843df28ac4850354f988d55ee2eaa47b6dc05cd
 value: uint256 (array length) e.g. 0x0000000000000000000000000000000000000000000000000000000000000002
 
 // array items
 
 // 1st element (index 0)
-key: 0x3a47ab5bd3a594c3a8995f8fa58d087600000000000000000000000000000000
+key: 0x7c8c3416d6cda87cd42c71ea1843df2800000000000000000000000000000000
 value: 0xcafecafecafecafecafecafecafecafecafecafe
 
 // 2nd element (index 1)
-key: 0x3a47ab5bd3a594c3a8995f8fa58d087600000000000000000000000000000001
+key: 0x7c8c3416d6cda87cd42c71ea1843df2800000000000000000000000000000001
 value: 0xcafecafecafecafecafecafecafecafecafecafe
 ```
 
@@ -532,8 +532,8 @@ Using such schema allows interfaces to auto decode and interpret the values retr
         "valueContent": "JSONURL"
     },
     {
-        "name": "LSP3IssuedAssets[]",
-        "key": "0x3a47ab5bd3a594c3a8995f8fa58d0876c96819ca4516bd76100c92462f2f9dc0",
+        "name": "LSP12IssuedAssets[]",
+        "key": "0x7c8c3416d6cda87cd42c71ea1843df28ac4850354f988d55ee2eaa47b6dc05cd",
         "keyType": "Array",
         "valueType": "address",
         "valueContent": "Address"
