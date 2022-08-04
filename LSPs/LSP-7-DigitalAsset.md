@@ -203,6 +203,25 @@ event RevokedOperator(address indexed operator, address indexed tokenOwner);
 
 MUST be emitted when `tokenOwner` disables `operator`.
 
+
+### Hooks
+
+Every contract that supports the LSP7 standard SHOULD implement these hooks:
+
+#### _notifyTokenSender
+
+Calls the `universalReceiver(..)` function on the sender address when transferring or burning tokens, if it supports LSP1 InterfaceID, with the parameters below:
+
+- `typeId`: keccak256('LSP7TokensSender')
+- `data`: The data sent SHOULD be packed encoded and contain the `sender` (address), `receiver` (address), `amount` (uint256) and the `data` (bytes) respectively. 
+
+#### _notifyTokenReceiver
+
+Calls the `universalReceiver(..)` function on the receiver address when transferring or minting tokens, if it supports LSP1 InterfaceID, with the parameters below:
+
+- `typeId`: keccak256('LSP7TokensRecipient')
+- `data`: The data sent SHOULD be packed encoded and contain the `sender` (address), `receiver` (address), `amount` (uint256) and the `data` (bytes) respectively.
+
 ## Rationale
 <!--The rationale fleshes out the specification by describing what motivated the design and why particular design decisions were made. It should describe alternate designs that were considered and related work, e.g. how the feature is supported in other languages. The rationale may also provide evidence of consensus within the community, and should discuss important objections or concerns raised during discussion.-->
 
