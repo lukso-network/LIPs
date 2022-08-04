@@ -431,7 +431,35 @@ The `force` parameter sent during `function transfer` SHOULD be used when notify
 ## Implementation
 <!--The implementations must be completed before any LIP is given status "Final", but it need not be completed before the LIP is accepted. While there is merit to the approach of reaching consensus on the specification and rationale before writing code, the principle of "rough consensus and running code" is still useful when it comes to resolving many discussions of API details.-->
 
-A implementation can be found in the [lukso-network/lsp-smart-contracts][LSP8.sol];
+A implementation can be found in the [lukso-network/lsp-smart-contracts][LSP8.sol].
+
+ERC725Y JSON Schema `LSP8IdentifiableDigitalAsset`:
+
+```json
+[
+    {
+        "name": "LSP8TokenIdType",
+        "key": "0x715f248956de7ce65e94d9d836bfead479f7e70d69b718d47bfe7b00e05b4fe4",
+        "keyType": "Singleton",
+        "valueType": "uint256",
+        "valueContent": "Number"
+    },
+    {
+        "name": "LSP8MetadataAddress:<address|uint256|bytes32>",
+        "key": "0x73dcc7c3c4096cdc7f8a0000<address|uint256|bytes32>",
+        "keyType": "Mapping",
+        "valueType": "Mixed",
+        "valueContent": "Mixed"
+    },
+    {
+        "name": "LSP8MetadataJSON:<address|uint256|bytes32>",
+        "key": "0x9a26b4060ae7f7d5e3cd0000<address|uint256|bytes32>",
+        "keyType": "Mapping",
+        "valueType": "bytes",
+        "valueContent": "JSONURL"
+    }
+]
+```
 
 ## Interface Cheat Sheet
 
