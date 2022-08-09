@@ -45,7 +45,7 @@ function decimals() external view returns (uint256);
 
 Returns the number of decimals used to get its user representation.
 
-If the token is an NFT then `0` SHOULD be used, otherwise `18` is the common value.
+If the token is non-divisible then `0` SHOULD be used, otherwise `18` is the common value.
 
 **Returns:** `uint256` the number of decimals to tranfrom a token value when displaying.
 
