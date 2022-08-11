@@ -114,7 +114,7 @@ _Requirements:_
 #### isOperatorFor
 
 ```solidity
-function isOperatorFor(address tokenOwner, address operator) external view returns (uint256);
+function isOperatorFor(address operator, address tokenOwner) external view returns (uint256);
 ```
 
 Returns amount of tokens `operator` address has access to from `tokenOwner`.
