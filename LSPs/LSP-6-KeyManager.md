@@ -183,7 +183,7 @@ SETDATA             = 0x00000000000000000000000000000000000000000000000000000000
 // Allows calling other contracts through the controlled contract
 CALL                = 0x0000000000000000000000000000000000000000000000000000000000000010;
 // .... .... 0010 .... 
-// Allows calling other contracts through the controlled contract
+// Allows static calling other contracts through the controlled contract, while restrcting any state modifications during the call (or any subcalls, if present)
 STATICCALL          = 0x0000000000000000000000000000000000000000000000000000000000000020;
 // .... .... 0100 .... 
 // Allows delegate calling other contracts through the controlled contract
