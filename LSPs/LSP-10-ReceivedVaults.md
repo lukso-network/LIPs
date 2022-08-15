@@ -14,10 +14,10 @@ This standard describes a set of [ERC725Y](https://github.com/ethereum/EIPs/blob
 
 ## Abstract
 The following two data keys (including their ERC725Y JSON schema) are proposed to represent vaults owned by a smart contract:
-- `LSP10ReceivedVaults[]` to hold an array of vault addresses
-- `LSP10ReceivedVaultsMap` to hold a mapping of the index in the former array and the interface ID of the standard used by the vault. This enables to quickly differentiate vaults standards apart without the need to query each vault smart contract separately. 
+- `LSP10Vaults[]` to hold an array of vault addresses
+- `LSP10VaultsMap` to hold a mapping of the index in the former array and the interface ID of the standard used by the vault. This enables to quickly differentiate vaults standards apart without the need to query each vault smart contract separately. 
 
-The data key `LSP10ReceivedVaultsMap` also helps to prevent adding duplications to the array, when automatically added via smart contract (e.g. a [LSP1-UniversalReceiverDelegate](./LSP-1-UniversalReceiver.md)).
+The data key `LSP10VaultsMap` also helps to prevent adding duplications to the array, when automatically added via smart contract (e.g. a [LSP1-UniversalReceiverDelegate](./LSP-1-UniversalReceiver.md)).
 
 ## Motivation
 To be able to display received vaults in a profile we need to keep track of all received vaults contract addresses. This is important for [LSP3 UniversalProfile](./LSP-3-UniversalProfile.md), but also Assets smart contracts via [LSP5-ReceivedAssets](./LSP-5-ReceivedAssets.md) Standard.
