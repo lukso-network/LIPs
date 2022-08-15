@@ -174,7 +174,7 @@ CHANGEOWNER         = 0x00000000000000000000000000000000000000000000000000000000
 // Allows changing the permissions (adding + removing) of addresses
 CHANGEPERMISSIONS   = 0x0000000000000000000000000000000000000000000000000000000000000002;
 // .... .... .... 0100 
-// Allows adding new permissions to addresses (removing permission disallowed) 
+// Allows adding new controller addresses by granting them some permissions
 ADDPERMISSIONS      = 0x0000000000000000000000000000000000000000000000000000000000000004;
 // .... .... .... 1000 
 // Allows setting data on the controlled contract
