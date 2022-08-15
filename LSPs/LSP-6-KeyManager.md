@@ -189,7 +189,7 @@ STATICCALL          = 0x00000000000000000000000000000000000000000000000000000000
 // Allows delegate calling other contracts through the controlled contract
 DELEGATECALL        = 0x0000000000000000000000000000000000000000000000000000000000000040;
 // .... .... 1000 .... 
-// Allows deploying other contracts through the controlled contract
+// Allows deploying new contracts through the controlled contract
 DEPLOY              = 0x0000000000000000000000000000000000000000000000000000000000000080;
 // .... 0001 .... .... 
 // Allows transfering value to other contracts from the controlled contract
