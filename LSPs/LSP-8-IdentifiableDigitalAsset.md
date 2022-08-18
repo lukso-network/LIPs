@@ -322,6 +322,7 @@ _Parameters:_
 
 - `from` the sending address.
 - `to` the receiving address.
+- `from` and `to` cannot be the same address.
 - `tokenId` the token to transfer.
 - `force` when set to TRUE, `to` may be any address; when set to FALSE `to` must be a contract that supports [LSP1 UniversalReceiver][LSP1] and successfully processes a call to `universalReceiver(bytes32 typeId, bytes memory data)`.
 - `data` additional data the caller wants included in the emitted event, and sent in the hooks to `from` and `to` addresses.
@@ -356,6 +357,7 @@ _Requirements:_
 - `from`, `to`, `tokenId` lists are the same length.
 - no values in `from` can be the zero address.
 - no values in `to` can be the zero address.
+- `from` and `to` cannot be the same address at the same index of each lists.
 - each `tokenId` token must be owned by `from`.
 - If the caller is not `from`, it must be an operator of each `tokenId`.
 
