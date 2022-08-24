@@ -28,7 +28,7 @@ A commonality with [LSP8 IdentifiableDigitalAsset][LSP8] is desired so that the 
 
 ## Specification
 
-[ERC165] interface id: `0xe33f65c3`
+[ERC165] interface id: `0x5fcaac27`
 
 ### ERC725Y Data Keys
 
