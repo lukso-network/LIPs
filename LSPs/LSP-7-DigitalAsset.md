@@ -80,8 +80,8 @@ function authorizeOperator(address operator, uint256 amount) external;
 
 Sets `amount` as the amount of tokens `operator` address has access to from callers tokens.
 
-To increase or decrease the authorized amount of an operator, it's advised to call `revokeOperator(..)` function first, and then re-call `authorizeOperator(..)` with the new amount to authorize, to avoid front-running and Allowance Double-Spend Exploit.
-Check more information in this [document](https://docs.google.com/document/d/1YLPtQxZu1UAvO9cZ1O2RPXBbT0mooh4DYKjA_jp-RLM/).
+To increase or decrease the authorized amount of an operator, it's advised to call `revokeOperator(..)` function first, and then call `authorizeOperator(..)` with the new amount to authorize, to avoid front-running through an allowance double-spend exploit.
+Check more information [in this document](https://docs.google.com/document/d/1YLPtQxZu1UAvO9cZ1O2RPXBbT0mooh4DYKjA_jp-RLM/).
 
 MUST emit an [AuthorizedOperator event](#authorizedoperator).
 
