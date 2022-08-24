@@ -114,10 +114,10 @@ _Requirements:_
 - `operator` cannot be calling address.
 - `operator` cannot be the zero address.
 
-#### isOperatorFor
+#### authorizedAmountFor
 
 ```solidity
-function isOperatorFor(address tokenOwner, address operator) external view returns (uint256);
+function authorizedAmountFor(address tokenOwner, address operator) external view returns (uint256);
 ```
 
 Returns amount of tokens `operator` address has access to from `tokenOwner`.
@@ -300,7 +300,7 @@ interface ILSP7 is /* IERC165 */ {
 
     function revokeOperator(address to, uint256 amount) external;
 
-    function isOperatorFor(address operator, address tokenOwner) external view returns (uint256);
+    function authorizedAmountFor(address operator, address tokenOwner) external view returns (uint256);
 
     function transfer(address from, address to, uint256 amount, bool force, bytes memory data) external;
 
