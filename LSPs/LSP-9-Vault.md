@@ -128,6 +128,25 @@ event ValueReceived(address indexed sender, uint256 indexed value);
 MUST be emitted when a native token transfer was received.
 
 
+### Hooks
+
+Every contract that supports the LSP9 standard SHOULD implement these hooks:
+
+#### _notifyVaultSender
+
+Calls the `universalReceiver(..)` function on the old owner address when claiming ownership by the new owner, if the old owner address supports LSP1 InterfaceID, with the parameters below:
+
+- `typeId`: keccak256('LSP9VaultSender')
+- `data`: TBD
+
+#### _notifyVaultReceiver
+
+Calls the `universalReceiver(..)` function on the new owner address after claiming ownership, if it supports LSP1 InterfaceID, with the parameters below:
+
+- `typeId`: keccak256('LSP9VaultRecipient')
+- `data`: TBD
+
+
 ## Rationale
 
 The ERC725Y general data key value store allows for the ability to add any kind of information to the contract, which allows future use cases. The general execution allows full interactability with any smart contract or address. And the universal receiver allows the reaction to any future asset.
@@ -140,6 +159,13 @@ ERC725Y JSON Schema:
 
 ```json
 [
+    {
+        "name": "SupportedStandards:LSP9Vault",
+        "key": "0xeafec4d89fa9619884b600007c0334a14085fefa8b51ae5a40895018882bdb90",
+        "keyType": "Mapping",
+        "valueType": "bytes4",
+        "valueContent": "0x7c0334a1"
+    },
     {
         "name": "LSP1UniversalReceiverDelegate",
         "key": "0x0cfc51aec37c55a4d0b1a65c6255c4bf2fbdf6277f3cc0730c45b828b6db8b47",

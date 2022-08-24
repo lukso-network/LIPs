@@ -45,7 +45,7 @@ function decimals() external view returns (uint256);
 
 Returns the number of decimals used to get its user representation.
 
-If the token is an NFT then `0` SHOULD be used, otherwise `18` is the common value.
+If the token is non-divisible then `0` SHOULD be used, otherwise `18` is the common value.
 
 **Returns:** `uint256` the number of decimals to tranfrom a token value when displaying.
 
@@ -79,6 +79,9 @@ function authorizeOperator(address operator, uint256 amount) external;
 ```
 
 Sets `amount` as the amount of tokens `operator` address has access to from callers tokens.
+
+To increase or decrease the authorized amount of an operator, it's advised to call `revokeOperator(..)` function first, and then call `authorizeOperator(..)` with the new amount to authorize, to avoid front-running through an allowance double-spend exploit.
+Check more information [in this document](https://docs.google.com/document/d/1YLPtQxZu1UAvO9cZ1O2RPXBbT0mooh4DYKjA_jp-RLM/).
 
 MUST emit an [AuthorizedOperator event](#authorizedoperator).
 
@@ -202,6 +205,25 @@ event RevokedOperator(address indexed operator, address indexed tokenOwner);
 ```
 
 MUST be emitted when `tokenOwner` disables `operator`.
+
+
+### Hooks
+
+Every contract that supports the LSP7 standard SHOULD implement these hooks:
+
+#### _notifyTokenSender
+
+Calls the `universalReceiver(..)` function on the sender address when transferring or burning tokens, if it supports LSP1 InterfaceID, with the parameters below:
+
+- `typeId`: keccak256('LSP7TokensSender')
+- `data`: The data sent SHOULD be packed encoded and contain the `sender` (address), `receiver` (address), `amount` (uint256) and the `data` (bytes) respectively. 
+
+#### _notifyTokenReceiver
+
+Calls the `universalReceiver(..)` function on the receiver address when transferring or minting tokens, if it supports LSP1 InterfaceID, with the parameters below:
+
+- `typeId`: keccak256('LSP7TokensRecipient')
+- `data`: The data sent SHOULD be packed encoded and contain the `sender` (address), `receiver` (address), `amount` (uint256) and the `data` (bytes) respectively.
 
 ## Rationale
 <!--The rationale fleshes out the specification by describing what motivated the design and why particular design decisions were made. It should describe alternate designs that were considered and related work, e.g. how the feature is supported in other languages. The rationale may also provide evidence of consensus within the community, and should discuss important objections or concerns raised during discussion.-->
