@@ -123,7 +123,7 @@ MUST emit a [`OwnershipTransferred`](https://eips.ethereum.org/EIPS/eip-173#spec
 #### fallback
 
 ```solidity
-fallback() payable external;
+fallback() external payable;
 ```
 
 The fallback function allows for receiving native tokens, as well as arbitrary calldata. The reasoning is that it allows for Graffiti with transactions, or protocols to be built for offchain parsing.
