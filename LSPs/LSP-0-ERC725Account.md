@@ -120,7 +120,7 @@ MUST be called after `transferOwnership` by the current `pendingOwner` to finali
 
 MUST emit a [`OwnershipTransferred`](https://eips.ethereum.org/EIPS/eip-173#specification) event once the new owner has claimed ownership of the contract.
 
-#### fallback function
+#### fallback
 
 ```solidity
 function () payable external;
