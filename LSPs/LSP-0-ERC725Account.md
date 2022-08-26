@@ -120,6 +120,16 @@ MUST be called after `transferOwnership` by the current `pendingOwner` to finali
 
 MUST emit a [`OwnershipTransferred`](https://eips.ethereum.org/EIPS/eip-173#specification) event once the new owner has claimed ownership of the contract.
 
+#### fallback function
+
+```solidity
+function () payable external;
+```
+
+The fallback function allows for receiving native tokens, as well as arbitrary calldata. The reasoning is that it allows for Graffiti with transactions, or protocols to be built for offchain parsing.
+
+MUST emit a [`ValueReceived`](#valuereceived) event if value was present.
+
 
 ### Events
 
