@@ -117,10 +117,10 @@ _Requirements:_
 #### authorizedAmountFor
 
 ```solidity
-function authorizedAmountFor(address tokenOwner, address operator) external view returns (uint256);
+function authorizedAmountFor(address operator, address tokenOwner) external view returns (uint256);
 ```
 
-Returns amount of tokens `operator` address has access to from `tokenOwner`.
+Returns amount of tokens `operator` address is authorized to spent from `tokenOwner`.
 Operators can send and burn tokens on behalf of their owners. The tokenOwner is their own operator.
 
 _Parameters:_
