@@ -28,7 +28,7 @@ A commonality with [LSP8 IdentifiableDigitalAsset][LSP8] is desired so that the 
 
 ## Specification
 
-[ERC165] interface id: `0xe33f65c3`
+[ERC165] interface id: `0x5fcaac27`
 
 ### ERC725Y Data Keys
 
@@ -114,13 +114,13 @@ _Requirements:_
 - `operator` cannot be calling address.
 - `operator` cannot be the zero address.
 
-#### isOperatorFor
+#### authorizedAmountFor
 
 ```solidity
-function isOperatorFor(address operator, address tokenOwner) external view returns (uint256);
+function authorizedAmountFor(address operator, address tokenOwner) external view returns (uint256);
 ```
 
-Returns amount of tokens `operator` address has access to from `tokenOwner`.
+Returns amount of tokens `operator` address is authorized to spent from `tokenOwner`.
 Operators can send and burn tokens on behalf of their owners. The tokenOwner is their own operator.
 
 _Parameters:_
@@ -300,7 +300,7 @@ interface ILSP7 is /* IERC165 */ {
 
     function revokeOperator(address to, uint256 amount) external;
 
-    function isOperatorFor(address operator, address tokenOwner) external view returns (uint256);
+    function authorizedAmountFor(address operator, address tokenOwner) external view returns (uint256);
 
     function transfer(address from, address to, uint256 amount, bool force, bytes memory data) external;
 
