@@ -105,6 +105,8 @@ Sets the `newOwner` as `pendingOwner`.
 
 MUST be called only by `owner()`.
 
+MUST verify if `newOwner` is different from `address(this)`
+
 #### claimOwnership
 
 ```solidity
@@ -117,6 +119,21 @@ MUST be called after `transferOwnership` by the current `pendingOwner` to finali
 
 MUST emit a [`OwnershipTransferred`](https://eips.ethereum.org/EIPS/eip-173#specification) event once the new owner has claimed ownership of the contract.
 
+#### renounceOwnership
+
+```solidity
+function renounceOwnership() public;
+```
+Renounces ownership of the contract in 2 steps. Can only be called by the owner.
+
+MUST save current `block.number` to `_lastBlock` in first phase.
+
+MUST emit a [`RenounceOwnershipInitiated`](#renounceownershipinitiated) event during the first phase.
+
+MUST renounce ownership of the contract if and only if the `block.number` is bigger than `_lastBlock + 100` and smaller than `_lastBlock + 200`. 
+
+MUST emit [`OwnershipTransferred`](#ownershiptransferred) event during the second phase.
+
 ### Events
 
 #### ValueReceived
@@ -127,6 +144,13 @@ event ValueReceived(address indexed sender, uint256 indexed value);
 
 MUST be emitted when a native token transfer was received.
 
+#### RenounceOwnershipInitiated
+
+```solidity
+event RenounceOwnershipInitiated();
+```
+
+MUST be emitted when renouncing ownership of the contract is initiated.
 
 ### Hooks
 
