@@ -108,7 +108,7 @@ Sets the `newOwner` as `pendingOwner`.
 
 MUST be called only by `owner()`.
 
-MUST verify if `newOwner` is different from `address(this)`
+MUST check that `newOwner` is different from `address(this)`
 
 #### claimOwnership
 
@@ -127,15 +127,18 @@ MUST emit a [`OwnershipTransferred`](https://eips.ethereum.org/EIPS/eip-173#spec
 ```solidity
 function renounceOwnership() public;
 ```
-Renounces ownership of the contract in 2 steps. Can only be called by the owner.
 
-MUST save current `block.number` to `_lastBlock` in first phase.
+MUST be called only by `owner()`.
 
-MUST emit a [`RenounceOwnershipInitiated`](#renounceownershipinitiated) event during the first phase.
+MUST renounce ownership of the contract if and only if the `renounceOwnership(..)` function is called twice.
 
-MUST renounce ownership of the contract if and only if the `block.number` is bigger than `_lastBlock + 100` and smaller than `_lastBlock + 200`. 
+The second call MUST happen after a delay of 100 blocks from the first `renounceOwnership(..)` call.
 
-MUST emit [`OwnershipTransferred`](https://eips.ethereum.org/EIPS/eip-173#specification) event during the second phase.
+If the second call was not done in another 100 blocks after the delay, the renounce ownership phase should be reset.
+
+MUST emit a [`RenounceOwnershipInitiated`](#renounceownershipinitiated) event in the first call.
+
+MUST emit [`OwnershipTransferred`](https://eips.ethereum.org/EIPS/eip-173#specification) event after successfully renouncing ownership.
 
 #### fallback
 
