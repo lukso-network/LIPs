@@ -39,7 +39,7 @@ This allows us to:
 
 ## Specification
 
-[ERC165] interface id: `0x9a3bfe88`
+[ERC165] interface id: `0xeb6be62e`
 
 _This interface id can be used to detect ERC725Account contracts._
 

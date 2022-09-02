@@ -24,7 +24,7 @@ This standard defines a vault that can hold assets and interact with other contr
 
 ## Specification
 
-[ERC165] interface id: `0x8c1d44f6`
+[ERC165] interface id: `0xfd4d5c50`
 
 _This interface id can be used to detect Vault contracts._
 
