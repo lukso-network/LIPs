@@ -110,7 +110,7 @@ Sets the `newOwner` as `pendingOwner`.
 
 MUST be called only by `owner()`.
 
-The `newOwner` MUST NOT be `address(this)`
+The `newOwner` MUST NOT be the contract itself `address(this)`
 
 #### claimOwnership
 
@@ -132,13 +132,13 @@ function renounceOwnership() public;
 
 Leaves the contract without an owner. Once ownership of the contract is renounced, it MUST NOT be possible to call the functions restricted to the owner only.
 
-Since renouncing ownership a sensitive operation, it SHOULD be done as a two step process by calling  `renounceOwnership(..)` twice. First to initiate the process, second as a confirmation.
+Since renouncing ownership is a sensitive operation, it SHOULD be done as a two step process by calling  `renounceOwnership(..)` twice. First to initiate the process, second as a confirmation.
 
 _Requirements:_
 
 - MUST be called only by the `owner()` only.
-- second call MUST happen after a delay of 100 blocks from the first `renounceOwnership(..)` call.
-- If the second call was not done in another 100 blocks after the delay, the renounce ownership phase should be reset.
+- The second call MUST happen within a delay of 100 blocks from the first `renounceOwnership(..)` call.
+- If the 100 block delay has expired on the second call, the renounce ownership phase SHOULD be reset.
 - MUST emit a [`RenounceOwnershipInitiated`](#renounceownershipinitiated) event in the first call.
 - MUST emit [`OwnershipTransferred`](https://eips.ethereum.org/EIPS/eip-173#specification) event after successfully renouncing ownership.
 
