@@ -35,6 +35,8 @@ This allows us to:
 - Allow the account to be informed and react to receiving assets through [LSP1 UniversalReceiver](./LSP-1-UniversalReceiver.md)
 - Define a number of data key-values pairs to attach profile and other information through additional standards like [LSP3 UniversalProfile-Metadata](./LSP-3-UniversalProfile-Metadata.md)
 - Allow signature verification through [ERC1271](https://eips.ethereum.org/EIPS/eip-1271)
+- can execute any smart contract and deploy smart contracts
+- is highly extensible though additional standardisation of the key/value data stored.
 
 
 ## Specification
