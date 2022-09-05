@@ -40,14 +40,14 @@ This standard also expects data keys from [LSP4 DigitalAsset-Metadata][LSP4#erc7
 #### decimals
 
 ```solidity
-function decimals() external view returns (uint256);
+function decimals() external view returns (uint8);
 ```
 
 Returns the number of decimals used to get its user representation.
 
 If the token is non-divisible then `0` SHOULD be used, otherwise `18` is the common value.
 
-**Returns:** `uint256` the number of decimals to tranfrom a token value when displaying.
+**Returns:** `uint8` the number of decimals to tranfrom a token value when displaying.
 
 #### totalSupply
 
@@ -290,7 +290,7 @@ interface ILSP7 is /* IERC165 */ {
     event RevokedOperator(address indexed operator, address indexed tokenOwner);
 
 
-    function decimals() external view returns (uint256);
+    function decimals() external view returns (uint8);
 
     function totalSupply() external view returns (uint256);
 
