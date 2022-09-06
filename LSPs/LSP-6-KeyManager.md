@@ -197,21 +197,24 @@ TRANSFERVALUE       = 0x00000000000000000000000000000000000000000000000000000000
 // .... 0010 .... .... 
 // Allows signing on behalf of the controlled account, for example for login purposes
 SIGN                = 0x0000000000000000000000000000000000000000000000000000000000000200;
-// .... 0100 .... .... 
-// Same as SETDATA, but without restricting to specific data keys
-SUPER_SETDATA       = 0x0000000000000000000000000000000000000000000000000000000000000400;
+// .... 0100 .... ....
+// Allows encrypting messages on behalf of the controlled account, for example for private messages
+ENCRYPT             = 0x0000000000000000000000000000000000000000000000000000000000000400
 // .... 1000 .... .... 
-// Same as TRANSFERVALUE, but without restricting to specific addresses, functions or standards
-SUPER_TRANSFERVALUE = 0x0000000000000000000000000000000000000000000000000000000000000800;
+// Same as SETDATA, but without restricting to specific data keys
+SUPER_SETDATA       = 0x0000000000000000000000000000000000000000000000000000000000000800;
 // 0001 .... .... .... 
+// Same as TRANSFERVALUE, but without restricting to specific addresses, functions or standards
+SUPER_TRANSFERVALUE = 0x0000000000000000000000000000000000000000000000000000000000001000;
+//  0010 .... .... .... 
 // Same as CALL, but without restricting to specific addresses, functions or standards
-SUPER_CALL          = 0x0000000000000000000000000000000000000000000000000000000000001000;
-// 0010 .... .... .... 
+SUPER_CALL          = 0x0000000000000000000000000000000000000000000000000000000000002000;
+//  0100 .... .... .... 
 // Same as STATICCALL, but without restricting to specific addresses, functions or standards
-SUPER_STATICCALL    = 0x0000000000000000000000000000000000000000000000000000000000002000;
-// 0100 .... .... .... 
+SUPER_STATICCALL    = 0x0000000000000000000000000000000000000000000000000000000000004000;
+//  1000 .... .... .... 
 // Same as DELEGATECALL, but without restricting to specific addresses, functions or standards
-SUPER_DELEGATECALL  = 0x0000000000000000000000000000000000000000000000000000000000004000;
+SUPER_DELEGATECALL  = 0x0000000000000000000000000000000000000000000000000000000000008000;
 ```
 
 ![LSP6 - KeyManager-permissions-examples](../assets/LSP-6/lsp6-default-permissions-range.jpeg)
