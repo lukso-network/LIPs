@@ -137,7 +137,7 @@ Since renouncing ownership is a sensitive operation, it SHOULD be done as a two 
 _Requirements:_
 
 - MUST be called only by the `owner()` only.
-- The second call MUST happen within a delay of 100 blocks from the first `renounceOwnership(..)` call.
+- The second call MUST happen AFTER the delay if 100 blocks and then within the next 100 blocks from the first `renounceOwnership(..)` call.
 - If the 100 block delay has expired on the second call, the renounce ownership phase SHOULD be reset.
 - MUST emit a [`RenounceOwnershipInitiated`](#renounceownershipinitiated) event in the first call.
 - MUST emit [`OwnershipTransferred`](https://eips.ethereum.org/EIPS/eip-173#specification) event after successfully renouncing ownership.
