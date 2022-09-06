@@ -129,13 +129,14 @@ Leaves the contract without an owner. Once ownership of the contract is renounce
 
 Since renouncing ownership is a sensitive operation, it SHOULD be done as a two step process by calling  `renounceOwnership(..)` twice. First to initiate the process, second as a confirmation.
 
-_Requirements:_
+*Requirements:*
 
 - MUST be called only by the `owner()` only.
-- The second call MUST happen AFTER the delay if 100 blocks and then within the next 100 blocks from the first `renounceOwnership(..)` call.
-- If the 100 block delay has expired on the second call, the renounce ownership phase SHOULD be reset.
-- MUST emit a [`RenounceOwnershipInitiated`](#renounceownershipinitiated) event in the first call.
-- MUST emit [`OwnershipTransferred`](https://eips.ethereum.org/EIPS/eip-173#specification) event after successfully renouncing ownership.
+- The second call MUST happen AFTER the delay of 100 blocks and within the next 100 blocks from the first `renounceOwnership(..)` call.
+- If the 200 block has passed, the `renounceOwnership(..)` call phase SHOULD reset the process, and a new one will be initated.
+
+MUST emit a [`RenounceOwnershipInitiated`](#renounceownershipinitiated) event on the first `renounceOwnership(..)` call.
+MUST emit [`OwnershipTransferred`](https://eips.ethereum.org/EIPS/eip-173#specification) event after successfully renouncing the ownership.
 
 ### Events
 
