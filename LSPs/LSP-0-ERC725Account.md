@@ -110,6 +110,8 @@ Sets the `newOwner` as `pendingOwner`.
 
 MUST be called only by `owner()`.
 
+The `newOwner` MUST NOT be the contract itself `address(this)`
+
 #### claimOwnership
 
 ```solidity
@@ -122,6 +124,25 @@ MUST be called after `transferOwnership` by the current `pendingOwner` to finali
 
 MUST emit a [`OwnershipTransferred`](https://eips.ethereum.org/EIPS/eip-173#specification) event once the new owner has claimed ownership of the contract.
 
+#### renounceOwnership
+
+```solidity
+function renounceOwnership() public;
+```
+
+Leaves the contract without an owner. Once ownership of the contract is renounced, it MUST NOT be possible to call the functions restricted to the owner only.
+
+Since renouncing ownership is a sensitive operation, it SHOULD be done as a two step process by calling  `renounceOwnership(..)` twice. First to initiate the process, second as a confirmation.
+
+*Requirements:*
+
+- MUST be called only by the `owner()` only.
+- The second call MUST happen AFTER the delay of 100 blocks and within the next 100 blocks from the first `renounceOwnership(..)` call.
+- If the 200 block has passed, the `renounceOwnership(..)` call phase SHOULD reset the process, and a new one will be initated.
+
+MUST emit a [`RenounceOwnershipInitiated`](#renounceownershipinitiated) event on the first `renounceOwnership(..)` call.
+MUST emit [`OwnershipTransferred`](https://eips.ethereum.org/EIPS/eip-173#specification) event after successfully renouncing the ownership.
+
 #### fallback
 
 ```solidity
@@ -131,7 +152,6 @@ fallback() external payable;
 The fallback function allows for receiving native tokens, as well as arbitrary calldata. The reasoning is that it allows for Graffiti with transactions, or protocols to be built for offchain parsing.
 
 MUST emit a [`ValueReceived`](#valuereceived) event if value was present.
-
 
 ### Events
 
@@ -143,6 +163,13 @@ event ValueReceived(address indexed sender, uint256 indexed value);
 
 MUST be emitted when a native token transfer was received.
 
+#### RenounceOwnershipInitiated
+
+```solidity
+event RenounceOwnershipInitiated();
+```
+
+MUST be emitted when renouncing ownership of the contract is initiated.
 
 ## Rationale
 
