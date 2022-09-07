@@ -69,9 +69,33 @@ Check [LSP1-UniversalReceiver] and [LSP2-ERC725YJSONSchema] for more information
 
 See the [Interface Cheat Sheet](#interface-cheat-sheet) for details.
 
-Contains the methods from:
-- [ERC725](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md#specification) (General data key-value store, and general executor)
-- [LSP1](./LSP-1-UniversalReceiver.md#specification), 
+**Contains the methods from** [ERC725](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md#specification) (General data key-value store, and general executor) with overriding:
+
+#### execute
+
+```solidity
+function execute(uint256 operationType, address to, uint256 value, bytes memory data) public payable returns(bytes memory)
+```
+
+Executes a call on any other smart contracts, transfers the blockchains native token, or deploys a new smart contract.
+MUST only be called by the current owner of the contract.
+
+The following `operationType` MUST exist:
+
+- `0` for `CALL`
+- `1` for `CREATE`
+- `2` for `CREATE2`
+- `3` for `STATICCALL`
+
+The following `operationType` COULD exist:
+
+- `4` for `DELEGATECALL` - **NOTE** This is a potentially dangerous operation
+
+Check [`execute(...)`](https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#execute) function of [ERC725X](https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#erc725x) for more details.
+
+**Contains the methods from:**
+
+- [LSP1](./LSP-1-UniversalReceiver.md#specification)
 - Claim Ownership, a modified version of [ERC173](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-173.md#specification) (Ownable). *See below for details*
 
 #### owner
