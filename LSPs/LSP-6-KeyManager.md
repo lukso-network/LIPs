@@ -167,52 +167,60 @@ By setting the value to `0xeafec4d89fa9619884b6000000000000000000000000000000000
 The following permissions are allowed in the BitArray of the `AddressPermissions:Permissions:<address>` data key for an address. The order can not be changed:
 
 ```js
-// 0000 0000 0000 0001 
+// right most bits ----------
+
+// [....] 0000 0000 0000 0001 
 // Allows changing the owner of the controlled contract
 CHANGEOWNER         = 0x0000000000000000000000000000000000000000000000000000000000000001;
-// .... .... .... 0010 
+// [....] .... .... .... 0010 
 // Allows changing the permissions (adding + removing) of addresses
 CHANGEPERMISSIONS   = 0x0000000000000000000000000000000000000000000000000000000000000002;
-// .... .... .... 0100 
+// [....] .... .... .... 0100 
 // Allows adding new controller addresses by granting them some permissions
 ADDPERMISSIONS      = 0x0000000000000000000000000000000000000000000000000000000000000004;
-// .... .... .... 1000 
+// [....] .... .... .... 1000 
 // Allows setting data on the controlled contract
 SETDATA             = 0x0000000000000000000000000000000000000000000000000000000000000008;
-// .... .... 0001 .... 
+// [....] .... .... 0001 .... 
 // Allows calling other contracts through the controlled contract
 CALL                = 0x0000000000000000000000000000000000000000000000000000000000000010;
-// .... .... 0010 .... 
+// [....] .... .... 0010 .... 
 // Allows static calling other contracts through the controlled contract, while restrcting any state modifications during the call (or any subcalls, if present)
 STATICCALL          = 0x0000000000000000000000000000000000000000000000000000000000000020;
-// .... .... 0100 .... 
+// [....] .... .... 0100 .... 
 // Allows delegate calling other contracts through the controlled contract
 DELEGATECALL        = 0x0000000000000000000000000000000000000000000000000000000000000040;
-// .... .... 1000 .... 
+// [....] .... .... 1000 .... 
 // Allows deploying new contracts through the controlled contract
 DEPLOY              = 0x0000000000000000000000000000000000000000000000000000000000000080;
-// .... 0001 .... .... 
+// [....] .... 0001 .... .... 
 // Allows transfering value to other contracts from the controlled contract
 TRANSFERVALUE       = 0x0000000000000000000000000000000000000000000000000000000000000100;
-// .... 0010 .... .... 
-// Allows signing on behalf of the controlled account, for example for login purposes
+// [....] .... 0010 .... .... 
+// Allows signing on behalf of the controlled contract, for example for login purposes
 SIGN                = 0x0000000000000000000000000000000000000000000000000000000000000200;
-// .... 0100 .... ....
-// Allows encrypting messages on behalf of the controlled account, for example for private messages
+// [....] .... 0100 .... ....
+// Allows encrypting messages on behalf of the controlled contract, for example for private messages
 ENCRYPT             = 0x0000000000000000000000000000000000000000000000000000000000000400
-// .... 1000 .... .... 
+// [....] .... 1000 .... ....
+// Allows decrypt messages on behalf of the controlled contract, for example for private messages
+DECRYPT             = 0x0000000000000000000000000000000000000000000000000000000000000800
+
+// left most bits ----------
+
+// .... 1000 .... .... [....]
 // Same as SETDATA, but without restricting to specific data keys
 SUPER_SETDATA       = 0x0000000000000000000000000000000000000000000000000000000000000800;
-// 0001 .... .... .... 
+// 0001 .... .... .... [....]
 // Same as TRANSFERVALUE, but without restricting to specific addresses, functions or standards
 SUPER_TRANSFERVALUE = 0x0000000000000000000000000000000000000000000000000000000000001000;
-//  0010 .... .... .... 
+//  0010 .... .... .... [....]
 // Same as CALL, but without restricting to specific addresses, functions or standards
 SUPER_CALL          = 0x0000000000000000000000000000000000000000000000000000000000002000;
-//  0100 .... .... .... 
+//  0100 .... .... .... [....]
 // Same as STATICCALL, but without restricting to specific addresses, functions or standards
 SUPER_STATICCALL    = 0x0000000000000000000000000000000000000000000000000000000000004000;
-//  1000 .... .... .... 
+//  1000 .... .... .... [....]
 // Same as DELEGATECALL, but without restricting to specific addresses, functions or standards
 SUPER_DELEGATECALL  = 0x0000000000000000000000000000000000000000000000000000000000008000;
 ```
