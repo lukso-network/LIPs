@@ -264,7 +264,7 @@ interface ILSP9  /* is ERC165 */ {
     
     // ERC725Y
 
-    event DataChanged(bytes32 indexed dataKey);
+    event DataChanged(bytes32 indexed dataKey, bytes dataValue);
 
 
     function getData(bytes32 dataKey) external view returns (bytes memory dataValue);
