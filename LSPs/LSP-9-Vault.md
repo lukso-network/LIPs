@@ -278,7 +278,7 @@ interface ILSP9  /* is ERC165 */ {
 
     // LSP1
 
-    event UniversalReceiver(address indexed from, uint256 value, bytes32 indexed typeId, bytes indexed returnedValue, bytes receivedData);
+    event UniversalReceiver(address indexed from, uint256 indexed value, bytes32 indexed typeId, bytes receivedData, bytes returnedValue);
     
 
     function universalReceiver(bytes32 typeId, bytes memory data) external payable returns (bytes memory);

@@ -58,7 +58,7 @@ _Returns:_ `bytes`, which can be used to encode response values.
 #### UniversalReceiver
 
 ```solidity
-event UniversalReceiver(address indexed from, uint256 value, bytes32 indexed typeId, bytes indexed returnedValue, bytes receivedData)
+event UniversalReceiver(address indexed from, uint256 indexed value, bytes32 indexed typeId, bytes receivedData, bytes returnedValue);
 ```
 
 This event MUST be emitted when the `universalReceiver` function is succesfully executed.
@@ -71,9 +71,9 @@ _Values:_
 
 - `typeId` is the hash of a standard, or the type relative to the `data` received.
 
-- `returnedValue` is the data returned from the `universalReceiver(..)` function.
-
 - `receivedData` is a byteArray of arbitrary data received.
+
+- `returnedValue` is the data returned from the `universalReceiver(..)` function.
 
 
 ## UniversalReceiverDelegate
@@ -168,7 +168,7 @@ contract MyWallet is ERC165, ILSP1 {
     }
 
     function universalReceiver(bytes32 typeId, bytes memory data) public payable returns (bytes memory) {
-        emit UniversalReceiver(msg.sender, msg.value, typeId, 0x0, data);
+        emit UniversalReceiver(msg.sender, msg.value, typeId, data, 0x);
         return 0x0;
     }
 }
@@ -229,7 +229,7 @@ contract MyWallet is ERC165, ILSP1 {
             returnedData = ILSP1Delegate(universalReceiverDelegate).universalReceiverDelegate(msg.sender, msg.value, typeId, data);
         }
 
-        emit UniversalReceiver(msg.sender, msg.value, typeId, returnedData, data);
+        emit UniversalReceiver(msg.sender, msg.value, typeId, data, returnedData);
         return returnedData;
     }
 }
@@ -259,7 +259,7 @@ contract UniversalReceiverDelegate is ERC165, ILSP1Delegate {
 
 interface ILSP1  /* is ERC165 */ {
 
-    event UniversalReceiver(address indexed from, uint256 value, bytes32 indexed typeId, bytes indexed returnedValue, bytes receivedData);
+    event UniversalReceiver(address indexed from, uint256 value, bytes32 indexed typeId, bytes receivedData, bytes returnedValue);
     
     
     function universalReceiver(bytes32 typeId, bytes memory data) external payable returns (bytes memory);
