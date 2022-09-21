@@ -197,14 +197,14 @@ DEPLOY              = 0x00000000000000000000000000000000000000000000000000000000
 // Allows setting data on the controlled contract
 SETDATA             = 0x0000000000000000000000000000000000000000000000000000000000000100;
 // [....] .... 0010 .... .... 
-// Allows signing on behalf of the controlled contract, for example for login purposes
-SIGN                = 0x0000000000000000000000000000000000000000000000000000000000000200;
-// [....] .... 0100 .... ....
 // Allows encrypting messages on behalf of the controlled contract, for example for private messages
-ENCRYPT             = 0x0000000000000000000000000000000000000000000000000000000000000400
-// [....] .... 1000 .... ....
+ENCRYPT                = 0x0000000000000000000000000000000000000000000000000000000000000200;
+// [....] .... 0100 .... ....
 // Allows decrypt messages on behalf of the controlled contract, for example for private messages
-DECRYPT             = 0x0000000000000000000000000000000000000000000000000000000000000800
+DECRYPT             = 0x0000000000000000000000000000000000000000000000000000000000000400
+// [....] .... 1000 .... ....
+// Allows signing on behalf of the controlled contract, for example for login purposes
+SIGN             = 0x0000000000000000000000000000000000000000000000000000000000000800
 
 // left most bits ----------
 
