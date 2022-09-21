@@ -169,58 +169,41 @@ The following permissions are allowed in the BitArray of the `AddressPermissions
 ```js
 // right most bits ----------
 
-// [....] 0000 0000 0000 0001 
 // Allows changing the owner of the controlled contract
 CHANGEOWNER         = 0x0000000000000000000000000000000000000000000000000000000000000001;
-// [....] .... .... .... 0010 
 // Allows adding new controller addresses by granting them some permissions
 ADDPERMISSIONS      = 0x0000000000000000000000000000000000000000000000000000000000000002;
-// [....] .... .... .... 0100
 // Allows changing the permissions of addresses (editing + removing permissions)
 CHANGEPERMISSIONS   = 0x0000000000000000000000000000000000000000000000000000000000000004;
-// [....] .... .... .... 1000 
 // Allows transferring value to addresses from the controlled contract
 TRANSFERVALUE       = 0x0000000000000000000000000000000000000000000000000000000000000008;
-// [....] .... .... 0001 .... 
 // Allows calling other contracts through the controlled contract
 CALL                = 0x0000000000000000000000000000000000000000000000000000000000000010;
-// [....] .... .... 0010 .... 
 // Allows static calling other contracts through the controlled contract, while restricting any state modifications during the call (or any sub-calls, if present)
 STATICCALL          = 0x0000000000000000000000000000000000000000000000000000000000000020;
-// [....] .... .... 0100 .... 
 // Allows delegate calling other contracts through the controlled contract
 DELEGATECALL        = 0x0000000000000000000000000000000000000000000000000000000000000040;
-// [....] .... .... 1000 .... 
 // Allows deploying new contracts through the controlled contract
 DEPLOY              = 0x0000000000000000000000000000000000000000000000000000000000000080;
-// [....] .... 0001 .... .... 
 // Allows setting data on the controlled contract
 SETDATA             = 0x0000000000000000000000000000000000000000000000000000000000000100;
-// [....] .... 0010 .... .... 
 // Allows encrypting messages on behalf of the controlled contract, for example for private messages
-ENCRYPT                = 0x0000000000000000000000000000000000000000000000000000000000000200;
-// [....] .... 0100 .... ....
+ENCRYPT             = 0x0000000000000000000000000000000000000000000000000000000000000200;
 // Allows decrypt messages on behalf of the controlled contract, for example for private messages
 DECRYPT             = 0x0000000000000000000000000000000000000000000000000000000000000400
-// [....] .... 1000 .... ....
 // Allows signing on behalf of the controlled contract, for example for login purposes
-SIGN             = 0x0000000000000000000000000000000000000000000000000000000000000800
+SIGN                = 0x0000000000000000000000000000000000000000000000000000000000000800
 
 // left most bits ----------
 
-// .... 1000 .... .... [....]
 // Same as SETDATA, but without restricting to specific data keys
 SUPER_SETDATA       = 0x0800000000000000000000000000000000000000000000000000000000000000;
-// 0001 .... .... .... [....]
 // Same as CALL, but without restricting to specific addresses, functions or standards
 SUPER_CALL          = 0x1000000000000000000000000000000000000000000000000000000000000000;
-// 0010 .... .... .... [....]
 // Same as STATICCALL, but without restricting to specific addresses, functions or standards
 SUPER_STATICCALL    = 0x2000000000000000000000000000000000000000000000000000000000000000;
-// 0100 .... .... .... [....]
 // Same as DELEGATECALL, but without restricting to specific addresses, functions or standards
 SUPER_DELEGATECALL  = 0x4000000000000000000000000000000000000000000000000000000000000000;
-// 1000 .... .... .... [....]
 // Same as TRANSFERVALUE, but without restricting to specific addresses, functions or standards
 SUPER_TRANSFERVALUE = 0x8000000000000000000000000000000000000000000000000000000000000000;
 ```
