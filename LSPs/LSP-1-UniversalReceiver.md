@@ -73,7 +73,7 @@ _Values:_
 
 - `receivedData` is a byteArray of arbitrary data received.
 
-- `returnedValue` is the data returned from the `universalReceiver(..)` function.
+- `returnedValue` is the data returned by the `universalReceiver(..)` function.
 
 
 ## UniversalReceiverDelegate
