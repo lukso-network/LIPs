@@ -6,7 +6,7 @@ discussions-to: https://discord.gg/E2rJPP4
 status: Draft
 type: LSP
 created: 2021-09-21
-requires: LSP1, LSP2, LSP14, ERC165, ERC725X, ERC725Y
+requires: ERC165, ERC725X, ERC725Y, LSP1, LSP2, LSP14
 ---
 
 
@@ -71,14 +71,6 @@ See the [Interface Cheat Sheet](#interface-cheat-sheet) for details.
 
 **Contains the methods from** [ERC725](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md#specification) (General data key-value store, and general executor) with overriding:
 
-#### transferOwnership
-
-Similar to [`transferOwnership(address)`](./LSP-14-Ownable2Step.md#transferownership) from LSP14.
-
-**Additional requirements:**
-
-- The `newOwner` MUST NOT be the contract itself `address(this)`.
-
 #### execute
 
 ```solidity
@@ -105,6 +97,18 @@ Check [`execute(...)`](https://github.com/ERC725Alliance/ERC725/blob/develop/doc
 
 - [LSP1](./LSP-1-UniversalReceiver.md#specification)
 - [LSP14](./LSP-14-Ownable2Step.md#specification)
+
+#### transferOwnership
+
+```solidity
+function transferOwnership(address newOwner) external;
+```
+
+Similar to [`transferOwnership(address)`](./LSP-14-Ownable2Step.md#transferownership) from LSP14.
+
+**Additional requirements:**
+
+- The `newOwner` MUST NOT be the contract itself `address(this)`.
 
 ### Events
 

@@ -81,6 +81,10 @@ Contains the methods from:
 
 #### transferOwnership
 
+```solidity
+function transferOwnership(address newOwner) external;
+```
+
 Similar to [`transferOwnership(address)`](./LSP-14-Ownable2Step.md#transferownership) from LSP14.
 
 **Additional requirements:**
