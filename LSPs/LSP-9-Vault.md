@@ -71,6 +71,14 @@ See the [Interface Cheat Sheet](#interface-cheat-sheet) for details.
 
 **Contains the methods from** [ERC725](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md#specification) (General data key-value store, and general executor) with overriding:
 
+#### transferOwnership
+
+Similar to [`transferOwnership(address)`](./LSP-14-Ownable2Step.md#transferownership) from LSP14.
+
+**Additional requirements:**
+
+- The `newOwner` MUST NOT be the contract itself `address(this)`.
+
 #### execute
 
 ```solidity
@@ -96,7 +104,7 @@ Check [`execute(...)`](https://github.com/ERC725Alliance/ERC725/blob/develop/doc
 **Contains the methods from:**
 
 - [LSP1](./LSP-1-UniversalReceiver.md#specification)
-- [LLSP14](./LSP-14-Ownable2Step.md#specification)
+- [LSP14](./LSP-14-Ownable2Step.md#specification)
 
 ### Events
 
@@ -190,6 +198,8 @@ interface ILSP9  /* is ERC165 */ {
     event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
 
     event RenounceOwnershipInitiated();
+
+    event OwnershipRenounced();
 
 
     function owner() external view returns (address);

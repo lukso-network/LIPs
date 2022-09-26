@@ -13,7 +13,7 @@ requires: ERC173, LSP1
 <!--"If you can't explain it simply, you don't understand it well enough." Provide a simplified and layman-accessible explanation of the LIP.-->
 This standard describes an extended version of [EIP173](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-173.md) that uses a 2-step process to transfer or renounce ownership of a contract, instead of instant execution.
 
-In addition, this standard defines hooks that call the `universalReceiver(...)` function of the current owner and new owner, if these addresses are contracts that implement LSP1. This aims to:
+In addition, this standard defines hooks that call the [`universalReceiver(...)`] function of the current owner and new owner, if these addresses are contracts that implement LSP1. This aims to:
 - notify when the new owner of the contract should accept ownership.
 - notify the previous and new owner when ownership of the contract has been fully transferred.
 
@@ -29,7 +29,7 @@ Transferring ownership of the contract in a single transaction does not guarante
 
 Letting the new owner accept ownership of the contract guarantees that the contract is owned by an address (EOA or contract) that can be controlled, and that control over the contract implementing LSP14 will not be lost.
 
-Making transfer of ownership a two-step process also enables to give a choice for the new owner in deciding if he wants to become the owner of the contract or not.
+Finally, transferring ownership of the contract in two-steps enables the new owner to decide if he wants to become the new owner or not.
 
 
 ## Specification
@@ -59,7 +59,7 @@ function pendingOwner() external view returns (address);
 
 Returns the `address` of the upcoming new owner that was initiated by the current owner via  `transferOwnership(address)`. 
 
-*Requirements:*
+**Requirements:**
 
 - MUST be `address(0)` if no ownership transfer is in progress.
 - MUST be set to a new `address` when transferring ownership of the contract via `transferOwnership(address)`.
@@ -76,9 +76,16 @@ Sets the `newOwner` as `pendingOwner()`. To transfer ownership fully of the cont
 
 MUST emit a [`OwnershipTransferredStarted`](#ownershiptransferstarted) event once the new owner was set as `pendingOwner()`.
 
-*Requirements:*
+**Requirements:**
 
 - MUST only be called by the current `owner()` of the contract.
+
+**LSP1 Hooks:**
+
+- If the new owner address supports LSP1 interface, SHOULD call the new owner's [`universalReceiver(...)`] function with the following parameters below:
+
+    - `typeId`: keccak256('LSP14OwnershipTransferStarted')
+    - `data`: TBD
 
 #### acceptOwnership
 
@@ -92,15 +99,27 @@ This function MUST be called as the second step (after `transferOwnership(addres
 
 MUST emit a [`OwnershipTransferred`](https://eips.ethereum.org/EIPS/eip-173#specification) event once the new owner has claimed ownership of the contract.
 
-*Requirements:*
+**Requirements:**
 
 - MUST only be called by the `pendingOwner()`.
+
+**LSP1 Hooks:**
+
+- if the previous owner is a contract that supports LSP1 interface, SHOULD call the previous owner's [`universalReceiver(...)`] function with the parameters below:
+
+    - `typeId`: keccak256('LSP14OwnershipTransferred_SenderNotification')
+    - `data`: TBD
+
+- if the new owner is a contract that supports LSP1 interface, SHOULD call the new owner's [`universalReceiver(...)`] function with the parameters below:
+
+    - `typeId`: keccak256('LSP14OwnershipTransferred_RecipientNotification')
+    - `data`: TBD
 
 
 #### renounceOwnership
 
 ```solidity
-function renounceOwnership() public;
+function renounceOwnership() external;
 ```
 
 Leaves the contract without an owner. Once ownership of the contract is renounced, it MUST NOT be possible to call functions restricted to the owner only.
@@ -110,7 +129,7 @@ Since renouncing ownership is a sensitive operation, it SHOULD be done as a two 
 MUST emit a [`RenounceOwnershipInitiated`](#renounceownershipinitiated) event on the first `renounceOwnership(..)` call.
 MUST emit [`OwnershipTransferred`](https://eips.ethereum.org/EIPS/eip-173#specification) event after successfully renouncing the ownership.
 
-*Requirements:*
+**Requirements:**
 
 - MUST be called only by the `owner()` only.
 - The second call MUST happen AFTER the delay of 100 blocks and within the next 100 blocks from the first `renounceOwnership(..)` call.
@@ -132,15 +151,6 @@ _Values:_
 
 - `newOwner` Address that will receive ownership of the contract that implements LSP14. 
 
-#### RenounceOwnershipStarted
-
-```solidity
-event RenounceOwnershipStarted();
-```
-
-MUST be emitted when the process of renouncing ownership of the contract is initiated.
-
-
 #### OwnershipTransferred
 
 ```solidity
@@ -149,37 +159,21 @@ event OwnershipTransferred(address indexed previousOwner, address indexed newOwn
 
 MUST be emitted when ownership of the contract has been transferred.
 
-### Hooks
-
-Every contract that supports the LSP14 standard SHOULD implement these hooks:
-
-#### _notifyUniversalReceiver
+#### RenounceOwnershipStarted
 
 ```solidity
-function _notifyUniversalReceiver(
-    address universalReceiver,
-    bytes32 typeId,
-    bytes memory data
-)
+event RenounceOwnershipStarted();
 ```
 
-Calls the `universalReceiver(..)` function on the `universalReceiver` address in the following situations:
+MUST be emitted when the process of renouncing ownership of the contract is initiated.
 
-- When transferring ownership to the new owner, if the new owner address supports LSP1 InterfaceID, with the parameters below:
+#### OwnershipRenounced
 
-    - `typeId`: keccak256('LSP14OwnershipTransferStarted')
-    - `data`: TBD
+```solidity
+event OwnershipRenounced();
+```
 
-- When accepting ownership by the new owner, if the old owner address supports LSP1 InterfaceID, with the parameters below:
-
-    - `typeId`: keccak256('LSP14OwnershipTransferred_SenderNotification')
-    - `data`: TBD
-
-- When accepting ownership by the new owner, if the new owner address supports LSP1 InterfaceID, with the parameters below:
-
-    - `typeId`: keccak256('LSP14OwnershipTransferred_RecipientNotification')
-    - `data`: TBD
-
+MUST be emitted when ownership of the contract has been renounced.
 
 ## Interface Cheat Sheet
 
@@ -193,6 +187,8 @@ interface ILSP14  /* is ERC173 */ {
 
     event RenounceOwnershipInitiated();
 
+    event OwnershipRenounced();
+
 
     function owner() external view returns (address);
     
@@ -200,7 +196,7 @@ interface ILSP14  /* is ERC173 */ {
 
     function transferOwnership(address newOwner) external; // onlyOwner
 
-    function acceptOwnership() external;
+    function acceptOwnership() external; // only pendingOwner()
     
     function renounceOwnership() external; // onlyOwner
 
@@ -214,3 +210,4 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 [ERC165]: <https://eips.ethereum.org/EIPS/eip-165>
 [LSP1-UniversalReceiver]: <./LSP-1-UniversalReceiver.md>
 [LSP2-ERC725YJSONSchema]: <./LSP-2-ERC725YJSONSchema.md>
+[`universalReceiver(...)`]: <./LSP-1-UniversalReceiver.md#universalreceiver>

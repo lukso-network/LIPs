@@ -79,6 +79,14 @@ Contains the methods from:
 - [LSP1](./LSP-1-UniversalReceiver.md#specification)
 - [LSP14](./LSP-14-Ownable2Step.md#specification)
 
+#### transferOwnership
+
+Similar to [`transferOwnership(address)`](./LSP-14-Ownable2Step.md#transferownership) from LSP14.
+
+**Additional requirements:**
+
+- The `newOwner` MUST NOT be the contract itself `address(this)`.
+
 #### fallback
 
 ```solidity
@@ -178,6 +186,8 @@ interface ILSP0  /* is ERC165 */ {
     event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
 
     event RenounceOwnershipInitiated();
+
+    event OwnershipRenounced();
 
 
     function owner() external view returns (address);
