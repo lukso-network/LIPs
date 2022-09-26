@@ -23,9 +23,9 @@ Because owning the contract allows access to sensitive methods, transferring to 
 
 ## Motivation
 <!--The motivation is critical for LIPs that want to change the Ethereum protocol. It should clearly explain why the existing protocol specification is inadequate to address the problem that the LIP solves. LIP submissions without sufficient motivation may be rejected outright.-->
-The particular issue that this implementation of [EIP173](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-173.md) solves is the irreversible nature of transferring or renouncing ownership of a contract.
+The particular issue that the LSP14 standard solves is the irreversible nature of transferring or renouncing ownership of a contract.
 
-Transferring ownership of the contract in a single transaction does not guarantee that the address behind the new owner (EOA or contract) is controlled. For instance, if the new owner lost its private key or if the new owner is a contract that is in a locked state.
+Transferring ownership of the contract in a single transaction does not guarantee that the address behind the new owner (EOA or contract) is able to control the Ownable contract. For instance, if the new owner lost its private key or if the new owner is a contract that does not have any generic execution function.
 
 Letting the new owner accept ownership of the contract guarantees that the contract is owned by an address (EOA or contract) that can be controlled, and that control over the contract implementing LSP14 will not be lost.
 
@@ -40,8 +40,7 @@ _This interface id can be used to detect Ownable2Step contracts._
 
 ### Methods
 
-Contains the methods from:
-- [ERC173](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-173.md#specification) (Ownable). *See below for details*
+The methods are based on the methods from [ERC173](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-173.md#specification) (Ownable), with additional changes. *See below for details*
 
 #### owner
 
@@ -84,7 +83,7 @@ MUST emit a [`OwnershipTransferredStarted`](#ownershiptransferstarted) event onc
 
 - If the new owner address supports LSP1 interface, SHOULD call the new owner's [`universalReceiver(...)`] function with the following parameters below:
 
-    - `typeId`: keccak256('LSP14OwnershipTransferStarted')
+    - `typeId`: `keccak256('LSP14OwnershipTransferStarted')` > `0xee9a7c0924f740a2ca33d59b7f0c2929821ea9837ce043ce91c1823e9c4e52c0`
     - `data`: TBD
 
 #### acceptOwnership
@@ -93,7 +92,7 @@ MUST emit a [`OwnershipTransferredStarted`](#ownershiptransferstarted) event onc
 function acceptOwnership() external;
 ```
 
-Allows the `pendingOwner()` to become the new owner of the contract.
+Allows the `pendingOwner()` to accept ownership of the contract.
 
 This function MUST be called as the second step (after `transferOwnership(address)`) by the current `pendingOwner()` to finalize the ownership transfer.
 
@@ -105,14 +104,14 @@ MUST emit a [`OwnershipTransferred`](https://eips.ethereum.org/EIPS/eip-173#spec
 
 **LSP1 Hooks:**
 
-- if the previous owner is a contract that supports LSP1 interface, SHOULD call the previous owner's [`universalReceiver(...)`] function with the parameters below:
+- If the previous owner is a contract that supports LSP1 interface, SHOULD call the previous owner's [`universalReceiver(...)`] function with the parameters below:
 
-    - `typeId`: keccak256('LSP14OwnershipTransferred_SenderNotification')
+    - `typeId`: `keccak256('LSP14OwnershipTransferred_SenderNotification')` > `0xa124442e1cc7b52d8e2ede2787d43527dc1f3ae0de87f50dd03e27a71834f74c`
     - `data`: TBD
 
-- if the new owner is a contract that supports LSP1 interface, SHOULD call the new owner's [`universalReceiver(...)`] function with the parameters below:
+- If the new owner is a contract that supports LSP1 interface, SHOULD call the new owner's [`universalReceiver(...)`] function with the parameters below:
 
-    - `typeId`: keccak256('LSP14OwnershipTransferred_RecipientNotification')
+    - `typeId`: `keccak256('LSP14OwnershipTransferred_RecipientNotification')` > `0xe32c7debcb817925ba4883fdbfc52797187f28f73f860641dab1a68d9b32902c`
     - `data`: TBD
 
 
