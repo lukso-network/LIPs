@@ -85,7 +85,7 @@ Contains the methods from:
 function transferOwnership(address newOwner) external;
 ```
 
-Similar to [`transferOwnership(address)`](./LSP-14-Ownable2Step.md#transferownership) from LSP14.
+This function is part of the [LSP14]((./LSP-14-Ownable2Step.md#transferownership)) Specification, with additional requirements as follows:
 
 **Additional requirements:**
 
