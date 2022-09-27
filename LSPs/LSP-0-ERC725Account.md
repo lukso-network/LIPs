@@ -6,7 +6,7 @@ discussions-to: https://discord.gg/E2rJPP4
 status: Draft
 type: LSP
 created: 2021-09-21
-requires: ERC165, ERC173, ERC1271, ERC725X, ERC725Y, LSP1, LSP2
+requires: ERC165, ERC1271, ERC725X, ERC725Y, LSP1, LSP2, LSP14
 ---
 
 
@@ -41,7 +41,7 @@ This allows us to:
 
 ## Specification
 
-[ERC165] interface id: `0xeb6be62e`
+[ERC165] interface id: `0xdca05671`
 
 _This interface id can be used to detect ERC725Account contracts._
 
@@ -77,28 +77,7 @@ Contains the methods from:
 - [ERC725](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md#specification) (General data key-value store, and general executor)
 - [ERC1271](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1271.md#specification)
 - [LSP1](./LSP-1-UniversalReceiver.md#specification)
-- Claim Ownership, a modified version of [ERC173](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-173.md#specification) (Ownable). *See below for details*
-
-#### owner
-
-```solidity
-function owner() external view returns (address);
-```
-
-Returns the `address` of the current contract owner.
-
-#### pendingOwner
-
-```solidity
-function pendingOwner() external view returns (address);
-```
-
-Return the `address` of the pending owner, of a ownership transfer, that was initiated with `transferOwnership(address)`. MUST be `address(0)` if no ownership transfer is in progress.
-
-MUST be set when transferring ownership of the contract via `transferOwnership(address)` to a new `address`.
-
-SHOULD be cleared once the [`pendingOwner`](#pendingowner) has claim ownership of the contract.
-
+- [LSP14](./LSP-14-Ownable2Step.md#specification)
 
 #### transferOwnership
 
@@ -106,42 +85,11 @@ SHOULD be cleared once the [`pendingOwner`](#pendingowner) has claim ownership o
 function transferOwnership(address newOwner) external;
 ```
 
-Sets the `newOwner` as `pendingOwner`.
+This function is part of the [LSP14]((./LSP-14-Ownable2Step.md#transferownership)) Specification, with additional requirements as follows:
 
-MUST be called only by `owner()`.
+**Additional requirements:**
 
-The `newOwner` MUST NOT be the contract itself `address(this)`
-
-#### claimOwnership
-
-```solidity
-function claimOwnership() external;
-```
-
-Allow an `address` to become the new owner of the contract. MUST only be called by the pending owner.
-
-MUST be called after `transferOwnership` by the current `pendingOwner` to finalize the ownership transfer.
-
-MUST emit a [`OwnershipTransferred`](https://eips.ethereum.org/EIPS/eip-173#specification) event once the new owner has claimed ownership of the contract.
-
-#### renounceOwnership
-
-```solidity
-function renounceOwnership() public;
-```
-
-Leaves the contract without an owner. Once ownership of the contract is renounced, it MUST NOT be possible to call the functions restricted to the owner only.
-
-Since renouncing ownership is a sensitive operation, it SHOULD be done as a two step process by calling  `renounceOwnership(..)` twice. First to initiate the process, second as a confirmation.
-
-*Requirements:*
-
-- MUST be called only by the `owner()` only.
-- The second call MUST happen AFTER the delay of 100 blocks and within the next 100 blocks from the first `renounceOwnership(..)` call.
-- If the 200 block has passed, the `renounceOwnership(..)` call phase SHOULD reset the process, and a new one will be initated.
-
-MUST emit a [`RenounceOwnershipInitiated`](#renounceownershipinitiated) event on the first `renounceOwnership(..)` call.
-MUST emit [`OwnershipTransferred`](https://eips.ethereum.org/EIPS/eip-173#specification) event after successfully renouncing the ownership.
+- The `newOwner` MUST NOT be the contract itself `address(this)`.
 
 #### fallback
 
@@ -162,14 +110,6 @@ event ValueReceived(address indexed sender, uint256 indexed value);
 ```
 
 MUST be emitted when a native token transfer was received.
-
-#### RenounceOwnershipInitiated
-
-```solidity
-event RenounceOwnershipInitiated();
-```
-
-MUST be emitted when renouncing ownership of the contract is initiated.
 
 ## Rationale
 
@@ -198,24 +138,7 @@ ERC725Y JSON Schema `ERC725Account`:
 ```solidity
 interface ILSP0  /* is ERC165 */ {
          
-    
-    // Modified ERC173 (ClaimOwnership)
-    
-    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
-
-
-    function owner() external view returns (address);
-    
-    function pendingOwner() external view returns (address);
-
-    function transferOwnership(address newOwner) external; // onlyOwner
-
-    function claimOwnership() external;
-    
-    function renounceOwnership() external; // onlyOwner
         
-
-    
     // ERC725X
 
     event Executed(uint256 indexed operation, address indexed to, uint256 indexed  value, bytes4 selector);
@@ -258,6 +181,28 @@ interface ILSP0  /* is ERC165 */ {
     
 
     function universalReceiver(bytes32 typeId, bytes memory data) external payable returns (bytes memory);
+
+    
+    // LSP14
+
+    event OwnershipTransferStarted(address indexed previousOwner, address indexed newOwner);
+
+    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
+
+    event RenounceOwnershipInitiated();
+
+    event OwnershipRenounced();
+
+
+    function owner() external view returns (address);
+    
+    function pendingOwner() external view returns (address);
+
+    function transferOwnership(address newOwner) external; // onlyOwner
+
+    function acceptOwnership() external;
+    
+    function renounceOwnership() external; // onlyOwner
 
 }
 

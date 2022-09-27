@@ -40,7 +40,7 @@ Every contract that complies with the Universal Receiver standard MUST implement
 #### universalReceiver
 
 ```solidity
-universalReceiver(bytes32 typeId, bytes memory data) public payable returns (bytes memory)
+function universalReceiver(bytes32 typeId, bytes memory data) public payable returns (bytes memory)
 ```
 
 Allows to be called by any external contract to inform the contract about any incoming transfers, interactions or simple information.
@@ -103,7 +103,12 @@ The UniversalReceiverDelegate contract should support the InterfaceId, otherwise
 
 
 ```solidity
-universalReceiverDelegate(address caller, uint256 value, bytes32 typeId, bytes memory data) public returns (bytes memory);
+function universalReceiverDelegate(
+    address caller, 
+    uint256 value, 
+    bytes32 typeId, 
+    bytes memory data
+) public returns (bytes memory);
 ```
 
 Allows to be called by any external contract when an address wants to delegate its universalReceiver functionality to another smart contract.
