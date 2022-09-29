@@ -203,7 +203,7 @@ _Parameters:_
 
 - `tokenId` the token to query.
 
-_Requirements:_
+**Requirements:**
 
 - `tokenId` must exist
 
@@ -238,7 +238,7 @@ _Parameters:_
 - `operator` the address to authorize as an operator.
 - `tokenId` the token to enable operator status to.
 
-_Requirements:_
+**Requirements:**
 
 - `tokenId` must exist
 - caller must be current `tokenOwner` of `tokenId`.
@@ -260,7 +260,7 @@ _Parameters:_
 - `operator` the address to revoke as an operator.
 - `tokenId` the token to disable operator status to.
 
-_Requirements:_
+**Requirements:**
 
 - `tokenId` must exist
 - caller must be current `tokenOwner` of `tokenId`.
@@ -281,7 +281,7 @@ _Parameters:_
 - `operator` the address to query operator status for.
 - `tokenId` the token to query.
 
-_Requirements:_
+**Requirements:**
 
 - `tokenId` must exist
 - caller must be current `tokenOwner` of `tokenId`.
@@ -300,7 +300,7 @@ _Parameters:_
 
 - `tokenId` the token to query.
 
-_Requirements:_
+**Requirements:**
 
 - `tokenId` must exist
 - caller must be current `tokenOwner` of `tokenId`.
@@ -327,12 +327,41 @@ _Parameters:_
 - `force` when set to TRUE, `to` may be any address; when set to FALSE `to` must be a contract that supports [LSP1 UniversalReceiver][LSP1] and successfully processes a call to `universalReceiver(bytes32 typeId, bytes memory data)`.
 - `data` additional data the caller wants included in the emitted event, and sent in the hooks to `from` and `to` addresses.
 
-_Requirements:_
+**Requirements:**
 
 - `from` cannot be the zero address.
 - `to` cannot be the zero address.
 - `tokenId` token must be owned by `from`.
 - If the caller is not `from`, it must be an operator of `tokenId`.
+
+**LSP1 Hooks:**
+
+- If the token sender is a contract that supports LSP1 interface, SHOULD call the token sender's [`universalReceiver(...)`] function with the parameters below:
+
+    - `typeId`: `0x0cfc51aec37c55a4d0b10000a124442e1cc7b52d8e2ede2787d43527dc1f3ae0`
+    - `data`: The data sent SHOULD be packed encoded and contain the `sender` (address), `receiver` (address), `tokenId` (bytes32) and the `data` (bytes) respectively. 
+
+TypeId was constructed as a bytes32 Key with Mapping as keyType according to LSP2-ERC725YJSONSChema:
+
+- `bytes10(keccak256('LSP1UniversalReceiverDelegate'))`
+- `bytes2(0)`  
+- `bytes20(keccak256('LSP8Tokens_SenderNotification'))`
+
+<br>
+
+- If the token recipient is a contract that supports LSP1 interface, SHOULD call the token recipient's [`universalReceiver(...)`] function with the parameters below:
+
+    - `typeId`: `0x0cfc51aec37c55a4d0b100000b084a55ebf70fd3c06fd755269dac2212c4d3f0`
+    - `data`: The data sent SHOULD be packed encoded and contain the `sender` (address), `receiver` (address), `tokenId` (bytes32) and the `data` (bytes) respectively. 
+
+TypeId was constructed as a bytes32 Key with Mapping as keyType according to LSP2-ERC725YJSONSChema:
+
+- `bytes10(keccak256('LSP1UniversalReceiverDelegate'))`
+- `bytes2(0)`  
+- `bytes20(keccak256('LSP8Tokens_RecipientNotification'))`
+
+
+**Note:** LSP1 Hooks MUST be implemented in any type of token transfer (mint, transfer, burn, transferBatch). 
 
 #### transferBatch
 
@@ -352,7 +381,7 @@ _Parameters:_
 - `force` when set to TRUE, `to` may be any address; when set to FALSE `to` must be a contract that supports [LSP1 UniversalReceiver][LSP1] and successfully processes a call to `universalReceiver(bytes32 typeId, bytes memory data)`.
 - `data` the list of additional data the caller wants included in the emitted event, and sent in the hooks to `from` and `to` addresses.
 
-_Requirements:_
+**Requirements:**
 
 - `from`, `to`, `tokenId` lists are the same length.
 - no values in `from` can be the zero address.

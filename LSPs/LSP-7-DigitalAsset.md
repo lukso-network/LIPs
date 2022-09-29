@@ -90,7 +90,7 @@ _Parameters:_
 - `operator` the address to authorize as an operator.
 - `amount` the amount of tokens operator has access to.
 
-_Requirements:_
+**Requirements:**
 
 - `operator` cannot be calling address.
 - `operator` cannot be the zero address.
@@ -109,7 +109,7 @@ _Parameters:_
 
 - `operator` the address to revoke as an operator.
 
-_Requirements:_
+**Requirements:**
 
 - `operator` cannot be calling address.
 - `operator` cannot be the zero address.
@@ -147,12 +147,41 @@ _Parameters:_
 - `force` when set to TRUE, `to` may be any address; when set to FALSE `to` must be a contract that supports [LSP1 UniversalReceiver][LSP1] and not revert.
 - `data` additional data the caller wants included in the emitted event, and sent in the hooks to `from` and `to` addresses.
 
-_Requirements:_
+**Requirements:**
 
 - `from` cannot be the zero address.
 - `to` cannot be the zero address.
 - `amount` tokens must be owned by `from`.
 - If the caller is not `from`, it must be an operator for `from` with access to at least `amount` tokens.
+
+**LSP1 Hooks:**
+
+- If the token sender is a contract that supports LSP1 interface, SHOULD call the token sender's [`universalReceiver(...)`] function with the parameters below:
+
+    - `typeId`: `0x0cfc51aec37c55a4d0b10000429ac7a06903dbc9c13dfcb3c9d11df8194581fa`
+    - `data`: The data sent SHOULD be packed encoded and contain the `sender` (address), `receiver` (address), `amount` (uint256) and the `data` (bytes) respectively. 
+
+TypeId was constructed as a bytes32 Key with Mapping as keyType according to LSP2-ERC725YJSONSChema:
+
+- `bytes10(keccak256('LSP1UniversalReceiverDelegate'))`
+- `bytes2(0)`  
+- `bytes20(keccak256('LSP7Tokens_SenderNotification'))`
+
+<br>
+
+- If the token recipient is a contract that supports LSP1 interface, SHOULD call the token recipient's [`universalReceiver(...)`] function with the parameters below:
+
+    - `typeId`: `0x0cfc51aec37c55a4d0b1000020804611b3e2ea21c480dc465142210acf4a2485`
+    - `data`: The data sent SHOULD be packed encoded and contain the `sender` (address), `receiver` (address), `amount` (uint256) and the `data` (bytes) respectively.
+
+TypeId was constructed as a bytes32 Key with Mapping as keyType according to LSP2-ERC725YJSONSChema:
+
+- `bytes10(keccak256('LSP1UniversalReceiverDelegate'))`
+- `bytes2(0)`  
+- `bytes20(keccak256('LSP7Tokens_RecipientNotification'))`
+
+
+**Note:** LSP1 Hooks MUST be implemented in any type of token transfer (mint, transfer, burn, transferBatch). 
 
 #### transferBatch
 
@@ -172,7 +201,7 @@ _Parameters:_
 - `force` when set to TRUE, `to` may be any address; when set to FALSE `to` must be a contract that supports [LSP1 UniversalReceiver][LSP1] and not revert.
 - `data` the list of additional data the caller wants included in the emitted event, and sent in the hooks to `from` and `to` addresses.
 
-_Requirements:_
+**Requirements:**
 
 - `from`, `to`, `amount` lists are the same length.
 - no values in `from` can be the zero address.
@@ -205,25 +234,6 @@ event RevokedOperator(address indexed operator, address indexed tokenOwner);
 ```
 
 MUST be emitted when `tokenOwner` disables `operator`.
-
-
-### Hooks
-
-Every contract that supports the LSP7 standard SHOULD implement these hooks:
-
-#### _notifyTokenSender
-
-Calls the `universalReceiver(..)` function on the sender address when transferring or burning tokens, if it supports LSP1 InterfaceID, with the parameters below:
-
-- `typeId`: keccak256('LSP7TokensSender')
-- `data`: The data sent SHOULD be packed encoded and contain the `sender` (address), `receiver` (address), `amount` (uint256) and the `data` (bytes) respectively. 
-
-#### _notifyTokenReceiver
-
-Calls the `universalReceiver(..)` function on the receiver address when transferring or minting tokens, if it supports LSP1 InterfaceID, with the parameters below:
-
-- `typeId`: keccak256('LSP7TokensRecipient')
-- `data`: The data sent SHOULD be packed encoded and contain the `sender` (address), `receiver` (address), `amount` (uint256) and the `data` (bytes) respectively.
 
 ## Rationale
 <!--The rationale fleshes out the specification by describing what motivated the design and why particular design decisions were made. It should describe alternate designs that were considered and related work, e.g. how the feature is supported in other languages. The rationale may also provide evidence of consensus within the community, and should discuss important objections or concerns raised during discussion.-->
