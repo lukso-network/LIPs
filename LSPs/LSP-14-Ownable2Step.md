@@ -228,5 +228,5 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 
 [ERC165]: <https://eips.ethereum.org/EIPS/eip-165>
 [LSP1-UniversalReceiver]: <./LSP-1-UniversalReceiver.md>
-[LSP2-ERC725YJSONSchema]: <./LSP-2-ERC725YJSONSchema.md.md>
+[LSP2-ERC725YJSONSchema]: <./LSP-2-ERC725YJSONSchema.md>
 [`universalReceiver(...)`]: <./LSP-1-UniversalReceiver.md#universalreceiver>

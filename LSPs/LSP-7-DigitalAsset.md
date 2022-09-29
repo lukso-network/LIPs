@@ -327,7 +327,7 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 [ERC20]: <https://github.com/ethereum/EIPs/blob/master/EIPS/eip-20.md>
 [ERC777]: <https://github.com/ethereum/EIPs/blob/master/EIPS/eip-777.md>
 [LSP1]: <./LSP-1-UniversalReceiver.md>
-[LSP2-ERC725YJSONSchema]: <./LSP-2-ERC725YJSONSchema.md.md>
+[LSP2-ERC725YJSONSchema]: <./LSP-2-ERC725YJSONSchema.md>
 [LSP4#erc725ykeys]: <./LSP-4-DigitalAsset-Metadata.md#erc725ykeys>
 [LSP8]: <./LSP-8-IdentifiableDigitalAsset.md>
 [LSP7.sol]: <https://github.com/lukso-network/lsp-universalprofile-smart-contracts/blob/main/contracts/LSP7DigitalAsset/LSP7DigitalAsset.sol>
