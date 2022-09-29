@@ -341,7 +341,7 @@ _Parameters:_
     - `typeId`: `0x0cfc51aec37c55a4d0b10000a124442e1cc7b52d8e2ede2787d43527dc1f3ae0`
     - `data`: The data sent SHOULD be packed encoded and contain the `sender` (address), `receiver` (address), `tokenId` (bytes32) and the `data` (bytes) respectively. 
 
-TypeId was constructed as a bytes32 Key with Mapping as keyType according to LSP2-ERC725YJSONSChema:
+TypeId was constructed as a bytes32 Key with Mapping as keyType according to [LSP2-ERC725YJSONSChema](LSP2):
 
 - `bytes10(keccak256('LSP1UniversalReceiverDelegate'))`
 - `bytes2(0)`  
@@ -354,7 +354,7 @@ TypeId was constructed as a bytes32 Key with Mapping as keyType according to LSP
     - `typeId`: `0x0cfc51aec37c55a4d0b100000b084a55ebf70fd3c06fd755269dac2212c4d3f0`
     - `data`: The data sent SHOULD be packed encoded and contain the `sender` (address), `receiver` (address), `tokenId` (bytes32) and the `data` (bytes) respectively. 
 
-TypeId was constructed as a bytes32 Key with Mapping as keyType according to LSP2-ERC725YJSONSChema:
+TypeId was constructed as a bytes32 Key with Mapping as keyType according to [LSP2-ERC725YJSONSChema](LSP2):
 
 - `bytes10(keccak256('LSP1UniversalReceiverDelegate'))`
 - `bytes2(0)`  
@@ -563,6 +563,7 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 [ERC725]: <https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md>
 [ERC777]: <https://github.com/ethereum/EIPs/blob/master/EIPS/eip-777.md>
 [LSP1]: <./LSP-1-UniversalReceiver.md>
+[LSP2]: <./LSP-2-ERC725YJSONSchema.md.md>
 [LSP2#jsonurl]: <./LSP-2-ERC725YJSONSchema.md#JSONURL>
 [LSP2#mapping]: <./LSP-2-ERC725YJSONSchema.md#mapping>
 [LSP4#erc725ykeys]: <./LSP-4-DigitalAsset-Metadata.md#erc725ykeys>

@@ -86,7 +86,7 @@ MUST emit a [`OwnershipTransferredStarted`](#ownershiptransferstarted) event onc
     - `typeId`: `0x0cfc51aec37c55a4d0b10000ee9a7c0924f740a2ca33d59b7f0c2929821ea983`
     - `data`: TBD
 
-TypeId was constructed as a bytes32 Key with Mapping as keyType according to LSP2-ERC725YJSONSChema:
+TypeId was constructed as a bytes32 Key with Mapping as keyType according to [LSP2-ERC725YJSONSChema](LSP2):
 
 - `bytes10(keccak256('LSP1UniversalReceiverDelegate'))`
 - `bytes2(0)`  
@@ -115,7 +115,7 @@ MUST emit a [`OwnershipTransferred`](https://eips.ethereum.org/EIPS/eip-173#spec
     - `typeId`: `0x0cfc51aec37c55a4d0b10000a124442e1cc7b52d8e2ede2787d43527dc1f3ae0`
     - `data`: TBD
 
-TypeId was constructed as a bytes32 Key with Mapping as keyType according to LSP2-ERC725YJSONSChema:
+TypeId was constructed as a bytes32 Key with Mapping as keyType according to [LSP2-ERC725YJSONSChema](LSP2):
 
 - `bytes10(keccak256('LSP1UniversalReceiverDelegate'))`
 - `bytes2(0)`  
@@ -128,7 +128,7 @@ TypeId was constructed as a bytes32 Key with Mapping as keyType according to LSP
     - `typeId`: `0x0cfc51aec37c55a4d0b10000e32c7debcb817925ba4883fdbfc52797187f28f7`
     - `data`: TBD
 
-TypeId was constructed as a bytes32 Key with Mapping as keyType according to LSP2-ERC725YJSONSChema:
+TypeId was constructed as a bytes32 Key with Mapping as keyType according to [LSP2-ERC725YJSONSChema](LSP2):
 
 - `bytes10(keccak256('LSP1UniversalReceiverDelegate'))`
 - `bytes2(0)`  
@@ -228,5 +228,5 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 
 [ERC165]: <https://eips.ethereum.org/EIPS/eip-165>
 [LSP1-UniversalReceiver]: <./LSP-1-UniversalReceiver.md>
-[LSP2-ERC725YJSONSchema]: <./LSP-2-ERC725YJSONSchema.md>
+[LSP2]: <./LSP-2-ERC725YJSONSchema.md.md>
 [`universalReceiver(...)`]: <./LSP-1-UniversalReceiver.md#universalreceiver>

@@ -161,7 +161,7 @@ _Parameters:_
     - `typeId`: `0x0cfc51aec37c55a4d0b10000429ac7a06903dbc9c13dfcb3c9d11df8194581fa`
     - `data`: The data sent SHOULD be packed encoded and contain the `sender` (address), `receiver` (address), `amount` (uint256) and the `data` (bytes) respectively. 
 
-TypeId was constructed as a bytes32 Key with Mapping as keyType according to LSP2-ERC725YJSONSChema:
+TypeId was constructed as a bytes32 Key with Mapping as keyType according to [LSP2-ERC725YJSONSChema](LSP2)
 
 - `bytes10(keccak256('LSP1UniversalReceiverDelegate'))`
 - `bytes2(0)`  
@@ -174,7 +174,7 @@ TypeId was constructed as a bytes32 Key with Mapping as keyType according to LSP
     - `typeId`: `0x0cfc51aec37c55a4d0b1000020804611b3e2ea21c480dc465142210acf4a2485`
     - `data`: The data sent SHOULD be packed encoded and contain the `sender` (address), `receiver` (address), `amount` (uint256) and the `data` (bytes) respectively.
 
-TypeId was constructed as a bytes32 Key with Mapping as keyType according to LSP2-ERC725YJSONSChema:
+TypeId was constructed as a bytes32 Key with Mapping as keyType according to [LSP2-ERC725YJSONSChema](LSP2):
 
 - `bytes10(keccak256('LSP1UniversalReceiverDelegate'))`
 - `bytes2(0)`  
@@ -327,6 +327,7 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 [ERC20]: <https://github.com/ethereum/EIPs/blob/master/EIPS/eip-20.md>
 [ERC777]: <https://github.com/ethereum/EIPs/blob/master/EIPS/eip-777.md>
 [LSP1]: <./LSP-1-UniversalReceiver.md>
+[LSP2]: <./LSP-2-ERC725YJSONSchema.md.md>
 [LSP4#erc725ykeys]: <./LSP-4-DigitalAsset-Metadata.md#erc725ykeys>
 [LSP8]: <./LSP-8-IdentifiableDigitalAsset.md>
 [LSP7.sol]: <https://github.com/lukso-network/lsp-universalprofile-smart-contracts/blob/main/contracts/LSP7DigitalAsset/LSP7DigitalAsset.sol>
