@@ -341,10 +341,10 @@ _Parameters:_
     - `typeId`: `0x0cfc51aec37c55a4d0b10000a124442e1cc7b52d8e2ede2787d43527dc1f3ae0`
     - `data`: The data sent SHOULD be packed encoded and contain the `sender` (address), `receiver` (address), `tokenId` (bytes32) and the `data` (bytes) respectively. 
 
-TypeId was constructed as a bytes32 Key with Mapping as keyType according to [LSP2-ERC725YJSONSchema]:
+TypeId is constructed as a bytes32 Key with [Mapping] as keyType according to [LSP2-ERC725YJSONSchema]. The `bytes32` key is constructed by concatenating the following:
 
-- `bytes10(keccak256('LSP1UniversalReceiverDelegate'))`
-- `bytes2(0)`  
+- `bytes10(keccak256('LSP1UniversalReceiverDelegate'))` +
+- `bytes2(0)`+  
 - `bytes20(keccak256('LSP8Tokens_SenderNotification'))`
 
 <br>
@@ -354,10 +354,10 @@ TypeId was constructed as a bytes32 Key with Mapping as keyType according to [LS
     - `typeId`: `0x0cfc51aec37c55a4d0b100000b084a55ebf70fd3c06fd755269dac2212c4d3f0`
     - `data`: The data sent SHOULD be packed encoded and contain the `sender` (address), `receiver` (address), `tokenId` (bytes32) and the `data` (bytes) respectively. 
 
-TypeId was constructed as a bytes32 Key with Mapping as keyType according to [LSP2-ERC725YJSONSchema]:
+TypeId is constructed as a bytes32 Key with [Mapping] as keyType according to [LSP2-ERC725YJSONSchema]. The `bytes32` key is constructed by concatenating the following:
 
-- `bytes10(keccak256('LSP1UniversalReceiverDelegate'))`
-- `bytes2(0)`  
+- `bytes10(keccak256('LSP1UniversalReceiverDelegate'))` +
+- `bytes2(0)`+
 - `bytes20(keccak256('LSP8Tokens_RecipientNotification'))`
 
 
@@ -547,6 +547,7 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 [LSP1]: <./LSP-1-UniversalReceiver.md>
 [LSP2-ERC725YJSONSchema]: <./LSP-2-ERC725YJSONSchema.md>
 [LSP2#jsonurl]: <./LSP-2-ERC725YJSONSchema.md#JSONURL>
+[Mapping]: <./LSP2-ERC725YJSONSchema#Mapping>
 [LSP2#mapping]: <./LSP-2-ERC725YJSONSchema.md#mapping>
 [LSP4#erc725ykeys]: <./LSP-4-DigitalAsset-Metadata.md#erc725ykeys>
 [LSP7]: <./LSP-7-DigitalAsset.md>

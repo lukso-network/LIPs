@@ -115,10 +115,10 @@ MUST emit a [`OwnershipTransferred`](https://eips.ethereum.org/EIPS/eip-173#spec
     - `typeId`: `0x0cfc51aec37c55a4d0b10000a124442e1cc7b52d8e2ede2787d43527dc1f3ae0`
     - `data`: TBD
 
-TypeId was constructed as a bytes32 Key with Mapping as keyType according to [LSP2-ERC725YJSONSchema]:
+TypeId is constructed as a bytes32 Key with [Mapping] as keyType according to [LSP2-ERC725YJSONSchema]. The `bytes32` key is constructed by concatenating the following:
 
-- `bytes10(keccak256('LSP1UniversalReceiverDelegate'))`
-- `bytes2(0)`  
+- `bytes10(keccak256('LSP1UniversalReceiverDelegate'))` +
+- `bytes2(0)`+ 
 - `bytes20(keccak256('LSP14OwnershipTransferred_SenderNotification'))`
 
 <br>
@@ -128,10 +128,10 @@ TypeId was constructed as a bytes32 Key with Mapping as keyType according to [LS
     - `typeId`: `0x0cfc51aec37c55a4d0b10000e32c7debcb817925ba4883fdbfc52797187f28f7`
     - `data`: TBD
 
-TypeId was constructed as a bytes32 Key with Mapping as keyType according to [LSP2-ERC725YJSONSchema]:
+TypeId is constructed as a bytes32 Key with [Mapping] as keyType according to [LSP2-ERC725YJSONSchema]. The `bytes32` key is constructed by concatenating the following:
 
-- `bytes10(keccak256('LSP1UniversalReceiverDelegate'))`
-- `bytes2(0)`  
+- `bytes10(keccak256('LSP1UniversalReceiverDelegate'))` +
+- `bytes2(0)`+
 - `bytes20(keccak256('LSP14OwnershipTransferred_RecipientNotification'))`
 
 
@@ -227,6 +227,7 @@ interface ILSP14  /* is ERC173 */ {
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
 
 [ERC165]: <https://eips.ethereum.org/EIPS/eip-165>
+[Mapping]: <./LSP2-ERC725YJSONSchema#Mapping>
 [LSP1-UniversalReceiver]: <./LSP-1-UniversalReceiver.md>
 [LSP2-ERC725YJSONSchema]: <./LSP-2-ERC725YJSONSchema.md>
 [`universalReceiver(...)`]: <./LSP-1-UniversalReceiver.md#universalreceiver>
