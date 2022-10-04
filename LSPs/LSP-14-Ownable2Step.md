@@ -86,10 +86,10 @@ MUST emit a [`OwnershipTransferredStarted`](#ownershiptransferstarted) event onc
     - `typeId`: `0x0cfc51aec37c55a4d0b10000ee9a7c0924f740a2ca33d59b7f0c2929821ea983`
     - `data`: TBD
 
-TypeId was constructed as a bytes32 Key with Mapping as keyType according to [LSP2-ERC725YJSONSchema]:
+TypeId is constructed as a bytes32 Key with [Mapping] as keyType according to [LSP2-ERC725YJSONSchema]. The `bytes32` key is constructed by concatenating the following:
 
-- `bytes10(keccak256('LSP1UniversalReceiverDelegate'))`
-- `bytes2(0)`  
+- `bytes10(keccak256('LSP1UniversalReceiverDelegate'))` +
+- `bytes2(0)`+
 - `bytes20(keccak256('LSP14OwnershipTransferStarted'))`
 
 #### acceptOwnership
