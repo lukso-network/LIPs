@@ -272,21 +272,68 @@ Allows anybody to execute `_calldata` payload on a set [ERC725 X or Y smart cont
 MUST fire the [Executed event](#executed).
 
 _Parameters:_
-- `signature`: bytes65 ethereum signature.
+- `signature`: bytes65 signature specific to LSP6 ExecuteRelayCall. _See details below_.
 - `nonce`: MUST be the nonce of the address that signed the message. This can be obtained via the `getNonce(address address, uint256 channel)` function.
 - `_calldata`: The call data to be executed.
 
-
 _Returns:_ `bytes` , the returned data as abi-encoded bytes if the call on ERC725 smart contract succeeded, otherwise revert with a reason-string. 
 
-**Important:** the message to sign MUST be of the following format: `<block.chainid>` + `<KeyManager address>` + `<signer nonce>` + `<_calldata payload>` .
-These 4 parameters MUST be:
+**Important Requirements**
 
-- packed encoded (not zero padded, leading `0`s are removed)
-- hashed with `keccak256`
+The message to sign MUST be of the following format: 
 
-The final message MUST be signed using ethereum specific signature, based on [EIP191].
+```
 
+  <block.chainid>       // uint256
++ <KeyManager address>  // address
++ <signer nonce>        // uint256
++ msg.value             // uint256
++ <_calldata payload>   // bytes
+
+```
+These 5 parameters MUST be:
+
+1. packed encoded (not zero padded, leading `0`s are removed).
+2. hashed with `keccak256`.
+3. signed using a LSP6 ExecuteRelayCall specific signature format described below.
+
+A LSP6 ExecuteRelayCall signed message is based on the [EIP191] Signed Data Standard with a modification of the message prefix. The following is prepended before hashing and signing.
+
+```
+"\x19LSP6 ExecuteRelayCall:\n" + len(message) + message
+```
+
+_Example_
+
+For the following parameters:
+
+| Parameter | Example Value |
+|---|---|
+| `block.chainid` | `2828` |
+| LSP6 Key Manager's address | `0xcafecafecafecafecafecafecafecafecafecafe` |
+| nonce | `10` |
+| `msg.value` | `8` |
+| calldata payload | `0x11223344556677889900` (MUST be abi encoded as `bytes` with offset and length) |
+
+A LSP6 ExecuteRelayCall signed message can be obtain as follow:
+
+```
+# Step 1: concatenate each parameter of the message (= packed encoded)
+0x2828cafecafecafecafecafecafecafecafecafecafe0a0811223344556677889900
+
+0x2828cafecafecafecafecafecafecafecafecafecafe0a080000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000000a1122334455667788990000000000000000000000000000000000000000000000
+
+# Step 2: hash with keccak256
+keccak256(0x2828cafecafecafecafecafecafecafecafecafecafe0a080000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000000a1122334455667788990000000000000000000000000000000000000000000000) 
+= 0x7fd7337e80a3739a49dc04582a6fe101c7318ce949f7ee8891fe2feddf3a4d4d
+
+# Step 3: sign using LSP6 ExecuteRelayCall prefix
+# len(message) = 120 (in decimals) = 78 (in hex)
+signed message = 
+ "\x19LSP6 ExecuteRelayCall:\n" 
++ 78 
++ 2828cafecafecafecafecafecafecafecafecafecafe0a080000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000000a1122334455667788990000000000000000000000000000000000000000000000
+```
 
 ### Events
 
