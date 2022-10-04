@@ -330,9 +330,9 @@ keccak256(data) = 0x7523c3fc3bf6e6bcc198114a870d648c0cdd7ef2b67f6cfc0e0f40d78b03
 
 
 # Step 3: sign using LSP6 ExecuteRelayCall prefix
-# len(message) = 126 (in decimals) = 7e (in hex)
+# len(message) = 32 bytes = 20 (in hex)
 
-signed message = "\x19LSP6 ExecuteRelayCall:\n" + 7e + data
+signed message = "\x19LSP6 ExecuteRelayCall:\n" + 32 + data
 ```
 
 ### Events
