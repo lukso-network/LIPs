@@ -81,7 +81,7 @@ MUST emit a [`OwnershipTransferredStarted`](#ownershiptransferstarted) event onc
 
 **LSP1 Hooks:**
 
-- If the new owner address supports LSP1 interface, SHOULD call the new owner's [`universalReceiver(...)`] function with the following parameters below:
+- If the new owner address supports LSP1 interface, it SHOULD call the new owner's [`universalReceiver(...)`] function with the following parameters below:
 
     - `typeId`: `0x0cfc51aec37c55a4d0b10000ee9a7c0924f740a2ca33d59b7f0c2929821ea983`
     - `data`: TBD
@@ -110,7 +110,7 @@ MUST emit a [`OwnershipTransferred`](https://eips.ethereum.org/EIPS/eip-173#spec
 
 **LSP1 Hooks:**
 
-- If the previous owner is a contract that supports LSP1 interface, SHOULD call the previous owner's [`universalReceiver(...)`] function with the parameters below:
+- If the previous owner is a contract that supports LSP1 interface, it SHOULD call the previous owner's [`universalReceiver(...)`] function with the parameters below:
 
     - `typeId`: `0x0cfc51aec37c55a4d0b10000a124442e1cc7b52d8e2ede2787d43527dc1f3ae0`
     - `data`: TBD
@@ -123,7 +123,7 @@ TypeId is constructed as a bytes32 Key with [Mapping] as keyType according to [L
 
 <br>
 
-- If the new owner is a contract that supports LSP1 interface, SHOULD call the new owner's [`universalReceiver(...)`] function with the parameters below:
+- If the new owner is a contract that supports LSP1 interface, it SHOULD call the new owner's [`universalReceiver(...)`] function with the parameters below:
 
     - `typeId`: `0x0cfc51aec37c55a4d0b10000e32c7debcb817925ba4883fdbfc52797187f28f7`
     - `data`: TBD

@@ -336,7 +336,7 @@ _Parameters:_
 
 **LSP1 Hooks:**
 
-- If the token sender is a contract that supports LSP1 interface, SHOULD call the token sender's [`universalReceiver(...)`] function with the parameters below:
+- If the token sender is a contract that supports LSP1 interface, it SHOULD call the token sender's [`universalReceiver(...)`] function with the parameters below:
 
     - `typeId`: `0x0cfc51aec37c55a4d0b10000a124442e1cc7b52d8e2ede2787d43527dc1f3ae0`
     - `data`: The data sent SHOULD be packed encoded and contain the `sender` (address), `receiver` (address), `tokenId` (bytes32) and the `data` (bytes) respectively. 
@@ -349,7 +349,7 @@ TypeId is constructed as a bytes32 Key with [Mapping] as keyType according to [L
 
 <br>
 
-- If the token recipient is a contract that supports LSP1 interface, SHOULD call the token recipient's [`universalReceiver(...)`] function with the parameters below:
+- If the token recipient is a contract that supports LSP1 interface, it SHOULD call the token recipient's [`universalReceiver(...)`] function with the parameters below:
 
     - `typeId`: `0x0cfc51aec37c55a4d0b100000b084a55ebf70fd3c06fd755269dac2212c4d3f0`
     - `data`: The data sent SHOULD be packed encoded and contain the `sender` (address), `receiver` (address), `tokenId` (bytes32) and the `data` (bytes) respectively. 
