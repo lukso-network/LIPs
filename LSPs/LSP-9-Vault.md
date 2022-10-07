@@ -98,6 +98,46 @@ Check [`execute(...)`](https://github.com/ERC725Alliance/ERC725/blob/develop/doc
 - [LSP1](./LSP-1-UniversalReceiver.md#specification)
 - [LSP14](./LSP-14-Ownable2Step.md#specification)
 
+
+#### universalReceiver
+
+```solidity
+function universalReceiver(bytes32 typeId, bytes memory data) public payable returns (bytes memory)
+```
+
+This function is part of the [LSP1-UniversalReceiver] Specification, and do the following:
+
+- Emits [ValueReceived](#events) event when receiving native tokens.
+
+- Forwards the call to the `universalReceiverDelegate(..)` function in the **UniversalReceiverDelegate** contract which address is stored under the data key attached below, if it supports [LSP1UniversalReceiverDelegate InterfaceId](../smart-contracts/interface-ids.md). If there is no address stored under the data key, execution continue normally.
+
+```json
+{
+  "name": "LSP1UniversalReceiverDelegate",
+  "key": "0x0cfc51aec37c55a4d0b1a65c6255c4bf2fbdf6277f3cc0730c45b828b6db8b47",
+  "keyType": "Singleton",
+  "valueType": "address",
+  "valueContent": "Address"
+}
+```
+
+- Forwards the call to the `universalReceiverDelegate(..)` function in the **TypeIdDelegate** contract which address is stored under the data key attached below, if it supports [LSP1UniversalReceiverDelegate InterfaceId](../smart-contracts/interface-ids.md). If there is no address stored under the data key, execution continue normally.
+
+```json
+{
+  "name": "LSP1UniversalReceiverDelegate:<bytes32>",
+  "key": "0x0cfc51aec37c55a4d0b10000<bytes32>",
+  "keyType": "Mapping",
+  "valueType": "address",
+  "valueContent": "Address"
+}
+```
+
+> <bytes32\> is the `typeId` passed to the `universalReceiver(..)` function. 
+
+- Emits the [UniversalReceiver](./LSP-1-UniversalReceiver.md#events) event with the typeId and data passed to it, as well as additional parameters such as the amount sent to the function, the caller of the function, and the return value of the delegate contracts abi-encoded.
+
+
 #### transferOwnership
 
 ```solidity
