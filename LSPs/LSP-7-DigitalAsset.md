@@ -154,6 +154,24 @@ _Requirements:_
 - `amount` tokens must be owned by `from`.
 - If the caller is not `from`, it must be an operator for `from` with access to at least `amount` tokens.
 
+
+**LSP1 Hooks:**
+
+- If the token sender is a contract that supports LSP1 interface, it SHOULD call the token sender's [`universalReceiver(...)`] function with the parameters below:
+
+    - `typeId`: keccak256('LSP7Tokens_SenderNotification') > `0x429ac7a06903dbc9c13dfcb3c9d11df8194581fa047c96d7a4171fc7402958ea`
+    - `data`: The data sent SHOULD be packed encoded and contain the `sender` (address), `receiver` (address), `amount` (uint256) and the `data` (bytes) respectively. 
+
+<br>
+
+- If the token recipient is a contract that supports LSP1 interface, it SHOULD call the token recipient's [`universalReceiver(...)`] function with the parameters below:
+
+    - `typeId`: keccak256('LSP7Tokens_RecipientNotification') >`0x20804611b3e2ea21c480dc465142210acf4a2485947541770ec1fb87dee4a55c`
+    - `data`: The data sent SHOULD be packed encoded and contain the `sender` (address), `receiver` (address), `amount` (uint256) and the `data` (bytes) respectively.
+
+
+**Note:** LSP1 Hooks MUST be implemented in any type of token transfer (mint, transfer, burn, transferBatch). 
+
 #### transferBatch
 
 ```solidity
@@ -206,24 +224,6 @@ event RevokedOperator(address indexed operator, address indexed tokenOwner);
 
 MUST be emitted when `tokenOwner` disables `operator`.
 
-
-### Hooks
-
-Every contract that supports the LSP7 standard SHOULD implement these hooks:
-
-#### _notifyTokenSender
-
-Calls the `universalReceiver(..)` function on the sender address when transferring or burning tokens, if it supports LSP1 InterfaceID, with the parameters below:
-
-- `typeId`: keccak256('LSP7TokensSender')
-- `data`: The data sent SHOULD be packed encoded and contain the `sender` (address), `receiver` (address), `amount` (uint256) and the `data` (bytes) respectively. 
-
-#### _notifyTokenReceiver
-
-Calls the `universalReceiver(..)` function on the receiver address when transferring or minting tokens, if it supports LSP1 InterfaceID, with the parameters below:
-
-- `typeId`: keccak256('LSP7TokensRecipient')
-- `data`: The data sent SHOULD be packed encoded and contain the `sender` (address), `receiver` (address), `amount` (uint256) and the `data` (bytes) respectively.
 
 ## Rationale
 <!--The rationale fleshes out the specification by describing what motivated the design and why particular design decisions were made. It should describe alternate designs that were considered and related work, e.g. how the feature is supported in other languages. The rationale may also provide evidence of consensus within the community, and should discuss important objections or concerns raised during discussion.-->

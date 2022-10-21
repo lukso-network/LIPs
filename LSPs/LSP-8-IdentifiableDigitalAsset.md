@@ -334,6 +334,23 @@ _Requirements:_
 - `tokenId` token must be owned by `from`.
 - If the caller is not `from`, it must be an operator of `tokenId`.
 
+**LSP1 Hooks:**
+
+- If the token sender is a contract that supports LSP1 interface, it SHOULD call the token sender's [`universalReceiver(...)`] function with the parameters below:
+
+    - `typeId`: keccak256('LSP8Tokens_SenderNotification') > `0xb23eae7e6d1564b295b4c3e3be402d9a2f0776c57bdf365903496f6fa481ab00`
+    - `data`: The data sent SHOULD be packed encoded and contain the `sender` (address), `receiver` (address), `tokenId` (bytes32) and the `data` (bytes) respectively. 
+
+<br>
+
+- If the token recipient is a contract that supports LSP1 interface, it SHOULD call the token recipient's [`universalReceiver(...)`] function with the parameters below:
+
+    - `typeId`: keccak256('LSP8Tokens_RecipientNotification') >`0x0b084a55ebf70fd3c06fd755269dac2212c4d3f0f4d09079780bfa50c1b2984d`
+    - `data`: The data sent SHOULD be packed encoded and contain the `sender` (address), `receiver` (address), `tokenId` (bytes32) and the `data` (bytes) respectively.
+
+
+**Note:** LSP1 Hooks MUST be implemented in any type of token transfer (mint, transfer, burn, transferBatch). 
+
 #### transferBatch
 
 ```solidity
@@ -387,23 +404,6 @@ event RevokedOperator(address indexed operator, address indexed tokenOwner, byte
 
 MUST be emitted when `tokenOwner` disables `operator` for `tokenId`.
 
-### Hooks
-
-Every contract that supports the LSP8 standard SHOULD implement these hooks:
-
-#### _notifyTokenSender
-
-Calls the `universalReceiver(..)` function on the sender address when transferring or burning tokens, if it supports LSP1 InterfaceID, with the parameters below:
-
-- `typeId`: keccak256('LSP8TokensSender')
-- `data`: The data sent SHOULD be packed encoded and contain the `sender` (address), `receiver` (address), `tokenId` (bytes32) and the `data` (bytes) respectively. 
-
-#### _notifyTokenReceiver
-
-Calls the `universalReceiver(..)` function on the receiver address when transferring or minting tokens, if it supports LSP1 InterfaceID, with the parameters below:
-
-- `typeId`: keccak256('LSP8TokensRecipient')
-- `data`: The data sent SHOULD be packed encoded and contain the `sender` (address), `receiver` (address), `tokenId` (bytes32) and the `data` (bytes) respectively.
 
 ## Rationale
 <!--The rationale fleshes out the specification by describing what motivated the design and why particular design decisions were made. It should describe alternate designs that were considered and related work, e.g. how the feature is supported in other languages. The rationale may also provide evidence of consensus within the community, and should discuss important objections or concerns raised during discussion.-->
