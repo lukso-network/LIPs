@@ -1,6 +1,6 @@
 ---
 lip: 15
-title: TransactionRelayerAPI
+title: TransactionRelayServiceAPI
 author: Hugo Masclet <git@hugom.xyz>, Callum Grindle <callumgrindle@gmail.com>
 discussions-to: https://discord.gg/E2rJPP4
 status: Draft
@@ -10,15 +10,16 @@ created: 2022-10-05
 
 ## Simple Summary
 
-A Transaction Relayer API for consistency across all Transaction Relayer providers.
+A Transaction Relay Service API for consistency across all Transaction Relay Service providers.
 
 ## Abstract
 
-The [LSP-6-KeyManager](./LSP-6-KeyManager.md) proposes an [`executeRelayCall()`](./LSP-6-KeyManager.md#executerelaycall) function. It allows anybody to execute `_calldata` payload on a set ERC725 X or Y smart contract, given they have a signed message from an executor. This opens the way to Transaction Relayers. This document describes the API 
+The [LSP-6-KeyManager](./LSP-6-KeyManager.md) proposes an [`executeRelayCall()`](./LSP-6-KeyManager.md#executerelaycall) function. It allows anybody to execute `_calldata` payload on a set ERC725 X or Y smart contract, given they have a signed message from a valid executor. This opens the way to Transaction Relay Services which send transactions on behalf of a user to cover their gas costs. 
+
+This document describes the API for a Transaction Relay Service.
 
 ## Motivation
-<!--The motivation is critical for LIPs that want to change the Ethereum protocol. It should clearly explain why the existing protocol specification is inadequate to address the problem that the LIP solves. LIP submissions without sufficient motivation may be rejected outright.-->
-
+Standardizing the Transaction Relay Service API enables applications to be compatible with all Transaction Relay Services which may be built, and avoids a situation where specific applications are only compatible with specific Transaction Relay Services. This is essential for an open marketplace of Transaction Relay Services where a user can select the service which best fits their needs.
 
 ## Specification
 
@@ -54,9 +55,9 @@ Executes a signed transaction on behalf of a Universal Profile using `executeRel
 
 Returns the available quota left for a registered Universal Profile.
 
-- `signature` value is the message value signed by a controller key with the SIGN permission of the Universal Profile
-- `timestamp` must be +/- 5 seconds
-- hash should be calculated as `keccack256(address, timestamp)`. This is the message that should be signed.
+- `signature` is the result of signing a hash calculated as an EIP-712 hash where the message is keccak256(`address`, `timestamp`). 
+- `address` is the controller address with permissions on the Universal Profile used to create the signature value. 
+- `timestamp` represents the time the signature was created. Must be +/- 300 seconds from current time to be considered a valid request. Value should be `int`, `int256`, `uint` or `uint256`.
 
 ##### Request body
 
