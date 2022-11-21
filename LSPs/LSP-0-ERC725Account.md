@@ -16,27 +16,25 @@ This standard describes a version of an [ERC725](https://github.com/ethereum/EIP
  
 ## Abstract
 
-This standard, defines a blockchain account system to be used by humans, machines, or other smart contracts. It has the ability to **attach information** via [ERC725Y](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md#erc725y) to itself, **execute, deploy or transfer value** to any other smart contract or EOA via [ERC725X](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md#erc725x), is able to **be notified and react on incoming assets and information** via the [LSP1-UniversalReceiver](./LSP-1-UniversalReceiver.md) function, and can **verify signatures** via [ERC1271](https://eips.ethereum.org/EIPS/eip-1271).
+This standard, defines a blockchain account system to be used by humans, machines, or other smart contracts. It has the ability to **attach information** via [ERC725Y](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md#erc725y) to itself, **execute, deploy or transfer value** to any other smart contract or EOA via [ERC725X](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md#erc725x), is able to **be notified of incoming assets** via the [LSP1-UniversalReceiver](./LSP-1-UniversalReceiver.md) function, and can **verify signatures** via [ERC1271](https://eips.ethereum.org/EIPS/eip-1271).
 
 
 ## Motivation
 
 Using EOAs as accounts makes it hard to reason about the actor behind an address. Using EOAs have multiple disadvantages:
-- The public key is the address that mostly holds assets, meaning if the private key leaks or get lost, all asstes are lost.
-- No information can be easily attached to the address thats readable by interfaces or smart contracts.
+- The public key is the address that mostly holds assets, meaning if the private key leaks or get lost, all asstes are lost
+- No information can be easily attached to the address thats readable by interfaces or smart contracts
 - Security is not changeable, so proper precautions of securing the private key has to be taken from the generation of the EOA.
 - Recevied assets can not be tracked in the state of the account, but can only be retrieved to external block explorers.
 
 To make the usage of Blockchain infrastructures easier we need to use a smart contract account, rather that EOAs directly as account system.
 This allows us to:
 
-- Perform any action that an EOA can do, and even add the ability to use `staticcall`, `delegatecall` and `create2` through [ERC725X](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md#erc725x).
-- Add information continuously to the account in the form of data key-value pairs through [ERC725Y](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md#erc725y).
-- Provide a secure ownership management and transfer through [LSP14].
-- Make security upgradeable with owning the account via a key manager smart contract (e.g. [LSP6 KeyManager](./LSP-6-KeyManager.md))
-- Allow the account to be informed and react to incoming and outgoing calls such as receiving assets through [LSP1 UniversalReceiver](./LSP-1-UniversalReceiver.md)
-- Verify owner's signature through [ERC1271](https://eips.ethereum.org/EIPS/eip-1271).
+- Make security upgradeable via a key manager smart contract (e.g. [LSP6 KeyManager](./LSP-6-KeyManager.md))
+- Allow any action that an EOA can do, and even add the ability to use `create2` through [ERC725X](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md#erc725x)
+- Allow the account to be informed and react to receiving assets through [LSP1 UniversalReceiver](./LSP-1-UniversalReceiver.md)
 - Define a number of data key-values pairs to attach profile and other information through additional standards like [LSP3 UniversalProfile-Metadata](./LSP-3-UniversalProfile-Metadata.md)
+- Allow signature verification through [ERC1271](https://eips.ethereum.org/EIPS/eip-1271)
 - can execute any smart contract and deploy smart contracts
 - is highly extensible though additional standardisation of the key/value data stored.
 
