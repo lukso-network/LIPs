@@ -102,9 +102,7 @@ This function is part of the [LSP14]((./LSP-14-Ownable2Step.md#transferownership
 function transferOwnership(address newPendingOwner) external;
 ```
 
-This function is part of the [LSP14]((./LSP-14-Ownable2Step.md#transferownership)) specification, with additional requirements as follows:
-
-- The `newPendingOwner` MUST NOT be the contract itself `address(this)`.
+This function is part of the [LSP14]((./LSP-14-Ownable2Step.md#transferownership)) specification.
 
 #### acceptOwnership
 
