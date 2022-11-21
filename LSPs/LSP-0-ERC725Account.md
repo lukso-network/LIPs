@@ -6,7 +6,7 @@ discussions-to: https://discord.gg/E2rJPP4
 status: Draft
 type: LSP
 created: 2021-09-21
-requires: ERC165, ERC725X, ERC725Y, ERC1271, LSP1, LSP2, LSP14
+requires: ERC165, ERC725X, ERC725Y, ERC1271, LSP1, LSP2, LSP14, LSP17
 ---
 
 
@@ -45,11 +45,11 @@ This allows us to:
 
 The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL NOT”, “SHOULD”, “SHOULD NOT”, “RECOMMENDED”, “MAY”, and “OPTIONAL” in this document are to be interpreted as described in [RFC 2119](https://datatracker.ietf.org/doc/html/rfc2119).
 
-**LSP0-ERC725Account** interface id according to [ERC165]: `0xdca05671`.
+**LSP0-ERC725Account** interface id according to [ERC165]: `0x66767497`.
 
-_This `bytes4` interface id is calculated as the XOR of the function selectors from the following interface standards: ERC725Y, ERC725X, LSP1-UniversalReceiver, ERC1271-isValidSignature and LSP14Ownable2Step._
+_This `bytes4` interface id is calculated as the XOR of the interfaceId of the following standards: ERC725Y, ERC725X, LSP1-UniversalReceiver, ERC1271-isValidSignature, LSP14Ownable2Step and LSP17ContractExtension._
 
-Smart contracts implementing the LSP0 standard MUST implement the [ERC165] `supportsInterface(..)` function and MUST support the LSP0, ERC725X, ERC725Y, ERC1271, LSP1 and LSP14 interface ids.
+Smart contracts implementing the LSP0 standard MUST implement the [ERC165] `supportsInterface(..)` function and MUST support the LSP0, ERC725X, ERC725Y, ERC1271, LSP1, LSP14 and LSP17 interface ids.
 
 ### Methods
 
@@ -72,9 +72,10 @@ MUST emit a [`ValueReceived`](#valuereceived) event when receiving native token.
 fallback() external payable;
 ```
 
-The fallback function allows for receiving native tokens, as well as arbitrary calldata. The reasoning is that it allows for Graffiti with transactions, or protocols to be built for offchain parsing.
+This function is part of the LSP17 specification, with additional requirements as follows:
 
-MUST emit a [`ValueReceived`](#valuereceived) event if value was present.
+- MUST be payable.
+- MUST emit a [`ValueReceived`](#valuereceived) event if value was present.
 
 
 #### owner
@@ -128,9 +129,9 @@ This function is part of the [LSP14]((./LSP-14-Ownable2Step.md#transferownership
 ```solidity
 function execute(uint256 operationType, address target, uint256 value, bytes memory data) external payable returns (bytes memory);
 ```
-This function is part of the [ERC725X](https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#execute) specification with additional logic as follows:
+This function is part of the [ERC725X](https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#execute) specification, with additional requirements as follows:
 
-MUST emit a [`ValueReceived`](#valuereceived) event before external calls or contract creation if the function receives native tokens.
+- MUST emit a [`ValueReceived`](#valuereceived) event before external calls or contract creation if the function receives native tokens.
 
 
 #### execute (Array)
@@ -138,9 +139,9 @@ MUST emit a [`ValueReceived`](#valuereceived) event before external calls or con
 ```solidity
 function execute(uint256[] memory operationsType, address[] memory targets, uint256[] memory values, bytes[] memory datas) external payable returns (bytes[] memory);
 ```
-This function is part of the [ERC725X](https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#execute-array) specification with additional requirements as follows:
+This function is part of the [ERC725X](https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#execute-array) specification, with additional requirements as follows:
 
-MUST emit a [`ValueReceived`](#valuereceived) event before external calls or contract creation if the function receives native tokens.
+- MUST emit a [`ValueReceived`](#valuereceived) event before external calls or contract creation if the function receives native tokens.
 
 
 #### getData
@@ -166,7 +167,9 @@ This function is part of the [ERC725Y](https://github.com/ERC725Alliance/ERC725/
 ```solidity
 function setData(bytes32 dataKey, bytes memory dataValue) external;
 ```
-This function is part of the [ERC725Y](https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#setdata) specification.
+This function is part of the [ERC725Y](https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#setdata) specification, with additional requirements as follows:
+
+- MUST emit only the first 256 bytes of the dataValue in the DataChanged Event.
 
 
 #### setData (Array)
@@ -175,7 +178,9 @@ This function is part of the [ERC725Y](https://github.com/ERC725Alliance/ERC725/
 function setData(bytes32[] memory dataKeys, bytes[] memory dataValues) external;
 ```
 
-This function is part of the [ERC725Y](https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#setdata-array) specification.
+This function is part of the [ERC725Y](https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#setdata-array) specification, with additional requirements as follows:
+
+- MUST emit only the first 256 bytes of the dataValue in the DataChanged Event.
 
 
 #### isValidSignature
@@ -184,13 +189,11 @@ This function is part of the [ERC725Y](https://github.com/ERC725Alliance/ERC725/
 function isValidSignature(bytes32 hash, bytes memory signature) external view returns (bytes4);
 ```
 
-This function is part of the [ERC1271](https://eips.ethereum.org/EIPS/eip-1271) specification.
+This function is part of the [ERC1271](https://eips.ethereum.org/EIPS/eip-1271) specification, with additional requirements as follows:
 
-Checks if the signature is valid for the hash provided. 
+- When the owner is an EOA, the function MUST return the magic value if the address recovered from the hash and the signature is the owner of the contract, and MUST return the failure value otherwise. 
 
-When the owner is an EOA, the function MUST return the magic value if the address recovered from the hash and the signature is the owner of the contract, and the failure value otherwise. 
-
-When the owner is a contract, the function MUST check whether the owner contract supports ERC1271 interface id through ERC165, if yes it calls `isValidSignature(..)` function on the owner contract and returns its value. If the owner does not support ERC1271 interface id or the function does not exist on the owner, the function MUST return the failure value.
+- When the owner is a contract, the function MUST check whether the owner contract supports ERC1271 interface id through ERC165, if yes it calls `isValidSignature(..)` function on the owner contract and returns its value. If the owner does not support ERC1271 interface id or the function does not exist on the owner, the function MUST return the failure value.
 
 
 #### universalReceiver
@@ -199,11 +202,11 @@ When the owner is a contract, the function MUST check whether the owner contract
 function universalReceiver(bytes32 typeId, bytes memory receivedData) external payable returns (bytes memory);
 ```
 
-This function is part of the [LSP1](./LSP-1-UniversalReceiver.md) specification.
+This function is part of the [LSP1](./LSP-1-UniversalReceiver.md) specification, with additional requirements as follows:
 
-Forwards the call to the `universalReceiverDelegate(..)` function of the UniversalReceiverDelegate contract and the MappedUniversalReceiverDelegate relevant for the typeId provided as argument.
+- MUST emit a [`ValueReceived`](#valuereceived) event before external calls if the function receives native tokens.
 
-If an `address` is stored under the data key attached below and and this address is a contract that supports the [LSP1UniversalReceiverDelegate](#) interface id, forwards the call to the `universalReceiverDelegate(..)` function of the **UniversalReceiverDelegate** contract. If there is no address stored under this data key, execution continues normally. 
+- If an `address` is stored under the data key attached below and and this address is a contract that supports the [LSP1UniversalReceiverDelegate](#) interface id, forwards the call to the [`universalReceiverDelegate(..)`](#) function of the **UniversalReceiverDelegate** contract. If there is no address stored under this data key, execution continues normally. 
 
 ```json
 {
@@ -215,7 +218,7 @@ If an `address` is stored under the data key attached below and and this address
 }
 ```
 
-If an `address` is stored under the data key attached below and and this address is a contract that supports the [LSP1UniversalReceiverDelegate](#) interface id, forwards the call to the `universalReceiverDelegate(..)` function of the **MappedUniversalReceiverDelegate** contract. If there is no address stored under this data key, execution continues normally. 
+- If an `address` is stored under the data key attached below and and this address is a contract that supports the [LSP1UniversalReceiverDelegate](#) interface id, forwards the call to the [`universalReceiverDelegate(..)`](#)` function of the **MappedUniversalReceiverDelegate** contract. If there is no address stored under this data key, execution continues normally. 
 
 ```json
 {
@@ -229,12 +232,9 @@ If an `address` is stored under the data key attached below and and this address
 
 > <bytes32\> is the `typeId` passed to the `universalReceiver(..)` function. Check [LSP2-ERC725YJSONSchema] to learn how to encode the key.
 
-This function MUST return the returned value of both UniversalReceiverDelegate and MappedUniversalReceiverDelegate abi-encoded as bytes. 
+- MUST return the returned value of both UniversalReceiverDelegate and MappedUniversalReceiverDelegate abi-encoded as bytes.
 
-MUST emit a [UniversalReceiver](./LSP-1-UniversalReceiver.md#events) event if the function was successful.
-
-MUST emit a [`ValueReceived`](#valuereceived) event before external calls if the function receives native tokens.
-
+- MUST emit a [UniversalReceiver](./LSP-1-UniversalReceiver.md#events) event if the function was successful.
 
 ### Events
 
@@ -254,20 +254,6 @@ The ERC725Y general data key-value store allows for the ability to add any kind 
 
 An implementation can be found in the [lukso-network/lsp-smart-contracts](https://github.com/lukso-network/lsp-smart-contracts/blob/develop/contracts/LSP0ERC725Account/LSP0ERC725AccountCore.sol) repository.
 
-ERC725Y JSON Schema `ERC725Account`:
-
-```json
-[
-    {
-        "name": "LSP1UniversalReceiverDelegate",
-        "key": "0x0cfc51aec37c55a4d0b1a65c6255c4bf2fbdf6277f3cc0730c45b828b6db8b47",
-        "keyType": "Singleton",
-        "valueType": "address",
-        "valueContent": "Address"
-    }
-]
-```
-
 ## Interface Cheat Sheet
 
 ```solidity
@@ -282,6 +268,8 @@ interface ILSP0  /* is ERC165 */ {
     
     
     function execute(uint256 operationType, address to, uint256 value, bytes memory data) external payable returns (bytes memory); // onlyOwner
+    
+    function execute(uint256[] memory operationsType, address[] memory targets, uint256[] memory values, bytes[] memory datas) external payable returns(bytes[] memory); // onlyOwner
     
     
     // ERC725Y
@@ -307,7 +295,7 @@ interface ILSP0  /* is ERC165 */ {
       
     event ValueReceived(address indexed sender, uint256 indexed value);
 
-    fallback() external payable;
+    receive() external payable;
     
 
     // LSP1
@@ -338,6 +326,11 @@ interface ILSP0  /* is ERC165 */ {
     function acceptOwnership() external;
     
     function renounceOwnership() external; // onlyOwner
+    
+    
+    // LSP17
+    
+    fallback() external payable;
 
 }
 
