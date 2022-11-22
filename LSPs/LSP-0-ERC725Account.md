@@ -70,7 +70,7 @@ MUST emit a [`ValueReceived`](#valuereceived) event when receiving native token.
 fallback() external payable;
 ```
 
-This function is part of the LSP17 specification, with additional requirements as follows:
+This function is part of the [LSP17]((./LSP-17-ContractExtension.md)) specification, with additional requirements as follows:
 
 - MUST be payable.
 - MUST emit a [`ValueReceived`](#valuereceived) event if value was present.
@@ -165,7 +165,7 @@ function setData(bytes32 dataKey, bytes memory dataValue) external;
 ```
 This function is part of the [ERC725Y](https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#setdata) specification, with additional requirements as follows:
 
-- MUST emit only the first 256 bytes of the dataValue in the DataChanged Event.
+- MUST emit only the first 256 bytes of the dataValue parameter in the [DataChanged](https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#datachanged) Event.
 
 
 #### setData (Array)
@@ -176,7 +176,7 @@ function setData(bytes32[] memory dataKeys, bytes[] memory dataValues) external;
 
 This function is part of the [ERC725Y](https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#setdata-array) specification, with additional requirements as follows:
 
-- MUST emit only the first 256 bytes of the dataValue in the DataChanged Event.
+- MUST emit only the first 256 bytes of the dataValue parameter in the [DataChanged](https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#datachanged) Event.
 
 
 #### isValidSignature
@@ -187,9 +187,9 @@ function isValidSignature(bytes32 hash, bytes memory signature) external view re
 
 This function is part of the [ERC1271](https://eips.ethereum.org/EIPS/eip-1271) specification, with additional requirements as follows:
 
-- When the owner is an EOA, the function MUST return the magic value if the address recovered from the hash and the signature is the owner of the contract, and MUST return the failure value otherwise. 
+- When the owner is an EOA, the function MUST return the [magic value](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1271.md#specification) if the address recovered from the hash and the signature is the owner of the contract, and MUST return the [failure value](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1271.md#specification) otherwise. 
 
-- When the owner is a contract, the function MUST check whether the owner contract supports ERC1271 interface id through ERC165, if yes it calls `isValidSignature(..)` function on the owner contract and returns its value. If the owner does not support ERC1271 interface id or the function does not exist on the owner, the function MUST return the failure value.
+- When the owner is a contract, the function MUST check whether the owner contract supports ERC1271 interface id through ERC165, if yes it calls `isValidSignature(..)` function on the owner contract and returns its value. If the owner does not support ERC1271 interface id or the function does not exist on the owner, the function MUST return the [failure value](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1271.md#specification).
 
 
 #### universalReceiver
@@ -202,7 +202,7 @@ This function is part of the [LSP1](./LSP-1-UniversalReceiver.md) specification,
 
 - MUST emit a [`ValueReceived`](#valuereceived) event before external calls if the function receives native tokens.
 
-- If an `address` is stored under the data key attached below and and this address is a contract that supports the [LSP1UniversalReceiverDelegate](#) interface id, forwards the call to the [`universalReceiverDelegate(..)`](#) function of the **UniversalReceiverDelegate** contract. If there is no address stored under this data key, execution continues normally. 
+- If an `address` is stored under the data key attached below and and this address is a contract that supports the [LSP1UniversalReceiverDelegate](#) interface id, forwards the call to the [`universalReceiverDelegate(..)`](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1271.md#specification) function of the **UniversalReceiverDelegate** contract. If there is no address stored under this data key, execution continues normally. 
 
 ```json
 {
@@ -214,7 +214,7 @@ This function is part of the [LSP1](./LSP-1-UniversalReceiver.md) specification,
 }
 ```
 
-- If an `address` is stored under the data key attached below and and this address is a contract that supports the [LSP1UniversalReceiverDelegate](#) interface id, forwards the call to the [`universalReceiverDelegate(..)`](#)` function of the **MappedUniversalReceiverDelegate** contract. If there is no address stored under this data key, execution continues normally. 
+- If an `address` is stored under the data key attached below and and this address is a contract that supports the [LSP1UniversalReceiverDelegate](#) interface id, forwards the call to the [`universalReceiverDelegate(..)`](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1271.md#specification)` function of the **MappedUniversalReceiverDelegate** contract. If there is no address stored under this data key, execution continues normally. 
 
 ```json
 {
