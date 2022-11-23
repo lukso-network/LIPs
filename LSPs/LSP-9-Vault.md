@@ -6,7 +6,7 @@ discussions-to: https://discord.gg/E2rJPP4
 status: Draft
 type: LSP
 created: 2021-09-21
-requires: ERC165, ERC725X, ERC725Y, LSP1, LSP2, LSP14
+requires: ERC165, ERC725X, ERC725Y, LSP1, LSP2, LSP14, LSP17
 ---
 
 
@@ -44,7 +44,7 @@ receive() external payable;
 
 The receive function allows for receiving native tokens.
 
-MUST emit a [`ValueReceived`](#valuereceived) event when receiving native token.
+MUST emit a [`ValueReceived`] event when receiving native token.
 
 
 #### fallback
@@ -53,10 +53,10 @@ MUST emit a [`ValueReceived`](#valuereceived) event when receiving native token.
 fallback() external payable;
 ```
 
-This function is part of the LSP17 specification, with additional requirements as follows:
+This function is part of the [LSP17] specification, with additional requirements as follows:
 
 - MUST be payable.
-- MUST emit a [`ValueReceived`](#valuereceived) event if value was present.
+- MUST emit a [`ValueReceived`] event if value was present.
 
 
 #### owner
@@ -65,7 +65,7 @@ This function is part of the LSP17 specification, with additional requirements a
 function owner() external view returns (address);
 ```
 
-This function is part of the [LSP14]((./LSP-14-Ownable2Step.md#transferownership)) specification.
+This function is part of the [LSP14] specification.
 
 
 #### pendingOwner
@@ -74,7 +74,7 @@ This function is part of the [LSP14]((./LSP-14-Ownable2Step.md#transferownership
 function pendingOwner() external view returns (address);
 ```
 
-This function is part of the [LSP14]((./LSP-14-Ownable2Step.md#transferownership)) specification.
+This function is part of the [LSP14] specification.
 
 
 #### transferOwnership
@@ -83,7 +83,7 @@ This function is part of the [LSP14]((./LSP-14-Ownable2Step.md#transferownership
 function transferOwnership(address newPendingOwner) external;
 ```
 
-This function is part of the [LSP14]((./LSP-14-Ownable2Step.md#transferownership)) specification.
+This function is part of the [LSP14] specification.
 
 #### acceptOwnership
 
@@ -91,7 +91,7 @@ This function is part of the [LSP14]((./LSP-14-Ownable2Step.md#transferownership
 function acceptOwnership() external;
 ```
 
-This function is part of the [LSP14]((./LSP-14-Ownable2Step.md#transferownership)) specification.
+This function is part of the [LSP14] specification.
 
 
 #### renounceOwnership
@@ -100,7 +100,7 @@ This function is part of the [LSP14]((./LSP-14-Ownable2Step.md#transferownership
 function renounceOwnership() external;
 ```
 
-This function is part of the [LSP14]((./LSP-14-Ownable2Step.md#transferownership)) specification.
+This function is part of the [LSP14] specification.
 
 
 #### execute
@@ -108,11 +108,11 @@ This function is part of the [LSP14]((./LSP-14-Ownable2Step.md#transferownership
 ```solidity
 function execute(uint256 operationType, address target, uint256 value, bytes memory data) external payable returns (bytes memory);
 ```
-This function is part of the [ERC725X](https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#execute) specification, with additional requirements as follows:
+This function is part of the [ERC725X] specification, with additional requirements as follows:
 
 - MUST revert when the operation type is DELEGATECALL.
 
-- MUST emit a [`ValueReceived`](#valuereceived) event before external calls or contract creation if the function receives native tokens.
+- MUST emit a [`ValueReceived`] event before external calls or contract creation if the function receives native tokens.
 
 
 #### execute (Array)
@@ -120,11 +120,11 @@ This function is part of the [ERC725X](https://github.com/ERC725Alliance/ERC725/
 ```solidity
 function execute(uint256[] memory operationsType, address[] memory targets, uint256[] memory values, bytes[] memory datas) external payable returns (bytes[] memory);
 ```
-This function is part of the [ERC725X](https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#execute-array) specification, with additional requirements as follows:
+This function is part of the [ERC725X] specification, with additional requirements as follows:
 
-- MUST revert when the operation type is DELEGATECALL.
+- MUST revert when one of the operations type is DELEGATECALL.
 
-- MUST emit a [`ValueReceived`](#valuereceived) event before external calls or contract creation if the function receives native tokens.
+- MUST emit a [`ValueReceived`] event before external calls or contract creation if the function receives native tokens.
 
 
 #### getData
@@ -133,7 +133,7 @@ This function is part of the [ERC725X](https://github.com/ERC725Alliance/ERC725/
 function getData(bytes32 dataKey) external view returns (bytes memory);
 ```
 
-This function is part of the [ERC725Y](https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#getdata) specification.
+This function is part of the [ERC725Y] specification.
 
 
 #### getData
@@ -142,7 +142,7 @@ This function is part of the [ERC725Y](https://github.com/ERC725Alliance/ERC725/
 function getData(bytes32[] memory dataKeys) external view returns (bytes[] memory);
 ```
 
-This function is part of the [ERC725Y](https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#getdata-array) specification.
+This function is part of the [ERC725Y] specification.
 
 
 #### setData
@@ -150,11 +150,11 @@ This function is part of the [ERC725Y](https://github.com/ERC725Alliance/ERC725/
 ```solidity
 function setData(bytes32 dataKey, bytes memory dataValue) external;
 ```
-This function is part of the [ERC725Y](https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#setdata) specification, with additional requirements as follows:
+This function is part of the [ERC725Y] specification, with additional requirements as follows:
 
 - MUST allow only the owner and the UniversalReceiverDelegate contracts to setData. 
 
-- MUST emit only the first 256 bytes of the dataValue in the DataChanged Event.
+- MUST emit only the first 256 bytes of the dataValue parameter in the [DataChanged] event.
 
 
 #### setData (Array)
@@ -163,11 +163,11 @@ This function is part of the [ERC725Y](https://github.com/ERC725Alliance/ERC725/
 function setData(bytes32[] memory dataKeys, bytes[] memory dataValues) external;
 ```
 
-This function is part of the [ERC725Y](https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#setdata-array) specification, with additional requirements as follows:
+This function is part of the [ERC725Y] specification, with additional requirements as follows:
 
 - MUST allow only the owner and the UniversalReceiverDelegate contracts to setData. 
 
-- MUST emit only the first 256 bytes of the dataValue in the DataChanged Event.
+- MUST emit only the first 256 bytes of the dataValue parameter in the [DataChanged] event.
 
 
 #### universalReceiver
@@ -176,11 +176,11 @@ This function is part of the [ERC725Y](https://github.com/ERC725Alliance/ERC725/
 function universalReceiver(bytes32 typeId, bytes memory receivedData) external payable returns (bytes memory);
 ```
 
-This function is part of the [LSP1](./LSP-1-UniversalReceiver.md) specification, with additional requirements as follows:
+This function is part of the [LSP1] specification, with additional requirements as follows:
 
-- MUST emit a [`ValueReceived`](#valuereceived) event before external calls if the function receives native tokens.
+- MUST emit a [`ValueReceived`] event before external calls if the function receives native tokens.
 
-- If an `address` is stored under the data key attached below and and this address is a contract that supports the [LSP1UniversalReceiverDelegate](#) interface id, forwards the call to the [`universalReceiverDelegate(..)`](#) function of the **UniversalReceiverDelegate** contract. If there is no address stored under this data key, execution continues normally. 
+- If an `address` is stored under the data key attached below and and this address is a contract that supports the [LSP1UniversalReceiver interface id], forwards the call to the [`universalReceiver(bytes32,bytes)`] function on the address retreived appended with the caller address without padding (bytes20) and the uint256 msg.value sent (bytes32) to the `universalReceiver(bytes32,bytes)` function of the LSP9 contract. If there is no address stored under this data key, execution continues normally. 
 
 ```json
 {
@@ -192,7 +192,8 @@ This function is part of the [LSP1](./LSP-1-UniversalReceiver.md) specification,
 }
 ```
 
-- If an `address` is stored under the data key attached below and and this address is a contract that supports the [LSP1UniversalReceiverDelegate](#) interface id, forwards the call to the [`universalReceiverDelegate(..)`](#)` function of the **MappedUniversalReceiverDelegate** contract. If there is no address stored under this data key, execution continues normally. 
+- If an `address` is stored under the data key attached below and and this address is a contract that supports the [LSP1UniversalReceiver interface id], forwards the call to the [`universalReceiver(bytes32,bytes)`] function on the address retreived appended with the caller address without padding (bytes20) and the uint256 msg.value sent (bytes32) to the `universalReceiver(bytes32,bytes)` function of the LSP9 contract. If there is no address stored under this data key, execution continues normally. 
+
 ```json
 {
   "name": "LSP1UniversalReceiverDelegate:<bytes32>",
@@ -204,9 +205,10 @@ This function is part of the [LSP1](./LSP-1-UniversalReceiver.md) specification,
 ```
 
 > <bytes32\> is the `typeId` passed to the `universalReceiver(..)` function. Check [LSP2-ERC725YJSONSchema] to learn how to encode the key.
-- MUST return the returned value of both UniversalReceiverDelegate and MappedUniversalReceiverDelegate abi-encoded as bytes.
 
-- MUST emit a [UniversalReceiver](./LSP-1-UniversalReceiver.md#events) event if the function was successful.
+- MUST return the returned value of the `universalReceiver(bytes32,bytes)` function on both retreived contract abi-encoded as bytes. If there is no addresses stored under the data keys above or the call was not forwarded to them, the return value is the two empty bytes abi-encoded as bytes. 
+
+- MUST emit a [UniversalReceiver] event if the function was successful.
 
 ### Events
 
@@ -218,101 +220,146 @@ event ValueReceived(address indexed sender, uint256 indexed value);
 
 MUST be emitted when a native token transfer was received.
 
+
+### ERC725Y Data Keys
+
+
+#### LSP1UniversalReceiverDelegate
+
+```json
+{
+    "name": "LSP1UniversalReceiverDelegate",
+    "key": "0x0cfc51aec37c55a4d0b1a65c6255c4bf2fbdf6277f3cc0730c45b828b6db8b47",
+    "keyType": "Singleton",
+    "valueType": "address",
+    "valueContent": "Address"
+}
+```
+
+If the vault delegates its universal receiver functionality to another smart contract, this smart contract address MUST be stored under the data key attached above. This call to this contract is performed when the `universalReceiver(bytes32,bytes)` function of the vault is called and can react on the whole call regardless of typeId. 
+
+Check [LSP1-UniversalReceiver] and [LSP2-ERC725YJSONSchema] for more information.
+
+#### Mapped LSP1UniversalReceiverDelegate
+
+```json
+{
+    "name": "LSP1UniversalReceiverDelegate:<bytes32>",
+    "key": "0x0cfc51aec37c55a4d0b10000<bytes32>",
+    "keyType": "Mapping",
+    "valueType": "address",
+    "valueContent": "Address"
+}
+```
+
+> <bytes32\> is the `typeId` passed to the `universalReceiver(..)` function. Check [LSP2-ERC725YJSONSchema] to learn how to encode the key.
+
+If the vault delegates its universal receiver functionality to another smart contract, this smart contract address MUST be stored under the data key attached above. This call to this contract is performed when the `universalReceiver(bytes32,bytes)` function of the vault is called with a specific typeId that it can react on. 
+
+Check [LSP1-UniversalReceiver] and [LSP2-ERC725YJSONSchema] for more information.
+
+#### LSP17Extension
+
+```json
+{
+    "name": "LSP17Extension:<bytes4>",
+    "key": "0xcee78b4094da860110960000<bytes4>",
+    "keyType": "Mapping",
+    "valueType": "address",
+    "valueContent": "Address"
+}
+```
+
+> <bytes4\> is the `functionSelector` called on the vault contract. Check [LSP2-ERC725YJSONSchema] to learn how to encode the key.
+
+If there is a function called on the vault and the function does not exist, the fallback function lookup an address stored under the data key attached above and forwards the call to it with the value of the msg.sender and msg.value appended as extra calldata.
+
+Check [LSP17-ContractExtension] and [LSP2-ERC725YJSONSchema] for more information.
+
 ## Rationale
 
 The ERC725Y general data key value store allows for the ability to add any kind of information to the contract, which allows future use cases. The general execution allows full interactability with any smart contract or address. And the universal receiver allows the reaction to any future asset.
 
 ## Implementation
 
-An implementation can be found on the [lsp-universalprofile-smart-contracts](https://github.com/lukso-network/lsp-universalprofile-smart-contracts/tree/main/contracts/LSP9Vault) repository;
+An implementation can be found on the [lsp-universalprofile-smart-contracts] repository;
 
-ERC725Y JSON Schema:
-
-```json
-[
-    {
-        "name": "SupportedStandards:LSP9Vault",
-        "key": "0xeafec4d89fa9619884b600007c0334a14085fefa8b51ae5a40895018882bdb90",
-        "keyType": "Mapping",
-        "valueType": "bytes4",
-        "valueContent": "0x7c0334a1"
-    },
-    {
-        "name": "LSP1UniversalReceiverDelegate",
-        "key": "0x0cfc51aec37c55a4d0b1a65c6255c4bf2fbdf6277f3cc0730c45b828b6db8b47",
-        "keyType": "Singleton",
-        "valueContent": "Address",
-        "valueType": "address"
-    }
-]
-```
 
 ## Interface Cheat Sheet
 
 ```solidity
 
 interface ILSP9  /* is ERC165 */ {    
-
-    
+         
+        
     // ERC725X
-
-    event Executed(uint256 indexed operation, address indexed to, uint256 indexed  value, bytes4 selector);
-
+    
+    event Executed(uint256 indexed operation, address indexed to, uint256 indexed  value, bytes4 selector);\
+    
     event ContractCreated(uint256 indexed operation, address indexed contractAddress, uint256 indexed value);
     
     
     function execute(uint256 operationType, address to, uint256 value, bytes memory data) external payable returns (bytes memory); // onlyOwner
     
+    function execute(uint256[] memory operationsType, address[] memory targets, uint256[] memory values, bytes[] memory datas) external payable returns(bytes[] memory); // onlyOwner
+    
     
     // ERC725Y
-
+    
     event DataChanged(bytes32 indexed dataKey, bytes dataValue);
-
-
+    
+    
     function getData(bytes32 dataKey) external view returns (bytes memory dataValue);
     
     function setData(bytes32 dataKey, bytes memory dataValue) external; // onlyOwner
-
-    function getData(bytes32[] memory dataKeys) external view returns (bytes[] memory dataValues);
-
-    function setData(bytes32[] memory dataKeys, bytes[] memory dataValues) external; // onlyOwner
-        
-
-    // LSP1
-
-    event UniversalReceiver(address indexed from, uint256 indexed value, bytes32 indexed typeId, bytes receivedData, bytes returnedValue);
     
-
-    function universalReceiver(bytes32 typeId, bytes memory data) external payable returns (bytes memory);
-
-
-    // LSP9 
+    function getData(bytes32[] memory dataKeys) external view returns (bytes[] memory dataValues);
+    
+    function setData(bytes32[] memory dataKeys, bytes[] memory dataValues) external; // onlyOwner
+    
+    
+    // LSP9 (LSP9Vault)
       
     event ValueReceived(address indexed sender, uint256 indexed value);
-
-    fallback() external payable;
-
-
+    
+    
+    receive() external payable;
+    
+   
+    // LSP1
+    
+    
+    event UniversalReceiver(address indexed from, uint256 indexed value, bytes32 indexed typeId, bytes receivedData, bytes returnedValue);
+    
+    
+    function universalReceiver(bytes32 typeId, bytes memory data) external payable returns (bytes memory);
+    
+    
     // LSP14
-
+    
     event OwnershipTransferStarted(address indexed previousOwner, address indexed newOwner);
-
+    
     event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
-
+    
     event RenounceOwnershipInitiated();
-
+    
     event OwnershipRenounced();
-
-
+    
+    
     function owner() external view returns (address);
     
     function pendingOwner() external view returns (address);
-
+    
     function transferOwnership(address newOwner) external; // onlyOwner
-
+    
     function acceptOwnership() external;
     
     function renounceOwnership() external; // onlyOwner
+    
+    
+    // LSP17
+    
+    fallback() external payable;
 
 }
 
@@ -324,5 +371,17 @@ interface ILSP9  /* is ERC165 */ {
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
 
 [ERC165]: <https://eips.ethereum.org/EIPS/eip-165>
+[ERC725X]: <https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#erc725x>
+[ERC725Y]: <https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#erc725y>
 [LSP1-UniversalReceiver]: <./LSP-1-UniversalReceiver.md>
+[LSP1]: <./LSP-1-UniversalReceiver.md>
 [LSP2-ERC725YJSONSchema]: <./LSP-2-ERC725YJSONSchema.md>
+[LSP14]: <./LSP-14-Ownable2Step.md>
+[lukso-network/lsp-smart-contracts]: <https://github.com/lukso-network/lsp-smart-contracts/blob/develop/contracts/LSP9Vault/LSP9VaultCore.sol>
+[LSP17]: <./LSP-17-ContractExtension.md>
+[LSP17-ContractExtension]: <./LSP-17-ContractExtension.md>
+[UniversalReceiver]: <./LSP-1-UniversalReceiver.md#events>
+[`universalReceiver(bytes32,bytes)`]: <./LSP-1-UniversalReceiver.md#universalreceiver>
+[LSP1UniversalReceiver interface id]: <./LSP-1-UniversalReceiver.md#specification>
+[`ValueReceived`]: <#valuereceived>
+[DataChanged]: <https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#datachanged>
