@@ -218,7 +218,7 @@ This function is part of the [LSP1] specification, with additional requirements 
 
 ```json
 {
-  "name": "LSP1UniversalReceiverDelegate:<typeId>",
+  "name": "LSP1UniversalReceiverDelegate:<bytes32>",
   "key": "0x0cfc51aec37c55a4d0b10000<bytes32>",
   "keyType": "Mapping",
   "valueType": "address",
@@ -266,13 +266,15 @@ Check [LSP1-UniversalReceiver] and [LSP2-ERC725YJSONSchema] for more information
 
 ```json
 {
-    "name": "LSP1UniversalReceiverDelegate:<typeId>",
+    "name": "LSP1UniversalReceiverDelegate:<bytes32>",
     "key": "0x0cfc51aec37c55a4d0b10000<bytes32>",
     "keyType": "Mapping",
     "valueType": "address",
     "valueContent": "Address"
 }
 ```
+
+> <bytes32\> is the `typeId` passed to the `universalReceiver(..)` function. Check [LSP2-ERC725YJSONSchema] to learn how to encode the key.
 
 If the account delegates its universal receiver functionality to another smart contract, this smart contract address MUST be stored under the data key attached above. This call to this contract is performed when the `universalReceiver(bytes32,bytes)` function of the account is called with a specific typeId that it can react on. 
 
@@ -282,13 +284,15 @@ Check [LSP1-UniversalReceiver] and [LSP2-ERC725YJSONSchema] for more information
 
 ```json
 {
-    "name": "LSP17Extension:<functionSelector>",
+    "name": "LSP17Extension:<bytes4>",
     "key": "0xcee78b4094da860110960000<bytes4>",
     "keyType": "Mapping",
     "valueType": "address",
     "valueContent": "Address"
 }
 ```
+
+> <bytes4\> is the `functionSelector` called on the account contract. Check [LSP2-ERC725YJSONSchema] to learn how to encode the key.
 
 If there is a function called on the account and the function does not exist, the fallback function lookup an address stored under the data key attached above and forwards the call to it with the value of the msg.sender and msg.value appended as extra calldata.
 
