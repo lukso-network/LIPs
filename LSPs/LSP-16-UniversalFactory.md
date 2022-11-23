@@ -6,27 +6,27 @@ discussions-to: https://discord.gg/E2rJPP4
 status: Draft
 type: LSP
 created: 2022-11-19
-requires: EIP155, EIP104, EIP1167
+requires: EIP104, EIP155, EIP1167
 ---
 
 
 ## Simple Summary
 
-This standard defines a universal factory smart contract, that will allow to deploy different types of smart contract using CREATE2 opcode after being deployed with Nick's method in order to produce the same address on different chains.
+This standard defines a universal factory smart contract, that will allow to deploy different types of smart contract using [CREATE2] opcode after being deployed with [Nick's method] in order to produce the same address on different chains.
  
 ## Abstract
 
-This standard defines several function to be used to deploy different types of contracts using CREATE2 such as normal and initializable contracts. These functions take into consideration the need to initialize in the same transaction for initializable contracts. The initialize data is included in the salt to avoid squatting addresses on different chains.
+This standard defines several function to be used to deploy different types of contracts using [CREATE2] such as normal and initializable contracts. These functions take into consideration the need to initialize in the same transaction for initializable contracts. The initialize data is included in the salt to avoid squatting addresses on different chains.
 
-The same bytecode and salt will produce the same contract address on different chains, if and only if, the UniversalFactory contract was deployed on the same address on each chain, using nick's method in our case.
+The same bytecode and salt will produce the same contract address on different chains, if and only if, the UniversalFactory contract was deployed on the same address on each chain, using [Nick's method] in our case.
 
 ## Motivation
 
-Having the private key that controls an address makes it possible to control every address on different chains. This will allow people to check your address on a specific chain and send you an asset on the other chain assuming you can control the other address. 
+Having a private key that controls an address makes it possible to control this address on different chains. This will allow people to check an address on a specific chain and send assets on the other chains assuming the same entity control the other addresses. 
 
-With smart contract based accounts, having an account on a specific address on a chain doesn't mean that the same account is deployed on the same address address and controlled by you on the another chain.  
+With smart contract, having a contract on a specific address on a chain doesn't mean that the same contract is deployed on the same address address and controlled by the same entity on the another chain. The asset sents by the user who assumed the control of the same address on different chains are now unreachable, thats why it's good to have the ability to reproduce the same address of a contract on other chains, guaranteeing the access on the other smart contract in case there was a mistake sending assets to another chain.
 
-
+Also deploying a contract on multiple chain with the same address can create some sort of multi-chain identity that can be useful in case of factory, registry and account based contracts.
 
 ## Specification
 
@@ -38,7 +38,7 @@ With smart contract based accounts, having an account on a specific address on a
 function deployCreate2(bytes calldata byteCode, bytes32 providedSalt) external payable returns (address);
 ```
 
-Deploys a contract using CREATE2 with passed `byteCode` and a generated the salt with the msg.value sent to the function.
+Deploys a contract using [CREATE2] with passed `byteCode` and a generated the salt with the msg.value sent to the function.
 
 The salt generated is the keccak256 of an initializable boolean and the `provided salt` packed encoded. The initializable boolean is false in this function.
 
@@ -53,7 +53,7 @@ MUST emit the [ContractCreated] event after deploying the contract.
 function deployCreate2Init(bytes calldata byteCode, bytes32 providedSalt, bytes calldata initializeCalldata, uint256 constructorMsgValue, uint256 initializeCalldataMsgValue) external payable returns (address);
 ```
 
-Deploys a contract using CREATE2 with passed `byteCode` and a generated the salt with the `constructorMsgValue` as value. Perform an external call on the contract created with `initializeCalldata` as payload and `initializeCalldataMsgValue` as value.
+Deploys a contract using [CREATE2] with passed `byteCode` and a generated the salt with the `constructorMsgValue` as value. Perform an external call on the contract created with `initializeCalldata` as payload and `initializeCalldataMsgValue` as value.
 
 The salt generated is the keccak256 of an initializable boolean, the initializeCallData, and the provided salt packed encoded. The initializable boolean is true in this function.
 
@@ -72,7 +72,7 @@ MUST emit the [ContractCreated] event after deploying the contract.
 function deployCreate2Proxy(address baseContract, bytes32 providedSalt, bytes calldata initializeCalldata) external payable returns (address);
 ```
 
-Deploys a minimal proxy using CREATE2 with passed `baseContract` and a generated the salt. 
+Deploys a [minimal proxy] using [CREATE2] with passed `baseContract` and a generated the salt. 
 If the initializeCalldata length is not zero, perform an external call on the contract created with `initializeCalldata` as payload and msg.value as value. initializeCalldata length is zero do not perform an external contract and the msg.value should be zero.
 
 If the contract is initializable, the salt generated is the keccak256 of an initializable boolean, the initializeCallData, and the provided salt packed encoded. The initializable boolean is true in this case.
@@ -177,7 +177,7 @@ The contract has the address above for every chain on which it is deployed.
 
 The UniversalFactory is deployed using a keyless deployment method relying on a single-use deployment address to ensure no one controls the factory, thereby ensuring trust and to avoid maintaining a private key that control an address, were this address needs to deploy the same bytecode using the same nonce to produce the same address of the contract on each chain.
 
-Minimal proxy contracts can be deployed with `deployCreate2Init(..)` function but another function was created to lower the barrier of possible errors when interacting with the contract. The clone library will handle deploying and generating the minimal proxy bytecode by passing the address of the base contract.
+[Minimal proxy] contracts can be deployed with `deployCreate2Init(..)` function but another function was created to lower the barrier of possible errors when interacting with the contract. The clone library will handle deploying and generating the minimal proxy bytecode by passing the address of the base contract.
 
 The initializable boolean was added before the arguments that generate the salt as if it was not used, and we are deploying initializable contracts on another chain, people can use the `deployCreate2(..)` function to deploy the same bytecode with the same salt to get the same address of the contract on another chain without applying the effect of initializing.
 
@@ -194,7 +194,10 @@ Knowing that deploying a contract using the UniversalFactory will allow to deplo
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
 
 [EIP-155]: <./eip-155.md>
+[CREATE2]: <https://eips.ethereum.org/EIPS/eip-1014>
 [Nick's article]: <https://medium.com/@weka/how-to-send-ether-to-11-440-people-187e332566b7>
+[Nick's method]: <https://medium.com/@weka/how-to-send-ether-to-11-440-people-187e332566b7>
+[minimal proxy]: <https://eips.ethereum.org/EIPS/eip-1167>
 [Nick]: <https://github.com/Arachnid/>
 [ContractCreated]: <./LSP-16-UniversalFactory.md#contractcreated>
 [LSP16]: <./LSP-16-UniversalFactory.md>
