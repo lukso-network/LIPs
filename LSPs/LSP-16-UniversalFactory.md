@@ -1,5 +1,5 @@
 ---
-lip: 0
+lip: 16
 title: UniversalFactory
 author: 
 discussions-to: https://discord.gg/E2rJPP4
@@ -12,11 +12,11 @@ requires: EIP104, EIP155, EIP1167
 
 ## Simple Summary
 
-This standard defines a universal factory smart contract, that will allow to deploy different types of smart contract using [CREATE2] opcode after being deployed with [Nick's method] in order to produce the same address on different chains.
+This standard defines a universal factory smart contract, that will allow to deploy different types of smart contracts using [CREATE2] opcode after being deployed with [Nick's method] in order to produce the same address on different chains.
  
 ## Abstract
 
-This standard defines several function to be used to deploy different types of contracts using [CREATE2] such as normal and initializable contracts. These functions take into consideration the need to initialize in the same transaction for initializable contracts. The initialize data is included in the salt to avoid squatting addresses on different chains.
+This standard defines several functions to be used to deploy different types of contracts using [CREATE2] such as normal and initializable contracts. These functions take into consideration the need to initialize in the same transaction for initializable contracts. The initialize data is included in the salt to avoid squatting addresses on different chains.
 
 The same bytecode and salt will produce the same contract address on different chains, if and only if, the UniversalFactory contract was deployed on the same address on each chain, using [Nick's method] in our case.
 
@@ -24,9 +24,9 @@ The same bytecode and salt will produce the same contract address on different c
 
 Having a private key that controls an address makes it possible to control this address on different chains. This will allow people to check an address on a specific chain and send assets on the other chains assuming the same entity control the other addresses. 
 
-With smart contract, having a contract on a specific address on a chain doesn't mean that the same contract is deployed on the same address address and controlled by the same entity on the another chain. The asset sents by the user who assumed the control of the same address on different chains are now unreachable, thats why it's good to have the ability to reproduce the same address of a contract on other chains, guaranteeing the access on the other smart contract in case there was a mistake sending assets to another chain.
+With smart contracts, having a contract on a specific address on a chain doesn't mean that the same contract is deployed on the same address and controlled by the same entity on another chain. The assets sent by the user who assumed control of the same address on different chains are now unreachable, that's why it's good to have the ability to reproduce the same address of a contract on other chains, guaranteeing access to the other smart contract in case there was a mistake sending assets to another chain.
 
-Also deploying a contract on multiple chain with the same address can create some sort of multi-chain identity that can be useful in case of factory, registry and account based contracts.
+Also deploying a contract on multiple chains with the same address can create some sort of multi-chain identity that can be useful in the case of factory, registry, and account based contracts.
 
 ## Specification
 
