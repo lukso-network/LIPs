@@ -28,9 +28,9 @@ The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL 
 
 **LSP9-Vault** interface id according to [ERC165]: `0x7050cee9`.
 
-_This `bytes4` interface id is calculated as the XOR of the interfaceId of the following standards: ERC725Y, ERC725X, LSP1-UniversalReceiver, LSP14Ownable2Step and LSP17ContractExtension._
+_This `bytes4` interface id is calculated as the XOR of the interfaceId of the following standards: ERC725Y, ERC725X, LSP1-UniversalReceiver, LSP14Ownable2Step and LSP17Extendable._
 
-Smart contracts implementing the LSP9 standard MUST implement the [ERC165] `supportsInterface(..)` function and MUST support the LSP9, ERC725X, ERC725Y, LSP1, LSP14 and LSP17 interface ids.
+Smart contracts implementing the LSP9 standard MUST implement the [ERC165] `supportsInterface(..)` function and MUST support the LSP9, ERC725X, ERC725Y, LSP1, LSP14 and LSP17Extendable interface ids.
 
 ### Methods
 
