@@ -152,7 +152,9 @@ function setData(bytes32 dataKey, bytes memory dataValue) external;
 ```
 This function is part of the [ERC725Y] specification, with additional requirements as follows:
 
-- MUST allow only the owner and the UniversalReceiverDelegate contracts to setData. 
+- MUST allow the owner to setData. 
+
+- MUST allow the Universal Receiver Delegate contracts to setData only in reentrant calls of the `universalReceiver(..)` function of the LSP9Vault. 
 
 - MUST emit only the first 256 bytes of the dataValue parameter in the [DataChanged] event.
 
@@ -165,7 +167,9 @@ function setData(bytes32[] memory dataKeys, bytes[] memory dataValues) external;
 
 This function is part of the [ERC725Y] specification, with additional requirements as follows:
 
-- MUST allow only the owner and the UniversalReceiverDelegate contracts to setData. 
+- MUST allow the owner to setData. 
+
+- MUST allow the Universal Receiver Delegate contracts to setData only in reentrant calls of the `universalReceiver(..)` function of the LSP9Vault. 
 
 - MUST emit only the first 256 bytes of the dataValue parameter in the [DataChanged] event.
 
