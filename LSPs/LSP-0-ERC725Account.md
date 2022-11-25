@@ -205,7 +205,7 @@ This function is part of the [LSP1] specification, with additional requirements 
 
 - If an `address` is stored under the data key attached below and and this address is a contract that supports the [LSP1UniversalReceiver interface id], forwards the call to the [`universalReceiver(bytes32,bytes)`] function on the address retreived. If there is no address stored under this data key, execution continues normally. 
 
-The `msg.data` is appended with the caller address as bytes20 and the `msg.value` received as  bytes32 before calling the external contract, allowing the receiving contract to know the initial caller and the value sent.
+The `msg.data` is appended with the caller address as bytes20 and the `msg.value` received as bytes32 before calling the external contract, allowing the receiving contract to know the initial caller and the value sent.
 
 ```json
 {
@@ -219,7 +219,7 @@ The `msg.data` is appended with the caller address as bytes20 and the `msg.value
 
 - If an `address` is stored under the data key attached below and and this address is a contract that supports the [LSP1UniversalReceiver interface id], forwards the call to the [`universalReceiver(bytes32,bytes)`] function on the address retreived. If there is no address stored under this data key, execution continues normally. 
 
-The `msg.data` is appended with the caller address as bytes20 and the `msg.value` received as  bytes32 before calling the external contract, allowing the receiving contract to know the initial caller and the value sent.
+The `msg.data` is appended with the caller address as bytes20 and the `msg.value` received as bytes32 before calling the external contract, allowing the receiving contract to know the initial caller and the value sent.
 
 ```json
 {
