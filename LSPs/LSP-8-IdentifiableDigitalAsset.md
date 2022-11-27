@@ -48,6 +48,7 @@ Expected values are represented by the enum:
 - 1 -> `address`: another contract.
 - 2 -> `uint256`: a number, which may be an incrementing count where each minted token is assigned the next number.
 - 3 -> `bytes32`: a hashed value (ie. serial number).
+- 4 -> `string`: a hex encoded ASCII string (ie. token name).
 
 ```json
 {
