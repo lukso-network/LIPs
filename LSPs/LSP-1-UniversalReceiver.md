@@ -31,19 +31,21 @@ In cases where smart contracts function as a profile or wallet over a long time,
 
 ## Specification
 
-[ERC165] interface id: `0x6bb56a14`
+**LSP1-UniversalReceiver** interface id according to [ERC165]: `0x6bb56a14`.
 
-Every contract that complies with the Universal Receiver standard MUST implement:
+Smart contracts implementing the LSP1UniversalReceiver standard MUST implement the [ERC165] `supportsInterface(..)` function and MUST support ERC165 and LSP1 interface ids.
+
+Every contract that complies with the LSP1-UniversalReceiver standard MUST implement:
 
 ### Methods
 
 #### universalReceiver
 
 ```solidity
-function universalReceiver(bytes32 typeId, bytes memory data) public payable returns (bytes memory)
+function universalReceiver(bytes32 typeId, bytes memory data) external payable returns (bytes memory)
 ```
 
-Allows to be called by any external contract to inform the contract about any incoming transfers, interactions or simple information.
+Allows to be called by any external contract to inform the contract about any incoming transfers, interactions or simple information. Can be customized to react on the different aspect of the call such as the typeId, the data sent, the caller or the value sent to the function, e.g, reacting on a token or a vault transfer. 
 
 _Parameters:_
 
@@ -78,11 +80,18 @@ _Values:_
 
 ## UniversalReceiverDelegate
 
-The UniversalReceiverDelegate is an optional extension that could be used with the `universalReceiver(..)` function, where the `typeId` and `data` received to the function is forwarded to the UniversalReceiverDelegate contract that can be customized to react on certain combination of `typeId` and `data`.
+The ability to react to upcoming actions with a logic hardcoded within the `universalReceiver(..)` function is good but comes with a few limitations, one of them is the possibility to miss on reacting on a few cases which leads to new deployment and migrating to a new contract that supports reacting on the missed cases. This can be really bad specially if there are third parties that are related to the contract.
 
-The address of the UniversalReceiverDelegate **MUST** be changable in the contract implementing the `unviersalReceiver(..)` function to have the option to change how the contract react on upcoming information and assets transfers in the future.
+Another limitation is sticking to one behavior, sometimes there are cases, specially with smart contract-based accounts, where you want to change the way you react on different assets after some time, e.g, you may want to reject all the assets that you are being informed about, and in a certain point of time, you want to accept specific tokens that are verified by a third party registry.  
 
-_Could be done by having a setter function for the UniversalReceiverDelegate address, or if the contract supports [ERC725Y](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) the address should be stored under this Key:_
+The **UniversalReceiverDelegate** is an optional extension that could be used with the `universalReceiver(..)` function that will allow the function to delegate its universalReceiver functionality to an external contract that can be customized to react in different ways. 
+
+The `universalReceiver(..)` function forwards the call being received to the `universalReceiver(..)` on the **UniversalReceiverDelegate** contract and can append the calldata with extra 52 bytes as follows:
+
+- The `msg.sender` calling the initial `universalReceiver(..)` function without any pad, MUST be 20 bytes.
+- The `msg.value` received to the initial `universalReceiver(..)` function, MUST be 32 bytes.
+
+_Could be done by having a setter function for the UniversalReceiverDelegate address, or if the contract supports [ERC725Y](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) the address SHOULD be stored under this Key:_
 
 ```json
 {
@@ -95,35 +104,6 @@ _Could be done by having a setter function for the UniversalReceiverDelegate add
 ```
 Check [LSP2- ERC725YJSONSchema](./LSP-2-ERC725YJSONSchema.md) for more information. 
 
-### Specification
-
-ERC165 interface id: `0xa245bbda`
-
-The UniversalReceiverDelegate contract should support the InterfaceId, otherwise the call should not be forwarded from the `universalReceiver(...)` function.
-
-
-```solidity
-function universalReceiverDelegate(
-    address caller, 
-    uint256 value, 
-    bytes32 typeId, 
-    bytes memory data
-) public returns (bytes memory);
-```
-
-Allows to be called by any external contract when an address wants to delegate its universalReceiver functionality to another smart contract.
-
-_Parameters:_
-
-- `caller` is the address calling the `universalReceiver` function.
-
-- `value` is the amount of value sent to the `universalReceiver` function.
-
-- `typeId` is the hash of a standard, or the type relative to the `data` received.
-
-- `data` is a byteArray of arbitrary data. Receiving contracts should take the `typeId` in consideration to properly decode the `data`. 
-
-_Returns:_ `bytes`, which can be used to encode response values.
 
 ## Rationale
 <!--The rationale fleshes out the specification by describing what motivated the design and why particular design decisions were made. It should describe alternate designs that were considered and related work, e.g. how the feature is supported in other languages. The rationale may also provide evidence of consensus within the community, and should discuss important objections or concerns raised during discussion.-->
@@ -181,8 +161,9 @@ contract MyWallet is ERC165, ILSP1 {
 
 ### UniversalReceiverDelegate Example:
 
-This example is the same example written above except that `MyWallet` contract now supports UniversalReceiverDelegate.
-The `TokenABC` contract will inform `MyWallet` contract about the transfer by calling the `universalReceiver(..)` function and this function will call the `universalReceiverDelegate(..)` function on the UniversalReceiverDelegate address set by the owner, to react on the transfer accordingly.
+This example is the same example written above except that `MyWallet` contract now delegate the universalReceiver functionality to a UniversalReceiverDelegate contract.
+
+The `TokenABC` contract will inform `MyWallet` contract about the transfer by calling the `universalReceiver(..)` function and this function will call the `universalReceiver(..)` function on the UniversalReceiverDelegate address set by the owner, to react on the transfer accordingly.
 
 ```solidity
 // SPDX-License-Identifier: CC0-1.0
@@ -212,7 +193,6 @@ contract TokenABC {
 contract MyWallet is ERC165, ILSP1 {
 
     bytes4 _INTERFACE_ID_LSP1 = 0x6bb56a14;
-    bytes4 _INTERFACE_ID_LSP1_DELEGATE = 0xa245bbda;
 
     address public universalReceiverDelegate;
 
@@ -228,11 +208,25 @@ contract MyWallet is ERC165, ILSP1 {
     function universalReceiver(bytes32 typeId, bytes memory data) public payable returns (bytes memory) {
 
         // if the address set as universalReceiverDelegate supports LSP1Delegate then call the universalReceiverDelegate function
-        if(ERC165Checker.supportsInterface(universalReceiverDelegate,_INTERFACE_ID_LSP1_DELEGATE)){
+        if(ERC165Checker.supportsInterface(universalReceiverDelegate,_INTERFACE_ID_LSP1)){
 
             // Call the universalReceiverDelegate function on universalReceiverDelegate address
-            returnedData = ILSP1Delegate(universalReceiverDelegate).universalReceiverDelegate(msg.sender, msg.value, typeId, data);
-        }
+            returnedData = ILSP1(universalReceiverDelegate).universalReceiver(typeId, data);
+            
+            
+            // OR can call with appending extra calldata
+            bytes memory callData = abi.encodePacked(
+                abi.encodeWithSelector(
+                    ILSP1UniversalReceiver.universalReceiver.selector,
+                    typeId,
+                    receivedData
+                ),
+                msgSender,
+                msgValue
+             );
+
+        (bool success, bytes memory result) = universalReceiverDelegate.call(callData);
+     
 
         emit UniversalReceiver(msg.sender, msg.value, typeId, data, returnedData);
         return returnedData;
@@ -240,21 +234,38 @@ contract MyWallet is ERC165, ILSP1 {
 }
 
 
-contract UniversalReceiverDelegate is ERC165, ILSP1Delegate {
 
-    bytes4 _INTERFACE_ID_LSP1_DELEGATE = 0xa245bbda;
+
+contract UniversalReceiverDelegate is ERC165, ILSP1 {
+
+    bytes4 _INTERFACE_ID_LSP1 = 0x6bb56a14;
 
     constructor() public {
-        _registerInterface(_INTERFACE_ID_LSP1_DELEGATE);
+        _registerInterface(_INTERFACE_ID_LSP1);
     }
 
-    function universalReceiverDelegate(address caller, uint256 value, bytes32 typeId, bytes memory data) public returns (bytes memory) {
+    function universalReceiver(bytes32 typeId, bytes memory data) public payable returns (bytes memory) {
         // Any logic could be written here:
         // - Interfact with DeFi protocol contract to sell the new tokens received automatically.
         // - Register the token received on other registery contract
         // - Allow only tokens with `_TOKEN_RECEIVING_HASH` hash and reject the others.
         // - revert; so in this way the wallet will have the option to reject any token.
     }
+    
+    // The `msg.sender` of the caller contract and the `msg.value` sent to the caller contract if appended as extra calldata sent to the 
+    // delegate contract, can be retreived using these functions:
+    
+  
+    function _mainMsgSender() internal view virtual returns (address) {
+        return address(bytes20(msg.data[msg.data.length - 52:msg.data.length - 32]));
+    }
+
+
+
+    function _mainMsgValue() internal view virtual returns (uint256) {
+       return uint256(bytes32(msg.data[msg.data.length - 32:]));
+    }
+
 }
 ```
 
@@ -271,11 +282,6 @@ interface ILSP1  /* is ERC165 */ {
     
 }
     
-interface ILSP1Delegate  /* is ERC165 */ {
-    
-    function universalReceiverDelegate(address caller, uint256 value, bytes32 typeId, bytes memory data) external returns (bytes memory);
-
-}
 ```
 
 ## Copyright
