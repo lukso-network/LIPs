@@ -104,19 +104,21 @@ The `valueType` is relevant for interfaces to know how a value MUST be encoded/d
 
 The `valueType` can also be useful for typecasting. It enables contracts or interfaces to know how to manipulate the data and the limitations behind its type. To illustrate, an interface could know that it cannot set the value to `300` if its `valueType` is `uint8` (max `uint8` allowed = `255`).
 
-| `valueType` | Description |
-|---|---|
-| `boolean`     | a value as either **true** or **false** |
-| `string`      | an UTF8 encoded string  |
-| `address`     | a 20 bytes long address |
-| `uintN`       | an **unsigned** integer (= only positive number) of size `N`  |
-| `bytesN`      | a bytes value of **fixed-size** `N`, from `bytes1` up to `bytes32` |
-| `bytes`       | a bytes value of **dynamic-size** |
-| `uintN[]`     | an array of **signed** integers |
-| `string[]`    | an array of UTF8 encoded strings |
-| `address[]`   | an array of addresses |
-| `bytes[]`     | an array of dynamic size bytes  |
-| `bytesN[]`    | an array of fixed size bytes  |
+| `valueType`                    | Description |
+|--------------------------------|-------------|
+| `boolean`                      | a value as either **true** or **false** |
+| `string`                       | an UTF8 encoded string  |
+| `address`                      | a 20 bytes long address |
+| `uintN`                        | an **unsigned** integer (= only positive number) of size `N`  |
+| `bytesN`                       | a bytes value of **fixed-size** `N`, from `bytes1` up to `bytes32` |
+| `bytes`                        | a bytes value of **dynamic-size** |
+| `uintN[]`                      | an array of **signed** integers |
+| `string[]`                     | an array of UTF8 encoded strings |
+| `address[]`                    | an array of addresses |
+| `bytes[]`                      | an array of dynamic size bytes  |
+| `bytesN[]`                     | an array of fixed size bytes  |
+| [`bytes[CompactBytesArray]`](#bytescompactbytesarray)     | a compacted bytes array of dynamic size bytes  |
+| `bytesN[CompactBytesArray]`    | a compacted bytes array of fixed size bytes  |
 
 The `valueType` can also be a **tuple of types**, meaning the value stored under the ERC725Y data key is a mixture of multiple value types concatenated together. In such case, the types MUST be defined between parentheses. For instance: `(bytes4,bytes8)` or `(bytes8,address)`
 
@@ -152,6 +154,7 @@ This is useful for decoding tools, to know how to interpret each value type in t
 
 ---
 
+## keyType
 
 ### Singleton
 
@@ -324,6 +327,31 @@ MyKeyName:<bytes32>:<bool> // 0xaaaabbbbccccddddeeeeffff111122223333444455556666
 }
 ```
 
+
+## ValueType
+
+### bytes[CompactBytesArray]
+
+The following value type represent a type of array containing dynamic bytes. The compacted bytes array will have 1 byte before each element to specify the length of the next element.
+
+#### Example
+
+If we want to have the following bytes as elements in the compacted bytes array:
+
+```
+[
+0xaabbccdd, // element 1 length is 4 in hex: 0x04
+0xcafecafecafecafecafecafecafe, // element 2 length is 14 in hex: 0x0E
+0xff // element 3 length is 1 in hex: 0x01
+]
+```
+
+The representation of these dynamic elements in a compacted bytes array would be:
+
+`0x04aabbccdd0Ecafecafecafecafecafecafecafe01ff`
+
+
+## ValueContent
 
 ### BitArray
 
