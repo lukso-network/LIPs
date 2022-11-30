@@ -80,9 +80,15 @@ _Values:_
 
 ## UniversalReceiverDelegate
 
+
+### Motivation
+
 The ability to react to upcoming actions with a logic hardcoded within the `universalReceiver(..)` function comes with a few limitations. One is the possibility of missing on reacting on a few cases, leading to new deployment and migrating to a new contract that supports responding to these missed cases. This can be problematic, primarily if third parties are related to the contract.
 
 Another limitation is sticking to one behaviour without the ability to make it change. In some cases, like with smart contract-based accounts, there might be a need to adjust how the contract reacts to certain received assets over time. For instance, a user might want to reject any assets in the first place but decide at some point to accept specific tokens that a third-party registry has verified.
+
+
+### Specification
 
 The **UniversalReceiverDelegate** is an optional extension. It allows the `universalReceiver(..)` function to delegate its functionality to an external contract that can be customized to react differently based on the `typeId` and the `data` received. 
 
