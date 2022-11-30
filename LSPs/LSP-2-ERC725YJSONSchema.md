@@ -348,7 +348,7 @@ If we want to have the following bytes as elements in the compacted bytes array:
 
 The representation of these dynamic elements in a compacted bytes array would be:
 
-`0x04 aabbccdd 0E cafecafecafecafecafecafecafe 01 ff` > `0x04aabbccdd0Ecafecafecafecafecafecafecafe01ff`
+`0x04 aabbccdd 0e cafecafecafecafecafecafecafe 01 ff` > `0x04aabbccdd0ecafecafecafecafecafecafecafe01ff`
 
 
 ## ValueContent
