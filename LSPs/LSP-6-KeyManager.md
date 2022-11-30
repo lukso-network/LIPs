@@ -87,7 +87,7 @@ Payloads signed with nonces of different channels are execution independant from
 
 > X and Y can be any arbitrary number between 0 and 2^128.
 
-Read [what are multi-channel nonces](#what-are-multi-channel-nonces)
+Read [what are multi-channel nonces](#what-are-multi-channel-nonces).
 
 #### execute
 
@@ -109,11 +109,11 @@ _Requirements:_
 
 - The first 4 bytes of the `_calldata` payload MUST correspond to one of the function selector on the ERC725 smart contract such as:
 
-    - **[`setData(bytes32,bytes)`](./LSP-0-ERC725Account.md#setdata)**
-    - **[`setData(bytes32[],bytes[])`](./LSP-0-ERC725Account.md#setdata-array)**
-    - **[`execute(uint256,address,uint256,bytes)`](./LSP-0-ERC725Account.md#execute)**
-    - **[`transferOwnership(address)`](./LSP-0-ERC725Account.md#transferownership)**
-    - **[`acceptOwnership()`](./LSP-0-ERC725Account.md#acceptownership)**
+    - [`setData(bytes32,bytes)`](./LSP-0-ERC725Account.md#setdata)
+    - [`setData(bytes32[],bytes[])`](./LSP-0-ERC725Account.md#setdata-array)
+    - [`execute(uint256,address,uint256,bytes)`](./LSP-0-ERC725Account.md#execute)
+    - [`transferOwnership(address)`](./LSP-0-ERC725Account.md#transferownership)
+    - [`acceptOwnership()`](./LSP-0-ERC725Account.md#acceptownership)
 
 - MUST send the value passed by the caller to the call on the ERC725 contracts. 
 
@@ -232,21 +232,21 @@ event Executed(bytes4 indexed selector, uint256 indexed value);
 
 MUST be fired when a transaction was successfully executed.
 
-The first parameter `selector` in the `Executed` event corresponds to the `bytes4` selector of the function being executed in the linked [target](#target)
+The first parameter `selector` in the `Executed` event corresponds to the `bytes4` selector of the function being executed in the linked [target](#target).
 
 ### Permissions
 
 The permissions MUST be checked against the caller in case of [`execute(bytes)`](#execute) and [`execute(uint256[],bytes[])`](#execute-array) functions. In case of [`executeRelayCall(bytes,uint256,bytes)`](#executerelaycall) and [`executeRelayCall(bytes[],uint256[],uint256[],bytes[])`](#executerelaycall-array), permissions should be checked against the signer address, recovered from the signature and the digest.
 
-The permissions MUST be stored as BitArray under the [`AddressPermissions:Permissions:<address>`](#) data key on the target.
+The permissions MUST be stored as BitArray under the [`AddressPermissions:Permissions:<address>`](#addresspermissionspermissionsaddress) data key on the target.
 
-#### CHANGEOWNER
+#### `CHANGEOWNER`
 
 BitArray representation: `0x0000000000000000000000000000000000000000000000000000000000000001`
 
-- Allows changing the owner of the target contract by calling [`transferOwnership`](./LSP-0-ERC725Account.md#transferownership) and [`acceptOwnership`](./LSP-0-ERC725Account.md#acceptownership).
+- Allows changing the owner of the target contract by calling [`transferOwnership(address)`](./LSP-0-ERC725Account.md#transferownership) and [`acceptOwnership()`](./LSP-0-ERC725Account.md#acceptownership).
 
-#### ADDPERMISSIONS
+#### `ADDPERMISSIONS`
 
 BitArray representation: `0x0000000000000000000000000000000000000000000000000000000000000002`
 
@@ -254,13 +254,13 @@ BitArray representation: `0x0000000000000000000000000000000000000000000000000000
 
 - Allows adding permissions for a new controller key under the [`AddressPermissions:Permissions:<address>`](#addresspermissionspermissionsaddress) data key.
 
-- Allows adding the [restrictions](#) for the [CALL](#call) and [SETDATA](#setdata) permissions stored respectively under the [`AddressPermissions:Permissions:<address>`](#)  and [`AddressPermissions:Permissions:<address>`](#).
+- Allows adding the [restrictions](#) for the [CALL](#call) and [SETDATA](#setdata) permissions stored respectively under the [`AddressPermissions:AllowedCalls:<address>`](#addresspermissionsallowedcallsaddress)  and [`AddressPermissions:AllowedERC725YDataKeys:<address>`](#addresspermissionsallowederc725ydatakeysaddress).
 
 The value of these data keys SHOULD be validated before being set to avoid edge cases.
 
 > All the actions above are done using the setData function
 
-#### CHANGEPERMISSIONS
+#### `CHANGEPERMISSIONS`
 
 BitArray representation: `0x0000000000000000000000000000000000000000000000000000000000000004`
 
@@ -268,116 +268,113 @@ BitArray representation: `0x0000000000000000000000000000000000000000000000000000
 
 - Allows changing permissions for an existing controller key under the [`AddressPermissions:Permissions:<address>`](#addresspermissionspermissionsaddress) data key.
 
-- Allows changing the existing [restrictions] for the [CALL](#call) and [SETDATA](#setdata) permissions stored respectively under the [`AddressPermissions:Permissions:\<address\>`]  and [`AddressPermissions:Permissions:\<address\>`].
+- Allows changing the existing [restrictions] for the [CALL](#call) and [SETDATA](#setdata) permissions stored respectively under the [`AddressPermissions:AllowedCalls:<address>`](#addresspermissionsallowedcallsaddress)  and [`AddressPermissions:AllowedERC725YDataKeys:<address>`](#addresspermissionsallowederc725ydatakeysaddress).
 
 The value of these data keys SHOULD be validated before being set to avoid edge cases.
 
 > All the actions above are done using the setData function
 
-#### ADDEXTENSIONS
+#### `ADDEXTENSIONS`
 
 BitArray representation: `0x0000000000000000000000000000000000000000000000000000000000000008`
 
 - Allows adding new extension address/es for new function selectors stored under [LSP17Extension](./LSP-0-ERC725Account.md#lsp17extension) data key. 
 
 
-#### CHANGEEXTENSIONS
+#### `CHANGEEXTENSIONS`
 
 BitArray representation: `0x0000000000000000000000000000000000000000000000000000000000000010`
 
 - Allows changing existing extension address/es for function selectors stored under [LSP17Extension](./LSP-0-ERC725Account.md#lsp17extension) data key.  
 
-#### ADDUNIVERSALRECEIVERDELEGATE
+#### `ADDUNIVERSALRECEIVERDELEGATE`
 
 BitArray representation: `0x0000000000000000000000000000000000000000000000000000000000000020`
 
-- Allows adding new UniversalReceiverDelegate address/es stored under new [LSP1UniversalReceiverDelegate](./LSP-0-ERC725Account.md#lsp1universalreceiverdelegate) and [Mapped LSP1UniversalReceiverDelegate](./LSP-0-ERC725Account.md#mapped-lsp1universalreceiverdelegate) data keys. 
+- Allows adding new UniversalReceiverDelegate address/es stored under new [LSP1UniversalReceiverDelegate](./LSP-0-ERC725Account.md#lsp1universalreceiverdelegate) and [Mapped LSP1UniversalReceiverDelegate](./LSP-0-ERC725Account.md#mapped-lsp1universalreceiverdelegate) data keys.
 
-#### CHANGEUNIVERSALRECEIVERDELEGATE
+#### `CHANGEUNIVERSALRECEIVERDELEGATE`
 
 BitArray representation: `0x0000000000000000000000000000000000000000000000000000000000000040`
 
 - Allows changing existing UniversalReceiverDelegate address/es stored under [LSP1UniversalReceiverDelegate](./LSP-0-ERC725Account.md#lsp1universalreceiverdelegate) and [Mapped LSP1UniversalReceiverDelegate](./LSP-0-ERC725Account.md#mapped-lsp1universalreceiverdelegate) data keys.
 
 
-#### REENTRANCY
+#### `REENTRANCY`
 
 BitArray representation: `0x0000000000000000000000000000000000000000000000000000000000000080`
 
 - Allows reentering the public [`execute(bytes)`](#execute), [`execute(uint256[],bytes[])`](#execute-array), [`executeRelayCall(bytes,uint256,bytes)`](#executerelaycall) and [`executeRelayCall(bytes[],uint256[],uint256[],bytes[])`](#executerelaycall-array) functions.
 
 
-#### SUPER_TRANSFERVALUE
+#### `SUPER_TRANSFERVALUE`
 
 BitArray representation: `0x0000000000000000000000000000000000000000000000000000000000000100`
 
-- Allows transferring value from the target contract through [`execute`](./LSP-0-ERC725Account.md#execute) function of the target without any restrictions.
+- Allows transferring value from the target contract through [`execute(..)`](./LSP-0-ERC725Account.md#execute) function of the target without any restrictions.
 
 
-#### TRANSFERVALUE
+#### `TRANSFERVALUE`
 
 BitArray representation: `0x0000000000000000000000000000000000000000000000000000000000000200`
 
-- Allows transferring value from the target contract through [`execute`](./LSP-0-ERC725Account.md#execute) function of the target with restricting to specific standards, addresses or functions.
+- Allows transferring value from the target contract through [`execute(..)`](./LSP-0-ERC725Account.md#execute) function of the target with restricting to specific standards, addresses or functions.
 
-> Check [`AddressPermissions:AllowedCalls:\<address\>`](#) to know more infor about the restrictions.
+> Check [`AddressPermissions:AllowedCalls:<address>`](#addresspermissionsallowedcallsaddress) to know more infor about the restrictions.
 
-#### SUPER_CALL
+#### `SUPER_CALL`
 
 BitArray representation: `0x0000000000000000000000000000000000000000000000000000000000000400`
 
-- Allows executing a payload with [CALL](#) operation from the target contract through [`execute`](./LSP-0-ERC725Account.md#execute) function of the target without any restrictions.
+- Allows executing a payload with [CALL] operation from the target contract through [`execute(..)`](./LSP-0-ERC725Account.md#execute) function of the target without any restrictions.
 
 
-#### CALL
+#### `CALL`
 
 BitArray representation: `0x0000000000000000000000000000000000000000000000000000000000000800`
 
-- Allows executing a payload with [CALL](#) operation from the target contract through [`execute`](./LSP-0-ERC725Account.md#execute) function of the target with restricting to specific standards, addresses or functions.
+- Allows executing a payload with [CALL] operation from the target contract through [`execute(..)`](./LSP-0-ERC725Account.md#execute) function of the target with restricting to specific standards, addresses or functions.
 
-> Check [`AddressPermissions:AllowedCalls:\<address\>`](#) to know more infor about the restrictions.
+> Check [`AddressPermissions:AllowedCalls:<address>`](#addresspermissionsallowedcallsaddress) to know more infor about the restrictions.
 
-#### SUPER_STATICCALL
+#### `SUPER_STATICCALL`
 
 BitArray representation: `0x0000000000000000000000000000000000000000000000000000000000001000`
 
-- Allows executing a payload with [STATICCALL](#) operation from the target contract through [`execute`](./LSP-0-ERC725Account.md#execute) function of the target without any restrictions.
+- Allows executing a payload with [STATICCALL] operation from the target contract through [`execute(..)`](./LSP-0-ERC725Account.md#execute) function of the target without any restrictions.
 
 
-#### STATICCALL
+#### `STATICCALL`
 
 BitArray representation: `0x0000000000000000000000000000000000000000000000000000000000002000`
 
-- Allows executing a payload with [STATICCALL](#) operation from the target contract through [`execute`](./LSP-0-ERC725Account.md#execute) function of the target with restricting to specific standards, addresses or functions.
+- Allows executing a payload with [STATICCALL] operation from the target contract through [`execute(..)`](./LSP-0-ERC725Account.md#execute) function of the target with restricting to specific standards, addresses or functions.
 
-> Check [`AddressPermissions:AllowedCalls:\<address\>`](#) to know more infor about the restrictions.
+> Check [`AddressPermissions:AllowedCalls:<address>`](#addresspermissionsallowedcallsaddress) to know more infor about the restrictions.
 
-#### SUPER_DELEGATECALL
+#### `SUPER_DELEGATECALL`
 
 BitArray representation: `0x0000000000000000000000000000000000000000000000000000000000004000`
 
-- Allows executing a payload with [DELEGATECALL](#) operation from the target contract through [`execute`](./LSP-0-ERC725Account.md#execute) function of the target without any restrictions.
+- Allows executing a payload with [DELEGATECALL] operation from the target contract through [`execute(..)`](./LSP-0-ERC725Account.md#execute) function of the target without any restrictions.
 
 
-#### DELEGATECALL
+#### `DELEGATECALL`
 
 BitArray representation: `0x0000000000000000000000000000000000000000000000000000000000008000`
 
-- Allows executing a payload with [DELEGATECALL](#) operation from the target contract through [`execute`](./LSP-0-ERC725Account.md#execute) function of the target with restricting to specific standards, addresses or functions.
+- Allows executing a payload with [DELEGATECALL] operation from the target contract through [`execute(..)`](./LSP-0-ERC725Account.md#execute) function of the target with restricting to specific standards, addresses or functions.
 
-> Check [`AddressPermissions:AllowedCalls:\<address\>`](#) to know more infor about the restrictions.
+> Check [`AddressPermissions:AllowedCalls:<address>`](#addresspermissionsallowedcallsaddress) to know more infor about the restrictions.
 
 
-#### DEPLOY
+#### `DEPLOY`
 
 BitArray representation: `0x0000000000000000000000000000000000000000000000000000000000010000`
 
-- Allows creating a contract with [CREATE](#) and [CREATE2](#) operations from the target contract through [`execute`](./LSP-0-ERC725Account.md#execute) function of the target.
+- Allows creating a contract with [CREATE] and [CREATE2] operations from the target contract through [`execute(..)`](./LSP-0-ERC725Account.md#execute) function of the target.
 
-> Check [`AddressPermissions:AllowedCalls:\<address\>`](#) to know more infor about the restrictions.
-
-
-#### SUPER_SETDATA
+#### `SUPER_SETDATA`
 
 BitArray representation: `0x0000000000000000000000000000000000000000000000000000000000020000`
 
@@ -385,7 +382,7 @@ BitArray representation: `0x0000000000000000000000000000000000000000000000000000
 
 The data keys related to permissions, extensions, UniversalReceiverDelegate MUST be checked with their own permission.
 
-#### SETDATA
+#### `SETDATA`
 
 BitArray representation: `0x0000000000000000000000000000000000000000000000000000000000040000`
 
@@ -393,21 +390,21 @@ BitArray representation: `0x0000000000000000000000000000000000000000000000000000
 
 The data keys related to permissions, extensions, UniversalReceiverDelegate MUST be checked with their own permission.
 
-> Check [`AddressPermissions:AllowedERC725YDataKeys:<address>`](#) to know more info about the restrictions.
+> Check [`AddressPermissions:AllowedERC725YDataKeys:<address>`](#addresspermissionsallowederc725ydatakeysaddress) to know more infor about the restrictions.
 
-#### ENCRYPT
+#### `ENCRYPT`
 
 BitArray representation: `0x0000000000000000000000000000000000000000000000000000000000080000`
 
 - Allows encrypting data to be used for on/off-chain purposes.
 
-#### DECRYPT
+#### `DECRYPT`
 
 BitArray representation: `0x0000000000000000000000000000000000000000000000000000000000100000`
 
 - Allows decrypting data to be used for on/off-chain purposes.
 
-#### SIGN
+#### `SIGN`
 
 BitArray representation: `0x0000000000000000000000000000000000000000000000000000000000200000`
 
@@ -731,3 +728,8 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 [failure value]: <https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1271.md#specification>
 [ERC725Account]: <./LSP-0-ERC725Account.md>
 [EIP191]: <https://eips.ethereum.org/EIPS/eip-191>
+[CALL]: <https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#execute>
+[STATICCALL]: <https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#execute>
+[DELEGATECALL]: <https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#execute>
+[CREATE]: <https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#execute>
+[CREATE2]: <https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#execute>
