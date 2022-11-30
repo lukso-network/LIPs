@@ -340,15 +340,15 @@ If we want to have the following bytes as elements in the compacted bytes array:
 
 ```
 [
-0xaabbccdd, // element 1 length is 4 in hex: 0x04
-0xcafecafecafecafecafecafecafe, // element 2 length is 14 in hex: 0x0E
-0xff // element 3 length is 1 in hex: 0x01
+    0xaabbccdd,                     // element 1 length is 4 in hex:    0x04
+    0xcafecafecafecafecafecafecafe, // element 2 length is 14 in hex:   0x0E
+    0xff                            // element 3 length is 1 in hex:    0x01
 ]
 ```
 
 The representation of these dynamic elements in a compacted bytes array would be:
 
-`0x04aabbccdd0Ecafecafecafecafecafecafecafe01ff`
+`0x04 aabbccdd 0E cafecafecafecafecafecafecafe 01 ff` > `0x04aabbccdd0Ecafecafecafecafecafecafecafe01ff`
 
 
 ## ValueContent
