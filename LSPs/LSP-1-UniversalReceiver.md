@@ -80,13 +80,13 @@ _Values:_
 
 ## UniversalReceiverDelegate
 
-The ability to react to upcoming actions with a logic hardcoded within the `universalReceiver(..)` function is good but comes with a few limitations, one of them is the possibility to miss on reacting on a few cases which leads to new deployment and migrating to a new contract that supports reacting on the missed cases. This can be really bad specially if there are third parties that are related to the contract.
+The ability to react to upcoming actions with a logic hardcoded within the `universalReceiver(..)` function comes with a few limitations. One is the possibility of missing on reacting on a few cases, leading to new deployment and migrating to a new contract that supports responding to these missed cases. This can be problematic, primarily if third parties are related to the contract.
 
-Another limitation is sticking to one behavior, sometimes there are cases, specially with smart contract-based accounts, where you want to change the way you react on different assets after some time, e.g, you may want to reject all the assets that you are being informed about, and in a certain point of time, you want to accept specific tokens that are verified by a third party registry.  
+Another limitation is sticking to one behaviour without the ability to make it change. In some cases, like with smart contract-based accounts, there might be a need to adjust how the contract reacts to certain received assets over time. For instance, a user might want to reject any assets in the first place but decide at some point to accept specific tokens that a third-party registry has verified.
 
-The **UniversalReceiverDelegate** is an optional extension that could be used with the `universalReceiver(..)` function that will allow the function to delegate its universalReceiver functionality to an external contract that can be customized to react in different ways. 
+The **UniversalReceiverDelegate** is an optional extension. It allows the `universalReceiver(..)` function to delegate its functionality to an external contract that can be customized to react differently based on the `typeId` and the `data` received. 
 
-The `universalReceiver(..)` function forwards the call being received to the `universalReceiver(..)` on the **UniversalReceiverDelegate** contract and can append the calldata with extra 52 bytes as follows:
+The `universalReceiver(..)` function forwards the call being received to the `universalReceiver(..)` on the **UniversalReceiverDelegate** contract and can append the calldata with 52 extra bytes as follows:
 
 - The `msg.sender` calling the initial `universalReceiver(..)` function without any pad, MUST be 20 bytes.
 - The `msg.value` received to the initial `universalReceiver(..)` function, MUST be 32 bytes.
