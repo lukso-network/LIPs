@@ -16,13 +16,17 @@ This standard describes a way to extend contract's functionalities even after de
  
 ## Abstract
 
-This proposal defines two types of contracts, the extendable and the extensions contract. An extendable contract is a contract that in case of being called with a function that does not exist, it calls an extension contract ,through the fallback function, with the calldata received appended with the `msg.sender` and `msg.value` of the extendable contract as extra calldata.
+This proposal defines two types of contracts:
+- an extendable contract which functionalities are extended.
+- an extension contract that extend the functionalities of the extendable contract.
 
-The extendable contract should map function selectors (bytes4) to extensions (address) that implement these functions being called.
+When the extendable contract receives a call for a function not implemented in its public interface, it can forward this call to an extension contract. This forwarding occurs through the fallback function. The extension contract can then receive the calldata of the initial message call, appended with the `msg.sender` and the `msg.value` initially received.
+
+The extendable contract should map function selectors (bytes4) to extension contract addresses that implement these functions being called.
 
 ## Motivation
 
-After deploying a contract, there is no possible way to integrate native functions into the bytecode of the deployed contract. This represents a limitation that smart contract have specially with smart contract based account that could evolve by time and needs to have specific function to support future usecases and standards.
+After deploying a contract, there is no possible way to add new native functions into the bytecode of the deployed contract. This represents a limitation for smart contracts, for instance, with smart contract-based accounts that could evolve over time and need specific functions to support future usecases and standards.
 
 The extensions added can be removed or replaced in any time in the future making the extendable contract highly customizable and able to suit any behavior needed. 
 
@@ -30,8 +34,6 @@ The contracts applying the extendable logic can re-use deployed extensions contr
 
 
 ## LSP17Extendable Specification
-
-The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL NOT”, “SHOULD”, “SHOULD NOT”, “RECOMMENDED”, “MAY”, and “OPTIONAL” in this document are to be interpreted as described in [RFC 2119](https://datatracker.ietf.org/doc/html/rfc2119).
 
 **LSP17-Extendable** interface id according to [ERC165]: `0xa918fa6b`.
 
@@ -42,7 +44,7 @@ Smart contracts implementing the LSP17Extendable standard MUST implement the [ER
 
 ### Overview
 
-Whenever a function is called on an extendable contract and the function does not exist, the fallback function of the extendable contract MUST call the function on the extension mapped using `CALL` opcode appended with extra 52 bytes of calldata as follows:
+Whenever a function is called on an extendable contract and the function does not exist, the fallback function of the extendable contract MUST call the function on the extension mapped using the `CALL` opcode. The calldata MUST be appended with 52 extra bytes as follows:
 
 - The `msg.sender` calling the extendable contract without any pad, MUST be 20 bytes.
 - The `msg.value` received to the extendable contract, MUST be 32 bytes.
@@ -60,62 +62,13 @@ If the extendable contract supports [ERC725Y], the extension address MUST be sto
 }
 ```
 
+> <bytes4\> is the `functionSelector` called on the account contract. Check [LSP2-ERC725YJSONSchema] to learn how to encode the key.
+
 The [DataChanged] event MUST be emitted whenever an extension is added/changed/removed.
 
-The LSP17ContractExtension do not enforce a specific way to store the extension address based on the bytes4 function selector. It could be an explicit mapping from function selectors to extensions, eg: `mapping(bytes4 => address)`.
+The LSP17ContractExtension does not enforce a specific way to store the extension address based on the bytes4 function selector. As an example, a mapping from function selectors to extensions, (eg: `mapping(bytes4 => address)`) can be used, but any other data structure can be used to map function selector to extension contract addresses.
 
 If the extendable contract does not support ERC725Y, the [ExtensionChanged] event MUST be emitted whenever an extension is added/changed/removed.
-
-### fallback Function
-
-Here is an illustrative example of how the extendable contract's fallback function might be implemented:
-
-```solidity
-
-fallback() external payable {
-
-    // If the msg.data is shorter than 4 bytes
-    // do not check for an extension and return
-    if (msg.data.length < 4) return;
-
-    // If there is a function selector
-    // Up to the extendable contract to implement
-    // `_getExtension` function in custom way
-    address extension = _getExtension(msg.sig);
-
-    // if no extension was found, return
-    if (extension == address(0)) return;
-
-    // solhint-disable no-inline-assembly
-    // if the extension was found, call the extension with the msg.data
-    // appended with bytes20(address) and bytes32(msg.value)
-    assembly {
-        calldatacopy(0, 0, calldatasize())
-
-        // The msg.sender address is shifted to the left by 12 bytes to remove the padding
-        // Then the address without padding is stored right after the calldata
-        mstore(calldatasize(), shl(96, caller()))
-
-        // The msg.value is stored right after the calldata + msg.sender
-        mstore(add(calldatasize(), 20), callvalue())
-
-        // Add 52 bytes for the msg.sender and msg.value appended at the end of the calldata
-        let success := call(gas(), extension, 0, 0, add(calldatasize(), 52), 0, 0)
-
-        // Copy the returned data
-        returndatacopy(0, 0, returndatasize())
-
-        switch success
-        // call returns 0 on failed calls
-        case 0 {
-            revert(0, returndatasize())
-        }
-        default {
-            return(0, returndatasize())
-        }
-    }
-}
-```
 
 ### Events
 
@@ -132,8 +85,6 @@ MUST be emitted when an extension is added/changed/removed.
 
 
 ## LSP17Extension Specification
-
-The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL NOT”, “SHOULD”, “SHOULD NOT”, “RECOMMENDED”, “MAY”, and “OPTIONAL” in this document are to be interpreted as described in [RFC 2119](https://datatracker.ietf.org/doc/html/rfc2119).
 
 **LSP17-Extension** interface id according to [ERC165]: `0xcee78b40`.
 
