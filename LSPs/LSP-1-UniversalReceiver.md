@@ -21,7 +21,6 @@ This allows receiving contracts to react on incoming transfers or other interact
 
 
 ## Motivation
-<!--The motivation is critical for LIPs that want to change the Ethereum protocol. It should clearly explain why the existing protocol specification is inadequate to address the problem that the LIP solves. LIP submissions without sufficient motivation may be rejected outright.-->
 There are often the need to inform other smart contracts about actions another smart contract did perform.
 A good example are token transfers, where the token smart contract should inform receiving contracts about the transfer.
 
@@ -78,43 +77,32 @@ _Values:_
 - `returnedValue` is the data returned by the `universalReceiver(..)` function.
 
 
-## UniversalReceiverDelegate
+## UniversalReceiver Delegation
 
+UniversalReceiver delegation allows to forward the `universalReceiver(..)` call on one contract to another external contract, allowing for upgradeability and changing behaviour of the initial `universalReceiver(..)` call.
 
 ### Motivation
 
-The ability to react to upcoming actions with a logic hardcoded within the `universalReceiver(..)` function comes with a few limitations. One is the possibility of missing on reacting on a few cases, leading to new deployment and migrating to a new contract that supports responding to these missed cases. This can be problematic, primarily if third parties are related to the contract.
+The ability to react to upcoming actions with a logic hardcoded within the `universalReceiver(..)` function comes with a limitations, as only a fixed functionality can be coded or the `UniversalReceiver` be fired. This section explains a way to forward the call to the `universalReceiver(..)` function to an external smart contract to extend and change funcitonality over time.
 
-Another limitation is sticking to one behaviour without the ability to make it change. In some cases, like with smart contract-based accounts, there might be a need to adjust how the contract reacts to certain received assets over time. For instance, a user might want to reject any assets in the first place but decide at some point to accept specific tokens that a third-party registry has verified.
+The delegation works by simply forwarding a call to the `universalReceiver(..)` function to a delegated smart contract calling the `universalReceiver(..)` function on the external smart contract.
+As the external smart contract doesn't know about the inital `msg.sender` and the `msg.value`, this specification proposes to add these values to the `msg.data`. This allows the external contract to strip them from the `msg.data` and understand the address and value of the inital call to the extended smart contract.
 
 
 ### Specification
 
 The **UniversalReceiverDelegate** is an optional extension. It allows the `universalReceiver(..)` function to delegate its functionality to an external contract that can be customized to react differently based on the `typeId` and the `data` received. 
 
-The `universalReceiver(..)` function forwards the call being received to the `universalReceiver(..)` on the **UniversalReceiverDelegate** contract and can append the calldata with 52 extra bytes as follows:
+The `universalReceiver(..)` function on the initial smart contract forwards the call to the `universalReceiver(..)` on the **UniversalReceiverDelegate** contract and append the calldata with 52 extra bytes as follows:
 
 - The `msg.sender` calling the initial `universalReceiver(..)` function without any pad, MUST be 20 bytes.
 - The `msg.value` received to the initial `universalReceiver(..)` function, MUST be 32 bytes.
 
-_Could be done by having a setter function for the UniversalReceiverDelegate address, or if the contract supports [ERC725Y](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) the address SHOULD be stored under this Key:_
-
-```json
-{
-    "name": "LSP1UniversalReceiverDelegate",
-    "key": "0x0cfc51aec37c55a4d0b1a65c6255c4bf2fbdf6277f3cc0730c45b828b6db8b47",
-    "keyType": "Singleton",
-    "valueType": "address",
-    "valueContent": "Address"
-}
-```
-Check [LSP2- ERC725YJSONSchema](./LSP-2-ERC725YJSONSchema.md) for more information. 
+The **UniversalReceiverDelegate** smart contract, can then understand the `msg.sender` and `msg.value` of the initial smart contract, or ignore the appended data.
 
 
 ## Rationale
-<!--The rationale fleshes out the specification by describing what motivated the design and why particular design decisions were made. It should describe alternate designs that were considered and related work, e.g. how the feature is supported in other languages. The rationale may also provide evidence of consensus within the community, and should discuss important objections or concerns raised during discussion.-->
-This is an abstraction of the ideas behind Ethereum [ERC223](https://github.com/ethereum/EIPs/issues/223) and [ERC777](https://eips.ethereum.org/EIPS/eip-777), that contracts are called when they are receiving tokens. With this proposal, we can allow contracts to receive any information over a standardised interface.
-This can even be done in an upgradable way, where the receiving code can be changed over time to support new standards and assets. 
+This is an abstraction of the ideas behind Ethereum [ERC223](https://github.com/ethereum/EIPs/issues/223) and [ERC777](https://eips.ethereum.org/EIPS/eip-777), that contracts are called when they are receiving tokens or other assets. With this proposal, we can allow contracts to receive any information over a standardised interface. As this function is generic and only the send `typeId` changes, smart contract accounts that can upgrade its behaviour using the **UniversalReceiverDelegate** technique can be created. UniversalReceiverDelegate functionality COULD be implemented using `call`, or `delegatecall`, both of which have different security properties.
 
 ## Implementation
 
