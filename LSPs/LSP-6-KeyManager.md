@@ -469,7 +469,7 @@ Since the `valueType` of this data key is `bytes32`, up to 255 different permiss
     "key": "0x4b80742de2bf393a64c70000<address>",
     "keyType": "MappingWithGrouping",
     "valueType": "bytes[CompactBytesArray]",
-    "valueContent": "bytes"
+    "valueContent": "Bytes"
 }
 ```
 
@@ -519,7 +519,7 @@ Also allowed to interact **with any address** supporting the **`0x68686868`** in
     "key": "0x4b80742de2bf866c29110000<address>",
     "keyType": "MappingWithGrouping",
     "valueType": "bytes[CompactBytesArray]",
-    "valueContent": "bytes"
+    "valueContent": "Bytes"
 }
 ```
 
@@ -645,9 +645,9 @@ To illustrate, for a file set with permission `755`, the group permission (secon
 <!--The implementations must be completed before any LIP is given status "Final", but it need not be completed before the LIP is accepted. While there is merit to the approach of reaching consensus on the specification and rationale before writing code, the principle of "rough consensus and running code" is still useful when it comes to resolving many discussions of API details.-->
 
 A implementation can be found in the [lukso-network/universalprofile-smart-contracts](https://github.com/lukso-network/lsp-universalprofile-smart-contracts/blob/main/contracts/LSP6KeyManager/LSP6KeyManager.sol);
-The below defines the JSON interface of the `LSP3Account`.
+The below defines the JSON interface of the target(#target) contract.
 
-ERC725Y JSON Schema `LSP6KeyManager`, set at the `LSP3Account`:
+ERC725Y JSON Schema `LSP6KeyManager`, set at the target(#target) contract:
 
 ```json
 [
@@ -666,32 +666,18 @@ ERC725Y JSON Schema `LSP6KeyManager`, set at the `LSP3Account`:
         "valueContent": "BitArray"
     },
     {
-        "name": "AddressPermissions:AllowedAddresses:<address>",
-        "key": "0x4b80742de2bfc6dd6b3c0000<address>",
+        "name": "AddressPermissions:AllowedCalls:<address>",
+        "key": "0x4b80742de2bf393a64c70000<address>",
         "keyType": "MappingWithGrouping",
-        "valueType": "address[]",
-        "valueContent": "Address"
+        "valueType": "bytes[CompactBytesArray]",
+        "valueContent": "Bytes"
     },
     {
-        "name": "AddressPermissions:AllowedFunctions:<address>",
-        "key": "0x4b80742de2bf8efea1e80000<address>",
+        "name": "AddressPermissions:AllowedERC725YDataKeys:<address>",
+        "key": "0x4b80742de2bf866c29110000<address>",
         "keyType": "MappingWithGrouping",
-        "valueType": "bytes4[]",
-        "valueContent": "Bytes4"
-    },
-    {
-        "name": "AddressPermissions:AllowedStandards:<address>",
-        "key": "0x4b80742de2bf3efa94a30000<address>",
-        "keyType": "MappingWithGrouping",
-        "valueType": "bytes4[]",
-        "valueContent": "Bytes4"
-    },
-    {
-        "name": "AddressPermissions:AllowedERC725YKeys:<address>",
-        "key": "0x4b80742de2bf90b8b4850000<address>",
-        "keyType": "MappingWithGrouping",
-        "valueType": "bytes32[]",
-        "valueContent": "Bytes32"
+        "valueType": "bytes[CompactBytesArray]",
+        "valueContent": "Bytes"
     }
 ]
 ```
@@ -709,16 +695,22 @@ interface ILSP6  /* is ERC165 */ {
     
     // LSP6
         
-    event Executed(uint256 indexed  value, bytes4 selector); 
+    event Executed(bytes4 indexed selector, uint256 indexed value); 
    
 
     function target() external view returns (address);
     
     function getNonce(address address, uint256 channel) external view returns (uint256);
     
-    function execute(bytes memory calldata) external payable returns (bytes memory);
     
-    function executeRelayCall(bytes memory signature, uint256 nonce, bytes memory _calldata) external payable returns (bytes memory);
+    function execute(bytes memory payload) external payable returns (bytes memory);
+    
+    function execute(uint256[] memory values, bytes[] memory payloads) external payable returns (bytes[] memory);
+    
+    
+    function executeRelayCall(bytes memory signature, uint256 nonce, bytes memory payload) external payable returns (bytes memory);
+    
+    function executeRelayCall(bytes[] memory signatures, uint256[] memory nonces, uint256[] memory values, bytes[] memory payloads) external payable returns (bytes[] memory);
     
 
 ```
