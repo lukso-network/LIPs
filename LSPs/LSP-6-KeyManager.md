@@ -64,7 +64,7 @@ function isValidSignature(bytes32 hash, bytes memory signature) external view re
 
 This function is part of the [ERC1271] specification, with additional requirements as follows:
 
-- MUST recover the address from the hash and the signature and return the [magic value] if the address recovered have the [**SIGN Permission**](#sign), if not, MUST return the [failure value].
+- MUST recover the address from the hash and the signature and return the [ERC1721 magic value] if the address recovered have the [**SIGN Permission**](#sign), if not, MUST return the [ERC1271 fail value].
 
 #### getNonce
 
@@ -72,7 +72,7 @@ This function is part of the [ERC1271] specification, with additional requiremen
 function getNonce(address signer, uint128 channel) external view returns (uint256)
 ```
 
-Returns the nonce that needs to be signed by an allowed key to be passed into the [executeRelayCall](#executeRelayCall) functionS. A signer can choose his channel number arbitrarily.
+Returns the latest nonce for a signer on a specific channel. A signer can choose a channel number arbitrarily and use this nonce to sign a payload that can be executed as a meta-transaction by any address via [executeRelayCall](#executeRelayCall)  function.
 
 _Parameters:_
 
@@ -81,9 +81,11 @@ _Parameters:_
 
 _Returns:_ `uint256` , the current nonce.
 
-Payloads signed with nonces of the same channnel, needs to be executed by order. e.g, in channel X, payload signed with the second nonce will not be successfully executed until the payload signed with the first nonce is executed.
+Payloads signed with incremental nonces on the same channel for the same signer are executed in order. e.g, in channel X, the payload nb two signed with the second nonce will not be successfully executed until the payload nb one signed with the first nonce has been executed.
 
-Payloads signed with nonces of different channels are execution independant from each other. e.g, payload signed with the forth nonce of channel X can be successfully executed even before the execution of the payload signed with the first nonce of channel Y. 
+Payloads signed with nonces on different channels are executed independently from each other, regardless of when they got executed or if they got executed successfully or not. e.g, the payload signed with the fourth nonce on channel X can be successfully executed even if the payload signed with the first nonce of channel Y:
+- was executed before.
+- was executed and reverted.
 
 > X and Y can be any arbitrary number between 0 and 2^128.
 
@@ -92,22 +94,22 @@ Read [what are multi-channel nonces](#what-are-multi-channel-nonces).
 #### execute
 
 ```solidity
-function execute(bytes memory _calldata) external payable returns (bytes memory)
+function execute(bytes memory payload) external payable returns (bytes memory)
 ```
 
-Execute a payload on a set [ERC725 X or Y smart contract].
+Execute a payload on the linked [target](#target) contract.
 
 MUST fire the [Executed event](#executed).
 
 _Parameters:_
 
-- `_calldata`: The call data to be executed.
+- `payload`: The abi-encoded function call to be executed on the linked target contract.
 
 _Returns:_ `bytes` , the returned data as abi-decoded bytes of the call on ERC725 smart contract, if the call succeeded, otherwise revert with a reason-string. 
 
 _Requirements:_
 
-- The first 4 bytes of the `_calldata` payload MUST correspond to one of the function selector on the ERC725 smart contract such as:
+- The first 4 bytes of the `payload` payload MUST correspond to one of the function selector on the ERC725 smart contract such as:
 
     - [`setData(bytes32,bytes)`](./LSP-0-ERC725Account.md#setdata)
     - [`setData(bytes32[],bytes[])`](./LSP-0-ERC725Account.md#setdata-array)
@@ -115,7 +117,7 @@ _Requirements:_
     - [`transferOwnership(address)`](./LSP-0-ERC725Account.md#transferownership)
     - [`acceptOwnership()`](./LSP-0-ERC725Account.md#acceptownership)
 
-- MUST send the value passed by the caller to the call on the ERC725 contracts. 
+- MUST send the value passed by the caller to the call on the linked target. 
 
 > Non payable functions will revert in case of calling them and passing value along the call.
 
@@ -125,19 +127,19 @@ _Requirements:_
 #### execute (Array)
 
 ```solidity
-function execute(uint256[] memory values, bytes memory _calldata[]) external payable returns (bytes[] memory)
+function execute(uint256[] memory values, bytes memory payloads[]) external payable returns (bytes[] memory)
 ```
 
-Execute a batch of payloads on a set [ERC725 X or Y smart contract].
+Execute a batch of payloads on the linked [target](#target) contract.
 
 MUST fire the [Executed event](#executed) on each iteration.
 
 _Parameters:_
 
 - `values`: The array of values to be sent to the target contract along the call on each iteration. 
-- `_calldata`: The array of calldata to be executed on the target contract on each iteration.
+- `payloads`: The array of calldata payloads to be executed on the target contract on each iteration.
 
-_Returns:_ `bytes[]` , an array of returned data as array of abi-decoded bytes of the call on ERC725 smart contract, if the calls succeeded, otherwise revert with a reason-string. 
+_Returns:_ `bytes[]` , an array of returned data as abi-decoded array of `bytes[]` of the call on ERC725 smart contract, if the calls succeeded, otherwise revert with a reason-string. 
 
 _Requirements:_
 
@@ -150,24 +152,24 @@ _Requirements:_
 #### executeRelayCall
 
 ```solidity
-function executeRelayCall(bytes memory signature, uint256 nonce, bytes memory _calldata) external payable returns (bytes memory)
+function executeRelayCall(bytes memory signature, uint256 nonce, bytes memory payload) external payable returns (bytes memory)
 ```
 
-Allows anybody to execute `_calldata` payload on a set [ERC725 X or Y smart contract], given they have a valid signature, specific to the payload passed, from permissioned controller.
+Allows anybody to execute a `payload` on the linked [target](#target) contract, given they have a valid signature, specific to the payload passed, from a permissioned controller.
 
 MUST fire the [Executed event](#executed).
 
 _Parameters:_
 - `signature`: bytes65 ethereum signature.
 - `nonce`: MUST be the nonce of the address that signed the message. This can be obtained via the `getNonce(address address, uint256 channel)` function.
-- `_calldata`: The call data to be executed.
+- `payload`: The abi-encoded function call to be executed on the linked target contract.
 
 
 _Returns:_ `bytes` , the returned data as abi-decoded bytes of the call on ERC725 smart contract, if the call succeeded, otherwise revert with a reason-string. 
 
 _Requirements:_
 
-- The address recovered from the signature and the digest signed MUST have **permission** for the action being executed. Check [Permissions](#permissions) to know more.
+- The address recovered from the signature and the digest signed MUST have **permission(s)** for the action(s) being executed. Check [Permissions](#permissions) to know more.
 
 The digest signed MUST be constructed according to the [version 0 of EIP-191] with the following format:
 
@@ -178,9 +180,9 @@ The digest signed MUST be constructed according to the [version 0 of EIP-191] wi
     - `0x19`: byte intended to ensure that the `signed_data` is not valid RLP.
     - `0x00`: version 0 of the EIP191.
     - `KeyManager address`: The address of the Key Manager executing the payload.
-    - `LSP6_VERSION`: Version relative to the LSP6KeyManager defined as uint256 equal to 6.
-    - `chainId`: The chainId of the blockchain where the Key Manager is deployed.
-    - `nonce`: The nonce to sign the payload with.
+    - `LSP6_VERSION`: Version relative to the LSP6KeyManager defined as a uint256 equal to 6.
+    - `chainId`: The chainId of the blockchain where the Key Manager is deployed, as a uint256.
+    - `nonce`: The nonce to sign the payload with, as a uint256.
     - `payload`: The payload to be executed.
 
 These parameters MUST be packed encoded (not zero padded, leading `0`s are removed), then hashed with keccak256 to produce the digest.
@@ -189,7 +191,7 @@ For signing, permissioned users should apply the same steps and sign the final h
 
 - The nonce passed to the function MUST be a valid nonce according to the [multi-channel nonce](#what-are-multi-channel-nonces) section.
 
-- MUST send the value passed by the caller to the call on the ERC725 contracts. 
+- MUST send the value passed by the caller to the call on the linked target contract. 
 
 > Non payable functions will revert in case of calling them and passing value along the call.
 
@@ -197,11 +199,11 @@ For signing, permissioned users should apply the same steps and sign the final h
 #### executeRelayCall (Array)
 
 ```solidity
-function executeRelayCall(bytes[] memory signatures, uint256[] memory nonces, uint256[] memory values, bytes[] memory _calldatas) external payable returns (bytes[] memory)
+function executeRelayCall(bytes[] memory signatures, uint256[] memory nonces, uint256[] memory values, bytes[] memory payloads) external payable returns (bytes[] memory)
 ```
 
 
-Allows anybody to execute a batch of `_calldatas` payloads on a set [ERC725 X or Y smart contract], given they have valid signatures, specific to the payloads passed, from permissioned controller/es.
+Allows anybody to execute a batch of `payloads` on the linked [target](#target) contract, given they have valid signatures specific to the payloads signed by permissioned controllers.
 
 MUST fire the [Executed event](#executed) on each iteration.
 
@@ -210,9 +212,9 @@ _Parameters:_
 - `signatures`: The array of bytes65 ethereum signature.
 - `nonce`: The array of the nonce of the address/es that signed the digests. This can be obtained via the `getNonce(address address, uint256 channel)` function.
 - `values`: The array of values to be sent to the target contract along the call on each iteration. 
-- `_calldata`: The array of call data to be executed.
+- `payloads`: The array of calldata payloads to be executed on the target contract on each iteration.
 
-_Returns:_ `bytes[]` , an array of returned data as array of abi-decoded bytes of the call on ERC725 smart contract, if the calls succeeded, otherwise revert with a reason-string. 
+_Returns:_ `bytes[]` , an array of returned as abi-decoded array of `bytes[]` of the linked target contract, if the calls succeeded, otherwise revert with a reason-string. 
 
 _Requirements:_
 
@@ -236,9 +238,15 @@ The first parameter `selector` in the `Executed` event corresponds to the `bytes
 
 ### Permissions
 
-The permissions MUST be checked against the caller in case of [`execute(bytes)`](#execute) and [`execute(uint256[],bytes[])`](#execute-array) functions. In case of [`executeRelayCall(bytes,uint256,bytes)`](#executerelaycall) and [`executeRelayCall(bytes[],uint256[],uint256[],bytes[])`](#executerelaycall-array), permissions should be checked against the signer address, recovered from the signature and the digest.
+The permissions MUST be checked against the following address, depending on the function/method being called:
 
-The permissions MUST be stored as BitArray under the [`AddressPermissions:Permissions:<address>`](#addresspermissionspermissionsaddress) data key on the target.
+- against the **caller** in the cases of [`execute(bytes)`](#execute) and [`execute(uint256[],bytes[])`](#execute-array).
+
+- against the **signer address**, recovered from the signature and the digest, in the cases of [`executeRelayCall(bytes,uint256,bytes)`](#executerelaycall) and [`executeRelayCall(bytes[],uint256[],uint256[],bytes[])`](#executerelaycall-array).
+
+The permissions MUST be stored as [BitArray] under the [`AddressPermissions:Permissions:<address>`](#addresspermissionspermissionsaddress) data key on the target.
+
+> In the descriptions of each permissions below, the term _controller address_ refers to an address that has some permissions set under the target contract linked to this Key Manager.
 
 #### `CHANGEOWNER`
 
@@ -252,9 +260,9 @@ BitArray representation: `0x0000000000000000000000000000000000000000000000000000
 
 - Allows incrementing the length of the [`AddressPermissions[]`](#addresspermissions) data key and adding an address at a new index of the array.
 
-- Allows adding permissions for a new controller key under the [`AddressPermissions:Permissions:<address>`](#addresspermissionspermissionsaddress) data key.
+- Allows adding permissions for a new controller address under the [`AddressPermissions:Permissions:<address>`](#addresspermissionspermissionsaddress) data key.
 
-- Allows adding the [restrictions](#) for the [CALL](#call) and [SETDATA](#setdata) permissions stored respectively under the [`AddressPermissions:AllowedCalls:<address>`](#addresspermissionsallowedcallsaddress)  and [`AddressPermissions:AllowedERC725YDataKeys:<address>`](#addresspermissionsallowederc725ydatakeysaddress).
+- Allows adding the restrictions for the call operations such as [CALL](#call), [STATICCALL](#staticcall), and [DELEGATECALL](#delegatecall) and [SETDATA](#setdata) permissions stored respectively under the [`AddressPermissions:AllowedCalls:<address>`](#addresspermissionsallowedcallsaddress)  and [`AddressPermissions:AllowedERC725YDataKeys:<address>`](#addresspermissionsallowederc725ydatakeysaddress).
 
 The value of these data keys SHOULD be validated before being set to avoid edge cases.
 
@@ -266,9 +274,9 @@ BitArray representation: `0x0000000000000000000000000000000000000000000000000000
 
 - Allows decrementing the length of the [`AddressPermissions[]`](#addresspermissions) data key and changing the address at an existing index of the array.
 
-- Allows changing permissions for an existing controller key under the [`AddressPermissions:Permissions:<address>`](#addresspermissionspermissionsaddress) data key.
+- Allows changing permissions for an existing controller address under the [`AddressPermissions:Permissions:<address>`](#addresspermissionspermissionsaddress) data key.
 
-- Allows changing the existing [restrictions] for the [CALL](#call) and [SETDATA](#setdata) permissions stored respectively under the [`AddressPermissions:AllowedCalls:<address>`](#addresspermissionsallowedcallsaddress)  and [`AddressPermissions:AllowedERC725YDataKeys:<address>`](#addresspermissionsallowederc725ydatakeysaddress).
+- Allows changing existing restrictions for the call operations such as [CALL](#call), [STATICCALL](#staticcall), and [DELEGATECALL](#delegatecall) and [SETDATA](#setdata) permissions stored respectively under the [`AddressPermissions:AllowedCalls:<address>`](#addresspermissionsallowedcallsaddress)  and [`AddressPermissions:AllowedERC725YDataKeys:<address>`](#addresspermissionsallowederc725ydatakeysaddress).
 
 The value of these data keys SHOULD be validated before being set to avoid edge cases.
 
@@ -724,9 +732,10 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 [version 0 of EIP-191]: <https://github.com/ethereum/EIPs/blob/master/EIPS/eip-191.md#version-0x00>
 [ERC725 X or Y smart contract]: <https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md>
 [ERC1271]: <https://eips.ethereum.org/EIPS/eip-1271>
-[magic value]: <https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1271.md#specification>
-[failure value]: <https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1271.md#specification>
+[ERC1721 magic value]: <https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1271.md#specification>
+[ERC1271 fail value]: <https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1271.md#specification>
 [ERC725Account]: <./LSP-0-ERC725Account.md>
+[BitArray]: <./LSP-2-ERC725YJSONSchema.md#bitarray>
 [EIP191]: <https://eips.ethereum.org/EIPS/eip-191>
 [CALL]: <https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#execute>
 [STATICCALL]: <https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#execute>
