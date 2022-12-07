@@ -17,7 +17,7 @@ A standard interface for identifiable digital assets, allowing for tokens to be 
 
 ## Abstract
 <!--A short (~200 word) description of the technical issue being addressed.-->
-This standard defines an interface for tokens that are identified with a `tokenId`, based on [ERC721][ERC721]. A `bytes32` value is used for `tokenId` to allow many uses of token identification including numbers, contract addresses, and hashed values (ie. serial numbers).
+This standard defines an interface for tokens that are identified with a `tokenId`, based on [ERC721][ERC721]. A `bytes32` value is used for `tokenId` to allow many uses of token identification including numbers, contract addresses, and any other unique identifiers (_e.g:_ serial numbers, NFTs with unique names, hash values, etc...).
 
 This standard defines a set of data-key value pairs that are useful to know what the `tokenId` represents, and the associated metadata for each `tokenId`.
 
@@ -41,13 +41,26 @@ This standard can also be combined with the data keys from [LSP4 DigitalAsset-Me
 
 #### LSP8TokenIdType
 
-What the `tokenId` represents in this contract.
+In the context of LSP8, a contract implementing the LSP8 standard represents a collection of unique non-fungible tokens (NFT). The LSP8 collection contract is responsible for minting these tokens.
 
-Expected values are represented by the enum:
+Each token part of the collection is identifiable through its unique `tokenId`.
+
+However, these NFTs can be represented differently depending on the use case. This is referred to as the **type of the tokenId**.
+
+The LSP8TokenIdType metadata key provides this information and describes how to treat the NFTs parts of the LSP8 collection.
+
+The `tokenId` type can be one of the following possible enum values.
+
 
 - 1 -> `address`: another contract.
 - 2 -> `uint256`: a number, which may be an incrementing count where each minted token is assigned the next number.
 - 3 -> `bytes32`: a hashed value (ie. serial number).
+
+| Value | Type      | Description  |
+|:-----:|:---------:|--------------|
+| `1`   | `address` | each NFT is represented as its **own [ERC725Y] smart contract.** |
+| `2`   | `uint256` | each NFT is represented with a **unique number**. <br> This number is an incrementing count, where each minted token is assigned the next number.  |
+| `3`   | `bytes32` | each NFT is represented using a **32 characters long unique identifier**. <br> This identifier is flexible and can be adapted based on the use case. For instance, it can represent: <br> - a unique serial number. <br> - a unique name (as a short utf8 encoded string, no more than 32 characters long). <br> - a hash value or digest.  |
 
 ```json
 {
