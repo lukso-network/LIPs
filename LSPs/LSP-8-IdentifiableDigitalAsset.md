@@ -60,7 +60,8 @@ The `tokenId` type can be one of the following possible enum values.
 |:-----:|:---------:|--------------|
 | `1`   | `address` | each NFT is represented as its **own [ERC725Y] smart contract.** |
 | `2`   | `uint256` | each NFT is represented with a **unique number**. <br> This number is an incrementing count, where each minted token is assigned the next number.  |
-| `3`   | `bytes32` | each NFT is represented using a **32 characters long unique identifier**. <br> This identifier is flexible and can be adapted based on the use case. For instance, it can represent: <br> - a unique serial number. <br> - a unique name (as a short utf8 encoded string, no more than 32 characters long). <br> - a hash value or digest.  |
+| `3`   | `bytes32` | each NFT is represented using a **32 characters long unique identifier**. <br> This identifier can be for instance a unique serial number or a hash value (digest). |
+| `4`   | `string`  | each NFT is represented using a unique name (as a short utf8 encoded string, no more than 32 characters long) |
 
 ```json
 {
