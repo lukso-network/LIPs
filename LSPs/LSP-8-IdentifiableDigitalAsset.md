@@ -546,6 +546,7 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 [ERC165]: <https://eips.ethereum.org/EIPS/eip-165>
 [ERC721]: <https://github.com/ethereum/EIPs/blob/master/EIPS/eip-721.md>
 [ERC725]: <https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md>
+[ERC725Y]: <https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#erc725y>
 [ERC777]: <https://github.com/ethereum/EIPs/blob/master/EIPS/eip-777.md>
 [LSP1]: <./LSP-1-UniversalReceiver.md>
 [LSP2#jsonurl]: <./LSP-2-ERC725YJSONSchema.md#JSONURL>
