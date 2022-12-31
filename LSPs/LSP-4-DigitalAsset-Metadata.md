@@ -98,6 +98,7 @@ The linked JSON file SHOULD have the following format:
 ```js
 {
     "LSP4Metadata": {
+        "name": "string", // name of the DigitalAsset if not defined in LSP4TokenName
         "description": "string",
         "links": [ // links related to DigitalAsset
             {
@@ -134,7 +135,14 @@ The linked JSON file SHOULD have the following format:
             "hash": 'string',
             "url": 'string',
             "fileType": 'string'
-        }]  
+        }],
+        "attributes": [
+        {
+            "key": "string",    // name of the attribute
+            "value": "string", // value assigned to the attribute
+            "type": "string | number | boolean",   // for encoding/decoding purposes
+        },
+        ...
     }
 }
 ```
@@ -176,7 +184,24 @@ Example:
             hash: '0x98fe032f81c43426fbcfb21c780c879667a08e2a65e8ae38027d4d61cdfe6f55',
             url: 'ifps://QmPJESHbVkPtSaHntNVY5F6JDLW8v69M2d6khXEYGUMn7N',
             fileType: 'fbx'
-        }]  
+        }],
+        attributes: [
+            {
+                key: 'Standard type',
+                value: 'LSP',
+                type: "string"
+            },
+            {
+                key: 'Standard number',
+                value: 4,
+                type: "number"
+            },
+            {
+                key: '🆙',
+                value: true,
+                type: "boolean"
+            }
+        ]
     }
 }
 ```
