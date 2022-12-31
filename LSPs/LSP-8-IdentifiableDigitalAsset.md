@@ -128,6 +128,37 @@ The `bytes32` of the `tokenId` this metadata is for, to be stored in the [ERC725
 }
 ```
 
+#### LSP8MetadataBaseURI
+
+The base URI for the LSP8 tokenIds metadata.
+
+The URI that points to the metadata of a tokenId MUST be created using the following pattern: `{LSP8MetadataBaseURI}{tokenId}`
+
+⚠️ TokenIds MUST be in lowercase , even for the tokenId type `address`.
+
+- TokenId type `2` (= `uint256`)<br>
+  e.g. `http://mybase.uri/1234`
+- TokenId type `1` (= `address`)<br>
+  e.g. `http://mybase.uri/0x43fb7ab43a3a32f1e2d5326b651bbae713b02429`
+- TokenId type `3` or `4` (= `bytes32`)<br>
+  e.g. `http://mybase.uri/e5fe3851d597a3aa8bbdf8d8289eb9789ca2c34da7a7c3d0a7c442a87b81d5c2`
+- TokenId type `5`
+  e.g. `http://mybase.uri/my_string`
+
+If the tokenId type is a hash (type `3`), the first bytes4 represent the hash function.
+Otherwise the first 4 bytes MUST be `0x00000000`
+
+
+```json
+{
+  "name": "LSP8MetadataBaseURI",
+  "key": "0x4d338d2ae46727344b271e6736aa3d8083a199ee9abf854873c407bd28244c41",
+  "keyType": "Singleton",
+  "valueType": "(bytes4,string)",
+  "valueContent": "(Bytes4,URI)"
+}
+```
+
 ---
 (TODO: discussion if there are other TokenIdMetadata data keys to include in the standard)
 ---
