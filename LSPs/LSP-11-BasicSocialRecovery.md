@@ -6,18 +6,21 @@ discussions-to: https://discord.gg/E2rJPP4
 status: Draft
 type: LSP
 created: 2021-2-14
-requires: ERC725, LSP0, LSP2, LSP6
+requires: ERC165, ERC725, LSP2, LSP6
 ---
 
 ## Simple Summary
-This standard describes a **basic social recovery** contract that can recover access to [ERC725](https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md) contracts through the [LSP6-KeyManager](./LSP-6-KeyManager.md).
+
+This standard describes a **basic social recovery** contract that can recover access to [ERC725] contracts through the [LSP6-KeyManager](./LSP-6-KeyManager.md).
 
 ## Abstract
+
 This standard provides a mechanism for recovering access to ERC725 contracts such as tokens, NFTs, and Universal Profiles by adding a new controller address through the Key Manager after a recovery process.
 
-The social recovery contract should ensure a flexible and secure process where guardians, nominated by the owner, can vote for one address in each `recoverProcessId`. The address requesting recovery can choose a `recoverProcessId` where he reached the `guardiansThreshold` and after successfully providing the secret word which produces the same hash as the secret hash set by the owner, he will be granted the owner permissions in the recovered account and a new hash will be set and all previous `recoverProcessId` will be invalidated.
+The social recovery contract should ensure a flexible and secure process where guardians, nominated by the owner, can select one address. The address after reaching the `guardiansThreshold` and after successfully providing the secret word which produces the same hash as the secret hash set by the owner, will be granted the owner permissions in the recovered target and a new hash will be set and a new recovery counter will be created.
 
 ## Motivation
+
 Any Key could be lost or leaked due to a certain accident, so it's not advised to rely on one singular key to control ERC725 contracts through the Key Manager and a social recovery contract is needed in this case.
 
 In the case above, the user can simply reach out to his guardians and ask them to vote for a certain address. 
@@ -29,35 +32,40 @@ There are many possible choices for whom to select as a guardian. The three most
 
 ## Specification
 
-ERC165 interface id: `0xcb81043b`
-
-It's advised when deploying the contract and setting it up to start with the following order of functions:
-
-- **`addGuardian(...)`**
-
-- **`removeGuardian(...)`**
-
-- **`setThreshold(...)`**
-
-- **`setSecret(...)`**
-
-Every contract that supports the LSP11SocialRecovery SHOULD implement:
+LSP11 interface id according to [ERC165]: 0x8ad274f4.
 
 ### Methods
 
-#### account
+Smart contracts implementing the LSP11 standard MUST implement all of the functions listed below:
+
+#### target
 
 ```solidity
-function account() public view returns (address)
+function target() external view returns (address)
 ```
 
-Returns the address of the linked account to recover.
+Returns the address of the linked ERC725 contract to recover.
 
+#### getRecoveryCounter
+
+```solidity
+function getRecoveryCounter() external view returns (uint256)
+```
+
+Returns the number of finished successful recovery processes.
+
+#### getGuardians
+
+```solidity
+function getGuardians() external view returns (address[] memory)
+```
+
+Returns the array of guardian addresses set.
 
 #### isGuardian
 
 ```solidity
-function isGuardian(address _address) public view returns (bool)
+function isGuardian(address _address) external view returns (bool)
 ```
 
 Returns _true_ if the provided address is a guardian, _false_ otherwise.
@@ -66,146 +74,181 @@ _Parameters:_
 
 - `_address`: the address to query.
 
-
-#### getGuardians
-
-```solidity
-function getGuardians() public view returns (address[] memory)
-```
-
-Returns the array of guardian addresses set.
-
-
-
 #### getGuardiansThreshold
 
 ```solidity
-function getGuardiansThreshold() public view returns (uint256)
+function getGuardiansThreshold() external view returns (uint256)
 ```
 
-Returns the minimum number of guardian votes needed for an address to recover the linked account.
+Returns the minimum number of guardians selection required by an address to start a recovery process.
 
-
-
-#### getRecoverProcessesIds
+#### getGuardianChoice
 
 ```solidity
-function getRecoverProcessesIds() public view returns (bytes32[] memory)
+function getGuardianChoice(address guardian) external view returns (address)
 ```
 
-Returns all the recover processes ids that the guardians has voted in.
-
-#### getGuardianVote
-
-```solidity
-function getGuardianVote(bytes32 recoverProcessId, address guardian) public view returns (address)
-```
-
-Returns the address for which the `guardian` has voted in the provided recoverProcessId.
+Returns the address that a `guardian` selected for target recovery.
 
 _Parameters:_
 
-- `recoverProcessId`: the recover process id in which the guardian has voted.
-
-- `guardian`: the address of the guardian who voted.
+- `guardian`: the address that `guardian` has selected.
 
 #### addGuardian
 
 ```solidity
-function addGuardian(address newGuardian) public
+function addGuardian(address newGuardian) external
 ```
 
-Adds a new guardian.
-
-SHOULD be called only by the owner.
+Adds a guardian of the target. MUST fire the [AddedGuardian](#addedguardian) event.
 
 _Parameters:_
 
 - `newGuardian`: the address of the guardian to set.
 
+_Requirements:_
+
+- MUST be called only by the owner.
 
 #### removeGuardian
 
 ```solidity
-function removeGuardian(address currentGuardian) public
+function removeGuardian(address currentGuardian) external
 ```
 
-Removes an existing guardian.
-
-SHOULD be called only by the owner.
+Removes an existing guardian of the target. MUST fire the [RemovedGuardian](#removedguardian) event.
 
 _Parameters:_
 
 - `currentGuardian`: the address of the guardian to remove.
 
-#### setThreshold
+_Requirements:_
+
+- MUST be called only by the owner.
+
+#### setGuardiansThreshold
 
 ```solidity
-function setThreshold(uint256 newThreshold) public
+function setGuardiansThreshold(uint256 newThreshold) external
 ```
 
-Sets the number of guardian votes required to recover the linked account.
+Sets the minimum number of selection by the guardians required so that an address can recover ownership to the linked target contract. MUST fire the [GuardianThresholdChanged](#guardianthresholdchanged) event.
 
-The number should be greater than 0 and less than the guardians count.
-
-SHOULD be called only by the owner.
+If the GuardiansThreshold is equal to 0, the social recovery contract will act as a password recovery contract.
 
 _Parameters:_
 
-- `newThreshold`: the number of guardian votes required to recover the linked account.
+- `newThreshold`: the threshold to set.
 
-#### setSecret
+_Requirements:_
+
+- MUST be called only by the owner.
+
+#### setRecoverySecretHash
 
 ```solidity
-function setSecret(bytes32 newHash) public
+function setRecoverySecretHash(bytes32 newSecretHash) external
 ```
 
-Sets the hash of the plainSecret needed to recover the account after reaching the recoverThreshold.
-
-SHOULD be called only by the owner.
+Sets the hash of the plainSecret needed to recover the target after reaching the guardians threshold. MUST fire the [SecretHashChanged](#secrethashchanged) event.
 
 _Parameters:_
 
 - `newHash`: the hash of the plainSecret.
 
-#### voteToRecover
+_Requirements:_
+
+- MUST be called only by the owner.
+
+#### selectNewController
 
 ```solidity
-function voteToRecover(bytes32 recoverProcessId, address addressToRecover) public
+function selectNewController(address addressSelected) external
 ```
 
-Votes to a `addressToRecover` address in a specific recoverProcessId.
-
-Once the `addressToRecover` reach the recoverThreshold it will be able to call `recoverOwnership(..)` function and recover the linked account.
-
-SHOULD be called only by the guardians.
+Select an address to be a potentiel controller address if he reaches the guardian threshold and provide the correct plainSecret. MUST fire the [SelectedNewController](#selectednewcontroller) event.
 
 _Parameters:_
 
-- `recoverProcessId`: the recover Process Id in which the `addressToRecover` has been voted for.
+- `addressSelected`: The address selected by the guardian.
 
-- `addressToRecover`: the address to vote for in order to recover the linked account.
+_Requirements:_
+
+- MUST be called only by the guardians.
 
 #### recoverOwnership
 
 ```solidity
-function recoverOwnership(bytes32 recoverProcessId, string memory plainSecret, bytes32 newHash) public 
+function recoverOwnership(string memory plainSecret, bytes32 newHash) external 
 ```
 
-Recover the linked account by setting in All Permissions (combined) for the msg.sender after it reached the recoverThreshold and given the right plainSecret that produce the `secretHash`.
+Increment the recovery counter and recovers the ownership permissions in the linked target for the msg.sender after it has reached the guardiansThreshold and given the right plainSecret that produce the `secretHash`. MUST fire the [RecoverProcessSuccessful](#recoverprocesssuccessful) event and the [SecretHashChanged](#secrethashchanged) event.
 
 _Parameters:_
 
-- `recoverProcessId`: the recover process id in which the `msg.sender` should have reached the threshold.
-
 - `plainSecret`: the plain secret that should produce the `secretHash` with _keccak256_ function.
 
-- `newHash`: the new secret hash to set.
+- `newHash`: the new secret hash to set for the future recovery process.
 
+_Requirements:_
+
+- MUST be called only by the address that reached the guardian threshold.
+
+- The address calling MUST have provided the right `plainSecret` that produces the secretHash originally set by the owner.
+
+### Events
+
+#### AddedGuardian
+
+```solidity
+event AddedGuardian(address indexed newGuardian);
+```
+
+MUST be emitted when setting a new guardian for the target.
+
+#### RemovedGuardian
+
+```solidity
+event RemovedGuardian(address indexed removedGuardian);
+```
+
+MUST be emitted when removing an existing guardian for the target.
+
+#### GuardianThresholdChanged
+
+```solidity
+event GuardianThresholdChanged(uint256 indexed guardianThreshold);
+```
+
+MUST be emitted when changing the guardian threshold.
+
+#### SecretHashChanged
+
+```solidity
+event SecretHashChanged(bytes32 indexed secretHash);
+```
+
+MUST be emitted when changing the secret hash.
+
+#### SelectedNewController
+
+```solidity
+event SelectedNewController(uint256 indexed currentRecoveryCounter, address indexed guardian, address indexed addressSelected);
+```
+
+MUST be emitted when a guardian select a new potentiel controller address for the linked target.
+
+#### RecoverProcessSuccessful
+
+```solidity
+event RecoverProcessSuccessful(uint256 indexed recoveryCounter, address indexed newController, bytes32 indexed newSecretHash, address[] guardians);
+```
+
+MUST be emitted when the recovery process is finished by the controller who reached the guardian threshold and submitted the string that produce the secretHash
 
 ### Setup
 
-In order to allow the social recovery contract to recover the linked account and add new permissions, the linked account should have an [LSP6-KeyManager](./LSP-6-KeyManager.md) as owner and the social recovery contract should have `ADDPERMISSIONS` and `CHANGEPERMISSIONS` permissions set inside the **linked account** under this ERC725Y Data Key.
+In order to allow the social recovery contract to recover the linked target and add new permissions, the linked target should have an [LSP6-KeyManager](./LSP-6-KeyManager.md) as owner and the social recovery contract should have `ADDPERMISSIONS` and `CHANGEPERMISSIONS` permissions set inside the **linked target** under this ERC725Y data key.
 
 ```json
 {
@@ -217,51 +260,72 @@ In order to allow the social recovery contract to recover the linked account and
 }
 ```
 
-### Events
-
 ## Rationale
 
-This standard was inspired by the current recovery process in some crypto wallets but this recovery process is a balance between a secret hash and guardians.
+This standard was inspired by the current recovery process in some crypto wallets with a balance between relying on the guardians and a secret hash.
 
-In this case, it is ensured that guardians can't act maliciously and would need a secret word to recover. The same goes for the secret word if it is exposed, only addresses who reached the guardiansThreshold can use it to recover an account.
-
-A recoverProcessId is also created to ensure flexibility when recovering, so if guardians didn't reach consensus in a recoverProcessId, they can switch to another one. 
+In this case, it is ensured that guardians can't act maliciously and would need a secret word to recover. The same goes for the secret word if it is exposed, only addresses who reached the guardiansThreshold can use it to recover the target.
 
 ## Implementation
 
-An implementation can be found in the [lukso-network/lsp-smart-contracts](https://github.com/lukso-network/lsp-smart-contracts/pull/114) repo.
+An implementation can be found in the [lukso-network/lsp-smart-contracts](https://github.com/lukso-network/lsp-smart-contracts/pull/114) repository.
 
 ## Interface Cheat Sheet
 
 ```solidity
 interface ILSP11  /* is ERC165 */ {
-         
-    function account() external view returns (address);
+
+    event AddedGuardian(address indexed newGuardian);
+
+    event RemovedGuardian(address indexed removedGuardian);
+
+    event GuardianThresholdChanged(uint256 indexed guardianThreshold);
+
+    event SecretHashChanged(bytes32 indexed secretHash);
+
+    event SelectedNewController(
+        uint256 indexed recoveryCounter,
+        address indexed guardian,
+        address indexed controllerSelected
+    );
+
+    event RecoverProcessSuccessful(
+        uint256 indexed recoveryCounter,
+        address indexed newController,
+        bytes32 indexed newSecretHash,
+        address[] guardians
+    );
+
+
+    function target() external view returns (address);
+
+    function getRecoveryCounter() external view returns (uint256);
+
+    function getGuardians() external view returns (address[] memory);
 
     function isGuardian(address _address) external view returns (bool);
 
-    function getGuardians() external view returns (address[] memory);
-    
     function getGuardiansThreshold() external view returns (uint256);
 
-    function getRecoverProcessesIds() external view returns (bytes32[] memory);
+    function getGuardianChoice(address guardian) external view returns (address);
 
-    function getGuardianVote(bytes32 recoverProcessId, address guardian) external view returns (address);
+    function addGuardian(address newGuardian) external;
 
-    function addGuardian(address newGuardian) external;  // onlyOwner
+    function removeGuardian(address currentGuardian) external;
 
-    function removeGuardian(address currentGuardian) external;  // onlyOwner
-    
-    function setThreshold(uint256 _guardiansThreshold) external;  // onlyOwner
+    function setRecoverySecretHash(bytes32 newRecoverSecretHash) external;
 
-    function setSecret(bytes32 secretHash) external;  // onlyOwner
+    function setGuardiansThreshold(uint256 guardiansThreshold) external;
 
-    function voteToRecover(bytes32 recoverProcessId, address newOwner) external;  // onlyGuardians
+    function selectNewController(address addressSelected) external;
 
-    function recoverOwnership(bytes32 recoverProcessId, string memory plainSecret, bytes32 newHash) external;
+    function recoverOwnership(string memory plainSecret, bytes32 newHash) external;
     
 }
 ```
 
 ## Copyright
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
+
+[ERC165]: <https://eips.ethereum.org/EIPS/eip-165>
+[ERC725]: <https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md>
