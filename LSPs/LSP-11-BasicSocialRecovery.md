@@ -32,7 +32,7 @@ There are many possible choices for whom to select as a guardian. The three most
 
 ## Specification
 
-LSP11 interface id according to [ERC165]: 0x8ad274f4.
+LSP11 interface id according to [ERC165]: 0x049a28f1.
 
 ### Methods
 
@@ -82,6 +82,16 @@ function getGuardiansThreshold() external view returns (uint256)
 
 Returns the minimum number of guardians selection required by an address to start a recovery process.
 
+
+#### getRecoverySecretHash
+
+```solidity
+function getRecoverySecretHash() external view returns (bytes32)
+```
+
+Returns the recovery secret hash set by the owner.
+
+
 #### getGuardianChoice
 
 ```solidity
@@ -100,7 +110,7 @@ _Parameters:_
 function addGuardian(address newGuardian) external
 ```
 
-Adds a guardian of the target. MUST fire the [AddedGuardian](#addedguardian) event.
+Adds a guardian of the target. MUST fire the [AddedGuardian](#guardianadded) event.
 
 _Parameters:_
 
@@ -116,7 +126,7 @@ _Requirements:_
 function removeGuardian(address currentGuardian) external
 ```
 
-Removes an existing guardian of the target. MUST fire the [RemovedGuardian](#removedguardian) event.
+Removes an existing guardian of the target. MUST fire the [RemovedGuardian](#guardianremoved) event.
 
 _Parameters:_
 
@@ -132,7 +142,7 @@ _Requirements:_
 function setGuardiansThreshold(uint256 newThreshold) external
 ```
 
-Sets the minimum number of selection by the guardians required so that an address can recover ownership to the linked target contract. MUST fire the [GuardianThresholdChanged](#guardianthresholdchanged) event.
+Sets the minimum number of selection by the guardians required so that an address can recover ownership to the linked target contract. MUST fire the [GuardianThresholdChanged](#guardiansthresholdchanged) event.
 
 If the GuardiansThreshold is equal to 0, the social recovery contract will act as a password recovery contract.
 
@@ -160,6 +170,8 @@ _Requirements:_
 
 - MUST be called only by the owner.
 
+- MUST not be bytes32(0).
+
 #### selectNewController
 
 ```solidity
@@ -179,12 +191,14 @@ _Requirements:_
 #### recoverOwnership
 
 ```solidity
-function recoverOwnership(string memory plainSecret, bytes32 newHash) external 
+function recoverOwnership(address recoverer, string memory plainSecret, bytes32 newHash) external 
 ```
 
-Increment the recovery counter and recovers the ownership permissions in the linked target for the msg.sender after it has reached the guardiansThreshold and given the right plainSecret that produce the `secretHash`. MUST fire the [RecoverProcessSuccessful](#recoverprocesssuccessful) event and the [SecretHashChanged](#secrethashchanged) event.
+Increment the recovery counter and recovers the ownership permissions in the linked target for the recoverer if he has reached the guardiansThreshold and given the right plainSecret that produce the `secretHash`. MUST fire the [RecoveryProcessSuccessful](#recoverprocesssuccessful) event and the [SecretHashChanged](#secrethashchanged) event.
 
 _Parameters:_
+
+- `recoverer`: the address of the recoverer.
 
 - `plainSecret`: the plain secret that should produce the `secretHash` with _keccak256_ function.
 
@@ -192,32 +206,30 @@ _Parameters:_
 
 _Requirements:_
 
-- MUST be called only by the address that reached the guardian threshold.
-
-- The address calling MUST have provided the right `plainSecret` that produces the secretHash originally set by the owner.
+- MUST have provided the right `plainSecret` that produces the secretHash originally set by the owner.
 
 ### Events
 
-#### AddedGuardian
+#### GuardianAdded
 
 ```solidity
-event AddedGuardian(address indexed newGuardian);
+event GuardianAdded(address indexed newGuardian);
 ```
 
 MUST be emitted when setting a new guardian for the target.
 
-#### RemovedGuardian
+#### GuardianRemoved
 
 ```solidity
-event RemovedGuardian(address indexed removedGuardian);
+event GuardianRemoved(address indexed removedGuardian);
 ```
 
 MUST be emitted when removing an existing guardian for the target.
 
-#### GuardianThresholdChanged
+#### GuardiansThresholdChanged
 
 ```solidity
-event GuardianThresholdChanged(uint256 indexed guardianThreshold);
+event GuardiansThresholdChanged(uint256 indexed guardianThreshold);
 ```
 
 MUST be emitted when changing the guardian threshold.
@@ -238,10 +250,10 @@ event SelectedNewController(uint256 indexed currentRecoveryCounter, address inde
 
 MUST be emitted when a guardian select a new potentiel controller address for the linked target.
 
-#### RecoverProcessSuccessful
+#### RecoveryProcessSuccessful
 
 ```solidity
-event RecoverProcessSuccessful(uint256 indexed recoveryCounter, address indexed newController, bytes32 indexed newSecretHash, address[] guardians);
+event RecoveryProcessSuccessful(uint256 indexed recoveryCounter, address indexed newController, bytes32 indexed newSecretHash, address[] guardians);
 ```
 
 MUST be emitted when the recovery process is finished by the controller who reached the guardian threshold and submitted the string that produce the secretHash
@@ -275,11 +287,11 @@ An implementation can be found in the [lukso-network/lsp-smart-contracts](https:
 ```solidity
 interface ILSP11  /* is ERC165 */ {
 
-    event AddedGuardian(address indexed newGuardian);
+    event GuardianAdded(address indexed newGuardian);
 
-    event RemovedGuardian(address indexed removedGuardian);
+    event GuardianRemoved(address indexed removedGuardian);
 
-    event GuardianThresholdChanged(uint256 indexed guardianThreshold);
+    event GuardiansThresholdChanged(uint256 indexed guardianThreshold);
 
     event SecretHashChanged(bytes32 indexed secretHash);
 
@@ -289,7 +301,7 @@ interface ILSP11  /* is ERC165 */ {
         address indexed controllerSelected
     );
 
-    event RecoverProcessSuccessful(
+    event RecoveryProcessSuccessful(
         uint256 indexed recoveryCounter,
         address indexed newController,
         bytes32 indexed newSecretHash,
@@ -306,6 +318,8 @@ interface ILSP11  /* is ERC165 */ {
     function isGuardian(address _address) external view returns (bool);
 
     function getGuardiansThreshold() external view returns (uint256);
+    
+    function getRecoverySecretHash() external view returns (bytes32);
 
     function getGuardianChoice(address guardian) external view returns (address);
 
@@ -319,7 +333,7 @@ interface ILSP11  /* is ERC165 */ {
 
     function selectNewController(address addressSelected) external;
 
-    function recoverOwnership(string memory plainSecret, bytes32 newHash) external;
+    function recoverOwnership(address recoverer, string memory plainSecret, bytes32 newHash) external;
     
 }
 ```
