@@ -183,6 +183,7 @@ The digest signed MUST be constructed according to the [version 0 of EIP-191] wi
     - `LSP6_VERSION`: Version relative to the LSP6KeyManager defined as a uint256 equal to 6.
     - `chainId`: The chainId of the blockchain where the Key Manager is deployed, as a uint256.
     - `nonce`: The nonce to sign the payload with, as a uint256.
+    - `value`: The amount of native token to transfer to the linked target contract alongside the call.
     - `payload`: The payload to be executed.
 
 These parameters MUST be packed encoded (not zero padded, leading `0`s are removed), then hashed with keccak256 to produce the digest.
@@ -209,20 +210,21 @@ MUST fire the [Executed event](#executed) on each iteration.
 
 _Parameters:_
 
-- `signatures`: The array of bytes65 ethereum signature.
-- `nonce`: The array of the nonce of the address/es that signed the digests. This can be obtained via the `getNonce(address address, uint256 channel)` function.
-- `values`: The array of values to be sent to the target contract along the call on each iteration. 
-- `payloads`: The array of calldata payloads to be executed on the target contract on each iteration.
+- `signatures`: An array of bytes65 ethereum signature.
+- `nonce`: An array of nonces from the address/es that signed the digests. This can be obtained via the `getNonce(address address, uint256 channel)` function.
+- `values`: An array of native token amounts to transfer to the linked [target](#target) contract alongside the call on each iteration. 
+- `payloads`: An array of calldata payloads to be executed on the linked [target](#target) contract on each iteration.
 
 _Returns:_ `bytes[]` , an array of returned as abi-decoded array of `bytes[]` of the linked target contract, if the calls succeeded, otherwise revert with a reason-string. 
 
 _Requirements:_
 
+- MUST comply to the requirements of the [`executeRelayCall(bytes,uint256,bytes)`](#executerelaycall) function.
+
 - The parameters length MUST be equal.
 
-- The sum of each element of the `values` array MUST be equal to the value sent to the function.
+- The sum of each element of the `values` array MUST be equal to the total value sent to the function.
 
-- MUST comply to the requirements of the [`executeRelayCall(bytes,uint256,bytes)`](#executerelaycall) function.
 
 ### Events
 
