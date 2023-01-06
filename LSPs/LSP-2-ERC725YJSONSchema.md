@@ -350,6 +350,42 @@ The representation of these dynamic elements in a compacted bytes array would be
 
 `0x04 aabbccdd 0e cafecafecafecafecafecafecafe 01 ff` > `0x04aabbccdd0ecafecafecafecafecafecafecafe01ff`
 
+### bytesN[CompactBytesArray]
+
+Like a `bytes[CompactBytesArray]` a `bytesN[CompactBytesArray]` represents an array of `bytesN` values _encoded in a compact way_. The difference is that all the elements contained in the array have the same length `N`.
+
+In a compact bytes array of `bytesN`, each element is prefixed with 1 byte that specify the length `N`.
+
+For instance, in a `bytes8[CompactBytesArray]` an entry like `0x1122334455667788` is encoded as `0x081122334455667788`, where:
+- `0x08` = `8` to represent that `0x1122334455667788` contains 8 bytes.
+- `0x1122334455667788` is the actual value of the element.
+
+> **Note:** because a single byte is used to store the length of each element, the maximum `N` length allowed is 255 (a single byte is equivalent to the maximum value of a `uint8` is 255)
+
+#### Example
+
+If we want to have the following `bytes8` elements encoded as a `bytes8[CompactBytesArray]`:
+
+```
+[
+    0x1122334455667788,
+    0xcafecafecafecafe,
+    0xbeefbeefbeefbeef
+]
+```
+
+We will obtain the following:
+
+`0x08 1122334455667788 08 cafecafecafecafe 08 beefbeefbeefbeef` > `0x08112233445566778808cafecafecafecafe08beefbeefbeefbeef`.
+
+Where each byte `0x08` in the final encoded value represents the length `N` of each element.
+
+```
+  vv                vv                vv
+0x08112233445566778808cafecafecafecafe08beefbeefbeefbeef
+```
+
+
 
 ## ValueContent
 
