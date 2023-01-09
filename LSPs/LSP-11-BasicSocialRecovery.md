@@ -11,7 +11,7 @@ requires: ERC165, ERC725, LSP2, LSP6
 
 ## Simple Summary
 
-This standard describes a **basic social recovery** contract that can recover access to [ERC725] contracts through the [LSP6-KeyManager](./LSP-6-KeyManager.md).
+This standard describes a **basic social recovery** contract that can recover access to [ERC725] contracts through a [LSP6-KeyManager](./LSP-6-KeyManager.md).
 
 ## Abstract
 
@@ -21,10 +21,10 @@ The social recovery contract should ensure a flexible and secure process where g
 
 ## Motivation
 
-Any Key could be lost or leaked due to a certain accident, so it's not advised to rely on one singular key to control ERC725 contracts through the Key Manager and a social recovery contract is needed in this case.
+Any Key could be lost or leaked due to a certain accident, so it is not advised to rely on a singular key to control ERC725 contracts through the Key Manager and a social recovery contract is needed in this case.
 
-In the case above, the user can simply reach out to his guardians and ask them to vote for a certain address. 
-There are many possible choices for whom to select as a guardian. The three most common choices are:
+In the case above, the user can reach out to his guardians and ask them to vote for a specific address. 
+There are many possible options for whom to select as a guardian. The three most common options are:
 
 - EOAs controlled by the wallet holder themselves (via paper mnemonics or cold storage devices)
 - Friends and family members (EOAs or Universal Profiles)
