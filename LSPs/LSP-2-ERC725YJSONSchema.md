@@ -332,7 +332,16 @@ MyKeyName:<bytes32>:<bool> // 0xaaaabbbbccccddddeeeeffff111122223333444455556666
 
 ### bytes[CompactBytesArray]
 
-The following value type represent a type of array containing dynamic bytes. The compacted bytes array will have 1 byte before each element to specify the length of the next element.
+A `bytes[CompactBytesArray]` represents an array of `bytes` values _encoded in a compact way_. The elements contained in the array are `bytes` values with different dynamic lengths.
+
+In a compact bytes array of `bytes`, each element is prefixed with 1 byte to specify its length.
+
+For instance, `0xaabbccdd` in a `bytes[CompactBytesArray]` is encoded as `0x04aabbccdd`, where:
+- `0x04` = `4` to represent the total number of `bytes` in `0xaabbccdd`.
+- `0xaabbccdd` is the actual value of the element.
+
+> **Note:** the maximum length of each element is 255, because is a single byte (equivalent to a `uint8`) is used to store the length of each element and the maximum value of a `uint8` is 255.
+
 
 #### Example
 
@@ -365,7 +374,7 @@ A BitArray can be used as a mapping of values to states (on/off, allowed/disallo
 
 The example shows how a `BitArray` value can be read and interpreted.
 
-```js
+```json
 {
     "name": "MyPermissions",
     "key": "0xaacedf1d8b2cc85524a881760315208fb03c6c26538760922d6b9dee915fd66a",
