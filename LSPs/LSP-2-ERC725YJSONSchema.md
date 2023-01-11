@@ -177,7 +177,14 @@ The `valueContent` field can also define a tuple of value contents (for instance
 
 This is useful for decoding tools, to know how to interpret each value type in the tuple.
 
----
+### Cases of array `[]` and `Array`
+
+In the case where:
+
+a) the `keyType` is an [`Array`](#array).
+b) _or_ the [`valueType`](#valuetype) is an array `[]` ([compacted](#bytescompactbytesarray) or not).
+
+the `valueContent` describes how to interpret **each entries in the array**, not the whole array itself. Therefore the `valueContent` field MUST NOT include `[]`.
 
 ## keyType
 
