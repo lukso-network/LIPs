@@ -124,11 +124,36 @@ The `valueType` can also be a **tuple of types**, meaning the value stored under
 
 ### `valueContent`
 
-Describes how to interpret the content of the returned *decoded* value.
+The `valueContent` of a LSP2 Schema describes how to interpret the content of the returned *decoded* value.
 
-To illustrate, a string could be interpreted in multiple ways, such as:
+Knowing how to interpret the data retrieved under a data key is relevant to understand how to handle it. Interfaces can use the `valueContent` to adapt their behaviour or know how to display data fetched from an ERC725Y smart contract. 
+
+As an example, a string could be interpreted in multiple ways, such as:
 - a single word, or a sequence of words (*e.g.: "My Custom Token Name"*)
 - an URL (*e.g.: "ipfs://QmW4nUNy3vtvr3DxZHuLfSLnhzKMe2WmgsUsEGPPFh8Ztp"*)
+
+Using the following two LSP2 schemas as examples:
+
+```json
+{
+    "name": "MyProfileDescription",
+    "key": "0xd0f1819a38d741fce6a6b74406251c521768033029cd254f0f5cd29ca58f3390",
+    "keyType": "Singleton",
+    "valueType": "string",
+    "valueContent": "String"
+},
+{
+    "name": "MyWebsite",
+    "key": "0x449560072375b299bab5a695ea268c32c52d4820e4458e5f02f308c588e6715a",
+    "keyType": "Singleton",
+    "valueType": "string",
+    "valueContent": "URL"
+}
+```
+
+An interface could decode both values retrieved under these data keys as `string`, but:
+- display the profile description as plain text.
+- display the website URL as an external link.
 
 Valid `valueContent` are:
 
