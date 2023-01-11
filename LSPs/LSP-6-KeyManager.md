@@ -482,7 +482,7 @@ The compact bytes array MUST be constructed in this format according to [LSP2-ER
 ```js
 <1c> <bytes4 allowedInterfaceId> <bytes20 allowedAddress> <bytes4 allowedFunction>
 ```
-- `1c`: **1c** in decimals is **28**, which is the sum of bytes length of the elements stored in the array.
+- `001c`: **001c** in decimals is **28**, which is the sum of bytes length of the elements stored in the array.
 - `allowedInterfaceId`: The interfaceId being supported by the contract called from the target.  
 - `allowedAddress`: The address called by the target contract.
 - `allowedFunction`: The function selector being called on the contract called by the target contract.
@@ -495,7 +495,7 @@ The compact bytes array MUST be constructed in this format according to [LSP2-ER
 - If address A has [CALL](#permissions) permission, and have the following value for AllowedCalls:
 
 ```
-0x1c11223344cafecafecafecafecafecafecafecafecafecafebb11bb11
+0x001c11223344cafecafecafecafecafecafecafecafecafecafebb11bb11
 ```
 Resolve to:
 
@@ -506,7 +506,7 @@ The address A is allowed to interact with the function selector **`0xbb11bb11`**
 - If address B has [CALL](#permissions) permission, and have the following value for AllowedCalls:
 
 ```
-0x1cffffffffcafecafecafecafecafecafecafecafecafecafeffffff1c68686868ffffffffffffffffffffffffffffffffffffffffffffffff
+0x001cffffffffcafecafecafecafecafecafecafecafecafecafeffffff001c68686868ffffffffffffffffffffffffffffffffffffffffffffffff
 ```
 Resolve to:
 
@@ -551,10 +551,10 @@ key: 0xeafec4d89fa9619884b60000abe425d64acd861a49b8ddf5c0b6962110481f38
 - If address A has [SETDATA](#setdata) permission, and have the following value for AllowedERC725YDataKeys:
 
 ```
-> 0x 20 eafec4d89fa9619884b60000abe425d64acd861a49b8ddf5c0b6962110481f38 
-> 0x20eafec4d89fa9619884b60000abe425d64acd861a49b8ddf5c0b6962110481f38
+> 0x 0020 eafec4d89fa9619884b60000abe425d64acd861a49b8ddf5c0b6962110481f38 
+> 0x0020eafec4d89fa9619884b60000abe425d64acd861a49b8ddf5c0b6962110481f38
 ```
-> 20 (32 in decimals) is the length of the data key to be set. 
+> 0020 (32 in decimals) is the length of the data key to be set. 
 
 Resolve to:
 
@@ -565,10 +565,10 @@ Address A is only allowed to set the value for the data key attached above.
 - If address B has [SETDATA](#setdata) permission, and have the following value for AllowedERC725YDataKeys:
 
 ```
-> 0x 0a eafec4d89fa9619884b6 20 beefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeef
-> 0x0aeafec4d89fa9619884b620beefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeef
+> 0x 000a eafec4d89fa9619884b6 0020 beefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeef
+> 0x000aeafec4d89fa9619884b60020beefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeef
 ```
-> 0a (10 in decimals) is the length of the `eafec4d89fa9619884b6` prefix
+> 000a (10 in decimals) is the length of the `eafec4d89fa9619884b6` prefix
 
 Resolve to:
 
