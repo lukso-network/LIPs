@@ -264,7 +264,7 @@ BitArray representation: `0x0000000000000000000000000000000000000000000000000000
 
 - Allows adding permissions for a new controller address under the [`AddressPermissions:Permissions:<address>`](#addresspermissionspermissionsaddress) data key.
 
-- Allows adding the restrictions for the call operations such as [CALL](#call), [STATICCALL](#staticcall), and [DELEGATECALL](#delegatecall) and [SETDATA](#setdata) permissions stored respectively under the [`AddressPermissions:AllowedCalls:<address>`](#addresspermissionsallowedcallsaddress)  and [`AddressPermissions:AllowedERC725YDataKeys:<address>`](#addresspermissionsallowederc725ydatakeysaddress).
+- Allows adding the restrictions for the call operations such as [CALL](#call), [STATICCALL](#staticcall), and [DELEGATECALL](#delegatecall) and [SETDATA](#setdata) permissions stored respectively under the [`AddressPermissions:AllowedCalls:<address>`](#addresspermissionsallowedcallsaddress) and [`AddressPermissions:AllowedERC725YDataKeys:<address>`](#addresspermissionsallowederc725ydatakeysaddress).
 
 The value of these data keys SHOULD be validated before being set to avoid edge cases.
 
@@ -330,7 +330,7 @@ BitArray representation: `0x0000000000000000000000000000000000000000000000000000
 
 - Allows transferring value from the target contract through [`execute(..)`](./LSP-0-ERC725Account.md#execute) function of the target with restricting to specific standards, addresses or functions.
 
-> Check [`AddressPermissions:AllowedCalls:<address>`](#addresspermissionsallowedcallsaddress) to know more infor about the restrictions.
+> Check [`AddressPermissions:AllowedCalls:<address>`](#addresspermissionsallowedcallsaddress) for more infos about the restrictions.
 
 #### `SUPER_CALL`
 
@@ -345,7 +345,7 @@ BitArray representation: `0x0000000000000000000000000000000000000000000000000000
 
 - Allows executing a payload with [CALL] operation from the target contract through [`execute(..)`](./LSP-0-ERC725Account.md#execute) function of the target with restricting to specific standards, addresses or functions.
 
-> Check [`AddressPermissions:AllowedCalls:<address>`](#addresspermissionsallowedcallsaddress) to know more infor about the restrictions.
+> Check [`AddressPermissions:AllowedCalls:<address>`](#addresspermissionsallowedcallsaddress) to know more about the restrictions.
 
 #### `SUPER_STATICCALL`
 
@@ -360,7 +360,7 @@ BitArray representation: `0x0000000000000000000000000000000000000000000000000000
 
 - Allows executing a payload with [STATICCALL] operation from the target contract through [`execute(..)`](./LSP-0-ERC725Account.md#execute) function of the target with restricting to specific standards, addresses or functions.
 
-> Check [`AddressPermissions:AllowedCalls:<address>`](#addresspermissionsallowedcallsaddress) to know more infor about the restrictions.
+> Check [`AddressPermissions:AllowedCalls:<address>`](#addresspermissionsallowedcallsaddress) for more infos about the restrictions.
 
 #### `SUPER_DELEGATECALL`
 
@@ -375,7 +375,7 @@ BitArray representation: `0x0000000000000000000000000000000000000000000000000000
 
 - Allows executing a payload with [DELEGATECALL] operation from the target contract through [`execute(..)`](./LSP-0-ERC725Account.md#execute) function of the target with restricting to specific standards, addresses or functions.
 
-> Check [`AddressPermissions:AllowedCalls:<address>`](#addresspermissionsallowedcallsaddress) to know more infor about the restrictions.
+> Check [`AddressPermissions:AllowedCalls:<address>`](#addresspermissionsallowedcallsaddress) for more infos about the restrictions.
 
 
 #### `DEPLOY`
@@ -400,7 +400,7 @@ BitArray representation: `0x0000000000000000000000000000000000000000000000000000
 
 The data keys related to permissions, extensions, UniversalReceiverDelegate MUST be checked with their own permission.
 
-> Check [`AddressPermissions:AllowedERC725YDataKeys:<address>`](#addresspermissionsallowederc725ydatakeysaddress) to know more infor about the restrictions.
+> Check [`AddressPermissions:AllowedERC725YDataKeys:<address>`](#addresspermissionsallowederc725ydatakeysaddress) for more infos about the restrictions.
 
 #### `ENCRYPT`
 
@@ -444,7 +444,7 @@ These data keys are based on the [LSP2-ERC725YJSONSchema](./LSP-2-ERC725YJSONSch
 Contains an array of addresses, that have some permission set.
 This is mainly useful for interfaces to know which address holds which permissions.
 
-For more informations about how to access each index of the `AddressPermissions[]` array, see: [ERC725Y JSON Schema > `keyType` `Array`](./LSP-2-ERC725YJSONSchema.md#array)
+For more information about how to access each index of the `AddressPermissions[]` array, see: [ERC725Y JSON Schema > `keyType` `Array`](./LSP-2-ERC725YJSONSchema.md#array)
 
 #### AddressPermissions:Permissions:\<address\>
 
@@ -470,25 +470,27 @@ Since the `valueType` of this data key is `bytes32`, up to 255 different permiss
     "name": "AddressPermissions:AllowedCalls:<address>",
     "key": "0x4b80742de2bf393a64c70000<address>",
     "keyType": "MappingWithGrouping",
-    "valueType": "bytes[CompactBytesArray]",
-    "valueContent": "Bytes"
+    "valueType": "(bytes4,address,bytes4)[CompactBytesArray]",
+    "valueContent": "(Bytes4,Address,Bytes4)"
 }
 ```
 
 Contains a compact bytes array of interface ids, addresses and function selectors a controller address is allowed to interact with (TRANSFERVALUE, CALL, STATICCALL, DELEGATECALL).
 
-The compact bytes array MUST be constructed in this format according to [LSP2-ERC725YJSONSchema]:
+Each entry (allowed call) is made of three elements concatenated together as a tuple that forms a final `bytes28` long value.
+
+The full list of allowed calls MUST be constructed as a [CompactBytesArray](./LSP-2-ERC725YJSONSchema.md#bytescompactbytesarray) according to [LSP2-ERC725YJSONSchema] as follow:
 
 ```js
 <1c> <bytes4 allowedInterfaceId> <bytes20 allowedAddress> <bytes4 allowedFunction>
 ```
-- `1c`: **1c** in decimals is **28**, which is the sum of bytes length of the elements stored in the array.
-- `allowedInterfaceId`: The interfaceId being supported by the contract called from the target.  
+- `1c`: **1c** in decimals is **28**, which is the sum of bytes length of the three elements below concatenated together.
+- `allowedInterfaceId`: The ERC165 interface id being supported by the contract called from the target.  
 - `allowedAddress`: The address called by the target contract.
 - `allowedFunction`: The function selector being called on the contract called by the target contract.
 
 - If the value of the data key is **empty**, execution is disallowed.
-- Check is discarded for an element if the value is full `ff` bytes. e.g, `0xffffffff` for interfaceIds and function selectors and `0xffffffffffffffffffffffffffffffffffffffff` for addresses. There MUST be at maximum 2 discarded checks, meaning `0xffffffffffffffffffffffffffffffffffffffffffffffffffffffff` data key is disallowed. 
+- Check is discarded for an element if the value is full `ff` bytes. e.g, `0xffffffff` for interfaceIds and function selectors and `0xffffffffffffffffffffffffffffffffffffffff` for addresses. There MUST be at most 2 discarded checks, meaning `0xffffffffffffffffffffffffffffffffffffffffffffffffffffffff` data key is disallowed. 
 
 **Example 1:**
 
@@ -671,8 +673,8 @@ ERC725Y JSON Schema `LSP6KeyManager`, set at the target(#target) contract:
         "name": "AddressPermissions:AllowedCalls:<address>",
         "key": "0x4b80742de2bf393a64c70000<address>",
         "keyType": "MappingWithGrouping",
-        "valueType": "bytes[CompactBytesArray]",
-        "valueContent": "Bytes"
+        "valueType": "(bytes4,address,bytes4)[CompactBytesArray]",
+        "valueContent": "(Bytes4,Address,Bytes4)"
     },
     {
         "name": "AddressPermissions:AllowedERC725YDataKeys:<address>",
