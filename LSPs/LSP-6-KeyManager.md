@@ -537,7 +537,7 @@ The compact bytes array MUST be constructed in this format according to [LSP2-ER
 <length of the data key prefix> <data key prefix>
 ```
 
-- `length of the data key prefix`: The length of the prefix of the data key which the rest is dynamic.  
+- `length of the data key prefix`: The length of the prefix of the data key which the rest is dynamic. MUST be a number between `1` and `32`. 
 - `data key prefix`: The prefix of the data key to be checked against the data keys being set.
 
 Below is an example based on a [LSP2 Mapping](./LSP-2-ERC725YJSONSchema.md#Mapping) key type, where first word = `SupportedStandards`, and second word = `LSP3UniversalProfile`.
