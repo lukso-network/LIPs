@@ -330,7 +330,7 @@ BitArray representation: `0x0000000000000000000000000000000000000000000000000000
 
 - Allows transferring value from the target contract through [`execute(..)`](./LSP-0-ERC725Account.md#execute) function of the target with restricting to specific standards, addresses or functions.
 
-> Check [`AddressPermissions:AllowedCalls:<address>`](#addresspermissionsallowedcallsaddress) for more infos about the restrictions.
+> Check [`AddressPermissions:AllowedCalls:<address>`](#addresspermissionsallowedcallsaddress) for more information about the restrictions.
 
 #### `SUPER_CALL`
 
@@ -360,7 +360,7 @@ BitArray representation: `0x0000000000000000000000000000000000000000000000000000
 
 - Allows executing a payload with [STATICCALL] operation from the target contract through [`execute(..)`](./LSP-0-ERC725Account.md#execute) function of the target with restricting to specific standards, addresses or functions.
 
-> Check [`AddressPermissions:AllowedCalls:<address>`](#addresspermissionsallowedcallsaddress) for more infos about the restrictions.
+> Check [`AddressPermissions:AllowedCalls:<address>`](#addresspermissionsallowedcallsaddress) for more information about the restrictions.
 
 #### `SUPER_DELEGATECALL`
 
@@ -375,7 +375,7 @@ BitArray representation: `0x0000000000000000000000000000000000000000000000000000
 
 - Allows executing a payload with [DELEGATECALL] operation from the target contract through [`execute(..)`](./LSP-0-ERC725Account.md#execute) function of the target with restricting to specific standards, addresses or functions.
 
-> Check [`AddressPermissions:AllowedCalls:<address>`](#addresspermissionsallowedcallsaddress) for more infos about the restrictions.
+> Check [`AddressPermissions:AllowedCalls:<address>`](#addresspermissionsallowedcallsaddress) for more information about the restrictions.
 
 
 #### `DEPLOY`
@@ -400,7 +400,7 @@ BitArray representation: `0x0000000000000000000000000000000000000000000000000000
 
 The data keys related to permissions, extensions, UniversalReceiverDelegate MUST be checked with their own permission.
 
-> Check [`AddressPermissions:AllowedERC725YDataKeys:<address>`](#addresspermissionsallowederc725ydatakeysaddress) for more infos about the restrictions.
+> Check [`AddressPermissions:AllowedERC725YDataKeys:<address>`](#addresspermissionsallowederc725ydatakeysaddress) for more information about the restrictions.
 
 #### `ENCRYPT`
 
