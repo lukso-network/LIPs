@@ -41,7 +41,7 @@ This schema is for example used in [ERC725](https://github.com/ethereum/EIPs/blo
 
 To make ERC725Y data keys readable, we describe a data key-value pair as a JSON object containing the following entries:
 
-```js
+```json
 {
     "name": "...",
     "key": "...",
@@ -126,7 +126,7 @@ The `valueType` can also be a **tuple of types**, meaning the value stored under
 
 The `valueContent` of a LSP2 Schema describes how to interpret the content of the returned *decoded* value.
 
-Knowing how to interpret the data retrieved under a data key is relevant to understand how to handle it. Interfaces can use the `valueContent` to adapt their behaviour or know how to display data fetched from an ERC725Y smart contract. 
+Knowing how to interpret the data retrieved under a data key is is the first step in understanding how to handle it. Interfaces can use the `valueContent` to adapt their behaviour or know how to display data fetched from an ERC725Y smart contract. 
 
 As an example, a string could be interpreted in multiple ways, such as:
 - a single word, or a sequence of words (*e.g.: "My Custom Token Name"*)
@@ -190,8 +190,6 @@ We can use the LSP2 Schema below as an example to better understand. This LSP2 S
 
 Reading the ERC725Y storage using this data key will return an array of abi-encoded `string[]`. Therefore the interface should use the `valueType` to decode the retrieved value. The `valueContent` however defines how each string in the array must be interpreted. In this case, it should be treated as a social media URL.
 
-
-
 ```json
 {
     "name": "MySocialMediaProfiles",
@@ -202,8 +200,6 @@ Reading the ERC725Y storage using this data key will return an array of abi-enco
 }
 ```
 
-In this example
-
 ## keyType
 
 ### Singleton
@@ -212,7 +208,7 @@ A **Singleton** data key refers to a simple data key. It is constructed using `b
 
 Below is an example of a Singleton data key type:
 
-```js
+```json
 {
     "name": "MyKeyName",
     "key": "0x35e6950bc8d21a1699e58328a3c4066df5803bb0b570d0150cb3819288e764b2",
@@ -259,7 +255,7 @@ Below is an example for the **Array** data key named `LSP12IssuedAssets[]`.
 - element 2: key: `0x7c8c3416d6cda87cd42c71ea1843df2800000000000000000000000000000001`, value: `0x321...` (index 1)
 ...
 
-```js
+```json
 {
     "name": "LSP12IssuedAssets[]",
     "key": "0x7c8c3416d6cda87cd42c71ea1843df28ac4850354f988d55ee2eaa47b6dc05cd",
@@ -639,7 +635,7 @@ Below is an example of an ERC725Y JSON Schema containing 3 x ERC725Y data keys.
 
 Using such schema allows interfaces to auto decode and interpret the values retrieved from the ERC725Y data key-value store.
 
-```js
+```json
 [
     {
         "name": "SupportedStandards:LSP3UniversalProfile",
