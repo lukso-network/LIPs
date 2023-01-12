@@ -186,6 +186,24 @@ b) _or_ the [`valueType`](#valuetype) is an array `[]` ([compacted](#bytescompac
 
 the `valueContent` describes how to interpret **each entries in the array**, not the whole array itself. Therefore the `valueContent` field MUST NOT include `[]`.
 
+We can use the LSP2 Schema below as an example to better understand. This LSP2 Schema below defines a data key that represents a list of social media profiles related to a user. 
+
+Reading the ERC725Y storage using this data key will return an array of abi-encoded `string[]`. Therefore the interface should use the `valueType` to decode the retrieved value. The `valueContent` however defines how each string in the array must be interpreted. In this case, it should be treated as a social media URL.
+
+
+
+```json
+{
+    "name": "MySocialMediaProfiles",
+    "key": "0x161761c54f6b013a4b4cbb1247f703c94ae5dfe32081554ad861781f48d47513",
+    "keyType": "Singleton",
+    "valueType": "string[]",
+    "valueContent": "URL"
+}
+```
+
+In this example
+
 ## keyType
 
 ### Singleton
