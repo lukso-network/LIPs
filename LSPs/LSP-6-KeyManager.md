@@ -494,26 +494,25 @@ The full list of allowed calls MUST be constructed as a [CompactBytesArray](./LS
 
 **Example 1:**
 
-- If address A has [CALL](#permissions) permission, and have the following value for AllowedCalls:
+If address A has [CALL](#permissions) permission, and have the following value for AllowedCalls:
 
 ```
 0x1c11223344cafecafecafecafecafecafecafecafecafecafebb11bb11
 ```
-Resolve to:
 
 The address A is allowed to interact with the function selector **`0xbb11bb11`** on the **`0xcafecafecafecafecafecafecafecafecafecafe`** address as long as the address supports **`0x11223344`** interfaceId through [ERC165].
 
 **Example 2:**
 
-- If address B has [CALL](#permissions) permission, and have the following value for AllowedCalls:
+If address B has [CALL](#permissions) permission, and have the following value for AllowedCalls:
 
 ```
 0x1cffffffffcafecafecafecafecafecafecafecafecafecafeffffff1c68686868ffffffffffffffffffffffffffffffffffffffffffffffff
 ```
-Resolve to:
 
-The address B is allowed to interact with **`0xcafecafecafecafecafecafecafecafecafecafe`** address without any restriction on the interfaceId or the function selector.
-Also allowed to interact **with any address** supporting the **`0x68686868`** interfaceId without any restriction on the function.
+The address B is allowed to interact with:
+- the address **`0xcafecafecafecafecafecafecafecafecafecafe`** without any restriction on the interfaceId or the function selector.
+- **any address** supporting the **`0x68686868`** interfaceId without any restriction on the function.
 
 #### AddressPermissions:AllowedERC725YDataKeys:\<address\>
 
