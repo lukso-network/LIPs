@@ -177,18 +177,18 @@ The `valueContent` field can also define a tuple of value contents (for instance
 
 This is useful for decoding tools, to know how to interpret each value type in the tuple.
 
-### Cases of array `[]` and `Array`
+#### valueContent in cases where `valueType` or `keyType` is an array
 
 In the case where:
 
-a) the `keyType` is an [`Array`](#array).
+a) the `keyType` is an [`Array`](#array).    
 b) _or_ the [`valueType`](#valuetype) is an array `[]` ([compacted](#bytescompactbytesarray) or not).
 
-the `valueContent` describes how to interpret **each entries in the array**, not the whole array itself. Therefore the `valueContent` field MUST NOT include `[]`.
+the `valueContent` describes how to interpret **each entry in the array**, not the whole array itself. Therefore the `valueContent` field MUST NOT include `[]`.
 
 We can use the LSP2 Schema below as an example to better understand. This LSP2 Schema below defines a data key that represents a list of social media profiles related to a user. 
 
-Reading the ERC725Y storage using this data key will return an array of abi-encoded `string[]`. Therefore the interface should use the `valueType` to decode the retrieved value. The `valueContent` however defines how each string in the array must be interpreted. In this case, it should be treated as a social media URL.
+Reading the ERC725Y storage using this data key will return an array of abi-encoded `string[]`. Therefore the interface should use the `valueType` to decode the retrieved value. The `valueContent` however defines that each string in the array must be interpreted as a social media URL.
 
 ```json
 {
