@@ -57,7 +57,7 @@ This function is part of the [LSP17] specification, with additional requirements
 
 - MUST be payable.
 - MUST emit a [`ValueReceived`] event if value was sent alongside some calldata.
-- MUST return if the data sent to the contract is less than 4 bytes in length or if the first 4 bytes of the data are equal to 0.
+- MUST return if the data sent to the contract is less than 4 bytes in length or if the first 4 bytes of the data are equal to `0x00000000`.
 - MUST check for address of the extension under the following ERC725Y Data Key:
 
 ```json
