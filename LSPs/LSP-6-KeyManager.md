@@ -256,7 +256,7 @@ BitArray representation: `0x0000000000000000000000000000000000000000000000000000
 
 - Allows changing the owner of the target contract by calling [`transferOwnership(address)`](./LSP-0-ERC725Account.md#transferownership) and [`acceptOwnership()`](./LSP-0-ERC725Account.md#acceptownership).
 
-#### `ADDPERMISSIONS`
+#### `ADDCONTROLLER`
 
 BitArray representation: `0x0000000000000000000000000000000000000000000000000000000000000002`
 
