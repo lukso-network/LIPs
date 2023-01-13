@@ -56,7 +56,7 @@ fallback() external payable;
 This function is part of the [LSP17] specification, with additional requirements as follows:
 
 - MUST be payable.
-- MUST emit a [`ValueReceived`] event if value was present.
+- MUST emit a [`ValueReceived`] event if value was sent alongside some calldata.
 - MUST return if the data sent to the contract is less than 4 bytes in length or if the first 4 bytes of the data are equal to 0.
 - MUST check for address of the extension under the following ERC725Y Data Key:
 
