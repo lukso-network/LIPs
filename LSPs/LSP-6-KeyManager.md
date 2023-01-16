@@ -479,10 +479,10 @@ Contains a compact bytes array of interface ids, addresses and function selector
 
 Each entry (allowed call) is made of three elements concatenated together as a tuple that forms a final `bytes28` long value.
 
-The full list of allowed calls MUST be constructed as a [CompactBytesArray](./LSP-2-ERC725YJSONSchema.md#bytescompactbytesarray) according to [LSP2-ERC725YJSONSchema] as follow:
+The full list of allowed calls MUST be constructed as a [CompactBytesArray](./LSP-2-ERC725YJSONSchema.md#bytescompactbytesarray) according to [LSP2-ERC725YJSONSchema] as follow (the three dots `...` are placeholders for `<bytes4 allowedInterfaceId> <bytes20 allowedAddress> <bytes4 allowedFunction>` and used for brievity):
 
 ```js
-<1c> <bytes4 allowedInterfaceId> <bytes20 allowedAddress> <bytes4 allowedFunction>
+<1c> <bytes4 allowedInterfaceId> <bytes20 allowedAddress> <bytes4 allowedFunction> <1c> ... <1c> ...
 ```
 - `1c`: **1c** in decimals is **28**, which is the sum of bytes length of the three elements below concatenated together.
 - `allowedInterfaceId`: The ERC165 interface id being supported by the contract called from the target.  
