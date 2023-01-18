@@ -100,7 +100,7 @@ This function is part of the [LSP14] specification.
 function transferOwnership(address newPendingOwner) external;
 ```
 
-This function is part of the [LSP14] specification.
+This function is part of the [LSP14] specification, with additional requirements as follows:
 
 - MUST override the LSP14 Type ID triggered by using `transferOwnership(..)` to the one below:
 
@@ -112,7 +112,7 @@ This function is part of the [LSP14] specification.
 function acceptOwnership() external;
 ```
 
-This function is part of the [LSP14] specification.
+This function is part of the [LSP14] specification, with additional requirements as follows:
 
 - MUST override the LSP14 Type IDs triggered by using `accceptOwnership(..)` to the ones below:
 
