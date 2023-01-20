@@ -1,6 +1,6 @@
 ---
 lip: 15
-title: TransactionRelayServiceAPI
+title: Transaction Relay Service API
 author: Hugo Masclet <git@hugom.xyz>, Callum Grindle <callumgrindle@gmail.com>
 discussions-to: https://discord.gg/E2rJPP4
 status: Draft

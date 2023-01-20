@@ -1,6 +1,6 @@
 ---
 lip: 14
-title: Ownable2Step
+title: Ownable 2 Step
 author:
 discussions-to: https://discord.gg/E2rJPP4
 status: Draft

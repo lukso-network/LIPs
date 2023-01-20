@@ -1,6 +1,6 @@
 ---
 lip: 12
-title: IssuedAssets
+title: Issued Assets
 author: Fabian Vogelsteller <fabian@lukso.network> 
 discussions-to: https://discord.gg/E2rJPP4
 status: Draft

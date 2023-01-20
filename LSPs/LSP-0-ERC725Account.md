@@ -1,6 +1,6 @@
 ---
 lip: 0
-title: ERC725Account
+title: ERC725 Account
 author: Fabian Vogelsteller <fabian@lukso.network> 
 discussions-to: https://discord.gg/E2rJPP4
 status: Draft

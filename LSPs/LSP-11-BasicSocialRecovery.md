@@ -1,6 +1,6 @@
 ---
 lip: 11
-title: BasicSocialRecovery
+title: Basic Social Recovery
 author: 
 discussions-to: https://discord.gg/E2rJPP4
 status: Draft

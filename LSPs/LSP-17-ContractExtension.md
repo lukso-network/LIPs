@@ -1,6 +1,6 @@
 ---
 lip: 17
-title: ContractExtension
+title: Contract Extension
 author: 
 discussions-to: https://discord.gg/E2rJPP4
 status: Draft
