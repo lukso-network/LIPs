@@ -51,11 +51,6 @@ The LSP8TokenIdType metadata key provides this information and describes how to 
 
 The `tokenId` type can be one of the following possible enum values.
 
-
-- 1 -> `address`: another contract.
-- 2 -> `uint256`: a number, which may be an incrementing count where each minted token is assigned the next number.
-- 3 -> `bytes32`: a hashed value (ie. serial number).
-
 | Value | Type      | Description  |
 |:-----:|:---------:|--------------|
 | `1`   | `address` | each NFT is represented as its **own [ERC725Y] smart contract.** |
