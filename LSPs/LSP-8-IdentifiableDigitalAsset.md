@@ -95,6 +95,96 @@ For construction of the JSONURL value see: [LSP2 ERC725Y JSON Schema > `valueCon
 }
 ```
 
+
+The linked JSON file SHOULD have the following format:
+
+```js
+{
+    "LSP8TokenMetadata": {
+        "name": "string",
+        "description": "string",
+        "links": [ // links related to DigitalAsset
+            {
+                "title": "string", // a title for the link.
+                "url": "string" // the link itself
+            },
+            ...
+        ],
+        "images": [ // multiple images in different sizes, related to the DigitalAsset, image 0, should be the main image
+            [ // array of different sizes of the same image
+                {
+                    "width": Number,
+                    "height": Number,
+                    "hashFunction": 'keccak256(bytes)',
+                    "hash": 'string', // bytes32 hex string of the image hash
+                    "url": 'string'
+                },
+                ...
+            ],
+            [...]
+        ],
+        "assets": [{
+            "hashFunction": 'keccak256(bytes)',
+            "hash": 'string',
+            "url": 'string',
+            "fileType": 'string'
+        }],
+        "attributes": [{
+            "key": 'string',
+            "value": 'any'
+        }]
+    }
+}
+```
+
+Example:
+
+```js
+{
+    LSP8TokenMetadata: {
+        name: 'Golden Pig'
+        description: 'The first digial golden pig.',
+        links: [
+            { title: 'Twitter', url: 'https://twitter.com/goldenpig123' },
+            { title: 'goldenpig.org', url: 'https://goldenpig.org' }
+        ],
+        images: [ // SHOULD be used for LSP8 NFT art
+            [
+                {
+                    width: 1024,
+                    height: 974,
+                    hashFunction: 'keccak256(bytes)',
+                    hash: '0xa9399df007997de92a820c6c2ec1cb2d3f5aa5fc1adf294157de563eba39bb6e',
+                    url: 'ifps://QmW4wM4r9yWeY1gUCtt7c6v3ve7Fzdg8CKvTS96NU9Uiwr'
+                }, 
+                ... // more image sizes
+            ],
+            ... // more images
+        ],
+        assets: [{ // SHOULD be used for anything that can be added "on top" of the token (e.g. 3d assets or high res pictures or music)
+            hashFunction: 'keccak256(bytes)',
+            hash: '0x98fe032f81c43426fbcfb21c780c879667a08e2a65e8ae38027d4d61cdfe6f55',
+            url: 'ifps://QmPJESHbVkPtSaHntNVY5F6JDLW8v69M2d6khXEYGUMn7N',
+            fileType: 'fbx'
+        }],
+        attributes: [
+            {
+                key: 'Standard type',
+                value: 'LSP',
+            },
+            {
+                key: 'Standard number',
+                value: 8,
+            },
+            {
+                key: '🆙',
+                value: true
+            }
+        ]
+    }
+}
+```
+
 ---
 (TODO: discussion if there are other data keys to include in the standard for the contract which mints tokens)
 ---
