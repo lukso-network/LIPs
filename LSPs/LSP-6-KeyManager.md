@@ -105,7 +105,7 @@ _Parameters:_
 
 - `payload`: The abi-encoded function call to be executed on the linked target contract.
 
-_Returns:_ `bytes` , the returned data as abi-decoded bytes of the call on ERC725 smart contract, if the call succeeded, otherwise revert with a reason-string. 
+_Returns:_ `bytes` , the returned data as abi-decoded bytes of the call on ERC725 smart contract, if the call succeeded, otherwise revert with a reason-string.
 
 _Requirements:_
 
@@ -117,7 +117,7 @@ _Requirements:_
     - [`transferOwnership(address)`](./LSP-0-ERC725Account.md#transferownership)
     - [`acceptOwnership()`](./LSP-0-ERC725Account.md#acceptownership)
 
-- MUST send the value passed by the caller to the call on the linked target. 
+- MUST send the value passed by the caller to the call on the linked target.
 
 > Non payable functions will revert in case of calling them and passing value along the call.
 
@@ -136,10 +136,10 @@ MUST fire the [Executed event](#executed) on each iteration.
 
 _Parameters:_
 
-- `values`: The array of values to be sent to the target contract along the call on each iteration. 
+- `values`: The array of values to be sent to the target contract along the call on each iteration.
 - `payloads`: The array of calldata payloads to be executed on the target contract on each iteration.
 
-_Returns:_ `bytes[]` , an array of returned data as abi-decoded array of `bytes[]` of the call on ERC725 smart contract, if the calls succeeded, otherwise revert with a reason-string. 
+_Returns:_ `bytes[]` , an array of returned data as abi-decoded array of `bytes[]` of the call on ERC725 smart contract, if the calls succeeded, otherwise revert with a reason-string.
 
 _Requirements:_
 
@@ -147,7 +147,7 @@ _Requirements:_
 
 - The sum of each element of the `values` array MUST be equal to the value sent to the function.
 
-- MUST comply to the requirements of the [`execute(bytes)`](#execute) function. 
+- MUST comply to the requirements of the [`execute(bytes)`](#execute) function.
 
 #### executeRelayCall
 
@@ -165,7 +165,7 @@ _Parameters:_
 - `payload`: The abi-encoded function call to be executed on the linked target contract.
 
 
-_Returns:_ `bytes` , the returned data as abi-decoded bytes of the call on ERC725 smart contract, if the call succeeded, otherwise revert with a reason-string. 
+_Returns:_ `bytes` , the returned data as abi-decoded bytes of the call on ERC725 smart contract, if the call succeeded, otherwise revert with a reason-string.
 
 _Requirements:_
 
@@ -192,7 +192,7 @@ For signing, permissioned users should apply the same steps and sign the final h
 
 - The nonce passed to the function MUST be a valid nonce according to the [multi-channel nonce](#what-are-multi-channel-nonces) section.
 
-- MUST send the value passed by the caller to the call on the linked target contract. 
+- MUST send the value passed by the caller to the call on the linked target contract.
 
 > Non payable functions will revert in case of calling them and passing value along the call.
 
@@ -212,10 +212,10 @@ _Parameters:_
 
 - `signatures`: An array of bytes65 ethereum signature.
 - `nonce`: An array of nonces from the address/es that signed the digests. This can be obtained via the `getNonce(address address, uint256 channel)` function.
-- `values`: An array of native token amounts to transfer to the linked [target](#target) contract alongside the call on each iteration. 
+- `values`: An array of native token amounts to transfer to the linked [target](#target) contract alongside the call on each iteration.
 - `payloads`: An array of calldata payloads to be executed on the linked [target](#target) contract on each iteration.
 
-_Returns:_ `bytes[]` , an array of returned as abi-decoded array of `bytes[]` of the linked target contract, if the calls succeeded, otherwise revert with a reason-string. 
+_Returns:_ `bytes[]` , an array of returned as abi-decoded array of `bytes[]` of the linked target contract, if the calls succeeded, otherwise revert with a reason-string.
 
 _Requirements:_
 
@@ -288,14 +288,14 @@ The value of these data keys SHOULD be validated before being set to avoid edge 
 
 BitArray representation: `0x0000000000000000000000000000000000000000000000000000000000000008`
 
-- Allows adding new extension address/es for new function selectors stored under [LSP17Extension](./LSP-0-ERC725Account.md#lsp17extension) data key. 
+- Allows adding new extension address/es for new function selectors stored under [LSP17Extension](./LSP-0-ERC725Account.md#lsp17extension) data key.
 
 
 #### `CHANGEEXTENSIONS`
 
 BitArray representation: `0x0000000000000000000000000000000000000000000000000000000000000010`
 
-- Allows changing existing extension address/es for function selectors stored under [LSP17Extension](./LSP-0-ERC725Account.md#lsp17extension) data key.  
+- Allows changing existing extension address/es for function selectors stored under [LSP17Extension](./LSP-0-ERC725Account.md#lsp17extension) data key.
 
 #### `ADDUNIVERSALRECEIVERDELEGATE`
 
@@ -462,7 +462,7 @@ For more information about how to access each index of the `AddressPermissions[]
 Contains a set of permissions for an address. Permissions defines what an address **can do on** the target contract (*eg: edit the data key-value store via SETDATA*), or **can perform on behalf of** the target.
 
 Since the `valueType` of this data key is `bytes32`, up to 255 different permissions can be defined. This includes the [default permissions](#permissions) defined. Custom permissions can be defined on top of the default one.
-    
+
 #### AddressPermissions:AllowedCalls:\<address\>
 
 ```json
@@ -482,25 +482,25 @@ Each entry (allowed call) is made of three elements concatenated together as a t
 The full list of allowed calls MUST be constructed as a [CompactBytesArray](./LSP-2-ERC725YJSONSchema.md#bytescompactbytesarray) according to [LSP2-ERC725YJSONSchema] as follow:
 
 ```js
-<1c> <bytes4 allowedInterfaceId> <bytes20 allowedAddress> <bytes4 allowedFunction> <1c> ... <1c> ...
+<001c> <bytes4 allowedInterfaceId> <bytes20 allowedAddress> <bytes4 allowedFunction> <001c> ... <001c> ...
 ```
 
 > **NB:** the three dots `...` are placeholders for `<bytes4 allowedInterfaceId> <bytes20 allowedAddress> <bytes4 allowedFunction>` and used for brievity.
 
-- `1c`: **1c** in decimals is **28**, which is the sum of bytes length of the three elements below concatenated together.
-- `allowedInterfaceId`: The ERC165 interface id being supported by the contract called from the target.  
+- `001c`: **001c** in decimals is **28**, which is the sum of bytes length of the three elements below concatenated together.
+- `allowedInterfaceId`: The ERC165 interface id being supported by the contract called from the target.
 - `allowedAddress`: The address called by the target contract.
 - `allowedFunction`: The function selector being called on the contract called by the target contract.
 
 - If the value of the data key is **empty**, execution is disallowed.
-- Check is discarded for an element if the value is full `ff` bytes. e.g, `0xffffffff` for interfaceIds and function selectors and `0xffffffffffffffffffffffffffffffffffffffff` for addresses. There MUST be at most 2 discarded checks, meaning `0xffffffffffffffffffffffffffffffffffffffffffffffffffffffff` data key is disallowed. 
+- Check is discarded for an element if the value is full `ff` bytes. e.g, `0xffffffff` for interfaceIds and function selectors and `0xffffffffffffffffffffffffffffffffffffffff` for addresses. There MUST be at most 2 discarded checks, meaning `0xffffffffffffffffffffffffffffffffffffffffffffffffffffffff` data key is disallowed.
 
 **Example 1:**
 
 If address A has [CALL](#permissions) permission, and have the following value for AllowedCalls:
 
 ```
-0x1c11223344cafecafecafecafecafecafecafecafecafecafebb11bb11
+0x001c11223344cafecafecafecafecafecafecafecafecafecafebb11bb11
 ```
 
 The address A is allowed to interact with the function selector **`0xbb11bb11`** on the **`0xcafecafecafecafecafecafecafecafecafecafe`** address as long as the address supports **`0x11223344`** interfaceId through [ERC165].
@@ -510,7 +510,7 @@ The address A is allowed to interact with the function selector **`0xbb11bb11`**
 If address B has [CALL](#permissions) permission, and have the following value for AllowedCalls:
 
 ```
-0x1cffffffffcafecafecafecafecafecafecafecafecafecafeffffff1c68686868ffffffffffffffffffffffffffffffffffffffffffffffff
+0x001cffffffffcafecafecafecafecafecafecafecafecafecafeffffff001c68686868ffffffffffffffffffffffffffffffffffffffffffffffff
 ```
 
 The address B is allowed to interact with:
@@ -539,7 +539,7 @@ The compact bytes array MUST be constructed in this format according to [LSP2-ER
 <length of the data key prefix> <data key prefix>
 ```
 
-- `length of the data key prefix`: The length of the prefix of the data key which the rest is dynamic. MUST be a number between `1` and `32`. 
+- `length of the data key prefix`: The length of the prefix of the data key which the rest is dynamic. MUST be a number between `1` and `32`.
 - `data key prefix`: The prefix of the data key to be checked against the data keys being set.
 
 Below is an example based on a [LSP2 Mapping](./LSP-2-ERC725YJSONSchema.md#Mapping) key type, where first word = `SupportedStandards`, and second word = `LSP3UniversalProfile`.
@@ -555,10 +555,10 @@ key: 0xeafec4d89fa9619884b60000abe425d64acd861a49b8ddf5c0b6962110481f38
 - If address A has [SETDATA](#setdata) permission, and have the following value for AllowedERC725YDataKeys:
 
 ```
-> 0x 20 eafec4d89fa9619884b60000abe425d64acd861a49b8ddf5c0b6962110481f38 
-> 0x20eafec4d89fa9619884b60000abe425d64acd861a49b8ddf5c0b6962110481f38
+> 0x 0020 eafec4d89fa9619884b60000abe425d64acd861a49b8ddf5c0b6962110481f38
+> 0x0020eafec4d89fa9619884b60000abe425d64acd861a49b8ddf5c0b6962110481f38
 ```
-> 20 (32 in decimals) is the length of the data key to be set. 
+> 0020 (32 in decimals) is the length of the data key to be set.
 
 Resolve to:
 
@@ -569,10 +569,10 @@ Address A is only allowed to set the value for the data key attached above.
 - If address B has [SETDATA](#setdata) permission, and have the following value for AllowedERC725YDataKeys:
 
 ```
-> 0x 0a eafec4d89fa9619884b6 20 beefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeef
-> 0x0aeafec4d89fa9619884b620beefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeef
+> 0x 000a eafec4d89fa9619884b6 0020 beefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeef
+> 0x000aeafec4d89fa9619884b60020beefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeef
 ```
-> 0a (10 in decimals) is the length of the `eafec4d89fa9619884b6` prefix
+> 000a (10 in decimals) is the length of the `eafec4d89fa9619884b6` prefix
 
 Resolve to:
 
@@ -695,29 +695,29 @@ ERC725Y JSON Schema `LSP6KeyManager`, set at the target(#target) contract:
 interface ILSP6  /* is ERC165 */ {
 
     // ERC1271
-    
+
     function isValidSignature(bytes32 hash, bytes memory signature) external view returns (bytes4 magicValue);
 
-    
+
     // LSP6
-        
-    event Executed(bytes4 indexed selector, uint256 indexed value); 
-   
+
+    event Executed(bytes4 indexed selector, uint256 indexed value);
+
 
     function target() external view returns (address);
-    
+
     function getNonce(address address, uint256 channel) external view returns (uint256);
-    
-    
+
+
     function execute(bytes memory payload) external payable returns (bytes memory);
-    
+
     function execute(uint256[] memory values, bytes[] memory payloads) external payable returns (bytes[] memory);
-    
-    
+
+
     function executeRelayCall(bytes memory signature, uint256 nonce, bytes memory payload) external payable returns (bytes memory);
-    
+
     function executeRelayCall(bytes[] memory signatures, uint256[] memory nonces, uint256[] memory values, bytes[] memory payloads) external payable returns (bytes[] memory);
-    
+
 
 ```
 

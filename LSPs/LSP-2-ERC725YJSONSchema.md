@@ -1,7 +1,7 @@
 ---
 lip: 2
 title: ERC725Y JSON Schema
-author: Fabian Vogelsteller <fabian@lukso.network> 
+author: Fabian Vogelsteller <fabian@lukso.network>
 discussions-to: https://discord.gg/E2rJPP4
 status: Draft
 type: LSP
@@ -51,7 +51,7 @@ To make ERC725Y data keys readable, we describe a data key-value pair as a JSON 
 }
 ```
 
-The table below describes each entries with their available options. 
+The table below describes each entries with their available options.
 
 | Title                                 | Description                   |
 |:--------------------------------------|:------------------------------|
@@ -100,7 +100,7 @@ Describes the underlying data type(s) of a value stored under a specific ERC725Y
 The `valueType` is relevant for interfaces to know how a value MUST be encoded/decoded. This include:
 
 - how to decode a value fetched via `ERC725Y.getData(...)`
-- how to encode a value that needs to be set via `ERC725Y.setData(...)`. 
+- how to encode a value that needs to be set via `ERC725Y.setData(...)`.
 
 The `valueType` can also be useful for typecasting. It enables contracts or interfaces to know how to manipulate the data and the limitations behind its type. To illustrate, an interface could know that it cannot set the value to `300` if its `valueType` is `uint8` (max `uint8` allowed = `255`).
 
@@ -126,7 +126,7 @@ The `valueType` can also be a **tuple of types**, meaning the value stored under
 
 The `valueContent` of a LSP2 Schema describes how to interpret the content of the returned *decoded* value.
 
-Knowing how to interpret the data retrieved under a data key is is the first step in understanding how to handle it. Interfaces can use the `valueContent` to adapt their behaviour or know how to display data fetched from an ERC725Y smart contract. 
+Knowing how to interpret the data retrieved under a data key is is the first step in understanding how to handle it. Interfaces can use the `valueContent` to adapt their behaviour or know how to display data fetched from an ERC725Y smart contract.
 
 As an example, a string could be interpreted in multiple ways, such as:
 - a single word, or a sequence of words (*e.g.: "My Custom Token Name"*)
@@ -181,12 +181,12 @@ This is useful for decoding tools, to know how to interpret each value type in t
 
 In the case where:
 
-a) the `keyType` is an [`Array`](#array).    
+a) the `keyType` is an [`Array`](#array).
 b) _or_ the [`valueType`](#valuetype) is an array `[]` ([compacted](#bytescompactbytesarray) or not).
 
 the `valueContent` describes how to interpret **each entry in the array**, not the whole array itself. Therefore the `valueContent` field MUST NOT include `[]`.
 
-We can use the LSP2 Schema below as an example to better understand. This LSP2 Schema below defines a data key that represents a list of social media profiles related to a user. 
+We can use the LSP2 Schema below as an example to better understand. This LSP2 Schema below defines a data key that represents a list of social media profiles related to a user.
 
 Reading the ERC725Y storage using this data key will return an array of abi-encoded `string[]`. Therefore the interface should use the `valueType` to decode the retrieved value. The `valueContent` however defines that each string in the array must be interpreted as a social media URL.
 
@@ -248,8 +248,8 @@ Each Array element can be accessed through its own `key`. The `key` of an Array 
 
 Below is an example for the **Array** data key named `LSP12IssuedAssets[]`.
 
-- total number of elements: 
-  - key: `0x7c8c3416d6cda87cd42c71ea1843df28ac4850354f988d55ee2eaa47b6dc05cd`, 
+- total number of elements:
+  - key: `0x7c8c3416d6cda87cd42c71ea1843df28ac4850354f988d55ee2eaa47b6dc05cd`,
   - value: `0x0000000000000000000000000000000000000000000000000000000000000002` (2 elements)
 - element 1: key: `0x7c8c3416d6cda87cd42c71ea1843df2800000000000000000000000000000000`, value: `0x123...` (index 0)
 - element 2: key: `0x7c8c3416d6cda87cd42c71ea1843df2800000000000000000000000000000001`, value: `0x321...` (index 1)
@@ -380,13 +380,13 @@ MyKeyName:<bytes32>:<bool> // 0xaaaabbbbccccddddeeeeffff111122223333444455556666
 
 A `bytes[CompactBytesArray]` represents an array of `bytes` values _encoded in a compact way_. The elements contained in the array are `bytes` values with different dynamic lengths.
 
-In a compact bytes array of `bytes`, each element is prefixed with 1 byte to specify its length.
+In a compact bytes array of `bytes`, each element is prefixed with 2 bytes to specify its length.
 
-For instance, `0xaabbccdd` in a `bytes[CompactBytesArray]` is encoded as `0x04aabbccdd`, where:
-- `0x04` = `4` to represent the total number of `bytes` in `0xaabbccdd`.
+For instance, `0xaabbccdd` in a `bytes[CompactBytesArray]` is encoded as `0x0004aabbccdd`, where:
+- `0x0004` = `4` represents the total number of `bytes` in `0xaabbccdd`.
 - `0xaabbccdd` is the actual value of the element.
 
-> **Note:** the maximum length of each element is 255, because is a single byte (equivalent to a `uint8`) is used to store the length of each element and the maximum value of a `uint8` is 255.
+> **Note:** the maximum length of each element is 65535, because two bytes (equivalent to a `uint16`) are used to store the length of each element and the maximum value of a `uint16` is 65535.
 
 
 #### Example
@@ -403,7 +403,7 @@ If we want to have the following bytes as elements in the compacted bytes array:
 
 The representation of these dynamic elements in a compacted bytes array would be:
 
-`0x04 aabbccdd 0e cafecafecafecafecafecafecafe 01 ff` > `0x04aabbccdd0ecafecafecafecafecafecafecafe01ff`
+`0x0004 aabbccdd 000e cafecafecafecafecafecafecafe 01 ff` > `0x0004aabbccdd000ecafecafecafecafecafecafecafe01ff`
 
 ### bytesN[CompactBytesArray]
 
@@ -411,11 +411,11 @@ Like a `bytes[CompactBytesArray]` a `bytesN[CompactBytesArray]` represents an ar
 
 In a compact bytes array of `bytesN`, each element is prefixed with 1 byte that specify the length `N`.
 
-For instance, in a `bytes8[CompactBytesArray]` an entry like `0x1122334455667788` is encoded as `0x081122334455667788`, where:
-- `0x08` = `8` to represent that `0x1122334455667788` contains 8 bytes.
+For instance, in a `bytes8[CompactBytesArray]` an entry like `0x1122334455667788` is encoded as `0x00081122334455667788`, where:
+- `0x0008` = `8` to represent that `0x1122334455667788` contains 8 bytes.
 - `0x1122334455667788` is the actual value of the element.
 
-> **Note:** because a single byte is used to store the length of each element, the maximum `N` length allowed is 255 (a single byte is equivalent to the maximum value of a `uint8` is 255)
+> **Note:** because two bytes are used to store the length of each element, the maximum `N` length allowed is 65535 (two bytes are equivalent to the maximum value of a `uint16` is 65535)
 
 #### Example
 
@@ -431,13 +431,13 @@ If we want to have the following `bytes8` elements encoded as a `bytes8[CompactB
 
 We will obtain the following:
 
-`0x08 1122334455667788 08 cafecafecafecafe 08 beefbeefbeefbeef` > `0x08112233445566778808cafecafecafecafe08beefbeefbeefbeef`.
+`0x0008 1122334455667788 0008 cafecafecafecafe 0008 beefbeefbeefbeef` > `0x000811223344556677880008cafecafecafecafe0008beefbeefbeefbeef`.
 
-Where each byte `0x08` in the final encoded value represents the length `N` of each element.
+Where each byte `0x0008` in the final encoded value represents the length `N` of each element.
 
 ```
-  vv                vv                vv
-0x08112233445566778808cafecafecafecafe08beefbeefbeefbeef
+  vvvv                vvvv                vvvv
+0x000811223344556677880008cafecafecafecafe0008beefbeefbeefbeef
 ```
 
 
@@ -552,7 +552,7 @@ keccak256(utf8)    hash                                                         
 
 ### JSONURL
 
-The content is bytes containing the following format:     
+The content is bytes containing the following format:
 `bytes4(keccak256('hashFunction'))` + `bytes32(keccak256(JSON.stringify(JSON)))` + `utf8ToHex('JSONURL')`
 
 Known hash functions:
@@ -585,7 +585,7 @@ const url = web3.utils.utf8ToHex('ifps://QmYr1VJLwerg6pEoscdhVGugo39pa6rycEZLjtR
 const JSONURL = hashFunction + hash.substring(2) + url.substring(2)
                 ^              ^                   ^
                 0x6f357c6a   + 820464ddfac1be... + 696670733a2f2...
-              
+
 // structure of the JSONURL
 0x6f357c6a +       820464ddfac1bec070cc14a8daf04129871d458f2ca94368aae8391311af6361 + 696670733a2f2f516d597231564a4c776572673670456f73636468564775676f3339706136727963455a4c6a7452504466573834554178
 ^                  ^                                                                  ^
