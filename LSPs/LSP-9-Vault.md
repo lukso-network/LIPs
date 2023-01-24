@@ -97,7 +97,11 @@ This function is part of the [LSP14] specification.
 function transferOwnership(address newPendingOwner) external;
 ```
 
-This function is part of the [LSP14] specification.
+This function is part of the [LSP14] specification, with additional requirements as follows:
+
+- MUST override the LSP14 Type ID triggered by using `transferOwnership(..)` to the one below:
+
+    - `keccak256('LSP0OwnershipTransferStarted')` > `0xe17117c9d2665d1dbeb479ed8058bbebde3c50ac50e2e65619f60006caac6926`
 
 #### acceptOwnership
 
@@ -105,8 +109,13 @@ This function is part of the [LSP14] specification.
 function acceptOwnership() external;
 ```
 
-This function is part of the [LSP14] specification.
+This function is part of the [LSP14] specification, with additional requirements as follows:
 
+- MUST override the LSP14 Type IDs triggered by using `accceptOwnership(..)` to the ones below:
+
+    - `keccak256('LSP0OwnershipTransferred_SenderNotification')` > `0xa4e59c931d14f7c8a7a35027f92ee40b5f2886b9fdcdb78f30bc5ecce5a2f814`
+    
+    - `keccak256('LSP0OwnershipTransferred_RecipientNotification')` > `0xceca317f109c43507871523e82dc2a3cc64dfa18f12da0b6db14f6e23f995538`
 
 #### renounceOwnership
 
