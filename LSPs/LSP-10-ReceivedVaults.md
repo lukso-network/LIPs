@@ -1,6 +1,6 @@
 ---
 lip: 10
-title: ReceivedVaults
+title: Received Vaults
 author: 
 discussions-to: https://discord.gg/E2rJPP4
 status: Draft
