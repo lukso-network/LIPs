@@ -260,7 +260,7 @@ MUST be emitted when the recovery process is finished by the controller who reac
 
 ### Setup
 
-In order to allow the social recovery contract to recover the linked target and add new permissions, the linked target should have an [LSP6-KeyManager](./LSP-6-KeyManager.md) as owner and the social recovery contract should have `ADDPERMISSIONS` and `CHANGEPERMISSIONS` permissions set inside the **linked target** under this ERC725Y data key.
+In order to allow the social recovery contract to recover the linked target and add new permissions, the linked target should have an [LSP6-KeyManager](./LSP-6-KeyManager.md) as owner and the social recovery contract should have `ADDCONTROLLER` and `CHANGEPERMISSIONS` permissions set inside the **linked target** under this ERC725Y data key.
 
 ```json
 {
