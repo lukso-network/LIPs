@@ -56,7 +56,21 @@ fallback() external payable;
 This function is part of the [LSP17] specification, with additional requirements as follows:
 
 - MUST be payable.
-- MUST emit a [`ValueReceived`] event if value was present.
+- MUST emit a [`ValueReceived`] event if value was sent alongside some calldata.
+- MUST return if the data sent to the contract is less than 4 bytes in length or if the first 4 bytes of the data are equal to `0x00000000`.
+- MUST check for address of the extension under the following ERC725Y Data Key:
+
+```json
+{
+    "name": "LSP17Extension:<bytes4>",
+    "key": "0xcee78b4094da860110960000<bytes4>",
+    "keyType": "Mapping",
+    "valueType": "address",
+    "valueContent": "Address"
+}
+```
+
+> <bytes4\> is the `functionSelector` called on the vault contract. Check [LSP2-ERC725YJSONSchema] to learn how to encode the key.
 
 
 #### owner
@@ -280,7 +294,7 @@ Check [LSP1-UniversalReceiver] and [LSP2-ERC725YJSONSchema] for more information
 
 > <bytes4\> is the `functionSelector` called on the vault contract. Check [LSP2-ERC725YJSONSchema] to learn how to encode the key.
 
-If there is a function called on the vault and the function does not exist, the fallback function lookup an address stored under the data key attached above and forwards the call to it with the value of the msg.sender and msg.value appended as extra calldata.
+If there is a function called on the vault and the function does not exist, the fallback function lookup an address stored under the data key attached above and forwards the call to it with the value of the `msg.sender` and `msg.value` appended as extra calldata.
 
 Check [LSP17-ContractExtension] and [LSP2-ERC725YJSONSchema] for more information.
 
