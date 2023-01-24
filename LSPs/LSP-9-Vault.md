@@ -56,7 +56,21 @@ fallback() external payable;
 This function is part of the [LSP17] specification, with additional requirements as follows:
 
 - MUST be payable.
-- MUST emit a [`ValueReceived`] event if value was present.
+- MUST emit a [`ValueReceived`] event if value was sent alongside some calldata.
+- MUST return if the data sent to the contract is less than 4 bytes in length or if the first 4 bytes of the data are equal to `0x00000000`.
+- MUST check for address of the extension under the following ERC725Y Data Key:
+
+```json
+{
+    "name": "LSP17Extension:<bytes4>",
+    "key": "0xcee78b4094da860110960000<bytes4>",
+    "keyType": "Mapping",
+    "valueType": "address",
+    "valueContent": "Address"
+}
+```
+
+> <bytes4\> is the `functionSelector` called on the vault contract. Check [LSP2-ERC725YJSONSchema] to learn how to encode the key.
 
 
 #### owner
@@ -83,7 +97,11 @@ This function is part of the [LSP14] specification.
 function transferOwnership(address newPendingOwner) external;
 ```
 
-This function is part of the [LSP14] specification.
+This function is part of the [LSP14] specification, with additional requirements as follows:
+
+- MUST override the LSP14 Type ID triggered by using `transferOwnership(..)` to the one below:
+
+    - `keccak256('LSP0OwnershipTransferStarted')` > `0xe17117c9d2665d1dbeb479ed8058bbebde3c50ac50e2e65619f60006caac6926`
 
 #### acceptOwnership
 
@@ -91,8 +109,13 @@ This function is part of the [LSP14] specification.
 function acceptOwnership() external;
 ```
 
-This function is part of the [LSP14] specification.
+This function is part of the [LSP14] specification, with additional requirements as follows:
 
+- MUST override the LSP14 Type IDs triggered by using `accceptOwnership(..)` to the ones below:
+
+    - `keccak256('LSP0OwnershipTransferred_SenderNotification')` > `0xa4e59c931d14f7c8a7a35027f92ee40b5f2886b9fdcdb78f30bc5ecce5a2f814`
+    
+    - `keccak256('LSP0OwnershipTransferred_RecipientNotification')` > `0xceca317f109c43507871523e82dc2a3cc64dfa18f12da0b6db14f6e23f995538`
 
 #### renounceOwnership
 
@@ -280,7 +303,7 @@ Check [LSP1-UniversalReceiver] and [LSP2-ERC725YJSONSchema] for more information
 
 > <bytes4\> is the `functionSelector` called on the vault contract. Check [LSP2-ERC725YJSONSchema] to learn how to encode the key.
 
-If there is a function called on the vault and the function does not exist, the fallback function lookup an address stored under the data key attached above and forwards the call to it with the value of the msg.sender and msg.value appended as extra calldata.
+If there is a function called on the vault and the function does not exist, the fallback function lookup an address stored under the data key attached above and forwards the call to it with the value of the `msg.sender` and `msg.value` appended as extra calldata.
 
 Check [LSP17-ContractExtension] and [LSP2-ERC725YJSONSchema] for more information.
 

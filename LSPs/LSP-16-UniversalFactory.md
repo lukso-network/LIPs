@@ -1,6 +1,6 @@
 ---
 lip: 16
-title: UniversalFactory
+title: Universal Factory
 author: 
 discussions-to: https://discord.gg/E2rJPP4
 status: Draft
