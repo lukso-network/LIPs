@@ -403,7 +403,7 @@ If we want to have the following bytes as elements in the compacted bytes array:
 
 The representation of these dynamic elements in a compacted bytes array would be:
 
-`0x0004 aabbccdd 000e cafecafecafecafecafecafecafe 01 ff` > `0x0004aabbccdd000ecafecafecafecafecafecafecafe01ff`
+`0x0004 aabbccdd 000e cafecafecafecafecafecafecafe 0001 ff` > `0x0004aabbccdd000ecafecafecafecafecafecafecafe0001ff`
 
 ### bytesN[CompactBytesArray]
 
