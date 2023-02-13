@@ -9,6 +9,34 @@ created: 2020-07-01
 requires: ERC725Y
 ---
 
+**Table of Content**
+
+- [Simple Summary](#simple-summary)
+- [Abstract](#abstract)
+- [Motivation](#motivation)
+- [Specification](#specification)
+  * [Data Key Name](#data-key-name)
+  * [Data Key Hash](#data-key-hash)
+  * [`keyType`](#-keytype-)
+  * [`valueType`](#-valuetype-)
+  * [`valueContent`](#-valuecontent-)
+    + [valueContent in cases where `valueType` or `keyType` is an array](#valuecontent-in-cases-where--valuetype--or--keytype--is-an-array)
+- [keyType](#keytype)
+  * [Singleton](#singleton)
+  * [Array](#array)
+  * [Mapping](#mapping)
+  * [MappingWithGrouping](#mappingwithgrouping)
+- [ValueType](#valuetype)
+  * [bytes[CompactBytesArray]](#bytes-compactbytesarray-)
+  * [bytesN[CompactBytesArray]](#bytesn-compactbytesarray-)
+  * [Tuples of `valueType`](#tuples-of--valuetype-)
+- [ValueContent](#valuecontent)
+  * [BitArray](#bitarray)
+  * [AssetURL](#asseturl)
+  * [JSONURL](#jsonurl)
+- [Rationale](#rationale)
+- [Implementation](#implementation)
+- [Copyright](#copyright)
 
 ## Simple Summary
 
@@ -58,7 +86,7 @@ The table below describes each entries with their available options.
 |[`name`](#name)                        | the name of the data key      |
 |[`key`](#key)                          | the **unique identifier** of the data key |
 |[`keyType`](#keyType)                  | *How* the data key must be treated <hr> [`Singleton`](#Singleton) <br> [`Array`](#Array) <br> [`Mapping`](#mapping) <br> [`MappingWithGrouping`](#mappingwithgrouping) |
-|[`valueType`](#valueType)              | *How* a value MUST be decoded <hr> `bool` <br> `string` <br> `address` <br> `uintN` <br> `intN` <br> `bytesN` <br> `bytes` <br> `uintN[]` <br> `intN[]` <br> `string[]` <br> `address[]` <br> `bytes[]` <br> [`bytes[CompactBytesArray]`](#bytescompactbytesarray) <br> `bytesN[CompactBytesArray]` <br> Tuple: [`(valueType1,valueType2,...)`](#tuples-of--valuetype-) |
+|[`valueType`](#valueType)              | *How* a value MUST be decoded <hr> `bool` <br> `string` <br> `address` <br> `uintN` <br> `intN` <br> `bytesN` <br> `bytes` <br> `uintN[]` <br> `intN[]` <br> `string[]` <br> `address[]` <br> `bytes[]` <br> [`bytes[CompactBytesArray]`](#bytescompactbytesarray) <br> [`bytesN[CompactBytesArray]`](#bytesn-compactbytesarray-) <br> Tuple: [`(valueType1,valueType2,...)`](#tuples-of--valuetype-) |
 |[`valueContent`](#valueContent)| *How* a value SHOULD be interpreted <hr> `Boolean` <br> `String` <br> `Address` <br> `Number` <br> `BytesN` <br> `Bytes` <br> `Keccak256` <br> [`BitArray`](#BitArray) <br> `URL` <br> [`AssetURL`](#AssetURL) <br> [`JSONURL`](#JSONURL) <br> `Markdown` <br> `Literal` (*e.g.:* `0x1345ABCD...`) |
 
 ### Data Key Name
@@ -390,7 +418,7 @@ For instance, `0xaabbccdd` in a `bytes[CompactBytesArray]` is encoded as `0x0004
 > **Note:** the maximum length of each element is 65535, because two bytes (equivalent to a `uint16`) are used to store the length of each element and the maximum value of a `uint16` is 65535.
 
 
-#### Example
+_example_
 
 If we want to have the following bytes as elements in the compacted bytes array:
 
@@ -418,7 +446,7 @@ For instance, in a `bytes8[CompactBytesArray]` an entry like `0x1122334455667788
 
 > **Note:** because two bytes are used to store the length of each element, the maximum `N` length allowed is 65535 (two bytes are equivalent to the maximum value of a `uint16` is 65535)
 
-#### Example
+_example:_
 
 If we want to have the following `bytes8` elements encoded as a `bytes8[CompactBytesArray]`:
 
@@ -441,7 +469,7 @@ Where each byte `0x0008` in the final encoded value represents the length `N` of
 0x000811223344556677880008cafecafecafecafe0008beefbeefbeefbeef
 ```
 
-#### Tuples of `valueType`
+### Tuples of `valueType`
 
 The `valueType` can also be a **tuple of types**. In this case, the value stored under the ERC725Y data key is a mixture of multiple values concatenated together (the values are just _"glued together"_).
 
