@@ -17,10 +17,10 @@ requires: ERC725Y
 - [Specification](#specification)
   * [Data Key Name](#data-key-name)
   * [Data Key Hash](#data-key-hash)
-  * [`keyType`](#-keytype-)
-  * [`valueType`](#-valuetype-)
-  * [`valueContent`](#-valuecontent-)
-    + [valueContent in cases where `valueType` or `keyType` is an array](#valuecontent-in-cases-where--valuetype--or--keytype--is-an-array)
+  * [Key Type](#key-type)
+  * [Value Type](#value-type)
+  * [Value Content](#value-content)
+    + [valueContent when `valueType` or `keyType` is an array](#valuecontent-when--valuetype--or--keytype--is-an-array)
 - [keyType](#keytype)
   * [Singleton](#singleton)
   * [Array](#array)
@@ -109,7 +109,7 @@ The `key` is a `bytes32` value that acts as the **unique identifier** for the da
 Usually `keccak256` hashing algorithm is used to generate the `bytes32` data key. However, *how* the data key is constructed varies, depending on the `keyType`.
 
 
-### `keyType`
+### Key Type
 
 The `keyType` determines the format of the data key(s).
 
@@ -121,7 +121,7 @@ The `keyType` determines the format of the data key(s).
 | [`MappingWithGrouping`](#mappingwithgrouping)  | A data key that consist of 3 sections, where the last two sections can also be dynamic values | `bytes6(keccak256("MyKeyName"))` +<br>`bytes4(keccak256("MyMapName") or <mixed type>)` +<br>`bytes2(0)` +<br>`bytes20(keccak256("MySubMapName") or <mixed type>)` <br> --- <br> `MyKeyName:MyMapName:<address>` -->  `0x35e6950bc8d275060e3c0000cafecafecafecafecafecafecafecafecafecafe` |
 
 
-### `valueType`
+### Value Type
 
 Describes the underlying data type(s) of a value stored under a specific ERC725Y data key. It refers to the type for the smart contract language like [Solidity](https://docs.soliditylang.org).
 
@@ -149,7 +149,7 @@ The `valueType` can also be useful for typecasting. It enables contracts or inte
 | `bytesN[CompactBytesArray]`    | a compacted bytes array of fixed size bytes  |
 | Tuple: [`(valueType1,valueType2,...)`](#tuples-of--valuetype-) | a tuple of valueTypes|
 
-### `valueContent`
+### Value Content
 
 The `valueContent` of a LSP2 Schema describes how to interpret the content of the returned *decoded* value.
 
@@ -204,7 +204,7 @@ The `valueContent` field can also define a tuple of value contents (for instance
 
 This is useful for decoding tools, to know how to interpret each value type in the tuple.
 
-#### valueContent in cases where `valueType` or `keyType` is an array
+#### valueContent when `valueType` or `keyType` is an array
 
 In the case where:
 
