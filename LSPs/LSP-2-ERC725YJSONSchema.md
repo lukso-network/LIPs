@@ -231,9 +231,9 @@ An array of elements, where each element has the same `valueType`.
 
 A data key of **Array** type MUST have the following requirements:
 
-- The `name` of the data key MUST have a `[]` (square brackets).
+- The `name` of the data key MUST have a `[]` (square brackets) at the end.
 - The `key` itself MUST be the keccak256 hash digest of the **full data key `name`, including the square brackets `[]`**
-- The value stored under the full data key hash MUST contain the total number of elements (= array length). It MUST be updated every time a new element is added to the array.
+- The value stored under the full data key hash MUST contain the total number of elements (= array length). It MUST be updated every time a new element is added or removed to/from the array.
 - The value stored under the full data key hash **MUST be stored as `uint256`** (32 bytes long, padded left with leading zeros).
 
 **Construction:**
@@ -243,6 +243,8 @@ For the **Array** `keyType`, the initial `key` contains the total number of elem
 Each Array element can be accessed through its own `key`. The `key` of an Array element consists of `bytes16(keccak256(KeyName)) + bytes16(uint128(ArrayElementIndex))`, where:
 - `bytes16(keccak256(KeyName))` = The first 16 bytes are the keccak256 hash of the full Array data key `name` (including the `[]`) (e.g.: `LSP12IssuedAssets[]`)
 - `bytes16(uint128(ArrayElementIndex))` = the position (= index) of the element in the array (**NB**: elements index access start at `0`)
+
+> **Note:** an ERC725Y data key of keyType Array can contain up to `max(uint128)` elements. This is because the index part of an Array keyType is 16 bytes long, which is equivalent to a `uint128`.
 
 *example:*
 
