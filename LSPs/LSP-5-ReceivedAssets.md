@@ -64,7 +64,7 @@ Value example: `0x5fcaac27000000000000000c` (interfaceId: `0x5fcaac27` for a [LS
     "name": "LSP5ReceivedAssetsMap:<address>",
     "key": "0x812c4334633eb816c80d0000<address>",
     "keyType": "Mapping",
-    "valueType": "(bytes4,bytes8)",
+    "valueType": "(bytes4,uint128)",
     "valueContent": "(Bytes4,Number)"
 }
 ```
@@ -89,7 +89,7 @@ ERC725Y JSON Schema `LSP5ReceivedAssets`:
         "name": "LSP5ReceivedAssetsMap:<address>",
         "key": "0x812c4334633eb816c80d0000<address>",
         "keyType": "Mapping",
-        "valueType": "(bytes4,bytes8)",
+        "valueType": "(bytes4,uint128)",
         "valueContent": "(Bytes4,Number)"
     },
 ]

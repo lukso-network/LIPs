@@ -59,7 +59,7 @@ Value example: `0xfd4d5c50000000000000000c` (interfaceId: `0xfd4d5c50`, index po
     "name": "LSP10VaultsMap:<address>",
     "key": "0x192448c3c0f88c7f238c0000<address>",
     "keyType": "Mapping",
-    "valueType": "(bytes4,bytes8)",
+    "valueType": "(bytes4,uint128)",
     "valueContent": "(Bytes4,Number)"
 }
 ```
@@ -85,7 +85,7 @@ ERC725Y JSON Schema `LSP10ReceivedVaults`:
         "name": "LSP10VaultsMap:<address>",
         "key": "0x192448c3c0f88c7f238c0000<address>",
         "keyType": "Mapping",
-        "valueType": "(bytes4,bytes8)",
+        "valueType": "(bytes4,uint128)",
         "valueContent": "(Bytes4,Number)"
     }
 ]
