@@ -58,7 +58,7 @@ The table below describes each entries with their available options.
 |[`name`](#name)                        | the name of the data key      |
 |[`key`](#key)                          | the **unique identifier** of the data key |
 |[`keyType`](#keyType)                  | *How* the data key must be treated <hr> [`Singleton`](#Singleton) <br> [`Array`](#Array) <br> [`Mapping`](#mapping) <br> [`MappingWithGrouping`](#mappingwithgrouping) |
-|[`valueType`](#valueType)              | *How* a value MUST be decoded <hr> `bool` <br> `string` <br> `address` <br> `uintN` <br> `intN` <br> `bytesN` <br> `bytes` <br> `uintN[]` <br> `intN[]` <br> `string[]` <br> `address[]` <br> `bytes[]` <br> [`bytes[CompactBytesArray]`](#bytescompactbytesarray) <br> `bytesN[CompactBytesArray]` |
+|[`valueType`](#valueType)              | *How* a value MUST be decoded <hr> `bool` <br> `string` <br> `address` <br> `uintN` <br> `intN` <br> `bytesN` <br> `bytes` <br> `uintN[]` <br> `intN[]` <br> `string[]` <br> `address[]` <br> `bytes[]` <br> [`bytes[CompactBytesArray]`](#bytescompactbytesarray) <br> `bytesN[CompactBytesArray]` <br> Tuple: [`(valueType1,valueType2,...)`](#tuples-of--valuetype-) |
 |[`valueContent`](#valueContent)| *How* a value SHOULD be interpreted <hr> `Boolean` <br> `String` <br> `Address` <br> `Number` <br> `BytesN` <br> `Bytes` <br> `Keccak256` <br> [`BitArray`](#BitArray) <br> `URL` <br> [`AssetURL`](#AssetURL) <br> [`JSONURL`](#JSONURL) <br> `Markdown` <br> `Literal` (*e.g.:* `0x1345ABCD...`) |
 
 ### Data Key Name
@@ -119,8 +119,7 @@ The `valueType` can also be useful for typecasting. It enables contracts or inte
 | `bytesN[]`                     | an array of fixed size bytes  |
 | [`bytes[CompactBytesArray]`](#bytescompactbytesarray)     | a compacted bytes array of dynamic size bytes  |
 | `bytesN[CompactBytesArray]`    | a compacted bytes array of fixed size bytes  |
-
-The `valueType` can also be a **tuple of types**, meaning the value stored under the ERC725Y data key is a mixture of multiple value types concatenated together. In such case, the types MUST be defined between parentheses. For instance: `(bytes4,bytes8)` or `(bytes8,address)`
+| Tuple: [`(valueType1,valueType2,...)`](#tuples-of--valuetype-) | a tuple of valueTypes|
 
 ### `valueContent`
 
@@ -442,6 +441,90 @@ Where each byte `0x0008` in the final encoded value represents the length `N` of
 0x000811223344556677880008cafecafecafecafe0008beefbeefbeefbeef
 ```
 
+#### Tuples of `valueType`
+
+The `valueType` can also be a **tuple of types**. In this case, the value stored under the ERC725Y data key is a mixture of multiple values concatenated together (the values are just _"glued together"_).
+
+LSP2 tuples of `valueTypes` are different than tuples according to Solidity. **In Solidity, values defined in the tuple are padded. In the case of LSP2 they are not.**
+
+In the case of tuple of `valueType`s, the types MUST be defined between parentheses, comma separated without parentheses.
+
+```
+(valueType1,valueType2,valueType3,...)
+```
+
+_example 1:_
+
+For a schema that includes the following tuple as `valueType`.
+
+```json
+{
+    "name": "...",
+    "key": "...",
+    "keyType": "...",
+    "valueType": "(bytes4,bytes8)",
+    "valueContent": "..."
+}
+```
+
+And the following values:
+- `bytes4` value = `0xcafecafe`
+- `bytes8` value = `0xbeefbeefbeefbeef`
+
+The tuple of `valueType` MUST be encoded as:
+
+```
+0xcafecafebeefbeefbeefbeef
+```
+
+_example 2:_
+
+For a schema that includes the following tuple as `valueType`.
+
+```json
+{
+    "name": "...",
+    "key": "...",
+    "keyType": "...",
+    "valueType": "(bytes8,address)",
+    "valueContent": "..."
+}
+```
+
+And the following values:
+- `bytes4` value = `0xca11ab1eca11ab1e`
+- `bytes8` value = `0x95222290DD7278Aa3Ddd389Cc1E1d165CC4BAfe5`
+
+The tuple of `valueType` MUST be encoded as:
+
+```
+0xca11ab1eca11ab1e95222290DD7278Aa3Ddd389Cc1E1d165CC4BAfe5
+```
+
+_example 3:_
+
+For a schema that includes the following tuple as `valueType`.
+
+```json
+{
+    "name": "...",
+    "key": "...",
+    "keyType": "...",
+    "valueType": "(address,uint128,bytes4,bool,bytes)",
+    "valueContent": "..."
+}
+```
+
+And the following values:
+- `address` value = `0x388C818CA8B9251b393131C08a736A67ccB19297`
+- `uint128` value = the number `5,918` (`0x0000000000000000000000000000171E` in hex)
+- `bytes4` value = `0xf00df00d`
+- `bool` value = true (`0x01` in hex)
+- `bytes` value = `0xcafecafecafecafecafecafecafe`
+
+```
+0x388C818CA8B9251b393131C08a736A67ccB192970000000000000000000000000000171Ef00df00d01afecafecafecafecafecafecafe
+```
 
 
 ## ValueContent
