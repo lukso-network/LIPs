@@ -20,16 +20,16 @@ requires: ERC725Y
   * [Key Type](#key-type)
   * [Value Type](#value-type)
   * [Value Content](#value-content)
-    + [valueContent when `valueType` or `keyType` is an array](#valuecontent-when--valuetype--or--keytype--is-an-array)
+    + [valueContent when `valueType` or `keyType` is an array](#valuecontent-when-valuetype-or-keytype-is-an-array)
 - [keyType](#keytype)
   * [Singleton](#singleton)
   * [Array](#array)
   * [Mapping](#mapping)
   * [MappingWithGrouping](#mappingwithgrouping)
 - [ValueType](#valuetype)
-  * [bytes[CompactBytesArray]](#bytes-compactbytesarray-)
-  * [bytesN[CompactBytesArray]](#bytesn-compactbytesarray-)
-  * [Tuples of `valueType`](#tuples-of--valuetype-)
+  * [bytes[CompactBytesArray]](#bytescompactbytesarray)
+  * [bytesN[CompactBytesArray]](#bytesncompactbytesarray)
+  * [Tuples of `valueType`](#tuples-of-valuetype)
 - [ValueContent](#valuecontent)
   * [BitArray](#bitarray)
   * [AssetURL](#asseturl)
@@ -86,7 +86,7 @@ The table below describes each entries with their available options.
 |[`name`](#name)                        | the name of the data key      |
 |[`key`](#key)                          | the **unique identifier** of the data key |
 |[`keyType`](#keyType)                  | *How* the data key must be treated <hr> [`Singleton`](#Singleton) <br> [`Array`](#Array) <br> [`Mapping`](#mapping) <br> [`MappingWithGrouping`](#mappingwithgrouping) |
-|[`valueType`](#valueType)              | *How* a value MUST be decoded <hr> `bool` <br> `string` <br> `address` <br> `uintN` <br> `intN` <br> `bytesN` <br> `bytes` <br> `uintN[]` <br> `intN[]` <br> `string[]` <br> `address[]` <br> `bytes[]` <br> [`bytes[CompactBytesArray]`](#bytescompactbytesarray) <br> [`bytesN[CompactBytesArray]`](#bytesn-compactbytesarray-) <br> Tuple: [`(valueType1,valueType2,...)`](#tuples-of--valuetype-) |
+|[`valueType`](#valueType)              | *How* a value MUST be decoded <hr> `bool` <br> `string` <br> `address` <br> `uintN` <br> `intN` <br> `bytesN` <br> `bytes` <br> `uintN[]` <br> `intN[]` <br> `string[]` <br> `address[]` <br> `bytes[]` <br> [`bytes[CompactBytesArray]`](#bytescompactbytesarray) <br> [`bytesN[CompactBytesArray]`](#bytesncompactbytesarray) <br> Tuple: [`(valueType1,valueType2,...)`](#tuples-of--valuetype-) |
 |[`valueContent`](#valueContent)| *How* a value SHOULD be interpreted <hr> `Boolean` <br> `String` <br> `Address` <br> `Number` <br> `BytesN` <br> `Bytes` <br> `Keccak256` <br> [`BitArray`](#BitArray) <br> `URL` <br> [`AssetURL`](#AssetURL) <br> [`JSONURL`](#JSONURL) <br> `Markdown` <br> `Literal` (*e.g.:* `0x1345ABCD...`) |
 
 ### Data Key Name
@@ -473,7 +473,18 @@ Where each byte `0x0008` in the final encoded value represents the length `N` of
 
 The `valueType` can also be a **tuple of types**. In this case, the value stored under the ERC725Y data key is a mixture of multiple values concatenated together (the values are just _"glued together"_).
 
-LSP2 tuples of `valueTypes` are different than tuples according to Solidity. **In Solidity, values defined in the tuple are padded. In the case of LSP2 they are not.**
+Tuples of valueTypes offer a convenient way to store more than one information under a single ERC725Y data key. In the example below, the value below can be represented as a tuple to store the address of a smart contract (`0xcafecafecafecafecafecafecafecafecafecafe`) + its interfaceID (`0xbeefbeef`), all under one single data key.
+
+```
+(address,bytes4)
+0xcafecafecafecafecafecafecafecafecafecafebeefbeef
+```
+
+The main purpose why tuples of valueTypes exist in LSP2 is because it offers a way to store more than one information under a data key. For instance (address,bytes4) is a useful tuple to 
+
+
+LSP2 tuples are different than Solidity tuples. **In Solidity, values defined in the tuple are padded. In the case of LSP2 they are not.**
+
 
 In the case of tuple of `valueType`s, the types MUST be defined between parentheses, comma separated without parentheses.
 
@@ -551,7 +562,7 @@ And the following values:
 - `bytes` value = `0xcafecafecafecafecafecafecafe`
 
 ```
-0x388C818CA8B9251b393131C08a736A67ccB192970000000000000000000000000000171Ef00df00d01afecafecafecafecafecafecafe
+0x388C818CA8B9251b393131C08a736A67ccB192970000000000000000000000000000171Ef00df00d01cafecafecafecafecafecafecafe
 ```
 
 
