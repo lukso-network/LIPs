@@ -89,7 +89,7 @@ This function is part of the [LSP17] specification, with additional requirements
 
 > <bytes4\> is the `functionSelector` called on the account contract. Check [LSP2-ERC725YJSONSchema] to learn how to encode the key.
 
-- MUST not revert when there is no extension set for `0x00000000`.
+- MUST NOT revert when there is no extension set for `0x00000000`.
 
 #### owner
 
