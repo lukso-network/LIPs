@@ -261,7 +261,7 @@ A data key of **Array** type MUST have the following requirements:
 - The `name` of the data key MUST have a `[]` (square brackets) at the end.
 - The `key` itself MUST be the keccak256 hash digest of the **full data key `name`, including the square brackets `[]`**
 - The value stored under the full data key hash MUST contain the total number of elements (= array length). It MUST be updated every time a new element is added or removed to/from the array.
-- The value stored under the full data key hash **MUST be stored as `uint256`** (32 bytes long, padded left with leading zeros).
+- The value stored under the full data key hash **MUST be stored as `uint128`** (16 bytes long, padded left with leading zeros).
 
 **Construction:**
 
@@ -271,7 +271,11 @@ Each Array element can be accessed through its own `key`. The `key` of an Array 
 - `bytes16(keccak256(KeyName))` = The first 16 bytes are the keccak256 hash of the full Array data key `name` (including the `[]`) (e.g.: `LSP12IssuedAssets[]`)
 - `bytes16(uint128(ArrayElementIndex))` = the position (= index) of the element in the array (**NB**: elements index access start at `0`)
 
-> **Note:** an ERC725Y data key of keyType Array can contain up to `max(uint128)` elements. This is because the index part of an Array keyType is 16 bytes long, which is equivalent to a `uint128`.
+> **Note:** an ERC725Y data key of keyType Array can contain up to `max(uint128)` elements. This is because:
+> - the value stored under the Array length data key,
+> - the index part of an Array index data key,
+>
+> are both 16 bytes long, which is equivalent to a `uint128`.
 
 *example:*
 
@@ -279,7 +283,7 @@ Below is an example for the **Array** data key named `LSP12IssuedAssets[]`.
 
 - total number of elements:
   - key: `0x7c8c3416d6cda87cd42c71ea1843df28ac4850354f988d55ee2eaa47b6dc05cd`,
-  - value: `0x0000000000000000000000000000000000000000000000000000000000000002` (2 elements)
+  - value: `0x00000000000000000000000000000002` (2 elements)
 - element 1: key: `0x7c8c3416d6cda87cd42c71ea1843df2800000000000000000000000000000000`, value: `0x123...` (index 0)
 - element 2: key: `0x7c8c3416d6cda87cd42c71ea1843df2800000000000000000000000000000001`, value: `0x321...` (index 1)
 ...
@@ -296,7 +300,7 @@ Below is an example for the **Array** data key named `LSP12IssuedAssets[]`.
 
 ```solidity
 key: keccak256('LSP12IssuedAssets[]') = 0x7c8c3416d6cda87cd42c71ea1843df28ac4850354f988d55ee2eaa47b6dc05cd
-value: uint256 (array length) e.g. 0x0000000000000000000000000000000000000000000000000000000000000002
+value: uint256 (array length) e.g. 0x00000000000000000000000000000002
 
 // array items
 
