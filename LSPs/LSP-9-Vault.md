@@ -140,7 +140,7 @@ _Parameters:_
 
 The data field can be:
 
-- an array of ABI-encoded function call such as an array of ABI-encoded execute, setData, transferOwnership or any LSP9 functions.
+- an array of ABI-encoded function calls such as an array of ABI-encoded execute, setData, transferOwnership or any LSP9 functions.
 - an array of bytes which will resolve to the fallback function to be checked for an extension. 
 
 
