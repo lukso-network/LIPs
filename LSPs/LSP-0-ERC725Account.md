@@ -45,7 +45,7 @@ The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL 
 
 **LSP0-ERC725Account** interface id according to [ERC165]: `0x0f15a0af`.
 
-_This `bytes4` interface id is calculated as the XOR of the selector of batchCalls function and the following standards: ERC725Y, ERC725X, LSP1-UniversalReceiver, ERC1271-isValidSignature, LSP14Ownable2Step and LSP17Extendable and _
+_This `bytes4` interface id is calculated as the XOR of the selector of batchCalls function and the following standards: ERC725Y, ERC725X, LSP1-UniversalReceiver, ERC1271-isValidSignature, LSP14Ownable2Step and LSP17Extendable_.
 
 Smart contracts implementing the LSP0 standard MUST implement the [ERC165] `supportsInterface(..)` function and MUST support the LSP0, ERC725X, ERC725Y, ERC1271, LSP1, LSP14 and LSP17Extendable interface ids.
 
