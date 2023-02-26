@@ -199,7 +199,7 @@ For more informations about how to access each index of the `LSP4Creators[]` arr
 
 #### LSP4CreatorsMap
 
-References the creator addresses for this asset.
+References the creator addresses for this asset. This data key exists so that smart contracts can detect whether the address of a creator is present in the `LSP4Creators[]` array without looping all over it on-chain, and identify where the creator address is located for easy access to change or remove this specific creator from the array. It also allows for the detection of the interfaceId supported by the Creator.
 
 The `valueContent` MUST be constructed as follows: `bytes4(standardInterfaceId) + bytes8(indexNumber)`. 
 Where:
