@@ -270,7 +270,7 @@ The value of these data keys SHOULD be validated before being set to avoid edge 
 
 > All the actions above are done using the setData function
 
-#### `CHANGEPERMISSIONS`
+#### `EDITPERMISSIONS`
 
 BitArray representation: `0x0000000000000000000000000000000000000000000000000000000000000004`
 
