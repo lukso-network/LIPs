@@ -51,7 +51,7 @@ For more info about how to access each index of the `LSP5ReceivedAssets[]` array
 
 #### LSP5ReceivedAssetsMap
 
-References received smart contract assets, like tokens (_e.g.: [LSP7 Digital Assets](./LSP-7-DigitalAsset)_) and NFTs (_e.g.: [LSP8 Identifiable Digital Assets](./LSP-8-IdentifiableDigitalAsset)_). This data key exists so that smart contracts can detect whether the address of an asset is present in the `LSP5ReceivedAssets[]` array without looping all over it on-chain, and identify where the asset address is located for easy access to change or remove this specific asset from the array. It also allows for the detection of the interfaceId supported by the asset.
+References received smart contract assets, like tokens (_e.g.: [LSP7 Digital Assets](./LSP-7-DigitalAsset)_) and NFTs (_e.g.: [LSP8 Identifiable Digital Assets](./LSP-8-IdentifiableDigitalAsset)_). This data key exists so that smart contracts can detect whether the address of an asset is present in the `LSP5ReceivedAssets[]` array without looping all over it on-chain. Moreover, it helps to identify at which index in the `LSP5ReceivedAssets[]` the asset address is located for easy access and to change or remove this specific asset from the array. Finally, it also allows dectecting the interface supported by the asset.
 
 The data value MUST be constructed as follows: `bytes4(standardInterfaceId) + bytes8(indexNumber)`. Where:
 - `standardInterfaceId` = the [ERC165 interface ID](https://eips.ethereum.org/EIPS/eip-165) of the standard that the token or asset smart contract implements (if the ERC165 interface ID is unknown, `standardInterfaceId = 0xffffffff`).

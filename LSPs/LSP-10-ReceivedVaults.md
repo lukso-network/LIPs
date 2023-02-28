@@ -46,7 +46,7 @@ References issued smart contract vaults.
 
 #### LSP10VaultsMap
 
-References owned [LSP9Vaults](./LSP-9-Vault.md). This data key exists so that smart contracts can detect whether the address of a vault is present in the `LSP10Vaults[]` array without looping all over it on-chain, and identify where the vault address is located for easy access to change or remove this specific vault from the array. It also allows for the detection of the interfaceId supported by the vault.
+References owned [LSP9Vaults](./LSP-9-Vault.md). This data key exists so that smart contracts can detect whether the address of a vault is present in the `LSP10Vaults[]` array without looping all over it on-chain. Moreover, it helps to identify at which index in the `LSP10Vaults[]` the vault address is located for easy access and to change or remove this specific vault from the array. Finally, it also allows dectecting the interface supported by the vault.
 
 The data value MUST be constructed as follows: `bytes4(standardInterfaceId) + bytes8(indexNumber)`. Where:
 - `standardInterfaceId` = the [ERC165 interface ID](https://eips.ethereum.org/EIPS/eip-165) of a [LSP9Vaults](./LSP-9-Vault.md): `0xfd4d5c50`.
