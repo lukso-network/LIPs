@@ -57,8 +57,8 @@ This function is part of the [LSP17] specification, with additional requirements
 
 - MUST be payable.
 - MUST emit a [`ValueReceived`] event if value was sent alongside some calldata.
-- MUST return if the data sent to the contract is less than 4 bytes in length or if the first 4 bytes of the data are equal to `0x00000000`.
-- MUST check for address of the extension under the following ERC725Y Data Key:
+- MUST return if the data sent to the contract is less than 4 bytes in length.
+- MUST check for address of the extension under the following ERC725Y Data Key, and call the extension.
 
 ```json
 {
@@ -72,6 +72,7 @@ This function is part of the [LSP17] specification, with additional requirements
 
 > <bytes4\> is the `functionSelector` called on the vault contract. Check [LSP2-ERC725YJSONSchema] to learn how to encode the key.
 
+- MUST NOT revert when there is no extension set for `0x00000000`.
 
 #### owner
 
