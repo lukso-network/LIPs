@@ -314,8 +314,38 @@ The ERC725Y general data key value store allows for the ability to add any kind 
 
 ## Implementation
 
-An implementation can be found on the [lsp-universalprofile-smart-contracts] repository;
+An implementation can be found in the [lukso-network/lsp-smart-contracts](https://github.com/lukso-network/lsp-smart-contracts/blob/main/contracts/LSP9Vault/LSP9VaultCore.sol) repository.
+The below defines the JSON interface of the `LSP9Vault`.
 
+ERC725Y JSON Schema `LSP9Vault`:
+
+```json
+[
+  // From LSP1
+  {
+    "name":"LSP1UniversalReceiverDelegate",
+    "key":"0x0cfc51aec37c55a4d0b1a65c6255c4bf2fbdf6277f3cc0730c45b828b6db8b47",
+    "keyType":"Singleton",
+    "valueType":"address",
+    "valueContent":"Address"
+  },
+  {
+    "name":"LSP1UniversalReceiverDelegate:<bytes32>",
+    "key":"0x0cfc51aec37c55a4d0b10000<bytes32>",
+    "keyType":"Mapping",
+    "valueType":"address",
+    "valueContent":"Address"
+  },
+  // From LSP17
+  {
+    "name":"LSP17Extension:<bytes4>",
+    "key":"0xcee78b4094da860110960000<bytes4>",
+    "keyType":"Mapping",
+    "valueType":"address",
+    "valueContent":"Address"
+  }
+]
+```
 
 ## Interface Cheat Sheet
 
