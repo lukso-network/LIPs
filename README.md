@@ -41,10 +41,3 @@ The key words below are to be used to describe the specifications of a LIP or LS
 | **SHOULD**  | it is recommended to use and follow the specification, but there may exist valid reasons in particular circumstances where the specification can be ignored. <br> In such cases, the full implications should be understood and carefully weighted before choosing an alternative.  | RECOMMENDED  |
 | **SHOULD NOT**  | it is not recommended to use the definition specified, but there may exist valid reasons in particular circumstances when the particular behaviour is acceptable or even useful. <br> Before implementing any behaviour described as SHOULD NOT, the full implications should be understood and the case weighted carefully.  | NOT RECOMMENDED  |
 | **COULD**  | the specification is truly optional. One implementation may choose to include this particular specification because the it feels that it enhances the feature, while an other implementation may decide to omit it considers it unnecessary. <br> An implementation that does not include this optional specification MUST be prepared to interoperate with another implementation which does includes this option, though perhaps with reduced functionality. <br> In the same manner, an implementation which does include a particular option MUST be prepared to interoperate with another implementation which does not include the option (except, of course, for the feature the option provides.) | MAY, OPTIONAL  |
-
-Note that one standard can be based on another standard and override a specification from the sub-standard. In this case, the terminology used can be overriden.
- 
-For instance, consider a LSP B based on LSP A.
-
-- LSP A can define a specific behaviour X as optional (COULD).
-- But LSP B can override this specification and mark behaviour X as a requirement (MUST).
