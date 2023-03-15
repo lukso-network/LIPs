@@ -314,7 +314,7 @@ BitArray representation: `0x0000000000000000000000000000000000000000000000000000
 
 BitArray representation: `0x0000000000000000000000000000000000000000000000000000000000000080`
 
-- Allows reentering the public [`execute(bytes)`](#execute), [`execute(uint256[],bytes[])`](#execute-array), [`executeRelayCall(bytes,uint256,bytes)`](#executerelaycall) and [`executeRelayCall(bytes[],uint256[],uint256[],bytes[])`](#executerelaycall-array) functions. 
+- Allows reentering the public [`execute(bytes)`](#execute), [`execute(uint256[],bytes[])`](#execute-array), [`executeRelayCall(bytes,uint256,bytes)`](#executerelaycall) and [`executeRelayCall(bytes[],uint256[],uint256[],bytes[])`](#executerelaycall-array) functions.
 
 
 #### `SUPER_TRANSFERVALUE`
@@ -382,7 +382,7 @@ BitArray representation: `0x0000000000000000000000000000000000000000000000000000
 
 BitArray representation: `0x0000000000000000000000000000000000000000000000000000000000010000`
 
-- Allows creating a contract with [CREATE] and [CREATE2] operations from the target contract through [`execute(..)`](./LSP-0-ERC725Account.md#execute) function of the target. To fund the contract created while deployment, the caller should have the SUPER_TRANSFERVALUE permission.
+- Allows creating a contract with [CREATE] and [CREATE2] operations from the target contract through [`execute(..)`](./LSP-0-ERC725Account.md#execute) function of the target.
 
 #### `SUPER_SETDATA`
 
