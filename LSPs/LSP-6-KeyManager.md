@@ -20,7 +20,7 @@ This standard allows for controlling addresses to be restricted through multiple
 
 The KeyManager functions as a gateway for the [ERC725Account] restricting an address actions based on set permissions.
 
-Permissions are described in the [Permissions values section](#permission-values-in-addresspermissionspermissionsaddress). Furthermore addresses can be restricted to only talk to certain other smart contracts or address, specific functions or smart contracts supporting only specifc standard interfaces.
+Permissions are described in the [Permissions section](#permissions). Furthermore addresses can be restricted to only talk to certain other smart contracts or address, specific functions or smart contracts supporting only specifc standard interfaces.
 
 The Permissions are stored under the ERC725Y data key-value store of the linked [ERC725Account], and can therefore survive an upgrade to a new KeyManager contract.
 
