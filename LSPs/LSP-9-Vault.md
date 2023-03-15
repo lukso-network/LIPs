@@ -24,11 +24,9 @@ This standard defines a vault that can hold assets and interact with other contr
 
 ## Specification
 
-The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL NOT”, “SHOULD”, “SHOULD NOT”, “RECOMMENDED”, “MAY”, and “OPTIONAL” in this document are to be interpreted as described in [RFC 2119](https://datatracker.ietf.org/doc/html/rfc2119).
+**LSP9-Vault** interface id according to [ERC165]: `0x19331ad1`.
 
-**LSP9-Vault** interface id according to [ERC165]: `0x7050cee9`.
-
-_This `bytes4` interface id is calculated as the XOR of the interfaceId of the following standards: ERC725Y, ERC725X, LSP1-UniversalReceiver, LSP14Ownable2Step and LSP17Extendable._
+_This `bytes4` interface id is calculated as the XOR of the selector of batchCalls function and the following standards: ERC725Y, ERC725X, LSP1-UniversalReceiver, LSP14Ownable2Step and LSP17Extendable._
 
 Smart contracts implementing the LSP9 standard MUST implement the [ERC165] `supportsInterface(..)` function and MUST support the LSP9, ERC725X, ERC725Y, LSP1, LSP14 and LSP17Extendable interface ids.
 
@@ -125,6 +123,35 @@ function renounceOwnership() external;
 ```
 
 This function is part of the [LSP14] specification.
+
+
+#### batchCalls
+
+```solidity
+function batchCalls(bytes[] calldata functionCalls) external returns (bytes[] memory results)
+```
+
+Enables the execution of a batch of encoded function calls on the current contract in a single transaction, provided as an array of bytes. 
+
+MUST use the delegatecall opcode to execute each call in the same context of the current contract.
+
+
+_Parameters:_
+
+- `functionCalls`: an array of encoded function calls to be executed on the current contract.
+
+The data field can be:
+
+- an array of ABI-encoded function calls such as an array of ABI-encoded execute, setData, transferOwnership or any LSP9 functions.
+- an array of bytes which will resolve to the fallback function to be checked for an extension. 
+
+
+_Requirements:_
+
+- MUST NOT be payable. 
+
+
+_Returns:_ `results` , an array of bytes containing the return values of each executed function call.
 
 
 #### execute
@@ -387,6 +414,10 @@ interface ILSP9  /* is ERC165 */ {
     
     receive() external payable;
     
+    fallback() external payable;
+    
+    function batchCalls(bytes[] calldata data) external returns (bytes[] memory results);
+    
    
     // LSP1
     
@@ -417,11 +448,6 @@ interface ILSP9  /* is ERC165 */ {
     function acceptOwnership() external;
     
     function renounceOwnership() external; // onlyOwner
-    
-    
-    // LSP17
-    
-    fallback() external payable;
 
 }
 
