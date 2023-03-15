@@ -24,8 +24,6 @@ This standard defines a vault that can hold assets and interact with other contr
 
 ## Specification
 
-The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL NOT”, “SHOULD”, “SHOULD NOT”, “RECOMMENDED”, “MAY”, and “OPTIONAL” in this document are to be interpreted as described in [RFC 2119](https://datatracker.ietf.org/doc/html/rfc2119).
-
 **LSP9-Vault** interface id according to [ERC165]: `0x19331ad1`.
 
 _This `bytes4` interface id is calculated as the XOR of the selector of batchCalls function and the following standards: ERC725Y, ERC725X, LSP1-UniversalReceiver, LSP14Ownable2Step and LSP17Extendable._
@@ -129,14 +127,17 @@ This function is part of the [LSP14] specification.
 #### batchCalls
 
 ```solidity
-function batchCalls(bytes[] calldata data) external returns (bytes[] memory results)
+function batchCalls(bytes[] calldata functionCalls) external returns (bytes[] memory results)
 ```
 
-MUST batch calls on the contract by performing a delegatecall on the contract itself.
+Enables the execution of a batch of encoded function calls on the current contract in a single transaction, provided as an array of bytes. 
+
+MUST use the delegatecall opcode to execute each call in the same context of the current contract.
+
 
 _Parameters:_
 
-- `data`: the call data to be executed on the contract. 
+- `functionCalls`: an array of encoded function calls to be executed on the current contract.
 
 The data field can be:
 
@@ -149,7 +150,7 @@ _Requirements:_
 - MUST NOT be payable. 
 
 
-_Returns:_ `results` , an array of returned data of each called function.
+_Returns:_ `results` , an array of bytes containing the return values of each executed function call.
 
 
 #### execute
