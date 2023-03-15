@@ -489,7 +489,7 @@ The full list of allowed calls MUST be constructed as a [CompactBytesArray](./LS
 > **NB:** the three dots `...` are placeholders for `<bytes4 restrictionOperations> <bytes20 allowedAddress> <bytes4 allowedInterfaceId> <bytes4 allowedFunction>` and used for brievity.
 
 - `0020`: **0020** in decimals is **32**, which is the sum of bytes length of the four elements below concatenated together.
-- `restrictionOperations`: A bitArray that represents the list of operations that the restrictions listed applies for.
+- `restrictionOperations`: A bitArray that represents the list of operations that the restrictions listed (address - interfaceId - function) applies for.
 
     The operations are defined with specific bits, starting from the 4th byte from the most right: 
 
