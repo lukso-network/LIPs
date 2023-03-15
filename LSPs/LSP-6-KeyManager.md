@@ -472,7 +472,7 @@ Since the `valueType` of this data key is `bytes32`, up to 255 different permiss
     "key": "0x4b80742de2bf393a64c70000<address>",
     "keyType": "MappingWithGrouping",
     "valueType": "(bytes4,address,bytes4,bytes4)[CompactBytesArray]",
-    "valueContent": "(Bytes4,Address,Bytes4,Bytes4)"
+    "valueContent": "(BitArray,Address,Bytes4,Bytes4)"
 }
 ```
 
@@ -756,7 +756,7 @@ ERC725Y JSON Schema `LSP6KeyManager`, set at the target(#target) contract:
         "key": "0x4b80742de2bf393a64c70000<address>",
         "keyType": "MappingWithGrouping",
         "valueType": "(bytes4,address,bytes4,bytes4)[CompactBytesArray]",
-        "valueContent": "(Bytes4,Address,Bytes4,Bytes4)"
+        "valueContent": "(BitArray,Address,Bytes4,Bytes4)"
     },
     {
         "name": "AddressPermissions:AllowedERC725YDataKeys:<address>",
