@@ -26,7 +26,7 @@ Delegating the function call requirements to another smart contract enables a mo
 
 ## Specification
 
-**LSP20-CallVerification** interface id according to [ERC165]: `..`.
+**LSP20-CallVerification** interface id according to [ERC165]: `0x480c0ec2`.
 
 ### Methods
 
