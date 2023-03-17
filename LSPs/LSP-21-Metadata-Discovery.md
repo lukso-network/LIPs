@@ -28,7 +28,7 @@ The LSP2 standard provides a schema that enables to read and interpret the metad
 
 Despite the benefits that LSP2 provides, a problem around metadata remains: 
 
-_how can someone that does not know the set of ERC725Y JSON schemas used by a smart contract can read + decode the data from the contract storage in the first place?_
+> _how does someone that does not know the set of ERC725Y JSON schemas used by a smart contract can read the data from the contract storage in the first place?_
 
 With no prior knowledge of the schemas, the contract metadata cannot be fetched as the schema helps to construct the `bytes32` data key, so that the contract can be queried to fetch data from it.
 
