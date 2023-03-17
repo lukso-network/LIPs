@@ -2,7 +2,7 @@
 lip: 21
 title: Metadata Discovery
 author: Jean Cavallera, Samuel Videau, Hugo Masclet, Callum Grindle
-discussions-to: https://discord.com/channels/359064931246538762/620552532602912769/930749248365015100
+discussions-to: shorturl.at/fnwKS
 status: Draft
 type: LSP
 created: 2023-03-17
