@@ -1,7 +1,7 @@
 ---
 lip: 21
 title: Metadata Discovery
-author: Jean Cavallera, Samuel Videau, Hugo Masclet
+author: Jean Cavallera, Samuel Videau, Hugo Masclet, Callum Grindle
 discussions-to: https://discord.com/channels/359064931246538762/620552532602912769/930749248365015100
 status: Draft
 type: LSP
@@ -24,14 +24,15 @@ This standard addresses the issue of making the different schemas used by an ERC
 <!--The motivation is critical for LIPs that want to change the Lukso protocol. It should clearly explain why the existing protocol specification is inadequate to address the problem that the LIP solves. LIP submissions without sufficient motivation may be rejected outright.-->
 The LSP2 standard provides a schema that enables to read and interpret the metadata of an ERC725Y smart contract in a human friendly. This is also useful for tools to automate encoding and decoding of standard entries in the storage of a ERC725Y smart contract.
 
-However, a problem around metadata remains: how can someone that does not know the set of ERC725Y JSON schemas used by a smart contract can read + decode the data from the contract storage in the first place? 
+### Current Problem
+
+Despite the benefits that LSP2 provides, a problem around metadata remains: 
+
+_how can someone that does not know the set of ERC725Y JSON schemas used by a smart contract can read + decode the data from the contract storage in the first place?_
 
 With no prior knowledge of the schemas, the contract metadata cannot be fetched as the schema helps to construct the `bytes32` data key, so that the contract can be queried to fetch data from it.
 
-
-
-In the mint based model, the mint was aware of all transactions and
-decided which arrived first. 
+### Existing Solutions
 
 Currently, the JSON schemas can be obtained through various ways, including public/private Github repositories, documentation websites, README, packages or Gist. There is no standard "rules" or recommendations on where and how these schemas should be shared, which leads to a need for a "LSP2 JSON sharing" model, a way to store the link of the JSON Metadat where the schemas can be retrieved from.
 
@@ -49,6 +50,8 @@ This lead to a non-standard way to retrieve this important information, as there
 We need a way for users and tools:
 - to know **how to retrieve** the JSON Schemas of the publicly available metadata.
 - to know **how to remember** how the schemas can be retrieved.
+
+### Proposed Solution
 
 For our purpose, we use a single unique and easy to remember `bytes32` data key: the **zero data key**: `0x0000000000000000000000000000000000000000000000000000000000000000`.
 
@@ -80,16 +83,14 @@ Whether the Schemas are stored on or off-chains, the JSON data MUST adhere to th
 
 ### When the Schemas are stored on-chain
 
-_What are the requirements_
-
-_Put an example here_
+- _What are the requirements_
+- _Put an example here_
 
 
 ### When the Schemas are stored off-chain
 
-_What are the additional requirements_
-
-_Put an example here_
+- _What are the additional requirements_
+- _Put an example here_
 
 
 ## Rationale
