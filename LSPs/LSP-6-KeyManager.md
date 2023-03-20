@@ -384,7 +384,7 @@ BitArray representation: `0x0000000000000000000000000000000000000000000000000000
 
 - Allows creating a contract with [CREATE] and [CREATE2] operations from the target contract through [`execute(..)`](./LSP-0-ERC725Account.md#execute) function of the target. 
 
-Sending value while creating the contract will require an additional permission: `SUPER_TRANSFERVALUE` permission.
+The permission `SUPER_TRANSFERVALUE` is REQUIRED to fund the contract with some native tokens while deploying it.
 
 #### `SUPER_SETDATA`
 
