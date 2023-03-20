@@ -476,9 +476,9 @@ Since the `valueType` of this data key is `bytes32`, up to 255 different permiss
 }
 ```
 
-Contains a compact bytes array of operations restrictions, addresses, interfaceIds and function selectors a controller address is allowed to execute and interact with.
+Contains a compact bytes array of call restrictions, addresses, interfaceIds and function selectors a controller address is allowed to execute and interact with.
 
-Each entry (allowed call) is made of four elements concatenated together as a tuple that forms a final `bytes32` long value.
+Each allowed call is made of four elements concatenated together as a tuple that forms a final `bytes32` long value.
 
 The full list of allowed calls MUST be constructed as a [CompactBytesArray](./LSP-2-ERC725YJSONSchema.md#bytescompactbytesarray) according to [LSP2-ERC725YJSONSchema] as follow:
 
@@ -486,12 +486,12 @@ The full list of allowed calls MUST be constructed as a [CompactBytesArray](./LS
 <0020> <bytes4 restrictionOperations> <bytes20 allowedAddress> <bytes4 allowedInterfaceId> <bytes4 allowedFunction> <0020> ... <0020> ...
 ```
 
-> **NB:** the three dots `...` are placeholders for `<bytes4 restrictionOperations> <bytes20 allowedAddress> <bytes4 allowedInterfaceId> <bytes4 allowedFunction>` and used for brievity.
+> **NB:** the three dots `...` are placeholders for `<bytes4 callRestrictions> <bytes20 allowedAddress> <bytes4 allowedInterfaceId> <bytes4 allowedFunction>` and used for brevity.
 
-- `0020`: **0020** in decimals is **32**, which is the sum of bytes length of the four elements below concatenated together.
-- `restrictionOperations`: A bitArray that represents the list of operations that the restrictions listed (address - interfaceId - function) applies for.
+- `0020`: **0020** in decimals is **32**, the total number of bytes of the four elements below concatenated together.
+- `callRestrictions`: A bitArray that represents the list of restricted call types applied for this allowed call (address - interfaceId - function).
 
-    The operations are defined with specific bits, starting from the 4th byte from the most right: 
+    The call restrictions are defined with specific bits, starting from the least significant bit (the rightmost bit): 
 
     - transferValue `00000001`
     - call `00000010`
@@ -506,7 +506,7 @@ The full list of allowed calls MUST be constructed as a [CompactBytesArray](./LS
 
 - If the value of the data key is **empty**, execution is disallowed.
 
-- `restrictionOperations` cannot be discarded. 
+- `restrictionOperations` MUST NOT discarded. 
 
 - Check is discarded for an element if the value is full `ff` bytes. e.g, `0xffffffff` for interfaceIds and function selectors and `0xffffffffffffffffffffffffffffffffffffffff` for addresses. There MUST be at most 2 discarded checks, meaning `0xffffffffffffffffffffffffffffffffffffffffffffffffffffffff` data key is disallowed. 
 
@@ -514,21 +514,21 @@ The full list of allowed calls MUST be constructed as a [CompactBytesArray](./LS
 
 **Example 1:**
 
-If address A has [CALL](#permissions) permission, and have the following value for AllowedCalls:
+If controller A has [CALL](#permissions) permission, and have the following value for AllowedCalls:
 
 ```
 0x002000000002cafecafecafecafecafecafecafecafecafecafe11223344bb11bb11
 ```
 
-The `restrictionOperations` is **`0x00000002`**, it means that the restrictions above only applies when the operation **[CALL](https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#execute)** is being executed.
+The `restrictionOperations` is **`0x00000002`**, meaning that the restrictions above only applies when the operation **[CALL](https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#execute)** is being executed.
 
-The address A is allowed to interact via the **CALL** operation with the function selector **`0xbb11bb11`** on the **`0xcafecafecafecafecafecafecafecafecafecafe`** address as long as the address supports **`0x11223344`** interfaceId through [ERC165]. 
+The controller A is allowed to interact via the **CALL** operation with the function selector **`0xbb11bb11`** on the **`0xcafecafecafecafecafecafecafecafecafecafe`** address as long as the address supports **`0x11223344`** interfaceId through [ERC165]. 
 
 <br>
 
 **Example 2:**
 
-If address B has [DELEGATECALL](#permissions) permission, and have the following value for AllowedCalls:
+If controller B has [DELEGATECALL](#permissions) permission, and have the following value for AllowedCalls:
 
 ```
 0x002000000004cafecafecafecafecafecafecafecafecafecafeffffffffffffff002000000004ffffffffffffffffffffffffffffffffffffffff68686868ffffffff
@@ -536,15 +536,15 @@ If address B has [DELEGATECALL](#permissions) permission, and have the following
 
 The `restrictionOperations` on both elements is **`0x00000004`**, it means that the restrictions above only applies when the operation **[DELEGATECALL](https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#execute)** is being executed.
 
-The address B is allowed to interact via **DELEGATECALL** with:
-- the address **`0xcafecafecafecafecafecafecafecafecafecafe`** without any restriction on the interfaceId or the function selector.
+The controller B is allowed to interact with:
+- the address **`0xcafecafecafecafecafecafecafecafecafecafe`** **only via DELEGATECALL** without any restriction on the interfaceId or the function selector.
 - **any address** supporting the **`0x68686868`** interfaceId without any restriction on the function.
 
 <br>
 
 **Example 3:**
 
-If address B has [DELEGATECALL](#permissions) permission, and have the following value for AllowedCalls:
+If controller B has [DELEGATECALL](#permissions) permission, and have the following value for AllowedCalls:
 
 ```
 0x002000000002cafecafecafecafecafecafecafecafecafecafe11223344bb11bb11
@@ -552,31 +552,32 @@ If address B has [DELEGATECALL](#permissions) permission, and have the following
 
 The `restrictionOperations` is **`0x00000002`**, it means that the restrictions above only applies when the operation **[CALL](https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#execute)** is being executed.
 
-Given that the address B have the **DELEGATECALL** Permission and the restrictions only applies for the **CALL** operation, any execution of **DELEGATECALL** operation will fail even to the function **`0xbb11bb11`** on **`0xcafecafecafecafecafecafecafecafecafecafe`** address.
+Given that the controller B have the **DELEGATECALL** Permission and the restrictions only applies for the **CALL** operation, any execution of **DELEGATECALL** operation will fail even to the function **`0xbb11bb11`** on **`0xcafecafecafecafecafecafecafecafecafecafe`** address.
 
 
 <br>
 
 **Example 4:**
 
-If address B has [TRANSFERVALUE](#permissions) and [CALL](#permissions) permissions, and have the following value for AllowedCalls:
+If controller B has [TRANSFERVALUE](#permissions) and [CALL](#permissions) permissions, and have the following value for AllowedCalls:
 
 ```
 0x002000000003cafecafecafecafecafecafecafecafecafecafe11223344bb11bb11
 ```
 
-The `restrictionOperations` is **`0x00000003`**, it means that the restrictions above applies when the operation **[CALL](https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#execute)** or **[TRANSFERVALUE](https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#execute)** is being executed.
+The `callRestrictions` is **`0x00000003`**, it means that the restrictions above applies when the operation **[CALL](https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#execute)** or **[TRANSFERVALUE](https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#execute)** is being executed.
 
-The address B is allowed to **CALL** or **TransferValue** to:
-- the function selector **`0xbb11bb11`** on the **`0xcafecafecafecafecafecafecafecafecafecafe`** address as long as the address supports **`0x11223344`** interfaceId through [ERC165].
-
+The controller B is allowed to **CALL** or **TransferValue** to:
+- the contract deployed at address **`0xcafecafecafecafecafecafecafecafecafecafe`** as long as this contract supports the interfaceId **`0x11223344`** through [ERC165]. 
+- only the function with selector **`0xbb11bb11`** on this contract.
+- this function on this contract with or without transferring value at the same time (because of the additional **TransferValue** in the `callRestrictions`).
 
 <br>
 
 
 **Example 5:**
 
-If address B has [TRANSFERVALUE](#permissions) and [CALL](#permissions) permissions, and have the following value for AllowedCalls:
+If controller B has [TRANSFERVALUE](#permissions) and [CALL](#permissions) permissions, and have the following value for AllowedCalls:
 
 ```
 0x002000000001cafecafecafecafecafecafecafecafecafecafe11223344bb11bb11002000000002ffffffffffffffffffffffffffffffffffffffff68686868ffffffff
@@ -584,9 +585,9 @@ If address B has [TRANSFERVALUE](#permissions) and [CALL](#permissions) permissi
 
 Each element of the compact bytes array have a different `restrictionOperations`:
 
-- **`0x000000001`** for the first element allowing the address B to only **TransferValue** to the function **`0xbb11bb11`** on **`0xcafecafecafecafecafecafecafecafecafecafe`** address as long as the address supports **`0x11223344`** interfaceId through [ERC165].
+- **`0x000000001`** for the first element allowing the controller B to only **TransferValue** to the function **`0xbb11bb11`** on **`0xcafecafecafecafecafecafecafecafecafecafe`** address as long as the address supports **`0x11223344`** interfaceId through [ERC165].
 
-- **`0x000000002`** for the second element allowing the address B to only **Call** any function on any address as long as the address supports **`0x68686868`** interfaceId through [ERC165].
+- **`0x000000002`** for the second element allowing the controller B to only **Call** any function on any contract that support the interface ID **`0x68686868`** through [ERC165].
 
 <br>
  
