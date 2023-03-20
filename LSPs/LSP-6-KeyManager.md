@@ -39,7 +39,7 @@ Storing the permissions at the core [ERC725Account] itself, allows it to survive
 
 **LSP6-KeyManager** interface id according to [ERC165]: `0xfb437414`.
 
-Smart contracts implementing the LSP6 standard MUST implement the [ERC165] `supportsInterface(..)` function and MUST support the [ERC165], [ERC1271] and the LSP6 interface ids.
+Smart contracts implementing the LSP6 standard MUST implement the [ERC165] `supportsInterface(..)` function and MUST support the [ERC165], [ERC1271], [LSP20-ReverseVerification] and the LSP6 interface ids.
 
 Every contract that supports the LSP6 standard SHOULD implement:
 
@@ -65,6 +65,38 @@ function isValidSignature(bytes32 hash, bytes memory signature) external view re
 This function is part of the [ERC1271] specification, with additional requirements as follows:
 
 - MUST recover the address from the hash and the signature and return the [ERC1721 magic value] if the address recovered have the [**SIGN Permission**](#sign), if not, MUST return the [ERC1271 fail value].
+
+
+#### lsp20VerifyCall
+
+```solidity
+function lsp20VerifyCall(address caller, uint256 value, bytes memory receivedCalldata) external returns (bytes4 magicValue);
+```
+
+This function is part of the [LSP20-ReverseVerification] specification, with additional requirements as follows:
+
+- MUST be called only by the linked [target](#target).
+
+- MUST verify the permission of the **`caller`** based on the **`receivedCalldata`** as defined in the [permission](#permissions) section.
+
+- MUST set the reentrancy guard to true and check for reentrancy permission if the call was reentrant.
+
+- MUST return the magic value with the `0x01` bytes that indicates that `lsp20VerifyCallResult(..)` MUST be invoked.
+
+
+#### lsp20VerifyCallResult
+
+```solidity
+function lsp20VerifyCallResult(bytes32 callHash, bytes memory callResult) external returns (bytes4 magicValue);
+```
+
+This function is part of the [LSP20-ReverseVerification] specification, with additional requirements as follows:
+
+- MUST be called only by the linked [target](#target).
+
+- MUST set the reentrancy guard to false. 
+
+- MUST return the magic value.
 
 #### getNonce
 
@@ -823,3 +855,4 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 [DELEGATECALL]: <https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#execute>
 [CREATE]: <https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#execute>
 [CREATE2]: <https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#execute>
+[LSP20-ReverseVerification]: <./LSP-20-CallVerification.md>

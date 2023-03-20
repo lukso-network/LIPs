@@ -6,7 +6,7 @@ discussions-to: https://discord.gg/E2rJPP4
 status: Draft
 type: LSP
 created: 2021-09-21
-requires: ERC165, ERC725X, ERC725Y, ERC1271, LSP1, LSP2, LSP14, LSP17
+requires: ERC165, ERC725X, ERC725Y, ERC1271, LSP1, LSP2, LSP14, LSP17, LSP20
 ---
 
 
@@ -73,7 +73,7 @@ This function is part of the [LSP17] specification, with additional requirements
 - MUST be payable.
 - MUST emit a [`ValueReceived`] event if value was sent alongside some calldata.
 - MUST return if the data sent to the contract is less than 4 bytes in length.
-- MUST check for address of the extension under the following ERC725Y Data Key, and call the extension.
+- MUST check for address of the extension under the following ERC725Y Data Key, and call the extension and behave according to [LSP17-ContractExtension] specification.
 
 ```json
 {
@@ -110,10 +110,30 @@ This function is part of the [LSP14] specification.
 #### transferOwnership
 
 ```solidity
-function transferOwnership(address newPendingOwner) external;
+function transferOwnership(address newPendingOwner) external payable;
 ```
 
 This function is part of the [LSP14] specification, with additional requirements as follows:
+
+- MUST allow the owner to call the function. 
+
+- If the caller is not the owner, the function MUST call the [`lsp20VerifyCall(..)`](./LSP-20-CallVerification.md#lsp20verifycall) function on the [owner](#owner) as per the [LSP20-ReverseVerification] specification.
+
+  The function MUST be called **before the execution of the transferOwnership logic**, passing the caller, value sent to the function, and the data sent (function selector + arguments + extra calldata) as parameters. 
+
+  The function should only continue executing if the `lsp20VerifyCall(..)` function returns bytes4 where the first bytes3 match the first bytes3 of the `lsp20VerifyCall(..)` selector, otherwise MUST revert.
+
+- If the `lsp20VerifyCall(..)` function is called and returns bytes4 where the first bytes3 match the first bytes3 of the lsp20VerifyCall selector, and the last byte is strictly `0x01`, the function MUST call the [`lsp20VerifyCallResult(..)`](./LSP-20-CallVerification.md#lsp20verifycallresult) function on the [owner](#owner) as per the [LSP20-ReverseVerification] specification.
+
+  The function MUST be called **after the execution of the transferOwnership logic**, passing the hash of the caller, value sent, and data sent concatenated, and the result of the `transferOwnership(..)` function represented by empty bytes as a second parameter. 
+
+  The call will pass if the bytes4 returned by the `lsp20VerifyCallResult(..)` function equals the `lsp20VerifyCallResult(..)` function selector, otherwise MUST revert.
+  
+  
+- MUST be payable.
+
+- MUST emit a [`ValueReceived`] event if value was sent along the function call.
+
 
 - MUST override the LSP14 Type ID triggered by using `transferOwnership(..)` to the one below:
 
@@ -136,10 +156,28 @@ This function is part of the [LSP14] specification, with additional requirements
 #### renounceOwnership
 
 ```solidity
-function renounceOwnership() external;
+function renounceOwnership() external payable;
 ```
 
-This function is part of the [LSP14] specification.
+This function is part of the [LSP14] specification with additional requirements:
+
+- MUST allow the owner to call the function. 
+
+- If the caller is not the owner, the function MUST call the [`lsp20VerifyCall(..)`](./LSP-20-CallVerification.md#lsp20verifycall) function on the [owner](#owner) as per the [LSP20-ReverseVerification] specification.
+
+  The function MUST be called **before the execution of the renounceOwnership logic**, passing the caller, value sent to the function, and the data sent (function selector + arguments + extra calldata) as parameters. 
+
+  The function should only continue executing if the `lsp20VerifyCall(..)` function returns bytes4 where the first bytes3 match the first bytes3 of the `lsp20VerifyCall(..)` selector, otherwise MUST revert.
+
+- If the `lsp20VerifyCall(..)` function is called and returns bytes4 where the first bytes3 match the first bytes3 of the lsp20VerifyCall selector, and the last byte is strictly `0x01`, the function MUST call the [`lsp20VerifyCallResult(..)`](./LSP-20-CallVerification.md#lsp20verifycallresult) function on the [owner](#owner) as per the [LSP20-ReverseVerification] specification.
+
+  The function MUST be called **after the execution of the renounceOwnership logic**, passing the hash of the caller, value sent, and data sent concatenated, and the result of the `renounceOwnership(..)` function represented by empty bytes as a second parameter. 
+
+  The call will pass if the bytes4 returned by the `lsp20VerifyCallResult(..)` function equals the `lsp20VerifyCallResult(..)` function selector, otherwise MUST revert.
+  
+- MUST be payable.
+
+- MUST emit a [`ValueReceived`] event if value was sent along the function call.
 
 
 
@@ -179,6 +217,20 @@ function execute(uint256 operationType, address target, uint256 value, bytes mem
 ```
 This function is part of the [ERC725X] specification, with additional requirements as follows:
 
+- MUST allow the owner to call the function. 
+
+- If the caller is not the owner, the function MUST call the [`lsp20VerifyCall(..)`](./LSP-20-CallVerification.md#lsp20verifycall) function on the [owner](#owner) as per the [LSP20-ReverseVerification] specification.
+
+  The function MUST be called **before the execution of the execute logic**, passing the caller, value sent to the function, and the data sent (function selector + arguments + extra calldata) as parameters.
+
+  The function should only continue executing if the `lsp20VerifyCall(..)` function returns bytes4 where the first bytes3 match the first bytes3 of the `lsp20VerifyCall(..)` selector, otherwise MUST revert.
+
+- If the `lsp20VerifyCall(..)` function is called and returns bytes4 where the first bytes3 match the first bytes3 of the lsp20VerifyCall selector, and the last byte is strictly `0x01`, the function MUST call the [`lsp20VerifyCallResult(..)`](./LSP-20-CallVerification.md#lsp20verifycallresult)  function on the [owner](#owner) as per the [LSP20-ReverseVerification] specification.
+
+  The function MUST be called **after the execution of the execute logic**, passing the hash of the caller, value sent, and data sent concatenated, and the result of the `execute(..)` function represented by the result of the call or the address of the contract created as a second parameter. 
+
+  The call will pass if the bytes4 returned by the `lsp20VerifyCallResult(..)` function equals the `lsp20VerifyCallResult(..)` function selector, otherwise MUST revert.
+  
 - MUST emit a [`ValueReceived`] event before external calls or contract creation if the function receives native tokens.
 
 
@@ -188,6 +240,20 @@ This function is part of the [ERC725X] specification, with additional requiremen
 function execute(uint256[] memory operationsType, address[] memory targets, uint256[] memory values, bytes[] memory datas) external payable returns (bytes[] memory);
 ```
 This function is part of the [ERC725X] specification, with additional requirements as follows:
+
+- MUST allow the owner to call the function. 
+
+- If the caller is not the owner, the function MUST call the [`lsp20VerifyCall(..)`](./LSP-20-CallVerification.md#lsp20verifycall) function on the [owner](#owner) as per the [LSP20-ReverseVerification] specification.
+
+  The function MUST be called **before the execution of the execute logic**, passing the caller, value sent to the function, and the data sent (function selector + arguments + extra calldata) as parameters. 
+
+  The function should only continue executing if the `lsp20VerifyCall(..)` function returns bytes4 where the first bytes3 match the first bytes3 of the `lsp20VerifyCall(..)` selector, otherwise MUST revert.
+
+- If the `lsp20VerifyCall(..)` function is called and returns bytes4 where the first bytes3 match the first bytes3 of the lsp20VerifyCall selector, and the last byte is strictly `0x01`, the function MUST call the [`lsp20VerifyCallResult(..)`](./LSP-20-CallVerification.md#lsp20verifycallresult) function on the [owner](#owner) as per the [LSP20-ReverseVerification] specification.
+
+  The function MUST be called **after the execution of the execute logic**, passing the hash of the caller, value sent, and data sent concatenated, and the result of the `execute(..)` function represented by the bytes encoding of the array of call results or the addresses of the contracts created as a second parameter.  
+
+  The call will pass if the bytes4 returned by the `lsp20VerifyCallResult(..)` function equals the `lsp20VerifyCallResult(..)` function selector, otherwise MUST revert.
 
 - MUST emit a [`ValueReceived`] event before external calls or contract creation if the function receives native tokens.
 
@@ -213,9 +279,27 @@ This function is part of the [ERC725Y] specification.
 #### setData
 
 ```solidity
-function setData(bytes32 dataKey, bytes memory dataValue) external;
+function setData(bytes32 dataKey, bytes memory dataValue) external payable;
 ```
 This function is part of the [ERC725Y] specification, with additional requirements as follows:
+
+- MUST allow the owner to call the function. 
+
+- If the caller is not the owner, the function MUST call the [`lsp20VerifyCall(..)`](./LSP-20-CallVerification.md#lsp20verifycall) function on the [owner](#owner) as per the [LSP20-ReverseVerification](./LSP-20-CallVerification.md#lsp20verifycallresult) specification. 
+
+  The function MUST be called **before the execution of the setData logic**, passing the caller, value sent to the function, and the data sent (function selector + arguments + extra calldata) as parameters. 
+
+  The function should only continue executing if the `lsp20VerifyCall(..)` function returns bytes4 where the first bytes3 match the first bytes3 of the `lsp20VerifyCall(..)` selector, otherwise MUST revert.
+
+- If the `lsp20VerifyCall(..)` function is called and returns bytes4 where the first bytes3 match the first bytes3 of the lsp20VerifyCall selector, and the last byte is strictly `0x01`, the function MUST call the [`lsp20VerifyCallResult(..)`](./LSP-20-CallVerification.md#lsp20verifycallresult) function on the [owner](#owner) as per the [LSP20-ReverseVerification] specification.
+
+  The function MUST be called **after the execution of the setData logic**, passing the hash of the caller, value sent, and data sent concatenated, and the result of the `execute(..)` function represented by empty bytes as a second parameter.  
+
+  The call will pass if the bytes4 returned by the `lsp20VerifyCallResult(..)` function equals the `lsp20VerifyCallResult(..)` function selector, otherwise MUST revert.
+  
+- MUST be payable.
+
+- MUST emit a [`ValueReceived`] event if value was sent along the function call.
 
 - MUST emit only the first 256 bytes of the dataValue parameter in the [DataChanged] event.
 
@@ -223,10 +307,28 @@ This function is part of the [ERC725Y] specification, with additional requiremen
 #### setData (Array)
 
 ```solidity
-function setData(bytes32[] memory dataKeys, bytes[] memory dataValues) external;
+function setData(bytes32[] memory dataKeys, bytes[] memory dataValues) external payable;
 ```
 
 This function is part of the [ERC725Y] specification, with additional requirements as follows:
+
+- MUST allow the owner to call the function. 
+
+- If the caller is not the owner, the function MUST call the [`lsp20VerifyCall(..)`](./LSP-20-CallVerification.md#lsp20verifycall) function on the [owner](#owner) as per the [LSP20-ReverseVerification] specification.
+
+  The function MUST be called **before the execution of the setData logic**, passing the caller, value sent to the function, and the data sent (function selector + arguments + extra calldata) as parameters. 
+
+  The function should only continue executing if the `lsp20VerifyCall(..)` function returns bytes4 where the first bytes3 match the first bytes3 of the `lsp20VerifyCall(..)` selector, otherwise MUST revert.
+
+- If the `lsp20VerifyCall(..)` function is called and returns bytes4 where the first bytes3 match the first bytes3 of the lsp20VerifyCall selector, and the last byte is strictly `0x01`, the function MUST call the [`lsp20VerifyCallResult(..)`](./LSP-20-CallVerification.md#lsp20verifycallresult) function on the [owner](#owner) as per the [LSP20-ReverseVerification] specification.
+
+  The function MUST be called **after the execution of the setData logic**, passing the hash of the caller, value sent, and data sent concatenated, and the result of the `execute(..)` function represented by empty bytes as a second parameter.  
+
+  The call will pass if the bytes4 returned by the `lsp20VerifyCallResult(..)` function equals the `lsp20VerifyCallResult(..)` function selector, otherwise MUST revert.
+  
+- MUST be payable.
+
+- MUST emit a [`ValueReceived`] event if value was sent along the function call.
 
 - MUST emit only the first 256 bytes of the dataValue parameter in the [DataChanged] event.
 
@@ -459,6 +561,7 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 [lukso-network/lsp-smart-contracts]: <https://github.com/lukso-network/lsp-smart-contracts/blob/develop/contracts/LSP0ERC725Account/LSP0ERC725AccountCore.sol>
 [LSP17]: <./LSP-17-ContractExtension.md>
 [LSP17-ContractExtension]: <./LSP-17-ContractExtension.md>
+[LSP20-ReverseVerification]: <./LSP-20-CallVerification.md>
 [UniversalReceiver]: <./LSP-1-UniversalReceiver.md#events>
 [`universalReceiver(bytes32,bytes)`]: <./LSP-1-UniversalReceiver.md#universalreceiver>
 [LSP1UniversalReceiver interface id]: <./LSP-1-UniversalReceiver.md#specification>
