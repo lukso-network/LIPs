@@ -18,7 +18,7 @@ This standard describes an interface to restrict transferability.
 
 ## Abstract
 
-This standard defines an interface for smart contracts, mainly assets and vaults, to disable or restrict their transferability to certain Universal Profiles or bind them to another asset address. It has built-in consent for the receiver via [LSP14](./LSP-14-Ownable2Step.md) and can house information about the restriction type, allowed kind of interactions, and current status.
+This standard defines an interface for smart contracts, mainly assets and vaults, to disable or restrict their transferability to certain Universal Profiles or bind them to another asset. It has built-in consent for the receiver via [LSP14](./LSP-14-Ownable2Step.md) and can house information about the restriction type, allowed kind of interactions, and current status.
 
 The inspiration mainly comes from the ideas of 
 - [ERC-5192] locking,
@@ -29,18 +29,19 @@ The inspiration mainly comes from the ideas of
 
 ## Motivation
 
-When regular smart contracts have custom logic around their transferability, frontends have no generic way to determine if the instance has a specific limitation or is locked. The only way to find out would be to catch the `transfer` error after calling it. Applications like marketplaces, recovery services, and social apps need to check transfer-restriction properties beforehand to adjust UI accordingly.
+When regular smart contracts have custom logic around their transferability, frontends have no generic way to determine if the instance has a specific limitation or is locked. The only way to find out would be to catch the `transfer` error after calling it. Applications like marketplaces, recovery services, and social apps need to check transfer-restriction properties beforehand to adjust UI accordingly. In the future, namely on what is outlined
+as decentral society right now, restriction of behaviour will be a main pillar. 
 
-Looking at the eager development of bound token from the last year, one common ground they share is their restriction. However, everyone has their own niecy way of doing so. By coming up with a generic restriction interface, many use-cases and standards could leverage it.  
+Looking at the eager development of bound token over the last year, one common ground they share is indeed their restriction. However, everyone has their own niche way of doing so as every standard has a separate use-case. By coming up with a generic restriction interface, many possibilities and standards could leverage the interaction flow. An important step into this direction is the consent if an asset or vault is locked after transfer- increasing friendliness and broad acceptance.
 
-The generic transfer restriction interface would enable a vast spectrum of use-cases: 
+A generic transfer restriction interface would enable a vast spectrum of use-cases: 
 - temporary or final lock-in
 - soulbound, account-bound, or non-tradable tokens and vaults
-- identity or human-based approvals
-- property-restricted bindings for services like domains
+- identity or human-based approvals if there is connected authentication
+- property-restricted bindings for services like aquired domains
 - assets with added accessories or redeemed appliances
 - reputation, to determine skill-based and nuanced governance or access
-- accurate proof of attendance
+- accurate non-tradable proof of attendance
 - non-financial rewards or recognition
 
 If transferability restriction is set up by a organisation, it further allows for:
