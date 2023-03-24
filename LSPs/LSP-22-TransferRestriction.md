@@ -1,12 +1,12 @@
 ---
 lip: 22
 title: Transfer Restriction
-author: Felix Hildebrandt <@fhildeb> 
+author: Felix Hildebrandt <@fhildeb>
 discussions-to: https://discord.gg/lukso
 status: Draft
 type: LSP
 created: 2022-03-22
-requires: , ERC165, LSP7, LSP8, LSP9, LSP14
+requires: ERC165, LSP14
 ---
 
 > STRUCTURES AND FUNCTION WILL CHANGE AS THIS IDEA IS A COMMON GROUND FOR DEVELOPMENT.
@@ -78,15 +78,15 @@ The type of a contract CAN ONLY be changed if `redeem` is implemented when wanti
 
 ### Mapping
 
-The following mapping MUST be implemented to represent if a Universal Profile or Contract is able to destroy or transfer the asset:
+The following mapping MUST be implemented to represent if a address is able to destroy or transfer the asset:
 
 ```Solidity
-mapping(address => uint) public allowList;
+mapping(address => uint) public restrictionPermission;
 ```
 
 - `0`: Can not perform any action
-- `2`: Can delete
-- `3`: Can delete & transfer
+- `1`: Can delete
+- `2`: Can delete & transfer
 - `3`: Can delete & transfer & set allow actions
 
 ### Mandatory Methods
@@ -96,7 +96,7 @@ Smart contracts implementing the LSP22 standard MUST implement the following fun
 #### getRestrictionInfo
 
 ```solidity
-getRestrictionInfo() external view returns (bool, restrictionType);
+getRestrictionInfo() external view returns (bool isLocked, RestrictionType restrictionType);
 ```
 
 Check if the asset is currently locked and whats the restrictionType.
@@ -121,7 +121,7 @@ delete() external;
 
 Deletes the contract from the address on custom logic. Some examples would be burning the asset or just change ownership to the `zero address`.
 
-- MUST check if allowList of msg.sender is greater or equal `0`
+- MUST check if `restrictionPermission` of msg.sender is greater or equal `0`
 - MUST emit `Deleted` event
 
 #### transfer
@@ -183,16 +183,16 @@ Redeems the transferability of an address forever and locks it in place by setti
 - MUST use additional request like `transferOwnership` but to owner itself
 - MUST emit `Redeemed` event when `acceptOwnership` went through
 
-#### updateAllowList
+#### updateRestrictionPermission
 
 ```solidity
-updateAllowList(address asset, uint value) external;
+updateRestrictionPermission(address asset, uint value) external;
 ```
 
-Updates the values in the allowList 
+Updates the values in the `restrictionPermission` 
 
-- MUST check if allowList of msg.sender is equal to `2`
-- MUST emit event `AllowListUpdated`
+- MUST check if `restrictionPermission` of msg.sender is equal to `2`
+- MUST emit event `RestrictionPermissionUpdated`
 
 ### Events
 
@@ -220,10 +220,10 @@ event Redeemed(address owner, address contract);
 
 MUST be emitted when the contact is redeemed.
 
-#### AllowListUpdated
+#### RestrictionPermissionUpdated
 
 ```solidity
-event AllowListUpdated(address user, uint permission);
+event RestrictionPermissionUpdated(address user, uint permission);
 ```
 
 MUST be emitted when the allow list was updated.
@@ -238,7 +238,7 @@ The interface is designed to be flexible and adaptable to various token and vaul
 
 By providing a two-step process for transferring ownership, the standard ensures that both parties (the current owner and the new owner) consent to the transfer whenever an _initial_ or _following_ lock-in process is involved. The backing prevents accidental or unauthorized transfers. If no locking mechanism occurs on transfer, it can be sent without a two-step process.
 
-The `lock`, `unlock`, `delete`, `redeem`, `updateAllowList` and `getRestrictionInfo` methods offer flexibility in defining transfer restrictions based on different conditions or rules.
+The `lock`, `unlock`, `delete`, `redeem`, `updateRestrictionPermission` and `getRestrictionInfo` methods offer flexibility in defining transfer restrictions based on different conditions or rules.
 
 ## Compatibility
 This standard is designed to be compatible with existing standards based on [LSP7], [LSP8], and [LSP9]. The contracts that are implementing this standard need to ensure proper integration with the base token standard and handle any potential conflicts with existing methods or events.
@@ -251,8 +251,39 @@ A reference implementation will be provided upon further development of the prop
 
 ```solidity
 
-interface ILSP22  /* is ERC165 */ {    
-    // TBD
+interface ILSP22  /* is ERC165 */ {  
+
+    // Enumeration  
+    enum RestrictionType {
+        HardLock,
+        SoftLock,
+        TempLock
+    }
+
+    // Restrictions
+    function restrictionType() external view returns (RestrictionType);
+    function restrictionPermission(address user) external view returns (uint);
+    function getRestrictionInfo() external view returns (bool isLocked, RestrictionType restrictionType);
+    function updateRestrictionPermission(address asset, uint value) external;
+
+    // Actions
+    function locked(bool isLocked) external;
+    function delete() external;
+    function transfer(address from, address to, ...) external;
+    function redeem(address asset) external;
+
+    // LSP14
+    function pendingOwner() external view returns (address);
+    function transferOwnership(address newPendingOwner) external;
+    function acceptOwnership() external;
+    function renounceOwnership() external;
+    
+    
+    // Events
+    event LockingSet(bool locked, address owner);
+    event Deleted(address owner, address contract);
+    event Redeemed(address owner, address contract);
+    event RestrictionPermissionUpdated(address user, uint permission);
 }
 ```
 
