@@ -13,26 +13,27 @@ requires: , ERC165, LSP7, LSP8, LSP9, LSP14
 
 ## Simple Summary
 
-This standard describes a smart contract with restricted transferability.
+This standard describes an interface to restrict transferability.
+
 
 ## Abstract
 
-This standard defines an add-on for smart contracts, mainly assets and vaults, to disable or restrict their transferability to certain Universal Profiles or bind them to another asset. It has built-in consent for the receiver via [LSP14](./LSP-14-Ownable2Step.md) and can house information about the restriction type, allowed kind of interactions, and current status.
+This standard defines an interface for smart contracts, mainly assets and vaults, to disable or restrict their transferability to certain Universal Profiles or bind them to another asset address. It has built-in consent for the receiver via [LSP14](./LSP-14-Ownable2Step.md) and can house information about the restriction type, allowed kind of interactions, and current status.
 
 The inspiration mainly comes from the ideas of 
 - [ERC-5192] locking,
-- [ERC-5484] and [LSP14] consensus,
-- [ERC-5516] multi-ownability,
-- [ERC-4671] revokability,
-- [ERC-5114] asset-binding,
-
-but formed together into a generic standard with utilizing the LSP ecosystem.
+- [ERC-5484] and [LSP14] consensus
+- [ERC-5516] multi-ownability
+- [ERC-4671] revokability
+- [ERC-5114] asset-binding
 
 ## Motivation
 
 When regular smart contracts have custom logic around their transferability, frontends have no generic way to determine if the instance has a specific limitation or is locked. The only way to find out would be to catch the `transfer` error after calling it. Applications like marketplaces, recovery services, and social apps need to check transfer-restriction properties beforehand to adjust UI accordingly.
 
-The generic transfer restriction of smart contracts would enable a vast spectrum of use-cases: 
+Looking at the eager development of bound token from the last year, one common ground they share is their restriction. However, everyone has their own niecy way of doing so. By coming up with a generic restriction interface, many use-cases and standards could leverage it.  
+
+The generic transfer restriction interface would enable a vast spectrum of use-cases: 
 - temporary or final lock-in
 - soulbound, account-bound, or non-tradable tokens and vaults
 - identity or human-based approvals
@@ -42,17 +43,17 @@ The generic transfer restriction of smart contracts would enable a vast spectrum
 - accurate proof of attendance
 - non-financial rewards or recognition
 
-The open interface for governance or recovery, it further allows for:
+If transferability restriction is set up by a organisation, it further allows for:
 - community-restricted claims and management
 - social membership opportunities
 
 ## Specification
 
-**LSP22-TransferRestriction** interface id according to [ERC165]: `is missing`.
+**LSP22-TransferRestriction** interface id according to [ERC165]: `TBD`.
 
-_This `bytes4` interface id is calculated as the XOR of the selector of batchCalls function and the following standards: LSP14Ownable2Step_
+_This `bytes4` interface id is calculated as the XOR of the functions selectors defined below_
 
-Smart contracts implementing the LSP22 standard MUST implement the [ERC165] `supportsInterface(..)` types, mapping and functions and MUST support the ERC165, LSP7, LSP8, LSP9, LSP14 interface ids.
+Smart contracts implementing the LSP22 standard MUST implement the [ERC165] `supportsInterface(..)` types, mapping and functions and MUST support the LSP22 interface id.
 
 ### Enumerable
 
@@ -82,14 +83,14 @@ The following mapping MUST be implemented to represent if a Universal Profile or
 mapping(address => uint) public allowList;
 ```
 
-- `default`: Can not perform any action
-- `0`:    Can delete
-- `1`:    Can delete & transfer
-- `2`:    Can delete & transfer & set allow list
+- `0`: Can not perform any action
+- `2`: Can delete
+- `3`: Can delete & transfer
+- `3`: Can delete & transfer & set allow actions
 
-### Methods
+### Mandatory Methods
 
-Smart contracts implementing the LSP22 standard MUST implement the following functions, if not stated as optional:
+Smart contracts implementing the LSP22 standard MUST implement the following functions:
 
 #### getRestrictionInfo
 
@@ -107,30 +108,9 @@ locked(bool isLocked) external;
 
 Locks or Unlocks the contract to the new address. 
 
-- MUST be called within the `acceptOwnership` function as `true` if `restrictionType` is `HardLock` or `SoftLock`. If locked, `transfer` or `transferOwnership` can not be called.
-MUST only be called once if `restrictionType` is `HardLock`.
-
-#### redeem
-
-```solidity
-redeem(address asset) external;
-```
-
-Optional. Redeems the transferability of an address forever and locks it in place by setting type to `HardLock`. This is used for entities that are bound to another asset, and not an account. Example: binding of accessories or digital goods to elements like avatars. 
-
-- CAN ONLY be executed if sender is owner of both assets
-- MUST use additional request like `transferOwnership` but to owner itself
-- MUST emit `Redeemed` event when `acceptOwnership` went through
-
-#### updateAllowList
-
-```solidity
-updateAllowList(address asset, uint value) external;
-```
-
-Optional. Updates the values in the allowList 
-- MUST check if allowList of msg.sender is equal to `2`
-- MUST emit event `AllowListUpdated`
+- MUST be connected to a arbitrary consent (like [LSP14]) if restrictionType is `HardLock` or `SoftLock`
+- If locked, `transfer` or `transferOwnership` can not be called
+- CAN ONLY be called once if `restrictionType` is `HardLock`
 
 #### delete
 
@@ -187,6 +167,32 @@ function renounceOwnership() external;
 
 This function is part of the [LSP14] specification.
 
+### Optional Methods
+
+Smart contracts implementing the LSP22 standard CAN implement the following functions:
+#### redeem
+
+```solidity
+redeem(address asset) external;
+```
+
+Redeems the transferability of an address forever and locks it in place by setting type to `HardLock`. Used for entities that are bound to another asset, like the binding of accessories or digital goods to avatars
+
+- CAN ONLY be executed if sender is owner of both assets
+- MUST use additional request like `transferOwnership` but to owner itself
+- MUST emit `Redeemed` event when `acceptOwnership` went through
+
+#### updateAllowList
+
+```solidity
+updateAllowList(address asset, uint value) external;
+```
+
+Updates the values in the allowList 
+
+- MUST check if allowList of msg.sender is equal to `2`
+- MUST emit event `AllowListUpdated`
+
 ### Events
 
 #### LockingSet
@@ -221,8 +227,7 @@ event AllowListUpdated(address user, uint permission);
 
 MUST be emitted when the allow list was updated.
 
-
-#### Transfer Events
+#### Transfer
 
 When consent is needed, events MUST be emitted like defined in [LSP14] spec. Otherwise, fall back to regular transfer events. 
 
