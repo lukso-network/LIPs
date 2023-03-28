@@ -6,7 +6,7 @@ discussions-to: https://discord.gg/lukso
 status: Draft
 type: LSP
 created: 2022-03-22
-requires: ERC165, LSP14
+requires: ERC165, LSP1, LSP14
 ---
 
 > STRUCTURES AND FUNCTION WILL CHANGE AS THIS IDEA IS A COMMON GROUND FOR DEVELOPMENT.
@@ -18,7 +18,9 @@ This standard describes an interface to restrict transferability.
 
 ## Abstract
 
-This standard defines an interface for smart contracts, mainly assets and vaults, to disable or restrict their transferability to certain Universal Profiles or bind them to another asset. It has built-in consent for the receiver via [LSP14](./LSP-14-Ownable2Step.md) and can house information about the restriction type, allowed kind of interactions, and current status.
+This standard defines an interface for smart contracts, mainly assets and vaults, to disable or restrict their transferability to certain Universal Profiles or bind them to another asset. It has built-in consent for the receiver via [LSP14] and can house information about the restriction type, allowed kind of interactions, and current status. 
+
+The consens should be interrelated with token hooks of [LSP1] in later stages. So far there is no specific plan for this feature as I seek for feedback on how to integrate such.
 
 The inspiration mainly comes from the ideas of 
 - [ERC-5192] locking,
@@ -297,6 +299,7 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 [ERC-5516]: <https://eips.ethereum.org/EIPS/eip-5516>
 [ERC-4671]: <https://eips.ethereum.org/EIPS/eip-4671>
 [ERC-5114]: <https://eips.ethereum.org/EIPS/eip-5114>
+[LSP1]: <./LSP-1-UniversalReceiver.md>
 [LSP7]: <./LSP-7-DigitalAsset.md>
 [LSP8]: <./LSP-8-IdentifiableDigitalAsset.md>
 [LSP9]: <./LSP-9-Vault.md>
