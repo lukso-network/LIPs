@@ -74,8 +74,10 @@ This MUST NOT be changeable, and set only during initialization of the token.
 
 #### LSP8MetadataURI:TokenId
 
-If the tokenId is a hash (type 3), first bytes4 represent the hash function
-Otherwise the first 4bytes MUST be 0x00000000
+When metadata JSON is created for a tokenId, the URL COULD be stored in the minting contract storage.
+
+If the tokenId is a hash (type 3), the first `bytes4` in the tuple of the `valueType`/`valueContent` represent the hash function.
+Otherwise the first `bytes4` MUST be `0x00000000`.
 
 ```json
 {
@@ -90,6 +92,12 @@ Otherwise the first 4bytes MUST be 0x00000000
 For construction of the Mapping data key see: [LSP2 ERC725Y JSON Schema > `keyType = Mapping`][LSP2#mapping]
 
 #### LSP8MetadataBaseURI
+
+The base URI for the LSP8 tokenIds metadata.<br>
+To access the metadata of a token, we need to create 
+a URL following this pattern: `{LSP8MetadataBaseURI}{tokenId}`
+
+⚠️ TokenIds need to be in lowercase (even for the tokenId type `address`)
 
 - TokenId type `uint256`<br>
 e.g. `http://mybase.uri/1234`
@@ -112,14 +120,27 @@ Otherwise the first 4bytes MUST be 0x00000000
 }
 ```
 
+---
+(TODO: discussion if there are other data keys to include in the standard for the contract which mints tokens)
+---
+
 ### ERC725Y Data Keys - (ERC725Y) contract representing the tokenId
 
 _TO BE DISCUSSED_
 
+The address of the contract which minted this tokenId, to be stored in the ERC725Y of a tokenId metadata contract.
+
 It is a reference back to the LSP8 Collection it comes from.
 
+```
+What should be the name of the data key?
+--> LSP8TokenIdFrom?
+--> LSP8OwnedBy?
+--> LSP8IssuedBy?
+--> LSP8ReferencedFrom?
+```
 
-LSP8TokenIdFrom
+#### LSP8TokenIdFrom
 
 LSP8 -> idsOfaddresses[] (owners) -> LSP7/LSP8 (owners of amounts/ids)
 
