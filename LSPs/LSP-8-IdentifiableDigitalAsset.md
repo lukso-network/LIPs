@@ -32,12 +32,13 @@ A commonality with [LSP7 DigitalAsset][LSP7] is desired so that the two token im
 
 [ERC165] interface id: `0x49399145`
 
-### ERC725Y Data Keys
+
 
 These are the expected data keys for an LSP8 contract that can mints identifiable tokens (NFTs).
 
 This standard can also be combined with the data keys from [LSP4 DigitalAsset-Metadata.][LSP4#erc725ykeys].
 
+### ERC725Y Data Keys - Minting Contract (Collection)
 
 #### LSP8TokenIdType
 
@@ -55,8 +56,9 @@ The `tokenId` type can be one of the following possible enum values.
 |:-----:|:---------:|--------------|
 | `1`   | `address` | each NFT is represented as its **own [ERC725Y] smart contract.** |
 | `2`   | `uint256` | each NFT is represented with a **unique number**. <br> This number is an incrementing count, where each minted token is assigned the next number.  |
-| `3`   | `bytes32` | each NFT is represented using a **32 characters long unique identifier**. <br> This identifier can be for instance a unique serial number or a hash value (digest). |
-| `4`   | `string`  | each NFT is represented using a unique name (as a short utf8 encoded string, no more than 32 characters long) |
+| `3`   | `bytes32` | each NFT is represented using a 32 bytes hash digest. |
+| `4`   | `bytes32` | each NFT is represented using a **32 characters long unique identifier** (e.g: a unique serial number). |
+| `5`   | `string`  | each NFT is represented using a unique name (as a short utf8 encoded string, no more than 32 characters long) |
 
 ```json
 {
@@ -68,74 +70,96 @@ The `tokenId` type can be one of the following possible enum values.
 }
 ```
 
-This SHOULD not be changeable, and set only during initialization of the token.
+This MUST NOT be changeable, and set only during initialization of the token.
 
-#### LSP8MetadataAddress:TokenId
+#### LSP8MetadataURI:TokenId
 
-When a metadata contract is created for a tokenId, the address COULD be stored in the minting contract storage.
+If the tokenId is a hash (type 3), first bytes4 represent the hash function
+Otherwise the first 4bytes MUST be 0x00000000
+
+```json
+{
+    "name": "LSP8MetadataURI:<address|uint256|bytes32>",
+    "key": "0xxxxxxxxxxx0000<address|uint256|bytes32>",
+    "keyType": "Mapping",
+    "valueType": "(bytes4,string)",
+    "valueContent": "(Bytes4,URI)"
+}
+```
 
 For construction of the Mapping data key see: [LSP2 ERC725Y JSON Schema > `keyType = Mapping`][LSP2#mapping]
 
-```json
-{
-    "name": "LSP8MetadataAddress:<address|uint256|bytes32>",
-    "key": "0x73dcc7c3c4096cdc7f8a0000<address|uint256|bytes32>",
-    "keyType": "Mapping",
-    "valueType": "Mixed",
-    "valueContent": "Mixed"
-}
-```
+#### LSP8MetadataBaseURI
 
-#### LSP8MetadataJSON:TokenId
+- TokenId type `uint256`<br>
+e.g. `http://mybase.uri/1234`
+- TokenId type `address`<br>
+e.g. `http://mybase.uri/0x43fb7ab43a3a32f1e2d5326b651bbae713b02429`
+- TokenId type `bytes32`<br>
+e.g. `http://mybase.uri/e5fe3851d597a3aa8bbdf8d8289eb9789ca2c34da7a7c3d0a7c442a87b81d5c2`
 
-When metadata JSON is created for a tokenId, the URL COULD be stored in the minting contract storage.
+If the tokenId is a hash (type 3), first bytes4 represent the hash function
+Otherwise the first 4bytes MUST be 0x00000000
 
-For construction of the Mapping data key see: [LSP2 ERC725Y JSON Schema > `keyType = Mapping`][LSP2#mapping]
-
-For construction of the JSONURL value see: [LSP2 ERC725Y JSON Schema > `valueContent = JSONURL`][LSP2#jsonurl]
 
 ```json
 {
-    "name": "LSP8MetadataJSON:<address|uint256|bytes32>",
-    "key": "0x9a26b4060ae7f7d5e3cd0000<address|uint256|bytes32>",
-    "keyType": "Mapping",
-    "valueType": "bytes",
-    "valueContent": "JSONURL"
-}
-```
-
----
-(TODO: discussion if there are other data keys to include in the standard for the contract which mints tokens)
----
-
-
-#### LSP8TokenIdMetadataMintedBy
-
-The `address` of the contract which minted this tokenId, to be stored in the [ERC725Y][ERC725] of a `tokenId` metadata conract.
-
-```json
-{
-    "name": "LSP8TokenIdMetadata:MintedBy",
-    "key": "0xa0093ef0f6788cc87a372bbd12cf83ae7eeb2c85b87e43517ffd5b3978d356c9",
+    "name": "LSP8MetadataBaseURI",
+    "key": "0x......",
     "keyType": "Singleton",
-    "valueType": "address",
-    "valueContent": "Address"
+    "valueType": "(bytes4,string)",
+    "valueContent": "(Bytes4,URI)"
 }
 ```
 
-#### LSP8TokenIdMetadataTokenId
+### ERC725Y Data Keys - (ERC725Y) contract representing the tokenId
 
-The `bytes32` of the `tokenId` this metadata is for, to be stored in the [ERC725Y][ERC725] of a `tokenId` metadata conract.
+_TO BE DISCUSSED_
+
+It is a reference back to the LSP8 Collection it comes from.
+
+
+LSP8TokenIdFrom
+
+LSP8 -> idsOfaddresses[] (owners) -> LSP7/LSP8 (owners of amounts/ids)
+
+
+#### LSP8OwnedBy (or LSP8IssuedBy) ??
+
+If "LSP8OwnedBy" key is set, it MUST NOT be changeable.
+If set it COULD represent the result of `owner()`.
+
+internally needs todo:
+`owner() { return LSP8(address).tokenOwnerOf(bytes32) }`
 
 ```json
 {
-    "name": "LSP8TokenIdMetadata:TokenId",
-    "key": "0x51ea539c2c3a29af57cb4b60be9d43689bfa633dba8613743d1be7fb038d36c3",
+    "name": "LSP8OwnedBy",
+    "key": "0x....",
     "keyType": "Singleton",
-    "valueType": "bytes32",
-    "valueContent": "Bytes32"
+    "valueType": "(address,bytes32)",
+    "valueContent": "(Address,bytes32)"
 }
 ```
+
+#### LSP8ReferencedFrom ??
+
+If "LSP8ReferencedFrom" key is set, it MUST NOT be changeable.
+If set it COULD represent the result of `owner()`.
+
+internally needs todo:
+`owner() { return LSP8(address).tokenOwnerOf(bytes32) }`
+
+```json
+{
+    "name": "LSP8ReferencedFrom",
+    "key": "0x....",
+    "keyType": "Singleton",
+    "valueType": "(address,bytes32)",
+    "valueContent": "(Address,bytes32)"
+}
+```
+
 
 ---
 (TODO: discussion if there are other TokenIdMetadata data keys to include in the standard)
