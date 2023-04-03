@@ -74,7 +74,7 @@ This MUST NOT be changeable, and set only during initialization of the token.
 
 #### LSP8MetadataURI:<tokenId>
 
-When metadata JSON is created for a tokenId, the URL COULD be stored in the minting contract storage.
+When metadata JSON is created for a tokenId, the URI COULD be stored in the minting contract storage.
 
 If the tokenId is a hash (type 3), the first `bytes4` in the tuple of the `valueType`/`valueContent` represents the hash function.
 Otherwise the first `bytes4` MUST be `0x00000000`.
@@ -89,15 +89,15 @@ Otherwise the first `bytes4` MUST be `0x00000000`.
 }
 ```
 
-For construction of the Mapping data key see: [LSP2 ERC725Y JSON Schema > `keyType = Mapping`][LSP2#mapping]
+> For construction of the Mapping data key see: [LSP2 ERC725Y JSON Schema > `keyType = Mapping`][LSP2#mapping]
 
 #### LSP8MetadataBaseURI
 
-The base URI for the LSP8 tokenIds metadata.<br>
-To access the metadata of a token, we need to create 
-a URL following this pattern: `{LSP8MetadataBaseURI}{tokenId}`
+The base URI for the LSP8 tokenIds metadata.
 
-⚠️ TokenIds need to be in lowercase (even for the tokenId type `address`)
+The URI that points to the metadata of a tokenId MUST be created using the following pattern: `{LSP8MetadataBaseURI}{tokenId}`
+
+⚠️ TokenIds MUST be in lowercase , even for the tokenId type `address`.
 
 - TokenId type `2` (= `uint256`)<br>
 e.g. `http://mybase.uri/1234`
