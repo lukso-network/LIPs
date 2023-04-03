@@ -120,56 +120,15 @@ Otherwise the first 4bytes MUST be 0x00000000
 }
 ```
 
----
-(TODO: discussion if there are other data keys to include in the standard for the contract which mints tokens)
----
-
 ### ERC725Y Data Keys - (ERC725Y) contract representing the tokenId
 
-_TO BE DISCUSSED_
+#### LSP8ReferencedFrom
 
 The address of the contract which minted this tokenId, to be stored in the ERC725Y of a tokenId metadata contract.
 
 It is a reference back to the LSP8 Collection it comes from.
 
-```
-What should be the name of the data key?
---> LSP8TokenIdFrom?
---> LSP8OwnedBy?
---> LSP8IssuedBy?
---> LSP8ReferencedFrom?
-```
-
-#### LSP8TokenIdFrom
-
-LSP8 -> idsOfaddresses[] (owners) -> LSP7/LSP8 (owners of amounts/ids)
-
-
-#### LSP8OwnedBy (or LSP8IssuedBy) ??
-
-If "LSP8OwnedBy" key is set, it MUST NOT be changeable.
-If set it COULD represent the result of `owner()`.
-
-internally needs todo:
-`owner() { return LSP8(address).tokenOwnerOf(bytes32) }`
-
-```json
-{
-    "name": "LSP8OwnedBy",
-    "key": "0x....",
-    "keyType": "Singleton",
-    "valueType": "(address,bytes32)",
-    "valueContent": "(Address,bytes32)"
-}
-```
-
-#### LSP8ReferencedFrom ??
-
-If "LSP8ReferencedFrom" key is set, it MUST NOT be changeable.
-If set it COULD represent the result of `owner()`.
-
-internally needs todo:
-`owner() { return LSP8(address).tokenOwnerOf(bytes32) }`
+If "LSP8ReferencedFrom" data key is set, it MUST NOT be changeable.
 
 ```json
 {
@@ -181,43 +140,11 @@ internally needs todo:
 }
 ```
 
+### LSP8 TokenId Metadata
 
----
-(TODO: discussion if there are other TokenIdMetadata data keys to include in the standard)
----
+A uniquely identifiable digital asset (represented by its tokenId) can be described through a JSON file using the same format and structure as the [`LSP4Metadata`](./LSP-4-DigitalAsset-Metadata.md#lsp4metadata) data key.
 
-### ERC725Y Data keys for off-chain tokenId metadata
-
-#### LSP8TokenIdMetadata
-
-The description of the asset.
-
-```json
-{
-    "name": "LSP4Metadata",
-    "key": "0x9afb95cacc9f95858ec44aa8c3b685511002e30ae54415823f406128b85b238e",
-    "keyType": "Singleton",
-    "valueType": "bytes",
-    "valueContent": "JSONURL"
-}
-```
-
-For construction of the JSONURL value see: [LSP2 ERC725Y JSON Schema > `valueContent = JSONURL`][LSP2#jsonurl]
-
-The linked JSON file SHOULD have the following format:
-
-```json
-{
-    "LSP8TokenIdMetadata": {
-        "mintedBy": "address",
-        "tokenId": "bytes32",
-    }
-}
-```
-
----
-(TODO: discussion if there are other TokenIdMetadata data keys to include in the JSON document standard)
----
+A s`"attributes"`
 
 ### Methods
 
