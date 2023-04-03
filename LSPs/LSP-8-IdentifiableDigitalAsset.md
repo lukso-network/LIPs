@@ -72,17 +72,17 @@ The `tokenId` type can be one of the following possible enum values.
 
 This MUST NOT be changeable, and set only during initialization of the token.
 
-#### LSP8MetadataURI:TokenId
+#### LSP8MetadataURI:<tokenId>
 
 When metadata JSON is created for a tokenId, the URL COULD be stored in the minting contract storage.
 
-If the tokenId is a hash (type 3), the first `bytes4` in the tuple of the `valueType`/`valueContent` represent the hash function.
+If the tokenId is a hash (type 3), the first `bytes4` in the tuple of the `valueType`/`valueContent` represents the hash function.
 Otherwise the first `bytes4` MUST be `0x00000000`.
 
 ```json
 {
-    "name": "LSP8MetadataURI:<address|uint256|bytes32>",
-    "key": "0xxxxxxxxxxx0000<address|uint256|bytes32>",
+    "name": "LSP8MetadataURI:<address|uint256|bytes32|string>",
+    "key": "0x155a8ef8f23d8a9814dd0000<address|uint256|bytes32|string>",
     "keyType": "Mapping",
     "valueType": "(bytes4,string)",
     "valueContent": "(Bytes4,URI)"
@@ -99,21 +99,22 @@ a URL following this pattern: `{LSP8MetadataBaseURI}{tokenId}`
 
 ⚠️ TokenIds need to be in lowercase (even for the tokenId type `address`)
 
-- TokenId type `uint256`<br>
+- TokenId type `2` (= `uint256`)<br>
 e.g. `http://mybase.uri/1234`
-- TokenId type `address`<br>
+- TokenId type `1` (= `address`)<br>
 e.g. `http://mybase.uri/0x43fb7ab43a3a32f1e2d5326b651bbae713b02429`
-- TokenId type `bytes32`<br>
+- TokenId type `3` or `4` (= `bytes32`)<br>
 e.g. `http://mybase.uri/e5fe3851d597a3aa8bbdf8d8289eb9789ca2c34da7a7c3d0a7c442a87b81d5c2`
+- TokenId type `5`
 
-If the tokenId is a hash (type 3), first bytes4 represent the hash function
-Otherwise the first 4bytes MUST be 0x00000000
+If the tokenId type is a hash (type `3`), the first bytes4 represent the hash function.
+Otherwise the first 4 bytes MUST be `0x00000000`
 
 
 ```json
 {
     "name": "LSP8MetadataBaseURI",
-    "key": "0x......",
+    "key": "0x4d338d2ae46727344b271e6736aa3d8083a199ee9abf854873c407bd28244c41",
     "keyType": "Singleton",
     "valueType": "(bytes4,string)",
     "valueContent": "(Bytes4,URI)"
@@ -128,7 +129,7 @@ The address of the contract which minted this tokenId, to be stored in the ERC72
 
 It is a reference back to the LSP8 Collection it comes from.
 
-If "LSP8ReferencedFrom" data key is set, it MUST NOT be changeable.
+If the `LSP8ReferencedFrom` data key is set, it MUST NOT be changeable.
 
 ```json
 {
@@ -142,9 +143,9 @@ If "LSP8ReferencedFrom" data key is set, it MUST NOT be changeable.
 
 ### LSP8 TokenId Metadata
 
-A uniquely identifiable digital asset (represented by its tokenId) can be described through a JSON file using the same format and structure as the [`LSP4Metadata`](./LSP-4-DigitalAsset-Metadata.md#lsp4metadata) data key.
+The JSON format of the [`LSP4Metadata`](./LSP-4-DigitalAsset-Metadata.md#lsp4metadata) data key can be used as a base for the metadata of a uniquely identifiable digital asset.
 
-A s`"attributes"`
+The `"attributes"` fields of the LSP4Metadata JSON can be used to describe the unique properties of the tokenId.
 
 ### Methods
 
