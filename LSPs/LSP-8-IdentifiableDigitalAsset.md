@@ -106,6 +106,7 @@ e.g. `http://mybase.uri/0x43fb7ab43a3a32f1e2d5326b651bbae713b02429`
 - TokenId type `3` or `4` (= `bytes32`)<br>
 e.g. `http://mybase.uri/e5fe3851d597a3aa8bbdf8d8289eb9789ca2c34da7a7c3d0a7c442a87b81d5c2`
 - TokenId type `5`
+e.g. `http://mybase.uri/my_string`
 
 If the tokenId type is a hash (type `3`), the first bytes4 represent the hash function.
 Otherwise the first 4 bytes MUST be `0x00000000`
