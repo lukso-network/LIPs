@@ -39,7 +39,7 @@ Storing the permissions at the core [ERC725Account] itself, allows it to survive
 
 **LSP6-KeyManager** interface id according to [ERC165]: `0xfb437414`.
 
-Smart contracts implementing the LSP6 standard MUST implement the [ERC165] `supportsInterface(..)` function and MUST support the [ERC165], [ERC1271], [LSP20-ReverseVerification] and the LSP6 interface ids.
+Smart contracts implementing the LSP6 standard MUST implement the [ERC165] `supportsInterface(..)` function and MUST support the [ERC165], [ERC1271], [LSP20-CallVerification] and the LSP6 interface ids.
 
 Every contract that supports the LSP6 standard SHOULD implement:
 
@@ -73,13 +73,15 @@ This function is part of the [ERC1271] specification, with additional requiremen
 function lsp20VerifyCall(address caller, uint256 value, bytes memory receivedCalldata) external returns (bytes4 magicValue);
 ```
 
-This function is part of the [LSP20-ReverseVerification] specification, with additional requirements as follows:
+This function is part of the [LSP20-CallVerification] specification, with additional requirements as follows:
 
 - MUST be called only by the linked [target](#target).
 
 - MUST verify the permission of the **`caller`** based on the **`receivedCalldata`** as defined in the [permission](#permissions) section.
 
-- MUST set the reentrancy guard to true and check for reentrancy permission if the call was reentrant.
+- MUST emit the [VerifiedCall](#verifiedcall) event after verifying permissions. 
+
+- MUST set the reentrancy guard to true if the first 4 bytes of `receivedCalldata` are any function other than `setData(..)` and check for reentrancy permission if the call was reentrant.
 
 - MUST return the magic value with the `0x01` bytes that indicates that `lsp20VerifyCallResult(..)` MUST be invoked.
 
@@ -90,11 +92,11 @@ This function is part of the [LSP20-ReverseVerification] specification, with add
 function lsp20VerifyCallResult(bytes32 callHash, bytes memory callResult) external returns (bytes4 magicValue);
 ```
 
-This function is part of the [LSP20-ReverseVerification] specification, with additional requirements as follows:
+This function is part of the [LSP20-CallVerification] specification, with additional requirements as follows:
 
 - MUST be called only by the linked [target](#target).
 
-- MUST set the reentrancy guard to false. 
+- MUST set the reentrancy guard to false if it's set to true. 
 
 - MUST return the magic value.
 
@@ -131,7 +133,7 @@ function execute(bytes memory payload) external payable returns (bytes memory)
 
 Execute a payload on the linked [target](#target) contract.
 
-MUST fire the [Executed event](#executed).
+MUST fire the [VerifiedCall event](#verifiedcall).
 
 _Parameters:_
 
@@ -164,7 +166,7 @@ function execute(uint256[] memory values, bytes memory payloads[]) external paya
 
 Execute a batch of payloads on the linked [target](#target) contract.
 
-MUST fire the [Executed event](#executed) on each iteration.
+MUST fire the [VerifiedCall event](#verifiedcall) on each iteration.
 
 _Parameters:_
 
@@ -189,7 +191,7 @@ function executeRelayCall(bytes memory signature, uint256 nonce, bytes memory pa
 
 Allows anybody to execute a `payload` on the linked [target](#target) contract, given they have a valid signature, specific to the payload passed, from a permissioned controller.
 
-MUST fire the [Executed event](#executed).
+MUST fire the [VerifiedCall event](#verifiedcall).
 
 _Parameters:_
 - `signature`: bytes65 ethereum signature.
@@ -238,7 +240,7 @@ function executeRelayCall(bytes[] memory signatures, uint256[] memory nonces, ui
 
 Allows anybody to execute a batch of `payloads` on the linked [target](#target) contract, given they have valid signatures specific to the payloads signed by permissioned controllers.
 
-MUST fire the [Executed event](#executed) on each iteration.
+MUST fire the [VerifiedCall event](#verifiedcall) on each iteration.
 
 _Parameters:_
 
@@ -260,19 +262,20 @@ _Requirements:_
 
 ### Events
 
-#### Executed
+#### VerifiedCall
 
 ```solidity
-event Executed(bytes4 indexed selector, uint256 indexed value);
+event VerifiedCall(address indexed signer, uint256 indexed value, bytes4 indexed selector);
 ```
 
-MUST be fired when a transaction was successfully executed.
-
-The first parameter `selector` in the `Executed` event corresponds to the `bytes4` selector of the function being executed in the linked [target](#target).
+MUST be fired when the permissions of a call was successfully verified.
 
 ### Permissions
 
-The permissions MUST be checked against the following address, depending on the function/method being called:
+The permissions MUST be checked against the following address, depending on 
+the function/method being called:
+
+- against the **caller** parameter in the cases of [`lsp20VerifyCall(address,uint256,bytes)`](#lsp20verifycall).
 
 - against the **caller** in the cases of [`execute(bytes)`](#execute) and [`execute(uint256[],bytes[])`](#execute-array).
 
@@ -855,4 +858,4 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 [DELEGATECALL]: <https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#execute>
 [CREATE]: <https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#execute>
 [CREATE2]: <https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#execute>
-[LSP20-ReverseVerification]: <./LSP-20-CallVerification.md>
+[LSP20-CallVerification]: <./LSP-20-CallVerification.md>
