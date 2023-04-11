@@ -113,7 +113,7 @@ function supportsInterface(bytes4 interfaceId) external view returns (bool);
 
 This function is part of the [ERC165] specification, with additional requirements as follows:
 
-- If the interfaceId being queried is not supported in the contract or inherited contracts, the data key attached below MUST be retreived from the ERC725Y storage.
+- If the interfaceId being queried is not supported by the contract or inherited contracts, the data key attached below MUST be retrieved from the ERC725Y storage.
 
   - If there is an address stored under the data key, forward the `supportsInterface(bytes4)` call to the address and returns the value.
 
