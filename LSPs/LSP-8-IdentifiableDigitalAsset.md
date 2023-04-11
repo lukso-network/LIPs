@@ -76,24 +76,12 @@ This MUST NOT be changeable, and set only during initialization of the token.
 
 When metadata JSON is created for a tokenId, the URI COULD be stored in the storage of the LSP8 contract.
 
-If the tokenId is a hash (LSP8TokenIdType 3), the first `bytes4` in the tuple of the `valueType`/`valueContent` represents the hash function.
-Otherwise the first `bytes4` MUST be `0x00000000`.
+The value stored under this data key is a tuple `(bytes4,string)` that contains the following elements:
 
-The URI of some NFTs could be alterable, for example in the case of NFTs that need their metadata to change overtime. 
-
-In this case, the first `bytes4` in the tuple of the `valueType`/`valueContent` MUST be set to `0x00000000` (4 x zero bytes), which describes that the URI can be changed over the lifetime of the NFTs.
-
-If the tokenId type is a hash (LSP8TokenIdType `3`), the first `bytes4` in the tuple represents the hash function. 
-
-_Example:_
-
-To represent the hash function `keccak256`:
-
-- `bytes4` value in the tuple to represent the hash function `keccak256` = **`0x6f357c6a`**
-
-This can be obtained as follow:
-
-`keccak256('keccak256(utf8)')` = `0x`**`6f357c6a`**`956bf6b8a917ccf88cc1d3388ff8d646810d0393fe69ae7ee228004f`
+- `bytes4` = the 4 bytes identifier of the hash function used to generate the URI:
+    - if the tokenId is a hash (LSP8TokenIdType `3`): see details below.
+    - if the tokenId is any other LSP8TokenIdType: MUST be `0x00000000`.
+- `string` = the URI where the metadata for the `tokenId` can be retrieved.
 
 ```json
 {
@@ -106,6 +94,24 @@ This can be obtained as follow:
 ```
 
 > For construction of the Mapping data key see: [LSP2 ERC725Y JSON Schema > `keyType = Mapping`][LSP2#mapping]
+
+
+**When `bytes4 = 0x00000000`**
+
+The URI of some NFTs could be alterable, for example in the case of NFTs that need their metadata to change overtime. 
+
+In this case, the first `bytes4` in the tuple MUST be set to `0x00000000` (4 x zero bytes), which describes that the URI can be changed over the lifetime of the NFTs.
+
+**When `bytes4 = some 4 bytes value` (Example)**
+
+To represent the hash function `keccak256`:
+
+- `bytes4` value in the tuple to represent the hash function `keccak256` = **`0x6f357c6a`**
+
+This can be obtained as follow:
+
+`keccak256('keccak256(utf8)')` = `0x`**`6f357c6a`**`956bf6b8a917ccf88cc1d3388ff8d646810d0393fe69ae7ee228004f`
+
 
 #### LSP8TokenMetadataBaseURI
 
