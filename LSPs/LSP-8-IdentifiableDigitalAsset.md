@@ -72,7 +72,7 @@ The `tokenId` type can be one of the following possible enum values.
 
 This MUST NOT be changeable, and set only during initialization of the token.
 
-#### LSP8MetadataURI:<tokenId>
+#### LSP8MetadataTokenURI:<tokenId>
 
 When metadata JSON is created for a tokenId, the URI COULD be stored in the minting contract storage.
 
@@ -81,8 +81,8 @@ Otherwise the first `bytes4` MUST be `0x00000000`.
 
 ```json
 {
-    "name": "LSP8MetadataURI:<address|uint256|bytes32|string>",
-    "key": "0x155a8ef8f23d8a9814dd0000<address|uint256|bytes32|string>",
+    "name": "LSP8MetadataTokenURI:<address|uint256|bytes32|string>",
+    "key": "0x4690256ef7e93288012f0000<address|uint256|bytes32|string>",
     "keyType": "Mapping",
     "valueType": "(bytes4,string)",
     "valueContent": "(Bytes4,URI)"
@@ -91,31 +91,31 @@ Otherwise the first `bytes4` MUST be `0x00000000`.
 
 > For construction of the Mapping data key see: [LSP2 ERC725Y JSON Schema > `keyType = Mapping`][LSP2#mapping]
 
-#### LSP8MetadataBaseURI
+#### LSP8TokenMetadataBaseURI
 
 The base URI for the LSP8 tokenIds metadata.
 
-The URI that points to the metadata of a tokenId MUST be created using the following pattern: `{LSP8MetadataBaseURI}{tokenId}`
+The URI that points to the metadata of a tokenId MUST be created using the following pattern: `{LSP8TokenMetadataBaseURI}{tokenId}`
 
 ⚠️ TokenIds MUST be in lowercase , even for the tokenId type `address`.
 
-- TokenId type `2` (= `uint256`)<br>
+- LSP8TokenIdType `2` (= `uint256`)<br>
 e.g. `http://mybase.uri/1234`
-- TokenId type `1` (= `address`)<br>
+- LSP8TokenIdType `1` (= `address`)<br>
 e.g. `http://mybase.uri/0x43fb7ab43a3a32f1e2d5326b651bbae713b02429`
-- TokenId type `3` or `4` (= `bytes32`)<br>
+- LSP8TokenIdType `3` or `4` (= `bytes32`)<br>
 e.g. `http://mybase.uri/e5fe3851d597a3aa8bbdf8d8289eb9789ca2c34da7a7c3d0a7c442a87b81d5c2`
-- TokenId type `5`
+- LSP8TokenIdType `5`
 e.g. `http://mybase.uri/my_string`
 
-If the tokenId type is a hash (type `3`), the first bytes4 represent the hash function.
+If the tokenId type is a hash (LSP8TokenIdType `3`), the first bytes4 represent the hash function.
 Otherwise the first 4 bytes MUST be `0x00000000`
 
 
 ```json
 {
-    "name": "LSP8MetadataBaseURI",
-    "key": "0x4d338d2ae46727344b271e6736aa3d8083a199ee9abf854873c407bd28244c41",
+    "name": "LSP8TokenMetadataBaseURI",
+    "key": "0x1a7628600c3bac7101f53697f48df381ddc36b9015e7d7c9c5633d1252aa2843",
     "keyType": "Singleton",
     "valueType": "(bytes4,string)",
     "valueContent": "(Bytes4,URI)"
@@ -135,7 +135,7 @@ If the `LSP8ReferencedFrom` data key is set, it MUST NOT be changeable.
 ```json
 {
     "name": "LSP8ReferencedFrom",
-    "key": "0x....",
+    "key": "0x87f2a937bb9848cae1880f2bbde878b2d26b490a9db08fd6d1458364a032769d",
     "keyType": "Singleton",
     "valueType": "(address,bytes32)",
     "valueContent": "(Address,bytes32)"
