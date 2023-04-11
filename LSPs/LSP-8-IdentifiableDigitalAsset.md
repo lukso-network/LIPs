@@ -38,7 +38,7 @@ These are the expected data keys for an LSP8 contract that can mints identifiabl
 
 This standard can also be combined with the data keys from [LSP4 DigitalAsset-Metadata.][LSP4#erc725ykeys].
 
-### ERC725Y Data Keys - Minting Contract (Collection)
+### ERC725Y Data Keys - LSP8 Contract
 
 #### LSP8TokenIdType
 
@@ -57,7 +57,7 @@ The `tokenId` type can be one of the following possible enum values.
 | `1`   | `address` | each NFT is represented as its **own [ERC725Y] smart contract.** |
 | `2`   | `uint256` | each NFT is represented with a **unique number**. <br> This number is an incrementing count, where each minted token is assigned the next number.  |
 | `3`   | `bytes32` | each NFT is represented using a 32 bytes hash digest. |
-| `4`   | `bytes32` | each NFT is represented using a **32 characters long unique identifier** (e.g: a unique serial number). |
+| `4`   | `bytes32` | each NFT is represented using a **32 characters long unique identifier** (e.g: a unique bytes sequence). |
 | `5`   | `string`  | each NFT is represented using a unique name (as a short utf8 encoded string, no more than 32 characters long) |
 
 ```json
@@ -76,7 +76,7 @@ This MUST NOT be changeable, and set only during initialization of the token.
 
 When metadata JSON is created for a tokenId, the URI COULD be stored in the minting contract storage.
 
-If the tokenId is a hash (type 3), the first `bytes4` in the tuple of the `valueType`/`valueContent` represents the hash function.
+If the tokenId is a hash (LSP8TokenIdType 3), the first `bytes4` in the tuple of the `valueType`/`valueContent` represents the hash function.
 Otherwise the first `bytes4` MUST be `0x00000000`.
 
 ```json
