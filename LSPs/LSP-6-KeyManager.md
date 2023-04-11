@@ -816,22 +816,22 @@ interface ILSP6  /* is ERC165 */ {
 
     // LSP6
 
-    event Executed(bytes4 indexed selector, uint256 indexed value);
+    event VerifiedCall(address indexed signer, uint256 indexed value, bytes4 indexed selector);
 
 
     function target() external view returns (address);
 
-    function getNonce(address address, uint256 channel) external view returns (uint256);
+    function getNonce(address from, uint128 channelId) external view returns (uint256);
 
 
-    function execute(bytes memory payload) external payable returns (bytes memory);
+    function execute(bytes calldata payload) external payable returns (bytes memory);
 
-    function execute(uint256[] memory values, bytes[] memory payloads) external payable returns (bytes[] memory);
+    function execute(uint256[] calldata values, bytes[] calldata payloads) external payable returns (bytes[] memory);
 
 
-    function executeRelayCall(bytes memory signature, uint256 nonce, bytes memory payload) external payable returns (bytes memory);
+    function executeRelayCall(bytes calldata signature, uint256 nonce, bytes calldata payload) external payable returns (bytes memory);
 
-    function executeRelayCall(bytes[] memory signatures, uint256[] memory nonces, uint256[] memory values, bytes[] memory payloads) external payable returns (bytes[] memory);
+    function executeRelayCall(bytes[] calldata signatures, uint256[] calldata nonces, uint256[] calldata values, bytes[] calldata payloads) external payable returns (bytes[] memory);
 
 
 ```

@@ -46,7 +46,14 @@ The supported standard SHOULD be `LSP4DigitalAsset`
 
 #### LSP4TokenName
 
-A string representing the name for the token collection.
+A string representing the name of the token.
+
+The `LSP4TokenName` data key is OPTIONAL. If this data key is present and used, the following requirements apply:
+
+_Requirements_
+
+- the value of the `LSP4TokenName` MUST NOT be changeable and set only on deployment or during initialization of the token.
+
 
 ```json
   {
@@ -62,7 +69,21 @@ This MUST NOT be changeable, and set only during initialization of the token.
 
 #### LSP4TokenSymbol
 
-A string representing the symbol for the token collection. Symbols should be UPPERCASE, without spaces and contain only ASCII.
+A string representing the symbol for the token collection. 
+
+The `LSP4TokenSymbol` data key is OPTIONAL. If this data key is present and used, the following requirements and recommendations apply:
+
+_Requirements_
+
+- the value of the `LSP4TokenSymbol` MUST NOT be changeable and set only on deployment or during initialization of the token.
+
+
+_Recommendations_
+
+- Symbols SHOULD be **UPPERCASE**.
+- Symbols SHOULD NOT contain any white spaces.
+- Symbols SHOULD contain only ASCII characters.
+
 
 ```json
   {
@@ -73,8 +94,6 @@ A string representing the symbol for the token collection. Symbols should be UPP
       "valueContent": "String"
   }
 ```
-
-This MUST NOT be changeable, and set only during initialization of the token.
 
 
 #### LSP4Metadata
@@ -91,13 +110,16 @@ The description of the asset.
 }
 ```
 
-For more informations about how to construct the JSONURL, see: [ERC725Y JSON Schema > `valueContent` > `JSONURL`](./LSP-2-ERC725YJSONSchema.md#JSONURL)
+For more informations on how to construct the JSONURL, see: [ERC725Y JSON Schema > `valueContent` > `JSONURL`](./LSP-2-ERC725YJSONSchema.md#JSONURL)
 
 The linked JSON file SHOULD have the following format:
+
+> **Note:** the `"attributes"` field is OPTIONAL.
 
 ```js
 {
     "LSP4Metadata": {
+        "name": "string", // name of the DigitalAsset if not defined in LSP4TokenName
         "description": "string",
         "links": [ // links related to DigitalAsset
             {
@@ -129,12 +151,22 @@ The linked JSON file SHOULD have the following format:
             ],
             [...]
         ],
-        "assets": [{
-            "hashFunction": 'keccak256(bytes)',
-            "hash": 'string',
-            "url": 'string',
-            "fileType": 'string'
-        }]  
+        "assets": [
+            {
+                "hashFunction": 'keccak256(bytes)',
+                "hash": 'string',
+                "url": 'string',
+                "fileType": 'string'
+            }
+        ],
+        "attributes": [
+            {
+                "key": "string",    // name of the attribute
+                "value": "string", // value assigned to the attribute
+                "type": "string | number | boolean",   // for encoding/decoding purposes
+            },
+        ]
+        ...
     }
 }
 ```
@@ -176,7 +208,24 @@ Example:
             hash: '0x98fe032f81c43426fbcfb21c780c879667a08e2a65e8ae38027d4d61cdfe6f55',
             url: 'ifps://QmPJESHbVkPtSaHntNVY5F6JDLW8v69M2d6khXEYGUMn7N',
             fileType: 'fbx'
-        }]  
+        }],
+        attributes: [
+            {
+                key: 'Standard type',
+                value: 'LSP',
+                type: "string"
+            },
+            {
+                key: 'Standard number',
+                value: 4,
+                type: "number"
+            },
+            {
+                key: '🆙',
+                value: true,
+                type: "boolean"
+            }
+        ]
     }
 }
 ```
