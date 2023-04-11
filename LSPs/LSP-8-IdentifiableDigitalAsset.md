@@ -74,10 +74,26 @@ This MUST NOT be changeable, and set only during initialization of the token.
 
 #### LSP8MetadataTokenURI:<tokenId>
 
-When metadata JSON is created for a tokenId, the URI COULD be stored in the minting contract storage.
+When metadata JSON is created for a tokenId, the URI COULD be stored in the storage of the LSP8 contract.
 
 If the tokenId is a hash (LSP8TokenIdType 3), the first `bytes4` in the tuple of the `valueType`/`valueContent` represents the hash function.
 Otherwise the first `bytes4` MUST be `0x00000000`.
+
+The URI of some NFTs could be alterable, for example in the case of NFTs that need their metadata to change overtime. 
+
+In this case, the first `bytes4` in the tuple of the `valueType`/`valueContent` MUST be set to `0x00000000` (4 x zero bytes), which describes that the URI can be changed over the lifetime of the NFTs.
+
+If the tokenId type is a hash (LSP8TokenIdType `3`), the first `bytes4` in the tuple represents the hash function. 
+
+_Example:_
+
+To represent the hash function `keccak256`:
+
+- `bytes4` value in the tuple to represent the hash function `keccak256` = **`0x6f357c6a`**
+
+This can be obtained as follow:
+
+`keccak256('keccak256(utf8)')` = `0x`**`6f357c6a`**`956bf6b8a917ccf88cc1d3388ff8d646810d0393fe69ae7ee228004f`
 
 ```json
 {
@@ -97,7 +113,7 @@ The base URI for the LSP8 tokenIds metadata.
 
 The URI that points to the metadata of a tokenId MUST be created using the following pattern: `{LSP8TokenMetadataBaseURI}{tokenId}`
 
-⚠️ TokenIds MUST be in lowercase , even for the tokenId type `address`.
+⚠️ TokenIds MUST be in lowercase, even for the tokenId type `address`.
 
 - LSP8TokenIdType `2` (= `uint256`)<br>
 e.g. `http://mybase.uri/1234`
@@ -108,8 +124,21 @@ e.g. `http://mybase.uri/e5fe3851d597a3aa8bbdf8d8289eb9789ca2c34da7a7c3d0a7c442a8
 - LSP8TokenIdType `5`
 e.g. `http://mybase.uri/my_string`
 
-If the tokenId type is a hash (LSP8TokenIdType `3`), the first bytes4 represent the hash function.
-Otherwise the first 4 bytes MUST be `0x00000000`
+Some Base URIs could be alterable, for example in the case of NFTs that need their metadata to change overtime. 
+
+In this case, the first `bytes4` in the tuple (for the `valueType`/`valueContent`) MUST be set to `0x00000000` (4 x zero bytes), which describes that the URI can be changed over the lifetime of the NFTs.
+
+If the tokenId type is a hash (LSP8TokenIdType `3`), the first `bytes4` in the tuple represents the hash function. 
+
+_Example:_
+
+To represent the hash function `keccak256`:
+
+- `bytes4` value in the tuple to represent the hash function `keccak256` = **`0x6f357c6a`**
+
+This can be obtained as follow:
+
+`keccak256('keccak256(utf8)')` = `0x`**`6f357c6a`**`956bf6b8a917ccf88cc1d3388ff8d646810d0393fe69ae7ee228004f`
 
 
 ```json
