@@ -16,19 +16,19 @@ This standard describes a version of an [ERC725](https://github.com/ethereum/EIP
  
 ## Abstract
 
-This standard, defines a blockchain account system to be used by humans, machines, or other smart contracts.
+This standard, defines a blockchain-based account system that can be used by humans, machines, or other smart contracts.
 
 The primary features of this account are:
 
-- **Attaching information**: via [ERC725Y](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md#erc725y), allowing the addition of information even after deployment
+- **Attaching information**: via [ERC725Y](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md#erc725y), allowing the addition of information even after deployment.
 
-- **Executing**: via [ERC725X](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md#erc725x), enabling the account to call functions on other contracts with different operations, transfer native tokens to other addresses, and deploy new contracts
+- **Executing**: via [ERC725X](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md#erc725x), enabling the account to call functions on other contracts with different operations, transfer native tokens to addresses, and deploy new contracts.
 
 - **Verifying signatures**: via [ERC1271](https://eips.ethereum.org/EIPS/eip-1271)
 
-- **Receiving notifications of incoming and outgoing transactions**: via [LSP1-UniversalReceiver](./LSP-1-UniversalReceiver.md), enabling the account to be aware of assets or followers or any other information, and react accordingly (e.g., denying specific tokens)
+- **Receiving notifications of incoming and outgoing transactions**: via [LSP1-UniversalReceiver](./LSP-1-UniversalReceiver.md), enabling the account to be aware of assets or any other information and react accordingly (e.g., denying specific tokens)
 
-- **Owning and controlling the account**: via [LSP14-Ownable2Step](https://github.com/lukso-network/LIPs/blob/main/LSPs/LSP-14-Ownable2Step.md), ensuring secure two-step ownership transfers
+- **Owning and controlling the account**: via [LSP14-Ownable2Step](https://github.com/lukso-network/LIPs/blob/main/LSPs/LSP-14-Ownable2Step.md), ensuring transfer of ownership is secured through a 2-step process.
 
 - **Supporting new functions and interfaceIds**: via [LSP17-ContractExtension](https://github.com/lukso-network/LIPs/blob/main/LSPs/LSP-17-ContractExtension.md), allowing the account to extend and support new standardized functions over time
 
