@@ -335,6 +335,16 @@ If there is a function called on the vault and the function does not exist, the 
 
 Check [LSP17-ContractExtension] and [LSP2-ERC725YJSONSchema] for more information.
 
+### Graffiti 
+
+Graffiti refers to the arbitrary messages or data sent to an **LSP9-Vault** contract that do not match any existing function selectors, such as `execute(..)`, `setData(..)`, etc. These bytes, often carrying a message or additional information, are usually not intended to invoke specific functions within the contract. 
+
+When the vault is called with specific bytes that do not match any function selector, it will first check its storage to see if there are any extensions set for these function selectors (bytes). If no extension is found, the call will typically revert. However, to emulate the behavior of calling an Externally Owned Account (EOA) with random bytes (which always passes), an exception has been made for the `0x00000000` selector.
+
+When the vault is called with data that starts with `0x00000000`, it will first check for extensions. If none are found, the call will still pass, allowing it to match the behavior of calling an EOA and enabling the ability to send arbitrary messages to the vault. For example, one might receive a message like "This is a gift" while sending native tokens. 
+
+Additionally, it is possible to set an extension for the `0x00000000` selector. With this custom extension, you can define specific logic that runs when someone sends graffiti to your vault. For instance, you may choose to disallow sending graffiti by reverting the transaction, impose a fee for sending graffiti, or emit the graffiti on an external contract. This flexibility allows for various use cases and interactions with graffiti in the LSP9Vaults contracts.
+
 ## Rationale
 
 The ERC725Y general data key value store allows for the ability to add any kind of information to the contract, which allows future use cases. The general execution allows full interactability with any smart contract or address. And the universal receiver allows the reaction to any future asset.
