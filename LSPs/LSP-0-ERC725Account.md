@@ -152,7 +152,7 @@ This function is part of the [LSP14] specification.
 #### transferOwnership
 
 ```solidity
-function transferOwnership(address newPendingOwner) external payable;
+function transferOwnership(address newPendingOwner) external;
 ```
 
 This function is part of the [LSP14] specification, with additional requirements as follows:
@@ -192,10 +192,10 @@ This function is part of the [LSP14] specification, with additional requirements
 #### renounceOwnership
 
 ```solidity
-function renounceOwnership() external payable;
+function renounceOwnership() external;
 ```
 
-This function is part of the [LSP14] specification with additional requirements:
+This function is part of the [LSP14] specification with additional requirements as follows:
 
 - MUST allow the owner to call the function. 
 
