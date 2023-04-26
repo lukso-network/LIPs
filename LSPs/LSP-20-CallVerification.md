@@ -40,9 +40,9 @@ Smart contracts implementing the LSP20 standard SHOULD implement both of the fun
 function lsp20VerifyCall(address caller, uint256 value, bytes memory receivedCalldata) external returns (bytes4 magicValue);
 ```
 
-MUST return the first 3 bytes of `lsp20VerifyCall(..)` function selector if the call to the function is allowed, concatenated with a byte that determines if the `lsp20VerifyCallResult(..)` function should be called after the original function call. 
+This function is the pre-verification function.
 
-The byte that invokes the `lsp20VerifyCallResult(..)` function is strictly `0x01`.
+It can be used to run any form of verification mechanism **prior to** running the actual function being called.
 
 _Parameters:_
 
@@ -50,8 +50,15 @@ _Parameters:_
 - `value`:  The value sent by the caller to the function called on the contract delegating the verification mechanism.
 - `receivedCalldata`: The calldata sent by the caller to the contract delegating the verification mechanism.
 
+_Returns:_ 
 
-_Returns:_ `magicValue` , the magic value determining if the verification succeeded or not.
+- `magicValue`: the magic value determining if the verification succeeded or not.
+
+_Requirements_
+
+- the `bytes4` magic value returned MUST be of the following format: 
+  - the first 3 bytes MUST be the `lsp20VerifyCall(..)` function selector = this determines if the call to the function is allowed.
+  - the last 4th byte MUST be either `0x00` or `0x01` = if the 4th byte is `0x01`, this determines if the `lsp20VerifyCallResult(..)` function should be called after the original function call (The byte that invokes the `lsp20VerifyCallResult(..)` function is strictly `0x01`).
 
 
 #### lsp20VerifyCallResult
@@ -60,16 +67,24 @@ _Returns:_ `magicValue` , the magic value determining if the verification succee
 function lsp20VerifyCallResult(bytes32 callHash, bytes memory callResult) external returns (bytes4 magicValue);
 ```
 
-MUST return the `lsp20VerifyCallResult(..)` function selector if the call to the function is allowed.
+This function is the **post-verification** function.
+
+It can be used to run any form of verification mechanism after having run the actual function that was initially called.
 
 _Parameters:_
 
 - `callHash`: The keccak256 of the parameters of `lsp20VerifyCall(..)` parameters packed-encoded (concatened).
-- `callResult`: The result of the function being called on the contract delegating the verification mechanism.
+- `callResult`: the result of the function being called on the contract delegating the verification mechanism.
+  - if the function being called returns some data, the `callResult` MUST be the value returned by the function being called as abi-encoded `bytes`.
+  - if the function being called does not return any data, the `callResult` MUST be an empty abi-encoded `bytes`.
 
-_Returns:_ `magicValue` , the magic value determining if the verification succeeded or not.
+_Returns:_ 
 
+- `magicValue`: the magic value determining if the verification succeeded or not.
 
+_Requirements_
+
+- MUST return the `lsp20VerifyCallResult(..)` function selector if the call to the function is allowed.
 ## Rationale
 
 TBD
