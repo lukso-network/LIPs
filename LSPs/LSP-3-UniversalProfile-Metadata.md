@@ -81,6 +81,12 @@ The linked JSON file SHOULD have the following format:
                 "hash": 'string',
                 "url": 'string',
                 "fileType": 'string'
+            },
+            ...
+            // OR link a DigitalAsset (NFT)
+            {  
+                "address": Address, // the address of an LSP7 or LSP8
+                "tokenId": 32bytes  // (optional) if token contract is an LSP7
             }
         ]
         // below each image type SHOULD have different size of the same image, so that interfaces can choose which one to load for better loading performance
