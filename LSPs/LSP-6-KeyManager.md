@@ -836,7 +836,7 @@ interface ILSP6  /* is ERC165 */ {
 
     function executeRelayCall(bytes[] calldata signatures, uint256[] calldata nonces, uint256[] calldata values, bytes[] calldata payloads) external payable returns (bytes[] memory);
 
-
+}
 ```
 
 ## Copyright
