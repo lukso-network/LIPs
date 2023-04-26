@@ -52,7 +52,10 @@ _Parameters:_
 
 - `data` is a byteArray of arbitrary data. Receiving contracts should take the `typeId` in consideration to properly decode the `data`.
 
-_Returns:_ `bytes`, which can be used to encode response values.
+_Returns:_ `bytes` which can be used to encode response values.
+
+> **Note:** the `universalReceiver(...)` function COULD be allowed to return no data (no return as the equivalent of the opcode instruction `return(memory_pointer, 0)`).
+> If any `bytes` data is returned, bytes not conforming to the default ABI encoding will result in a revert. See the [specification for the abi-encoding of `bytes`](https://docs.soliditylang.org/en/v0.8.19/abi-spec.html#formal-specification-of-the-encoding) for more details.
 
 ### Events
 
