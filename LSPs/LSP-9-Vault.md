@@ -235,7 +235,11 @@ This function is part of the [LSP1] specification, with additional requirements 
 
 - MUST emit a [`ValueReceived`] event before external calls if the function receives native tokens.
 
-- If an `address` is stored under the data key attached below and and this address is a contract that supports the [LSP1UniversalReceiver interface id], forwards the call to the [`universalReceiver(bytes32,bytes)`] function on the address retreived. If there is no address stored under this data key, execution continues normally. 
+- If an `address` is stored under the data key attached below and this address is a contract:
+  - forwards the call to the [`universalReceiver(bytes32,bytes)`] function on the contract at this address **ONLY IF** this contract supports the [LSP1UniversalReceiver interface id].
+  - if the contract at this address does not supports the [LSP1UniversalReceiver interface id], execution continues normally.
+  
+- If there is no `address` stored under this data key, execution continues normally. 
 
 The `msg.data` is appended with the caller address as bytes20 and the `msg.value` received as bytes32 before calling the external contract, allowing the receiving contract to know the initial caller and the value sent.
 
@@ -249,7 +253,11 @@ The `msg.data` is appended with the caller address as bytes20 and the `msg.value
 }
 ```
 
-- If an `address` is stored under the data key attached below and and this address is a contract that supports the [LSP1UniversalReceiver interface id], forwards the call to the [`universalReceiver(bytes32,bytes)`] function on the address retreived. If there is no address stored under this data key, execution continues normally. 
+- If an `address` is stored under the data key attached below and this address is a contract:
+  - forwards the call to the [`universalReceiver(bytes32,bytes)`] function on the contract at this address **ONLY IF** this contract supports the [LSP1UniversalReceiver interface id].
+  - if the contract at this address does not supports the [LSP1UniversalReceiver interface id], execution continues normally.
+  
+- If there is no `address` stored under this data key, execution continues normally. 
 
 The `msg.data` is appended with the caller address as bytes20 and the `msg.value` received as bytes32 before calling the external contract, allowing the receiving contract to know the initial caller and the value sent.
 
