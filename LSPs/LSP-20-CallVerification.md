@@ -58,7 +58,8 @@ _Requirements_
 
 - the `bytes4` magic value returned MUST be of the following format: 
   - the first 3 bytes MUST be the `lsp20VerifyCall(..)` function selector = this determines if the call to the function is allowed.
-  - the last 4th byte MUST be either `0x00` or `0x01` = if the 4th byte is `0x01`, this determines if the `lsp20VerifyCallResult(..)` function should be called after the original function call (The byte that invokes the `lsp20VerifyCallResult(..)` function is strictly `0x01`).
+  - any value for the last 4th byte is accepted.
+  - if the 4th byte is `0x01`, this determines if the `lsp20VerifyCallResult(..)` function should be called after the original function call (The byte that invokes the `lsp20VerifyCallResult(..)` function is strictly `0x01`).
 
 
 #### lsp20VerifyCallResult
