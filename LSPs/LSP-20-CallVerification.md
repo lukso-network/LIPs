@@ -76,7 +76,7 @@ _Parameters:_
 - `callHash`: The keccak256 of the parameters of `lsp20VerifyCall(..)` parameters packed-encoded (concatened).
 - `callResult`: the result of the function being called on the contract delegating the verification mechanism.
   - if the function being called returns some data, the `callResult` MUST be the value returned by the function being called as abi-encoded `bytes`.
-  - if the function being called does not return any data, the `callResult` MUST be an empty abi-encoded `bytes`.
+  - if the function being called does not return any data, the `callResult` MUST be an empty `bytes`.
 
 _Returns:_ 
 
