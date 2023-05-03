@@ -258,7 +258,7 @@ This function is part of the [ERC725X] specification, with additional requiremen
 
 - If the `lsp20VerifyCall(..)` function is called and returns bytes4 where the first bytes3 match the first bytes3 of the lsp20VerifyCall selector, and the last byte is strictly `0x01`, the function MUST call the [`lsp20VerifyCallResult(..)`](./LSP-20-CallVerification.md#lsp20verifycallresult)  function on the [owner](#owner) as per the [LSP20-CallVerification] specification.
 
-  The function MUST be called **after the execution of the execute logic**, passing the hash of the caller, value sent, and data sent concatenated, and the result of the `execute(..)` function represented by the result of the call or the address of the contract created as a second parameter. 
+  The function MUST be called **after the execution of the `execute(...)` function logic completed**, passing the hash of the caller, value and data sent concatenated, and the result of the `execute(..)` function represented by the encoding as `bytes` the result of the call or the address of the contract created as a second parameter. 
 
   The call will pass if the bytes4 returned by the `lsp20VerifyCallResult(..)` function equals the `lsp20VerifyCallResult(..)` function selector, otherwise MUST revert.
   
@@ -282,7 +282,7 @@ This function is part of the [ERC725X] specification, with additional requiremen
 
 - If the `lsp20VerifyCall(..)` function is called and returns bytes4 where the first bytes3 match the first bytes3 of the lsp20VerifyCall selector, and the last byte is strictly `0x01`, the function MUST call the [`lsp20VerifyCallResult(..)`](./LSP-20-CallVerification.md#lsp20verifycallresult) function on the [owner](#owner) as per the [LSP20-CallVerification] specification.
 
-  The function MUST be called **after the execution of the execute logic**, passing the hash of the caller, value sent, and data sent concatenated, and the result of the `execute(..)` function represented by the bytes encoding of the array of call results or the addresses of the contracts created as a second parameter.  
+  The function MUST be called **after the execution of the execute logic**, passing the hash of the caller, value sent, and data sent concatenated, and the result of the `execute(..)` function represented by the bytes encoding as bytes of the array of call results or the addresses of the contracts created as a second parameter.  
 
   The call will pass if the bytes4 returned by the `lsp20VerifyCallResult(..)` function equals the `lsp20VerifyCallResult(..)` function selector, otherwise MUST revert.
 

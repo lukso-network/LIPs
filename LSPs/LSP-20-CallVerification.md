@@ -98,7 +98,17 @@ Both of these scenarios mean that the verification failed when calling the contr
 
 ## Rationale
 
-TBD
+The `lsp20VerifyCall(..)` and `lsp20VerifyCallResult(..)` functions work in tandem to verify certain conditions before and after the execution of a function within the same transaction. To optimize gas costs and improve efficiency, the `callHash` parameter is introduced in the `lsp20VerifyCallResult(..)` function.
+
+`lsp20VerifyCall(..)` takes the `caller`, `value`, and `data` as parameters and is invoked before the execution of the targeted function. Based on the return value of this function, it is determined whether `lsp20VerifyCallResult(..)` will run.
+
+Instead of passing the same parameters (caller, value, data) along with the result of the executed function to `lsp20VerifyCallResult(..)`, the `callHash` parameter is used. The `callHash` is the keccak256 hash of the concatenated `lsp20VerifyCall(..)` parameters. Since both functions are invoked in the same transaction, a user can hash these parameters in `lsp20VerifyCall(..)` and store them under the hash. Later, the stored values can be retrieved using the `callHash` provided in `lsp20VerifyCallResult(..)`.
+
+This approach has been adopted because passing the same parameters again would be expensive in terms of gas costs, and it's not always necessary for the user to access these parameters in `lsp20VerifyCallResult(..)`. If a user needs to use these parameters, they should store them in the contract storage during the `lsp20VerifyCall(..)` invocation.
+
+_Example: Reentrancy Check_
+
+In a case where the parameters are not relevant for `lsp20VerifyCallResult(..)`, such as checking for reentrancy, the first `lsp20VerifyCall(..)` function will be checking for reentrancy and will set the reentrancy flag to `true`. Then, `lsp20VerifyCallResult(..)` can simply set the reentrancy flag back to false without needing access to the original parameters.
 
 ## Implementation
 
@@ -120,4 +130,5 @@ interface ILSP20  /* is ERC165 */ {
 
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
 
+[ERC165]: <https://eips.ethereum.org/EIPS/eip-165>
 [lukso-network/lsp-smart-contracts]: <https://github.com/lukso-network/lsp-smart-contracts/blob/develop/contracts/>
