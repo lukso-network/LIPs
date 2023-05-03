@@ -466,7 +466,21 @@ Check [LSP1-UniversalReceiver] and [LSP2-ERC725YJSONSchema] for more information
 }
 ```
 
-> <bytes32\> is the `typeId` passed to the `universalReceiver(..)` function. Check [LSP2-ERC725YJSONSchema] to learn how to encode the key.
+The `<bytes32\>` in the data key name corresponds to the `typeId` passed to the `universalReceiver(..)` function. 
+
+> **Warning**
+> When constructing this data key for a specific `typeId`, unique elements of the typeId SHOULD NOT be on the right side because of trimming rules.
+> 
+> The `<bytes32>` is trimmed on the right side to keep only the first 20 bytes. Therefore, implementations SHOULD ensure that the first 20 bytes are unique to avoid clashes.
+> For example, the `bytes32 typeId` below:
+> 
+> ```
+> 0x1111222233334444555566667777888899990000aaaabbbbccccddddeeeeffff
+> ```
+> 
+> will be trimmed to `0x1111222233334444555566667777888899990000`.
+> 
+> See the section about the trimming rules for the key type [`Mapping`](./LSP-2-ERC725YJSONSchema.md#mapping) in [LSP2-ERC725YJSONSchema] to learn how to encode this data key.
 
 If the account delegates its universal receiver functionality to another smart contract, this smart contract address MUST be stored under the data key attached above. This call to this contract is performed when the `universalReceiver(bytes32,bytes)` function of the account is called with a specific typeId that it can react on. 
 

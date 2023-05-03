@@ -85,6 +85,16 @@ _Returns:_
 _Requirements_
 
 - MUST return the `lsp20VerifyCallResult(..)` function selector if the call to the function is allowed.
+
+### Handling Verification Result
+
+When calling the functions `lsp20VerifyCall(...)` and `lsp20VerifyCallResult(...)`, the LSP20 standard does not differentiate between:
+
+- if a revert occurred when calling one of these functions.
+- if these functions executed successfully but returned a non-magic value.
+
+Both of these scenarios mean that the verification failed when calling the contract that implements the LSP20 interface.
+
 ## Rationale
 
 TBD
