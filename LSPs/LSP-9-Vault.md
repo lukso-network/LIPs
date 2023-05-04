@@ -24,7 +24,7 @@ This standard defines a vault that can hold assets and interact with other contr
 
 ## Specification
 
-**LSP9-Vault** interface id according to [ERC165]: `0x19331ad1`.
+**LSP9-Vault** interface id according to [ERC165]: `0x28af17e6`.
 
 _This `bytes4` interface id is calculated as the XOR of the selector of batchCalls function and the following standards: ERC725Y, ERC725X, LSP1-UniversalReceiver, LSP14Ownable2Step and LSP17Extendable._
 
@@ -166,10 +166,10 @@ This function is part of the [ERC725X] specification, with additional requiremen
 - MUST emit a [`ValueReceived`] event before external calls or contract creation if the function receives native tokens.
 
 
-#### execute (Array)
+#### executeBatch
 
 ```solidity
-function execute(uint256[] memory operationsType, address[] memory targets, uint256[] memory values, bytes[] memory datas) external payable returns (bytes[] memory);
+function executeBatch(uint256[] memory operationsType, address[] memory targets, uint256[] memory values, bytes[] memory datas) external payable returns (bytes[] memory);
 ```
 This function is part of the [ERC725X] specification, with additional requirements as follows:
 
@@ -187,10 +187,10 @@ function getData(bytes32 dataKey) external view returns (bytes memory);
 This function is part of the [ERC725Y] specification.
 
 
-#### getData
+#### getDataBatch
 
 ```solidity
-function getData(bytes32[] memory dataKeys) external view returns (bytes[] memory);
+function getDataBatch(bytes32[] memory dataKeys) external view returns (bytes[] memory);
 ```
 
 This function is part of the [ERC725Y] specification.
@@ -210,10 +210,10 @@ This function is part of the [ERC725Y] specification, with additional requiremen
 - MUST emit only the first 256 bytes of the dataValue parameter in the [DataChanged] event.
 
 
-#### setData (Array)
+#### setDataBatch
 
 ```solidity
-function setData(bytes32[] memory dataKeys, bytes[] memory dataValues) external;
+function setDataBatch(bytes32[] memory dataKeys, bytes[] memory dataValues) external;
 ```
 
 This function is part of the [ERC725Y] specification, with additional requirements as follows:
@@ -422,7 +422,7 @@ interface ILSP9  /* is ERC165 */ {
     
     function execute(uint256 operationType, address to, uint256 value, bytes memory data) external payable returns (bytes memory); // onlyOwner
     
-    function execute(uint256[] memory operationsType, address[] memory targets, uint256[] memory values, bytes[] memory datas) external payable returns(bytes[] memory); // onlyOwner
+    function executeBatch(uint256[] memory operationsType, address[] memory targets, uint256[] memory values, bytes[] memory datas) external payable returns(bytes[] memory); // onlyOwner
     
     
     // ERC725Y
@@ -434,9 +434,9 @@ interface ILSP9  /* is ERC165 */ {
     
     function setData(bytes32 dataKey, bytes memory dataValue) external; // onlyOwner
     
-    function getData(bytes32[] memory dataKeys) external view returns (bytes[] memory dataValues);
+    function getDataBatch(bytes32[] memory dataKeys) external view returns (bytes[] memory dataValues);
     
-    function setData(bytes32[] memory dataKeys, bytes[] memory dataValues) external; // onlyOwner
+    function setDataBatch(bytes32[] memory dataKeys, bytes[] memory dataValues) external; // onlyOwner
     
     
     // LSP9 (LSP9Vault)

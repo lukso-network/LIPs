@@ -37,7 +37,7 @@ Storing the permissions at the core [ERC725Account] itself, allows it to survive
 
 ## Specification
 
-**LSP6-KeyManager** interface id according to [ERC165]: `0xfb437414`.
+**LSP6-KeyManager** interface id according to [ERC165]: `0x06561226`.
 
 Smart contracts implementing the LSP6 standard MUST implement the [ERC165] `supportsInterface(..)` function and MUST support the [ERC165], [ERC1271], [LSP20-CallVerification] and the LSP6 interface ids.
 
@@ -81,7 +81,7 @@ This function is part of the [LSP20-CallVerification] specification, with additi
 
 - MUST emit the [VerifiedCall](#verifiedcall) event after verifying permissions. 
 
-- MUST set the reentrancy guard to true if the first 4 bytes of `receivedCalldata` are any function other than `setData(..)` and check for reentrancy permission if the call was reentrant.
+- MUST set the reentrancy guard to true if the first 4 bytes of `receivedCalldata` are any function other than `setData(..)`/`setDataBatch(..)` and check for reentrancy permission if the call was reentrant.
 
 - MUST return the magic value with the `0x01` bytes that indicates that `lsp20VerifyCallResult(..)` MUST be invoked.
 
@@ -146,7 +146,7 @@ _Requirements:_
 - The first 4 bytes of the `payload` payload MUST correspond to one of the function selector on the ERC725 smart contract such as:
 
     - [`setData(bytes32,bytes)`](./LSP-0-ERC725Account.md#setdata)
-    - [`setData(bytes32[],bytes[])`](./LSP-0-ERC725Account.md#setdata-array)
+    - [`setDataBatch(bytes32[],bytes[])`](./LSP-0-ERC725Account.md#setdatabatch)
     - [`execute(uint256,address,uint256,bytes)`](./LSP-0-ERC725Account.md#execute)
     - [`transferOwnership(address)`](./LSP-0-ERC725Account.md#transferownership)
     - [`acceptOwnership()`](./LSP-0-ERC725Account.md#acceptownership)
@@ -158,10 +158,10 @@ _Requirements:_
 - The caller MUST have **permission** for the action being executed. Check [Permissions](#permissions) to know more.
 
 
-#### execute (Array)
+#### executeBatch
 
 ```solidity
-function execute(uint256[] memory values, bytes memory payloads[]) external payable returns (bytes[] memory)
+function executeBatch(uint256[] memory values, bytes memory payloads[]) external payable returns (bytes[] memory)
 ```
 
 Execute a batch of payloads on the linked [target](#target) contract.
@@ -231,10 +231,10 @@ For signing, permissioned users should apply the same steps and sign the final h
 > Non payable functions will revert in case of calling them and passing value along the call.
 
 
-#### executeRelayCall (Array)
+#### executeRelayCallBatch
 
 ```solidity
-function executeRelayCall(bytes[] memory signatures, uint256[] memory nonces, uint256[] memory values, bytes[] memory payloads) external payable returns (bytes[] memory)
+function executeRelayCallBatch(bytes[] memory signatures, uint256[] memory nonces, uint256[] memory values, bytes[] memory payloads) external payable returns (bytes[] memory)
 ```
 
 
@@ -277,9 +277,9 @@ the function/method being called:
 
 - against the **caller** parameter in the cases of [`lsp20VerifyCall(address,uint256,bytes)`](#lsp20verifycall).
 
-- against the **caller** in the cases of [`execute(bytes)`](#execute) and [`execute(uint256[],bytes[])`](#execute-array).
+- against the **caller** in the cases of [`execute(bytes)`](#execute) and [`executeBatch(uint256[],bytes[])`](#executebatch).
 
-- against the **signer address**, recovered from the signature and the digest, in the cases of [`executeRelayCall(bytes,uint256,bytes)`](#executerelaycall) and [`executeRelayCall(bytes[],uint256[],uint256[],bytes[])`](#executerelaycall-array).
+- against the **signer address**, recovered from the signature and the digest, in the cases of [`executeRelayCall(bytes,uint256,bytes)`](#executerelaycall) and [`executeRelayCallBatch(bytes[],uint256[],uint256[],bytes[])`](#executerelaycallbatch).
 
 The permissions MUST be stored as [BitArray] under the [`AddressPermissions:Permissions:<address>`](#addresspermissionspermissionsaddress) data key on the target.
 
@@ -349,7 +349,7 @@ BitArray representation: `0x0000000000000000000000000000000000000000000000000000
 
 BitArray representation: `0x0000000000000000000000000000000000000000000000000000000000000080`
 
-- Allows reentering the public [`execute(bytes)`](#execute), [`execute(uint256[],bytes[])`](#execute-array), [`executeRelayCall(bytes,uint256,bytes)`](#executerelaycall) and [`executeRelayCall(bytes[],uint256[],uint256[],bytes[])`](#executerelaycall-array) functions.
+- Allows reentering the public [`execute(bytes)`](#execute), [`executeBatch(uint256[],bytes[])`](#executebatch), [`executeRelayCall(bytes,uint256,bytes)`](#executerelaycall) and [`executeRelayCallBatch(bytes[],uint256[],uint256[],bytes[])`](#executerelaycallbatch) functions.
 
 
 #### `SUPER_TRANSFERVALUE`
@@ -829,12 +829,12 @@ interface ILSP6  /* is ERC165 */ {
 
     function execute(bytes calldata payload) external payable returns (bytes memory);
 
-    function execute(uint256[] calldata values, bytes[] calldata payloads) external payable returns (bytes[] memory);
+    function executeBatch(uint256[] calldata values, bytes[] calldata payloads) external payable returns (bytes[] memory);
 
 
     function executeRelayCall(bytes calldata signature, uint256 nonce, bytes calldata payload) external payable returns (bytes memory);
 
-    function executeRelayCall(bytes[] calldata signatures, uint256[] calldata nonces, uint256[] calldata values, bytes[] calldata payloads) external payable returns (bytes[] memory);
+    function executeRelayCallBatch(bytes[] calldata signatures, uint256[] calldata nonces, uint256[] calldata values, bytes[] calldata payloads) external payable returns (bytes[] memory);
 
 }
 ```

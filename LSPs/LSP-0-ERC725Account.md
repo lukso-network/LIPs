@@ -56,7 +56,7 @@ This allows us to:
 
 ## Specification
 
-**LSP0-ERC725Account** interface id according to [ERC165]: `0x405befe2`.
+**LSP0-ERC725Account** interface id according to [ERC165]: `0x3e89ad98`.
 
 _This `bytes4` interface id is calculated as the XOR of the selector of [`batchCalls`](#batchcalls) function and the following standards: ERC725Y, ERC725X, LSP1-UniversalReceiver, ERC1271-isValidSignature, LSP14Ownable2Step, LSP17Extendable and LSP20CallVerification_.
 
@@ -265,10 +265,10 @@ This function is part of the [ERC725X] specification, with additional requiremen
 - MUST emit a [`ValueReceived`] event before external calls or contract creation if the function receives native tokens.
 
 
-#### execute (Array)
+#### executeBatch
 
 ```solidity
-function execute(uint256[] memory operationsType, address[] memory targets, uint256[] memory values, bytes[] memory datas) external payable returns (bytes[] memory);
+function executeBatch(uint256[] memory operationsType, address[] memory targets, uint256[] memory values, bytes[] memory datas) external payable returns (bytes[] memory);
 ```
 This function is part of the [ERC725X] specification, with additional requirements as follows:
 
@@ -282,7 +282,7 @@ This function is part of the [ERC725X] specification, with additional requiremen
 
 - If the `lsp20VerifyCall(..)` function is called and returns bytes4 where the first bytes3 match the first bytes3 of the lsp20VerifyCall selector, and the last byte is strictly `0x01`, the function MUST call the [`lsp20VerifyCallResult(..)`](./LSP-20-CallVerification.md#lsp20verifycallresult) function on the [owner](#owner) as per the [LSP20-CallVerification] specification.
 
-  The function MUST be called **after the execution of the execute logic**, passing the hash of the caller, value sent, and data sent concatenated, and the result of the `execute(..)` function represented by the bytes encoding as bytes of the array of call results or the addresses of the contracts created as a second parameter.  
+  The function MUST be called **after the execution of the execute logic**, passing the hash of the caller, value sent, and data sent concatenated, and the result of the `executeBatch(..)` function represented by the bytes encoding as bytes of the array of call results or the addresses of the contracts created as a second parameter.  
 
   The call will pass if the bytes4 returned by the `lsp20VerifyCallResult(..)` function equals the `lsp20VerifyCallResult(..)` function selector, otherwise MUST revert.
 
@@ -298,10 +298,10 @@ function getData(bytes32 dataKey) external view returns (bytes memory);
 This function is part of the [ERC725Y] specification.
 
 
-#### getData
+#### getDataBatch
 
 ```solidity
-function getData(bytes32[] memory dataKeys) external view returns (bytes[] memory);
+function getDataBatch(bytes32[] memory dataKeys) external view returns (bytes[] memory);
 ```
 
 This function is part of the [ERC725Y] specification.
@@ -325,7 +325,7 @@ This function is part of the [ERC725Y] specification, with additional requiremen
 
 - If the `lsp20VerifyCall(..)` function is called and returns bytes4 where the first bytes3 match the first bytes3 of the lsp20VerifyCall selector, and the last byte is strictly `0x01`, the function MUST call the [`lsp20VerifyCallResult(..)`](./LSP-20-CallVerification.md#lsp20verifycallresult) function on the [owner](#owner) as per the [LSP20-CallVerification] specification.
 
-  The function MUST be called **after the execution of the setData logic**, passing the hash of the caller, value sent, and data sent concatenated, and the result of the `execute(..)` function represented by empty bytes as a second parameter.  
+  The function MUST be called **after the execution of the setData logic**, passing the hash of the caller, value sent, and data sent concatenated, and the result of the `setData(..)` function represented by empty bytes as a second parameter.  
 
   The call will pass if the bytes4 returned by the `lsp20VerifyCallResult(..)` function equals the `lsp20VerifyCallResult(..)` function selector, otherwise MUST revert.
   
@@ -336,10 +336,10 @@ This function is part of the [ERC725Y] specification, with additional requiremen
 - MUST emit only the first 256 bytes of the dataValue parameter in the [DataChanged] event.
 
 
-#### setData (Array)
+#### setDataBatch
 
 ```solidity
-function setData(bytes32[] memory dataKeys, bytes[] memory dataValues) external payable;
+function setDataBatch(bytes32[] memory dataKeys, bytes[] memory dataValues) external payable;
 ```
 
 This function is part of the [ERC725Y] specification, with additional requirements as follows:
@@ -348,13 +348,13 @@ This function is part of the [ERC725Y] specification, with additional requiremen
 
 - If the caller is not the owner, the function MUST call the [`lsp20VerifyCall(..)`](./LSP-20-CallVerification.md#lsp20verifycall) function on the [owner](#owner) as per the [LSP20-CallVerification] specification.
 
-  The function MUST be called **before the execution of the setData logic**, passing the caller, value sent to the function, and the data sent (function selector + arguments + extra calldata) as parameters. 
+  The function MUST be called **before the execution of the setDataBatch logic**, passing the caller, value sent to the function, and the data sent (function selector + arguments + extra calldata) as parameters. 
 
   The function should only continue executing if the `lsp20VerifyCall(..)` function returns bytes4 where the first bytes3 match the first bytes3 of the `lsp20VerifyCall(..)` selector, otherwise MUST revert.
 
 - If the `lsp20VerifyCall(..)` function is called and returns bytes4 where the first bytes3 match the first bytes3 of the lsp20VerifyCall selector, and the last byte is strictly `0x01`, the function MUST call the [`lsp20VerifyCallResult(..)`](./LSP-20-CallVerification.md#lsp20verifycallresult) function on the [owner](#owner) as per the [LSP20-CallVerification] specification.
 
-  The function MUST be called **after the execution of the setData logic**, passing the hash of the caller, value sent, and data sent concatenated, and the result of the `execute(..)` function represented by empty bytes as a second parameter.  
+  The function MUST be called **after the execution of the setDataBatch logic**, passing the hash of the caller, value sent, and data sent concatenated, and the result of the `setDataBatch(..)` function represented by empty bytes as a second parameter.  
 
   The call will pass if the bytes4 returned by the `lsp20VerifyCallResult(..)` function equals the `lsp20VerifyCallResult(..)` function selector, otherwise MUST revert.
   
@@ -542,7 +542,7 @@ interface ILSP0  /* is ERC165 */ {
     
     function execute(uint256 operationType, address to, uint256 value, bytes memory data) external payable returns (bytes memory); 
     
-    function execute(uint256[] memory operationsType, address[] memory targets, uint256[] memory values, bytes[] memory datas) external payable returns(bytes[] memory); 
+    function executeBatch(uint256[] memory operationsType, address[] memory targets, uint256[] memory values, bytes[] memory datas) external payable returns(bytes[] memory); 
     
     
     // ERC725Y
@@ -554,9 +554,9 @@ interface ILSP0  /* is ERC165 */ {
     
     function setData(bytes32 dataKey, bytes memory dataValue) external payable; 
 
-    function getData(bytes32[] memory dataKeys) external view returns (bytes[] memory dataValues);
+    function getDataBatch(bytes32[] memory dataKeys) external view returns (bytes[] memory dataValues);
 
-    function setData(bytes32[] memory dataKeys, bytes[] memory dataValues) external payable; 
+    function setDataBatch(bytes32[] memory dataKeys, bytes[] memory dataValues) external payable; 
 
         
     // ERC1271
