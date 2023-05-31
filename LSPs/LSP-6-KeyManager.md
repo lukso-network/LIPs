@@ -37,7 +37,7 @@ Storing the permissions at the core [ERC725Account] itself, allows it to survive
 
 ## Specification
 
-**LSP6-KeyManager** interface id according to [ERC165]: `0x06561226`.
+**LSP6-KeyManager** interface id according to [ERC165]: `0x38bb3cdb`.
 
 Smart contracts implementing the LSP6 standard MUST implement the [ERC165] `supportsInterface(..)` function and MUST support the [ERC165], [ERC1271], [LSP20-CallVerification] and the LSP6 interface ids.
 
@@ -186,7 +186,7 @@ _Requirements:_
 #### executeRelayCall
 
 ```solidity
-function executeRelayCall(bytes memory signature, uint256 nonce, bytes memory payload) external payable returns (bytes memory)
+function executeRelayCall(bytes memory signature, uint256 nonce, uint256 validityTimestamps, bytes memory payload) external payable returns (bytes memory)
 ```
 
 Allows anybody to execute a `payload` on the linked [target](#target) contract, given they have a valid signature, specific to the payload passed, from a permissioned controller.
@@ -196,6 +196,7 @@ MUST fire the [VerifiedCall event](#verifiedcall).
 _Parameters:_
 - `signature`: bytes65 ethereum signature.
 - `nonce`: MUST be the nonce of the address that signed the message. This can be obtained via the `getNonce(address address, uint256 channel)` function.
+- `validityTimestamps`:	Two uint128 timestamps concatenated, the first timestamp determines from when the payload can be executed, the second timestamp delimits the end of the validity of the payload. If validityTimestamps is 0, the checks of the timestamps are skipped.
 - `payload`: The abi-encoded function call to be executed on the linked target contract.
 
 
@@ -208,7 +209,7 @@ _Requirements:_
 The digest signed MUST be constructed according to the [version 0 of EIP-191] with the following format:
 
 ```
-0x19 <0x00> <KeyManager address> <LSP6_VERSION> <chainId> <nonce> <value> <payload>
+0x19 <0x00> <KeyManager address> <LSP6_VERSION> <chainId> <nonce> <validityTimestamps> <value> <payload>
 ```
 
     - `0x19`: byte intended to ensure that the `signed_data` is not valid RLP.
@@ -217,6 +218,7 @@ The digest signed MUST be constructed according to the [version 0 of EIP-191] wi
     - `LSP6_VERSION`: Version relative to the LSP6KeyManager defined as a uint256 equal to 6.
     - `chainId`: The chainId of the blockchain where the Key Manager is deployed, as a uint256.
     - `nonce`: The nonce to sign the payload with, as a uint256.
+    - `validityTimestamps`:	Two uint128 timestamps concatenated, the first timestamp determines from when the payload can be executed, the second timestamp delimits the end of the validity of the payload. If validityTimestamps is 0, the checks of the timestamps are skipped.
     - `value`: The amount of native token to transfer to the linked target contract alongside the call.
     - `payload`: The payload to be executed.
 
@@ -234,7 +236,7 @@ For signing, permissioned users should apply the same steps and sign the final h
 #### executeRelayCallBatch
 
 ```solidity
-function executeRelayCallBatch(bytes[] memory signatures, uint256[] memory nonces, uint256[] memory values, bytes[] memory payloads) external payable returns (bytes[] memory)
+function executeRelayCallBatch(bytes[] memory signatures, uint256[] memory nonces, uint256[] memory validityTimestamps, uint256[] memory values, bytes[] memory payloads) external payable returns (bytes[] memory)
 ```
 
 
@@ -247,6 +249,7 @@ _Parameters:_
 - `signatures`: An array of bytes65 ethereum signature.
 - `nonce`: An array of nonces from the address/es that signed the digests. This can be obtained via the `getNonce(address address, uint256 channel)` function.
 - `values`: An array of native token amounts to transfer to the linked [target](#target) contract alongside the call on each iteration.
+- `validityTimestamps`:	An array of uint256 formed of Two uint128 timestamps concatenated, the first timestamp determines from when the payload can be executed, the second timestamp delimits the end of the validity of the payload. If validityTimestamps is 0, the checks of the timestamps are skipped.
 - `payloads`: An array of calldata payloads to be executed on the linked [target](#target) contract on each iteration.
 
 _Returns:_ `bytes[]` , an array of returned as abi-decoded array of `bytes[]` of the linked target contract, if the calls succeeded, otherwise revert with a reason-string.
@@ -832,9 +835,9 @@ interface ILSP6  /* is ERC165 */ {
     function executeBatch(uint256[] calldata values, bytes[] calldata payloads) external payable returns (bytes[] memory);
 
 
-    function executeRelayCall(bytes calldata signature, uint256 nonce, bytes calldata payload) external payable returns (bytes memory);
+    function executeRelayCall(bytes calldata signature, uint256 nonce, uint256 validityTimestamps, bytes calldata payload) external payable returns (bytes memory);
 
-    function executeRelayCallBatch(bytes[] calldata signatures, uint256[] calldata nonces, uint256[] calldata values, bytes[] calldata payloads) external payable returns (bytes[] memory);
+    function executeRelayCallBatch(bytes[] calldata signatures, uint256[] calldata nonces, uint256[] calldata validityTimestamps, uint256[] calldata values, bytes[] calldata payloads) external payable returns (bytes[] memory);
 
 }
 ```
