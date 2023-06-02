@@ -196,7 +196,7 @@ MUST fire the [VerifiedCall event](#verifiedcall).
 _Parameters:_
 - `signature`: bytes65 ethereum signature.
 - `nonce`: MUST be the nonce of the address that signed the message. This can be obtained via the `getNonce(address address, uint256 channel)` function.
-- `validityTimestamps`:	Two uint128 timestamps concatenated, the first timestamp determines from when the payload can be executed, the second timestamp delimits the end of the validity of the payload. If validityTimestamps is 0, the checks of the timestamps are skipped.
+- `validityTimestamps`:	Two `uint128` timestamps concatenated together. The first timestamp determines from when the payload can be executed, the second timestamp determines a deadlines after which the payload is not valid anymore. If validityTimestamps is `0`, the payload is valid at indefinitely at any point in time and the checks for the timestamps are skipped.
 - `payload`: The abi-encoded function call to be executed on the linked target contract.
 
 
@@ -218,7 +218,7 @@ The digest signed MUST be constructed according to the [version 0 of EIP-191] wi
     - `LSP6_VERSION`: Version relative to the LSP6KeyManager defined as a uint256 equal to 6.
     - `chainId`: The chainId of the blockchain where the Key Manager is deployed, as a uint256.
     - `nonce`: The nonce to sign the payload with, as a uint256.
-    - `validityTimestamps`:	Two uint128 timestamps concatenated, the first timestamp determines from when the payload can be executed, the second timestamp delimits the end of the validity of the payload. If validityTimestamps is 0, the checks of the timestamps are skipped.
+    - `validityTimestamps`: Two uint128 timestamps concatenated, the first timestamp determines from when the payload can be executed, the second timestamp delimits the end of the validity of the payload. If validityTimestamps is 0, the checks of the timestamps are skipped.
     - `value`: The amount of native token to transfer to the linked target contract alongside the call.
     - `payload`: The payload to be executed.
 
@@ -249,7 +249,7 @@ _Parameters:_
 - `signatures`: An array of bytes65 ethereum signature.
 - `nonce`: An array of nonces from the address/es that signed the digests. This can be obtained via the `getNonce(address address, uint256 channel)` function.
 - `values`: An array of native token amounts to transfer to the linked [target](#target) contract alongside the call on each iteration.
-- `validityTimestamps`:	An array of uint256 formed of Two uint128 timestamps concatenated, the first timestamp determines from when the payload can be executed, the second timestamp delimits the end of the validity of the payload. If validityTimestamps is 0, the checks of the timestamps are skipped.
+- `validityTimestamps`:	An array of `uint256` formed of Two `uint128` timestamps concatenated, the first timestamp determines from when the payload can be executed, the second timestamp delimits the end of the validity of the payload. If validityTimestamps is `0`, the checks of the timestamps are skipped.
 - `payloads`: An array of calldata payloads to be executed on the linked [target](#target) contract on each iteration.
 
 _Returns:_ `bytes[]` , an array of returned as abi-decoded array of `bytes[]` of the linked target contract, if the calls succeeded, otherwise revert with a reason-string.
