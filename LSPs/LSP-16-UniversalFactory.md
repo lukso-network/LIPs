@@ -495,6 +495,15 @@ The `providedSalt` parameter is not used directly as the salt by the CREATE2 opc
 
 MUST emit the [ContractCreated] event after deploying the contract.
 
+**Parameters:**
+
+- `byteCode`: The bytecode of the contract to deploy                                                                                                  
+- `providedSalt`: The salt provided by the deployer, which will be used to generate the final salt that will be used by the `CREATE2` opcode for contract deployment                                                                                                                              
+
+**Return:**
+
+- `contractCreated`: The address of the contract created.
+
 **Requirements:**
 
 - If value is associated with the contract creation, the constructor of the contract to deploy MUST be payable, otherwise the call will revert.
@@ -516,6 +525,18 @@ The `providedSalt` parameter is not used directly as the salt by the CREATE2 opc
 > `keccak256(abi.encodePacked(true, initializeCalldata, providedSalt))`
 
 MUST emit the [ContractCreated] event after deploying the contract.
+
+**Parameters:**
+
+- `byteCode`: The bytecode of the contract to deploy                                                                                                  
+- `providedSalt`: The salt provided by the deployer, which will be used to generate the final salt that will be used by the `CREATE2` opcode for contract deployment                                     
+- `initializeCalldata`: The calldata to be executed on the created contract
+- `constructorMsgValue`: The value sent to the contract during deploymentcontract                                                                                           
+- `initializeCalldataMsgValue`: The value sent to the contract during initialization                                                                                               
+
+**Return:**
+
+- `contractCreated`: The address of the contract created.
 
 
 **Requirements:**
@@ -544,6 +565,15 @@ The `providedSalt` parameter is not used directly as the salt by the CREATE2 opc
 
 MUST emit the [ContractCreated] event after deploying the contract.
 
+**Parameters:**
+
+- `implementationContract`: The contract to create a clone of according to ERC1167                                                                                                 
+- `providedSalt`: The salt provided by the deployer, which will be used to generate the final salt that will be used by the `CREATE2` opcode for contract deployment 
+
+**Return:**
+
+- `proxy`: The address of the contract created 
+
 **Requirements:**
 
 - MUST NOT use the same `implementationContract` and `providedSalt` twice, otherwise the call will revert.
@@ -564,6 +594,16 @@ The `providedSalt` parameter is not used directly as the salt by the CREATE2 opc
 
 MUST emit the [ContractCreated] event after deploying the contract.
 
+**Parameters:**
+
+- `implementationContract`: The contract to create a clone of according to ERC1167                                                                                                 
+- `providedSalt`: The salt provided by the deployer, which will be used to generate the final salt that will be used by the `CREATE2` opcode for contract deployment 
+- `initializeCalldata`: The calldata to be executed on the created contract                  
+
+**Return:**
+
+- `proxy`: The address of the contract created 
+
 **Requirements:**
 
 - MUST NOT use the same `implementationContract` and `providedSalt` twice, otherwise the call will revert.
@@ -571,6 +611,75 @@ MUST emit the [ContractCreated] event after deploying the contract.
 - If value is associated with the initialization call, the initialize function called on the contract to deploy MUST be payable, otherwise the call will revert.
 
 - MUST NOT use the same `bytecode`, `providedSalt` and `initializeCalldata` twice, otherwise the call will revert.
+
+
+#### computeAddress
+
+```solidity
+function computeAddress(bytes32 bytecodeHash, bytes32 providedSalt, bool initializable, bytes calldata initializeCalldata) public view virtual returns (address)
+```
+
+Computes the address of a contract to be deployed using CREATE2, based on the input parameters. Any change in one of these parameters will result in a different address.
+
+When the `initializable` boolean is set to `false`, `initializeCalldata` will not affect the function output.
+
+**Parameters:**
+
+- `byteCodeHash`: The keccak256 hash of the bytecode to be deployed                                                                                                  
+- `providedSalt`: The salt provided by the deployer, which will be used to generate the final salt that will be used by the `CREATE2` opcode for contract deployment 
+- `initializable`: A boolean that indicates whether an external call should be made to initialize the contract after deployment                                       
+- `initializeCalldata`: The calldata to be executed on the created contract if `initializable` is set to `true`                                                            
+
+**Return:**
+
+- `contractToCreate`: The address where the contract will be deployed. 
+
+### computeERC1167Address
+
+```solidity
+function computeERC1167Address(address implementationContract, bytes32 providedSalt, bool initializable, bytes calldata initializeCalldata) public view virtual returns (address)
+```
+
+Computes the address of a contract to be deployed using CREATE2, based on the input parameters. Any change in one of these parameters will result in a different address.
+
+When the `initializable` boolean is set to `false`, `initializeCalldata` will not affect the function output.
+
+**Parameters:**
+
+- `implementationContract`: The contract to create a clone of according to ERC1167                                                                                                 
+- `providedSalt`: The salt provided by the deployer, which will be used to generate the final salt that will be used by the `CREATE2` opcode for contract deployment 
+- `initializable`: A boolean that indicates whether an external call should be made to initialize the contract after deployment                                       
+- `initializeCalldata`: The calldata to be executed on the created contract if `initializable` is set to `true`                                                            
+
+**Return:**
+
+- proxyToCreate: The address where the contract will be deployed. 
+
+### generateSalt
+
+```solidity
+function generateSalt(bytes32 providedSalt, bool initializable, bytes memory initializeCalldata) public view virtual returns (bytes32)
+```
+
+Generates the salt used to deploy the contract by hashing the following parameters (concatenated together) with keccak256:
+
+- the `providedSalt`
+- the `initializable` boolean
+- the `initializeCalldata`, only if the contract is initializable (the `initializable` boolean is set to `true`)
+
+This approach ensures that in order to reproduce an initializable contract at the same address on another chain, not only the `providedSalt` is required to be the same, but also the initialize parameters within the `initializeCalldata` must also be the same.
+
+This maintains consistent deployment behaviour. Users are required to initialize contracts with the same parameters across different chains to ensure contracts are deployed at the same address across different chains.
+
+**Parameters:**
+                                                                              
+- `providedSalt`: The salt provided by the deployer, which will be used to generate the final salt that will be used by the `CREATE2` opcode for contract deployment 
+- `initializable`: A boolean that indicates whether an external call should be made to initialize the contract after deployment                                       
+- `initializeCalldata`: The calldata to be executed on the created contract if `initializable` is set to `true`        
+
+**Return:**
+
+- `generatedSalt`: The generated salt which will be used for CREATE2 deploymen
 
 
 ### Events
@@ -582,6 +691,14 @@ event ContractCreated(address indexed contractCreated, bytes32 indexed providedS
 ```
 
 MUST be emitted when a contract is created using the UniversalFactory contract.
+
+**Parameters:**
+
+- `contractCreated`: The address of the contract created                                                                                                               
+- `providedSalt`: The salt provided by the deployer which will be used to generate the final salt that will be used by the `CREATE2` opcode for contract deployment 
+- `generatedSalt`: The salt used by the `CREATE2` opcode for contract deployment                                                                                     
+- `initialized`: The Boolean that specifies if the contract must be initialized or not                                                                             
+- `initializeCalldata`: The bytes provided as initializeCalldata (Empty string when `initialized` is set to false)                                                        
 
 ## Rationale
 
