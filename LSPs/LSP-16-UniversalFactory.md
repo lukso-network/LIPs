@@ -487,9 +487,9 @@ function deployCreate2(bytes calldata byteCode, bytes32 providedSalt) public pay
 
 Deploys a contract using the CREATE2 opcode without initialization (external call after deployment).
 
-The address where the contract will be deployed can be known in advance via the {computeAddress} function.
+The address where the contract will be deployed can be known in advance via the [computeAddress](#computeaddress) function.
 
-The `providedSalt` parameter is not used directly as the salt by the CREATE2 opcode. Instead, it is hashed via keccak256 with prepending a false boolean. See {generateSalt} function for more details.
+The `providedSalt` parameter is not used directly as the salt by the CREATE2 opcode. Instead, it is hashed via keccak256 with prepending a false boolean. See [generateSalt](#generatesalt) function for more details.
 
 > `keccak256(abi.encodePacked(false, providedSalt))`
 
@@ -518,9 +518,9 @@ function deployCreate2AndInitialize(bytes calldata byteCode, bytes32 providedSal
 
 Deploys a contract using the CREATE2 opcode with initialization (external call after deployment).
 
-The address where the contract will be deployed can be known in advance via the {computeAddress} function.
+The address where the contract will be deployed can be known in advance via the [computeAddress](#computeaddress) function.
 
-The `providedSalt` parameter is not used directly as the salt by the CREATE2 opcode. Instead, it is hashed via keccak256 with prepending a true boolean and the initializeCalldata parameter . See {generateSalt} function for more details.
+The `providedSalt` parameter is not used directly as the salt by the CREATE2 opcode. Instead, it is hashed via keccak256 with prepending a true boolean and the initializeCalldata parameter . See [generateSalt](#generatesalt) function for more details.
 
 > `keccak256(abi.encodePacked(true, initializeCalldata, providedSalt))`
 
@@ -557,9 +557,9 @@ function deployERC1167Proxy(address implementationContract, bytes32 providedSalt
 
 Deploys an ERC1167 minimal proxy contract using the CREATE2 opcode.
 
-The address where the contract will be deployed can be known in advance via the {computeERC1167Address} function.
+The address where the contract will be deployed can be known in advance via the [computeERC1167Address](#computeerc1167address) function.
 
-The `providedSalt` parameter is not used directly as the salt by the CREATE2 opcode. Instead, it is hashed via keccak256 with prepending a false boolean. See {generateSalt} function for more details.
+The `providedSalt` parameter is not used directly as the salt by the CREATE2 opcode. Instead, it is hashed via keccak256 with prepending a false boolean. See [generateSalt](#generatesalt) function for more details.
 
 > `keccak256(abi.encodePacked(false, providedSalt))`
 
@@ -586,9 +586,9 @@ function deployERC1167Proxy(address implementationContract, bytes32 providedSalt
 
 Deploys an ERC1167 minimal proxy contract using the CREATE2 opcode with initialization (external call after deployment).
 
-The address where the contract will be deployed can be known in advance via the {computeERC1167Address} function.
+The address where the contract will be deployed can be known in advance via the [computeERC1167Address](#computeerc1167address) function.
 
-The `providedSalt` parameter is not used directly as the salt by the CREATE2 opcode. Instead, it is hashed via keccak256 with prepending a true boolean and the initializeCalldata parameter . See {generateSalt} function for more details.
+The `providedSalt` parameter is not used directly as the salt by the CREATE2 opcode. Instead, it is hashed via keccak256 with prepending a true boolean and the initializeCalldata parameter . See [generateSalt](#generatesalt) function for more details.
 
 > `keccak256(abi.encodePacked(true, initializeCalldata, providedSalt))`
 
