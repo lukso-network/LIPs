@@ -541,9 +541,9 @@ MUST emit the [ContractCreated] event after deploying the contract.
 
 **Requirements:**
 
-- If value is associated with the contract creation, the constructor of the contract to deploy MUST be payable, otherwise the call will revert.
+- If some value is transferred during the contract creation, the constructor of the contract to deploy MUST be payable, otherwise the call will revert.
 
-- If value is associated with the initialization call, the initialize function called on the contract to deploy MUST be payable, otherwise the call will revert.
+- If some value is transferred during the initialization call, the initialize function called on the contract to deploy MUST be payable, otherwise the call will revert.
 
 - The sum of `constructorMsgValue` and `initializeCalldataMsgValue` MUST be equal to the value associated with the function call.
 
