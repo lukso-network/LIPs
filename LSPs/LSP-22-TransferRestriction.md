@@ -103,10 +103,10 @@ getRestrictionInfo() external view returns (bool isLocked, RestrictionType restr
 
 Check if the asset is currently locked and whats the restrictionType.
 
-#### locked
+#### lock
 
 ```solidity
-locked(bool isLocked) external;
+lock(bool isLocked) external;
 ```
 
 Locks or Unlocks the contract to the new address. 
@@ -236,7 +236,7 @@ When consent is needed, events MUST be emitted like defined in [LSP14] spec. Oth
 
 ## Rationale
 
-The interface is designed to be flexible and adaptable to various token and vault standards, such as [LSP7], [LSP8], and [LSP9]. It uses [LSP165] to quickly identify the supported interface and [LSP14] to handle consent-based ownership transfers.
+The interface is designed to be flexible and adaptable to various token and vault standards, such as [LSP7], [LSP8], and [LSP9]. It uses [ERC165] to quickly identify the supported interface and [LSP14] to handle consent-based ownership transfers.
 
 By providing a two-step process for transferring ownership, the standard ensures that both parties (the current owner and the new owner) consent to the transfer whenever an _initial_ or _following_ lock-in process is involved. The backing prevents accidental or unauthorized transfers. If no locking mechanism occurs on transfer, it can be sent without a two-step process.
 
@@ -269,7 +269,7 @@ interface ILSP22  /* is ERC165 */ {
     function updateRestrictionPermission(address asset, uint value) external;
 
     // Actions
-    function locked(bool isLocked) external;
+    function lock(bool isLocked) external;
     function delete() external;
     function transfer(address from, address to, ...) external;
     function redeem(address asset) external;
