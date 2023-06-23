@@ -12,46 +12,46 @@ requires: ERC165, ERC725X, ERC725Y, ERC1271, LSP1, LSP2, LSP14, LSP17, LSP20
 
 ## Simple Summary
 
-This standard describes a version of an [ERC725](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) smart contract, that represents a blockchain account.
+This standard describes a version of an [ERC725] smart contract, that represents a blockchain account.
  
 ## Abstract
 
-This standard, defines a blockchain-based account system that can be used by humans, machines, or other smart contracts.
+This standard defines a blockchain-based account system that can be used by humans, machines, or other smart contracts.
 
 The primary features of this account are:
 
-- **Attaching information**: via [ERC725Y](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md#erc725y), allowing the addition of information even after deployment.
+- **Attaching information**: via [ERC725Y], allowing the addition of information even after deployment.
 
-- **Executing**: via [ERC725X](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md#erc725x), enabling the account to call functions on other contracts with different operations, transfer native tokens to addresses, and deploy new contracts.
+- **Executing**: via [ERC725X], enabling the account to call functions on other contracts with different operations, transfer native tokens to addresses, and deploy new contracts.
 
-- **Verifying signatures**: via [ERC1271](https://eips.ethereum.org/EIPS/eip-1271)
+- **Verifying signatures**: via [ERC1271].
 
-- **Receiving notifications of incoming and outgoing transactions**: via [LSP1-UniversalReceiver](./LSP-1-UniversalReceiver.md), enabling the account to be aware of assets or any other information and react accordingly (e.g., denying specific tokens)
+- **Receiving notifications of incoming and outgoing transactions**: via [LSP1-UniversalReceiver], enabling the account to be aware of assets or any other information and react accordingly (e.g., denying specific tokens).
 
-- **Owning and controlling the account**: via [LSP14-Ownable2Step](https://github.com/lukso-network/LIPs/blob/main/LSPs/LSP-14-Ownable2Step.md), ensuring transfer of ownership is secured through a 2-step process.
+- **Owning and controlling the account**: via [LSP14-Ownable2Step], ensuring transfer of ownership is secured through a 2-step process.
 
-- **Supporting new functions and interfaceIds**: via [LSP17-ContractExtension](https://github.com/lukso-network/LIPs/blob/main/LSPs/LSP-17-ContractExtension.md), allowing the account to extend and support new standardized functions over time
+- **Supporting new functions and interfaceIds**: via [LSP17-ContractExtension], allowing the account to extend and support new standardized functions over time.
 
-- **Interacting with the account in a unified way**: via [LSP20-CallVerification](https://github.com/lukso-network/LIPs/blob/main/LSPs/LSP-20-CallVerification.md), enabling direct function calls on the account, with verification occurring on the owner if it is a contract.
+- **Interacting with the account in a unified way**: via [LSP20-CallVerification], enabling direct function calls on the account, with verification occurring on the owner if it is a contract.
 
 ## Motivation
 
-Using EOAs as accounts makes it hard to reason about the actor behind an address. Using EOAs have multiple disadvantages:
-- The public key is the address that mostly holds assets, meaning if the private key leaks or get lost, all asstes are lost
-- No information can be easily attached to the address thats readable by interfaces or smart contracts
-- Security is not changeable, so proper precautions of securing the private key has to be taken from the generation of the EOA.
-- Recevied assets can not be tracked in the state of the account, but can only be retrieved to external block explorers.
+Using EOAs as accounts makes it hard to reason about the actor behind an address. Using EOAs has multiple disadvantages:
+- The public key is the address that mostly holds assets. If this private key leaks or gets lost, all assets are lost.
+- No information can be easily attached to the address thats readable by interfaces or smart contracts.
+- Security is not changeable, so proper precautions of securing the private key have to be taken from the generation of the EOA.
+- Received assets can not be tracked in the state of the account, but can only be retrieved to external block explorers.
 
-To make the usage of Blockchain infrastructures easier we need to use a smart contract account, rather that EOAs directly as account system.
+To make the usage of blockchain infrastructures easier we need to use a smart contract account, rather than EOAs directly as account system.
 This allows us to:
 
-- Make security upgradeable via a key manager smart contract (e.g. [LSP6 KeyManager](./LSP-6-KeyManager.md))
-- Allow any action that an EOA can do, and even add the ability to use `create2` through [ERC725X](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md#erc725x)
-- Allow the account to be informed and react to receiving assets through [LSP1 UniversalReceiver](./LSP-1-UniversalReceiver.md)
-- Define a number of data key-values pairs to attach profile and other information through additional standards like [LSP3 UniversalProfile-Metadata](./LSP-3-UniversalProfile-Metadata.md)
-- Allow signature verification through [ERC1271](https://eips.ethereum.org/EIPS/eip-1271)
-- can execute any smart contract and deploy smart contracts
-- is highly extensible though additional standardisation of the key/value data stored.
+- Make security upgradeable via a key manager smart contract (e.g. [LSP6-KeyManager]).
+- Allow any action that an EOA can do, and even add the ability to use `create2` through [ERC725X].
+- Allow the account to be informed and react to receiving assets through [LSP1-UniversalReceiver].
+- Define a number of data key/value pairs to attach profile and other information through additional standards like [LSP3-UniversalProfile-Metadata].
+- Allow signature verification through [ERC1271].
+- Execute any smart contract and deploy smart contracts.
+- Extend the account through additional standardisation of the key/value data stored.
 
 
 ## Specification
@@ -74,7 +74,7 @@ receive() external payable;
 
 The receive function allows for receiving native tokens.
 
-MUST emit a [`ValueReceived`] event when receiving native token.
+MUST emit a [`ValueReceived`] event when receiving native tokens.
 
 
 #### fallback
@@ -83,12 +83,12 @@ MUST emit a [`ValueReceived`] event when receiving native token.
 fallback() external payable;
 ```
 
-This function is part of the [LSP17] specification, with additional requirements as follows:
+This function is part of the [LSP17-ContractExtension] specification, with additional requirements as follows:
 
 - MUST be payable.
 - MUST emit a [`ValueReceived`] event if value was sent alongside some calldata.
 - MUST return if the data sent to the contract is less than 4 bytes in length.
-- MUST check for address of the extension under the following ERC725Y Data Key, and call the extension and behave according to [LSP17-ContractExtension] specification.
+- MUST check for address of the extension under the following [ERC725Y] Data Key, call the extension and behave according to [LSP17-ContractExtension] specification.
 
 ```json
 {
@@ -113,11 +113,11 @@ function supportsInterface(bytes4 interfaceId) external view returns (bool);
 
 This function is part of the [ERC165] specification, with additional requirements as follows:
 
-- If the interfaceId being queried is not supported by the contract or inherited contracts, the data key attached below MUST be retrieved from the ERC725Y storage.
+- If the interfaceId being queried is not supported by the contract or inherited contracts, the data key attached below MUST be retrieved from the [ERC725Y] storage.
 
-  - If there is an address stored under the data key, forward the `supportsInterface(bytes4)` call to the address and returns the value.
+  - If there is an address stored under the data key, forward the `supportsInterface(bytes4)` call to the address and return the value.
 
-  - If there is no address, execution end normally.
+  - If there is no address, execution ends normally.
 
 
 ```json
@@ -129,7 +129,7 @@ This function is part of the [ERC165] specification, with additional requirement
     "valueContent": "Address"
 }
 ```
-> <bytes4\> is the functionSelector of `supportsInterface(bytes4)` function. Check [LSP2-ERC725YJSONSchema] to learn how to encode the key.
+> <bytes4\> is the `functionSelector` of `supportsInterface(bytes4)` function. Check [LSP2-ERC725YJSONSchema] to learn how to encode the key.
 
 #### owner
 
@@ -137,7 +137,7 @@ This function is part of the [ERC165] specification, with additional requirement
 function owner() external view returns (address);
 ```
 
-This function is part of the [LSP14] specification.
+This function is part of the [LSP14-Ownable2Step] specification.
 
 
 #### pendingOwner
@@ -146,7 +146,7 @@ This function is part of the [LSP14] specification.
 function pendingOwner() external view returns (address);
 ```
 
-This function is part of the [LSP14] specification.
+This function is part of the [LSP14-Ownable2Step] specification.
 
 
 #### transferOwnership
@@ -155,17 +155,17 @@ This function is part of the [LSP14] specification.
 function transferOwnership(address newPendingOwner) external;
 ```
 
-This function is part of the [LSP14] specification, with additional requirements as follows:
+This function is part of the [LSP14-Ownable2Step] specification, with additional requirements as follows:
 
 - MUST allow the owner to call the function. 
 
-- If the caller is not the owner, the function MUST call the [`lsp20VerifyCall(..)`](./LSP-20-CallVerification.md#lsp20verifycall) function on the [owner](#owner) as per the [LSP20-CallVerification] specification.
+- If the caller is not the owner, the function MUST call the [`lsp20VerifyCall(..)`] function on the [owner](#owner) as per the [LSP20-CallVerification] specification.
 
   The function MUST be called **before the execution of the transferOwnership logic**, passing the caller, value sent to the function, and the data sent (function selector + arguments + extra calldata) as parameters.
 
-  The function should only continue executing if the `lsp20VerifyCall(..)` function returns bytes4 where the first bytes3 match the first bytes3 of the `lsp20VerifyCall(..)` selector, otherwise MUST revert.
+  The function SHOULD only continue executing if the `lsp20VerifyCall(..)` function returns bytes4 where the first bytes3 match the first bytes3 of the `lsp20VerifyCall(..)` selector, otherwise MUST revert.
 
-- If the `lsp20VerifyCall(..)` function is called and returns bytes4 where the first bytes3 match the first bytes3 of the lsp20VerifyCall selector, and the last byte is strictly `0x01`, the function MUST call the [`lsp20VerifyCallResult(..)`](./LSP-20-CallVerification.md#lsp20verifycallresult) function on the [owner](#owner) as per the [LSP20-CallVerification] specification.
+- If the `lsp20VerifyCall(..)` function is called and returns bytes4 where the first bytes3 match the first bytes3 of the `lsp20VerifyCall(..)` selector, and the last byte is strictly `0x01`, the function MUST call the [`lsp20VerifyCallResult(..)`] function on the [owner](#owner) as per the [LSP20-CallVerification] specification.
 
   The function MUST be called **after the execution of the transferOwnership logic**, passing the hash of the caller, value sent, and data sent concatenated, and the result of the `transferOwnership(..)` function represented by empty bytes as a second parameter. 
 
@@ -181,7 +181,7 @@ This function is part of the [LSP14] specification, with additional requirements
 function acceptOwnership() external;
 ```
 
-This function is part of the [LSP14] specification, with additional requirements as follows:
+This function is part of the [LSP14-Ownable2Step] specification, with additional requirements as follows:
 
 - MUST override the LSP14 Type IDs triggered by using `accceptOwnership(..)` to the ones below:
 
@@ -195,17 +195,17 @@ This function is part of the [LSP14] specification, with additional requirements
 function renounceOwnership() external;
 ```
 
-This function is part of the [LSP14] specification with additional requirements as follows:
+This function is part of the [LSP14-Ownable2Step] specification with additional requirements as follows:
 
 - MUST allow the owner to call the function. 
 
-- If the caller is not the owner, the function MUST call the [`lsp20VerifyCall(..)`](./LSP-20-CallVerification.md#lsp20verifycall) function on the [owner](#owner) as per the [LSP20-CallVerification] specification.
+- If the caller is not the owner, the function MUST call the [`lsp20VerifyCall(..)`] function on the [owner](#owner) as per the [LSP20-CallVerification] specification.
 
   The function MUST be called **before the execution of the renounceOwnership logic**, passing the caller, value sent to the function, and the data sent (function selector + arguments + extra calldata) as parameters. 
 
-  The function should only continue executing if the `lsp20VerifyCall(..)` function returns bytes4 where the first bytes3 match the first bytes3 of the `lsp20VerifyCall(..)` selector, otherwise MUST revert.
+  The function SHOULD only continue executing if the `lsp20VerifyCall(..)` function returns bytes4 where the first bytes3 match the first bytes3 of the `lsp20VerifyCall(..)` selector, otherwise MUST revert.
 
-- If the `lsp20VerifyCall(..)` function is called and returns bytes4 where the first bytes3 match the first bytes3 of the lsp20VerifyCall selector, and the last byte is strictly `0x01`, the function MUST call the [`lsp20VerifyCallResult(..)`](./LSP-20-CallVerification.md#lsp20verifycallresult) function on the [owner](#owner) as per the [LSP20-CallVerification] specification.
+- If the `lsp20VerifyCall(..)` function is called and returns bytes4 where the first bytes3 match the first bytes3 of the `lsp20VerifyCall(..)` selector, and the last byte is strictly `0x01`, the function MUST call the [`lsp20VerifyCallResult(..)`] function on the [owner](#owner) as per the [LSP20-CallVerification] specification.
 
   The function MUST be called **after the execution of the renounceOwnership logic**, passing the hash of the caller, value sent, and data sent concatenated, and the result of the `renounceOwnership(..)` function represented by empty bytes as a second parameter. 
 
@@ -219,7 +219,7 @@ function batchCalls(bytes[] calldata functionCalls) external returns (bytes[] me
 
 Enables the execution of a batch of encoded function calls on the current contract in a single transaction, provided as an array of bytes. 
 
-MUST use the delegatecall opcode to execute each call in the same context of the current contract.
+MUST use the [DELEGATECALL] opcode to execute each call in the same context of the current contract.
 
 
 _Parameters:_
@@ -250,15 +250,15 @@ This function is part of the [ERC725X] specification, with additional requiremen
 
 - MUST allow the owner to call the function. 
 
-- If the caller is not the owner, the function MUST call the [`lsp20VerifyCall(..)`](./LSP-20-CallVerification.md#lsp20verifycall) function on the [owner](#owner) as per the [LSP20-CallVerification] specification.
+- If the caller is not the owner, the function MUST call the [`lsp20VerifyCall(..)`] function on the [owner](#owner) as per the [LSP20-CallVerification] specification.
 
   The function MUST be called **before the execution of the execute logic**, passing the caller, value sent to the function, and the data sent (function selector + arguments + extra calldata) as parameters.
 
-  The function should only continue executing if the `lsp20VerifyCall(..)` function returns bytes4 where the first bytes3 match the first bytes3 of the `lsp20VerifyCall(..)` selector, otherwise MUST revert.
+  The function SHOULD only continue executing if the `lsp20VerifyCall(..)` function returns bytes4 where the first bytes3 match the first bytes3 of the `lsp20VerifyCall(..)` selector, otherwise MUST revert.
 
-- If the `lsp20VerifyCall(..)` function is called and returns bytes4 where the first bytes3 match the first bytes3 of the lsp20VerifyCall selector, and the last byte is strictly `0x01`, the function MUST call the [`lsp20VerifyCallResult(..)`](./LSP-20-CallVerification.md#lsp20verifycallresult)  function on the [owner](#owner) as per the [LSP20-CallVerification] specification.
+- If the `lsp20VerifyCall(..)` function is called and returns bytes4 where the first bytes3 match the first bytes3 of the `lsp20VerifyCall(..)` selector, and the last byte is strictly `0x01`, the function MUST call the [`lsp20VerifyCallResult(..)`] function on the [owner](#owner) as per the [LSP20-CallVerification] specification.
 
-  The function MUST be called **after the execution of the `execute(...)` function logic completed**, passing the hash of the caller, value and data sent concatenated, and the result of the `execute(..)` function represented by the encoding as `bytes` the result of the call or the address of the contract created as a second parameter. 
+  The function MUST be called **after the execution of the `execute(...)` function logic is completed**, passing the hash of the caller, value and data sent concatenated, and the result of the `execute(..)` function represented by the encoding as `bytes` the result of the call or the address of the contract created as a second parameter. 
 
   The call will pass if the bytes4 returned by the `lsp20VerifyCallResult(..)` function equals the `lsp20VerifyCallResult(..)` function selector, otherwise MUST revert.
   
@@ -274,13 +274,13 @@ This function is part of the [ERC725X] specification, with additional requiremen
 
 - MUST allow the owner to call the function. 
 
-- If the caller is not the owner, the function MUST call the [`lsp20VerifyCall(..)`](./LSP-20-CallVerification.md#lsp20verifycall) function on the [owner](#owner) as per the [LSP20-CallVerification] specification.
+- If the caller is not the owner, the function MUST call the [`lsp20VerifyCall(..)`] function on the [owner](#owner) as per the [LSP20-CallVerification] specification.
 
   The function MUST be called **before the execution of the execute logic**, passing the caller, value sent to the function, and the data sent (function selector + arguments + extra calldata) as parameters. 
 
-  The function should only continue executing if the `lsp20VerifyCall(..)` function returns bytes4 where the first bytes3 match the first bytes3 of the `lsp20VerifyCall(..)` selector, otherwise MUST revert.
+  The function SHOULD only continue executing if the `lsp20VerifyCall(..)` function returns bytes4 where the first bytes3 match the first bytes3 of the `lsp20VerifyCall(..)` selector, otherwise MUST revert.
 
-- If the `lsp20VerifyCall(..)` function is called and returns bytes4 where the first bytes3 match the first bytes3 of the lsp20VerifyCall selector, and the last byte is strictly `0x01`, the function MUST call the [`lsp20VerifyCallResult(..)`](./LSP-20-CallVerification.md#lsp20verifycallresult) function on the [owner](#owner) as per the [LSP20-CallVerification] specification.
+- If the `lsp20VerifyCall(..)` function is called and returns bytes4 where the first bytes3 match the first bytes3 of the `lsp20VerifyCall(..)` selector, and the last byte is strictly `0x01`, the function MUST call the [`lsp20VerifyCallResult(..)`] function on the [owner](#owner) as per the [LSP20-CallVerification] specification.
 
   The function MUST be called **after the execution of the execute logic**, passing the hash of the caller, value sent, and data sent concatenated, and the result of the `executeBatch(..)` function represented by the bytes encoding as bytes of the array of call results or the addresses of the contracts created as a second parameter.  
 
@@ -317,13 +317,13 @@ This function is part of the [ERC725Y] specification, with additional requiremen
 
 - MUST allow the owner to call the function. 
 
-- If the caller is not the owner, the function MUST call the [`lsp20VerifyCall(..)`](./LSP-20-CallVerification.md#lsp20verifycall) function on the [owner](#owner) as per the [LSP20-CallVerification](./LSP-20-CallVerification.md#lsp20verifycallresult) specification. 
+- If the caller is not the owner, the function MUST call the [`lsp20VerifyCall(..)`] function on the [owner](#owner) as per the [LSP20-CallVerification] specification. 
 
   The function MUST be called **before the execution of the setData logic**, passing the caller, value sent to the function, and the data sent (function selector + arguments + extra calldata) as parameters. 
 
-  The function should only continue executing if the `lsp20VerifyCall(..)` function returns bytes4 where the first bytes3 match the first bytes3 of the `lsp20VerifyCall(..)` selector, otherwise MUST revert.
+  The function SHOULD only continue executing if the `lsp20VerifyCall(..)` function returns bytes4 where the first bytes3 match the first bytes3 of the `lsp20VerifyCall(..)` selector, otherwise MUST revert.
 
-- If the `lsp20VerifyCall(..)` function is called and returns bytes4 where the first bytes3 match the first bytes3 of the lsp20VerifyCall selector, and the last byte is strictly `0x01`, the function MUST call the [`lsp20VerifyCallResult(..)`](./LSP-20-CallVerification.md#lsp20verifycallresult) function on the [owner](#owner) as per the [LSP20-CallVerification] specification.
+- If the `lsp20VerifyCall(..)` function is called and returns bytes4 where the first bytes3 match the first bytes3 of the `lsp20VerifyCall(..)` selector, and the last byte is strictly `0x01`, the function MUST call the [`lsp20VerifyCallResult(..)`] function on the [owner](#owner) as per the [LSP20-CallVerification] specification.
 
   The function MUST be called **after the execution of the setData logic**, passing the hash of the caller, value sent, and data sent concatenated, and the result of the `setData(..)` function represented by empty bytes as a second parameter.  
 
@@ -346,13 +346,13 @@ This function is part of the [ERC725Y] specification, with additional requiremen
 
 - MUST allow the owner to call the function. 
 
-- If the caller is not the owner, the function MUST call the [`lsp20VerifyCall(..)`](./LSP-20-CallVerification.md#lsp20verifycall) function on the [owner](#owner) as per the [LSP20-CallVerification] specification.
+- If the caller is not the owner, the function MUST call the [`lsp20VerifyCall(..)`] function on the [owner](#owner) as per the [LSP20-CallVerification] specification.
 
   The function MUST be called **before the execution of the setDataBatch logic**, passing the caller, value sent to the function, and the data sent (function selector + arguments + extra calldata) as parameters. 
 
-  The function should only continue executing if the `lsp20VerifyCall(..)` function returns bytes4 where the first bytes3 match the first bytes3 of the `lsp20VerifyCall(..)` selector, otherwise MUST revert.
+  The function SHOULD only continue executing if the `lsp20VerifyCall(..)` function returns bytes4 where the first bytes3 match the first bytes3 of the `lsp20VerifyCall(..)` selector, otherwise MUST revert.
 
-- If the `lsp20VerifyCall(..)` function is called and returns bytes4 where the first bytes3 match the first bytes3 of the lsp20VerifyCall selector, and the last byte is strictly `0x01`, the function MUST call the [`lsp20VerifyCallResult(..)`](./LSP-20-CallVerification.md#lsp20verifycallresult) function on the [owner](#owner) as per the [LSP20-CallVerification] specification.
+- If the `lsp20VerifyCall(..)` function is called and returns bytes4 where the first bytes3 match the first bytes3 of the `lsp20VerifyCall(..)` selector, and the last byte is strictly `0x01`, the function MUST call the [`lsp20VerifyCallResult(..)`]) function on the [owner](#owner) as per the [LSP20-CallVerification] specification.
 
   The function MUST be called **after the execution of the setDataBatch logic**, passing the hash of the caller, value sent, and data sent concatenated, and the result of the `setDataBatch(..)` function represented by empty bytes as a second parameter.  
 
@@ -371,11 +371,11 @@ This function is part of the [ERC725Y] specification, with additional requiremen
 function isValidSignature(bytes32 hash, bytes memory signature) external view returns (bytes4);
 ```
 
-This function is part of the [ERC1271](https://eips.ethereum.org/EIPS/eip-1271) specification, with additional requirements as follows:
+This function is part of the [ERC1271] specification, with additional requirements as follows:
 
-- When the owner is an EOA, the function MUST return the [magic value](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1271.md#specification) if the address recovered from the hash and the signature via [ecrecover](https://docs.soliditylang.org/en/v0.8.17/solidity-by-example.html?highlight=ecrecover#recovering-the-message-signer-in-solidity) is the owner of the contract, and MUST return the [failure value](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1271.md#specification) otherwise. 
+- When the owner is an EOA, the function MUST return the [magic value] if the address recovered from the hash and the signature via [ecrecover] is the owner of the contract. Otherwise, MUST return the [failure value]. 
 
-- When the owner is a contract, it will call the `isValidsignature(bytes32,bytes)` function on the owner contract, and return the magicValue if the function returns the magicValue. In any other case such as non-standard return value or revert, it will return the [failure value](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1271.md#specification) indicating that the signature is not valid.
+- When the owner is a contract, it will call the `isValidsignature(bytes32,bytes)` function on the owner contract, and return the magicValue if the function returns the magicValue. In any other case such as non-standard return value or revert, it will return the [failure value) indicating an invalid signature.
 
 #### universalReceiver
 
@@ -383,13 +383,13 @@ This function is part of the [ERC1271](https://eips.ethereum.org/EIPS/eip-1271) 
 function universalReceiver(bytes32 typeId, bytes memory receivedData) external payable returns (bytes memory);
 ```
 
-This function is part of the [LSP1] specification, with additional requirements as follows:
+This function is part of the [LSP1-UniversalReceiver] specification, with additional requirements as follows:
 
 - MUST emit a [`ValueReceived`] event before external calls if the function receives native tokens.
 
 - If an `address` is stored under the data key attached below and this address is a contract:
-  - forwards the call to the [`universalReceiver(bytes32,bytes)`] function on the contract at this address **ONLY IF** this contract supports the [LSP1UniversalReceiver interface id].
-  - if the contract at this address does not supports the [LSP1UniversalReceiver interface id], execution continues normally.
+  - forwards the call to the [`universalReceiver(bytes32,bytes)`] function on the contract at this address **ONLY IF** this contract supports the [LSP1-UniversalReceiver interface id].
+  - if the contract at this address does not support the [LSP1-UniversalReceiver interface id], execution continues normally.
   
 - If there is no `address` stored under this data key, execution continues normally. 
 
@@ -397,17 +397,17 @@ The `msg.data` is appended with the caller address as bytes20 and the `msg.value
 
 ```json
 {
-  "name": "LSP1UniversalReceiverDelegate",
-  "key": "0x0cfc51aec37c55a4d0b1a65c6255c4bf2fbdf6277f3cc0730c45b828b6db8b47",
-  "keyType": "Singleton",
-  "valueType": "address",
-  "valueContent": "Address"
+    "name": "LSP1UniversalReceiverDelegate",
+    "key": "0x0cfc51aec37c55a4d0b1a65c6255c4bf2fbdf6277f3cc0730c45b828b6db8b47",
+    "keyType": "Singleton",
+    "valueType": "address",
+    "valueContent": "Address"
 }
 ```
 
 - If an `address` is stored under the data key attached below and this address is a contract:
-  - forwards the call to the [`universalReceiver(bytes32,bytes)`] function on the contract at this address **ONLY IF** this contract supports the [LSP1UniversalReceiver interface id].
-  - if the contract at this address does not supports the [LSP1UniversalReceiver interface id], execution continues normally.
+  - forwards the call to the [`universalReceiver(bytes32,bytes)`] function on the contract at this address **ONLY IF** this contract supports the [LSP1-UniversalReceiver interface id].
+  - if the contract at this address does not support the [LSP1-UniversalReceiver interface id], execution continues normally.
 
 - If there is no `address` stored under this data key, execution continues normally. 
 
@@ -415,11 +415,11 @@ The `msg.data` is appended with the caller address as bytes20 and the `msg.value
 
 ```json
 {
-  "name": "LSP1UniversalReceiverDelegate:<bytes32>",
-  "key": "0x0cfc51aec37c55a4d0b10000<bytes32>",
-  "keyType": "Mapping",
-  "valueType": "address",
-  "valueContent": "Address"
+    "name": "LSP1UniversalReceiverDelegate:<bytes32>",
+    "key": "0x0cfc51aec37c55a4d0b10000<bytes32>",
+    "keyType": "Mapping",
+    "valueType": "address",
+    "valueContent": "Address"
 }
 ```
 
@@ -454,7 +454,7 @@ MUST be emitted when a native token transfer was received.
 }
 ```
 
-If the account delegates its universal receiver functionality to another smart contract, this smart contract address MUST be stored under the data key attached above. This call to this contract is performed when the `universalReceiver(bytes32,bytes)` function of the account is called and can react on the whole call regardless of typeId. 
+If the account delegates its universal receiver functionality to another smart contract, this smart contract address MUST be stored under the data key attached above. This call to this contract is performed when the `universalReceiver(bytes32,bytes)` function of the account is called and can react on the whole call regardless of the typeId. 
 
 Check [LSP1-UniversalReceiver] and [LSP2-ERC725YJSONSchema] for more information.
 
@@ -484,7 +484,7 @@ The `<bytes32\>` in the data key name corresponds to the `typeId` passed to the 
 > 
 > will be trimmed to `0x1111222233334444555566667777888899990000`.
 > 
-> See the section about the trimming rules for the key type [`Mapping`](./LSP-2-ERC725YJSONSchema.md#mapping) in [LSP2-ERC725YJSONSchema] to learn how to encode this data key.
+> See the section about the trimming rules for the key type [`Mapping`] in [LSP2-ERC725YJSONSchema] to learn how to encode this data key.
 
 If the account delegates its universal receiver functionality to another smart contract, this smart contract address MUST be stored under the data key attached above. This call to this contract is performed when the `universalReceiver(bytes32,bytes)` function of the account is called with a specific typeId that it can react on. 
 
@@ -521,7 +521,7 @@ Additionally, it is possible to set an extension for the `0x00000000` selector. 
 
 ## Rationale
 
-The ERC725Y general data key-value store allows for the ability to add any kind of information to the the account contract, which allows future use cases. The general executor allows full interactability with any smart contract or address. And the universal receiver allows reacting to any future asset received.
+The [ERC725Y] general data key/value store allows for the ability to add any kind of information to the the account contract, which allows future use cases. The general executor allows full interactability with any smart contract or address. And the universal receiver allows reacting to any future asset received.
 
 ## Implementation
 
@@ -535,7 +535,7 @@ interface ILSP0  /* is ERC165 */ {
         
     // ERC725X
 
-    event Executed(uint256 indexed operation, address indexed to, uint256 indexed  value, bytes4 selector);
+    event Executed(uint256 indexed operation, address indexed to, uint256 indexed value, bytes4 selector);
 
     event ContractCreated(uint256 indexed operation, address indexed contractAddress, uint256 indexed value, bytes32 salt);
     
@@ -614,18 +614,27 @@ interface ILSP0  /* is ERC165 */ {
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
 
 [ERC165]: <https://eips.ethereum.org/EIPS/eip-165>
-[ERC725X]: <https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#erc725x>
-[ERC725Y]: <https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#erc725y>
+[ERC1271]: <https://eips.ethereum.org/EIPS/eip-1271>
+[ERC725]: <https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md>
+[ERC725X]: <https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md#erc725x>
+[ERC725Y]: <https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md#erc725y>
 [LSP1-UniversalReceiver]: <./LSP-1-UniversalReceiver.md>
-[LSP1]: <./LSP-1-UniversalReceiver.md>
 [LSP2-ERC725YJSONSchema]: <./LSP-2-ERC725YJSONSchema.md>
-[LSP14]: <./LSP-14-Ownable2Step.md>
+[LSP3-UniversalProfile-Metadata]: <./LSP-3-UniversalProfile-Metadata.md>
+[LSP6-KeyManager]: <./LSP-6-KeyManager.md>
+[LSP14-Ownable2Step]: <./LSP-14-Ownable2Step.md>
 [lukso-network/lsp-smart-contracts]: <https://github.com/lukso-network/lsp-smart-contracts/blob/develop/contracts/LSP0ERC725Account/LSP0ERC725AccountCore.sol>
-[LSP17]: <./LSP-17-ContractExtension.md>
 [LSP17-ContractExtension]: <./LSP-17-ContractExtension.md>
 [LSP20-CallVerification]: <./LSP-20-CallVerification.md>
+[`lsp20VerifyCall(..)`]: <./LSP-20-CallVerification.md#lsp20verifycall>
+[`lsp20VerifyCallResult(..)`]: <./LSP-20-CallVerification.md#lsp20verifycallresult>
 [UniversalReceiver]: <./LSP-1-UniversalReceiver.md#events>
 [`universalReceiver(bytes32,bytes)`]: <./LSP-1-UniversalReceiver.md#universalreceiver>
-[LSP1UniversalReceiver interface id]: <./LSP-1-UniversalReceiver.md#specification>
+[LSP1-UniversalReceiver interface id]: <./LSP-1-UniversalReceiver.md#specification>
 [`ValueReceived`]: <#valuereceived>
 [DataChanged]: <https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#datachanged>
+[DELEGATECALL]: <https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#execute>
+[magic value]: <(https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1271.md#specification>
+[ecrecover]: <https://docs.soliditylang.org/en/v0.8.17/solidity-by-example.html?highlight=ecrecover#recovering-the-message-signer-in-solidity>
+[failure value]: <https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1271.md#specification>
+[`Mapping`]: <./LSP-2-ERC725YJSONSchema.md#mapping>
