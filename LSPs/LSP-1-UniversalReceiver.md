@@ -17,11 +17,13 @@ An entry function enabling a contract to receive arbitrary information.
 ## Abstract
 <!--A short (~200 word) description of the technical issue being addressed.-->
 Similar to a smart contract's fallback function, which allows a contract to be notified of an incoming transaction with a value, the [`universalReceiver(bytes32,bytes)`](#universalReceiver) function allows for any contract to receive information about any interaction.
+
 This allows receiving contracts to react on incoming transfers or other interactions.
 
 
 ## Motivation
-There are often the need to inform other smart contracts about actions another smart contract did perform.
+There is often the need to inform other smart contracts about actions another smart contract did perform.
+
 A good example are token transfers, where the token smart contract should inform receiving contracts about the transfer.
 
 By creating a universal function that many smart contracts implement, receiving of asset and information can be unified.
@@ -32,7 +34,7 @@ In cases where smart contracts function as a profile or wallet over a long time,
 
 **LSP1-UniversalReceiver** interface id according to [ERC165]: `0x6bb56a14`.
 
-Smart contracts implementing the LSP1UniversalReceiver standard MUST implement the [ERC165] `supportsInterface(..)` function and MUST support ERC165 and LSP1 interface ids.
+Smart contracts implementing the LSP1-UniversalReceiver standard MUST implement the [ERC165] `supportsInterface(..)` function and MUST support [ERC165] and LSP1 interface ids.
 
 Every contract that complies with the LSP1-UniversalReceiver standard MUST implement:
 
@@ -44,18 +46,20 @@ Every contract that complies with the LSP1-UniversalReceiver standard MUST imple
 function universalReceiver(bytes32 typeId, bytes memory data) external payable returns (bytes memory)
 ```
 
-Allows to be called by any external contract to inform the contract about any incoming transfers, interactions or simple information. Can be customized to react on the different aspect of the call such as the typeId, the data sent, the caller or the value sent to the function, e.g, reacting on a token or a vault transfer. 
+Allows to be called by any external contract to inform the contract about any incoming transfers, interactions or simple information. 
+
+The `universalReceiver(...)` function can be customized to react on a different aspect of the call such as the `typeId`, the data sent, the caller or the value sent to the function, e.g, reacting on a token or a vault transfer. 
 
 _Parameters:_
 
 - `typeId` is the hash of a standard, or the type relative to the `data` received.
 
-- `data` is a byteArray of arbitrary data. Receiving contracts should take the `typeId` in consideration to properly decode the `data`.
+- `data` is a byteArray of arbitrary data. Receiving contracts SHOULD take the `typeId` in consideration to properly decode the `data`.
 
 _Returns:_ `bytes` which can be used to encode response values.
 
-> **Note:** the `universalReceiver(...)` function COULD be allowed to return no data (no return as the equivalent of the opcode instruction `return(memory_pointer, 0)`).
-> If any `bytes` data is returned, bytes not conforming to the default ABI encoding will result in a revert. See the [specification for the abi-encoding of `bytes`](https://docs.soliditylang.org/en/v0.8.19/abi-spec.html#formal-specification-of-the-encoding) for more details.
+> **Note:** The `universalReceiver(...)` function COULD be allowed to return no data (no return as the equivalent of the opcode instruction `return(memory_pointer, 0)`).
+> If any `bytes` data is returned, bytes not conforming to the default ABI encoding will result in a revert. See the [specification for the abi-encoding of `bytes`] for more details.
 
 ### Events
 
@@ -86,7 +90,9 @@ UniversalReceiver delegation allows to forward the `universalReceiver(..)` call 
 
 ### Motivation
 
-The ability to react to upcoming actions with a logic hardcoded within the `universalReceiver(..)` function comes with a limitations, as only a fixed functionality can be coded or the `UniversalReceiver` be fired. This section explains a way to forward the call to the `universalReceiver(..)` function to an external smart contract to extend and change funcitonality over time.
+The ability to react to upcoming actions with a logic hardcoded within the `universalReceiver(..)` function comes with limitations, as only a fixed functionality can be coded or the `UniversalReceiver` be fired. 
+
+This section explains a way to forward the call to the `universalReceiver(..)` function to an external smart contract to extend and change funcitonality over time.
 
 The delegation works by simply forwarding a call to the `universalReceiver(..)` function to a delegated smart contract calling the `universalReceiver(..)` function on the external smart contract.
 As the external smart contract doesn't know about the inital `msg.sender` and the `msg.value`, this specification proposes to add these values to the `msg.data`. This allows the external contract to strip them from the `msg.data` and understand the address and value of the inital call to the extended smart contract.
@@ -101,19 +107,27 @@ The `universalReceiver(..)` function on the initial smart contract forwards the 
 - The `msg.sender` calling the initial `universalReceiver(..)` function without any pad, MUST be 20 bytes.
 - The `msg.value` received to the initial `universalReceiver(..)` function, MUST be 32 bytes.
 
-The **UniversalReceiverDelegate** smart contract, can then understand the `msg.sender` and `msg.value` of the initial smart contract, or ignore the appended data.
+The **UniversalReceiverDelegate** smart contract can then understand the `msg.sender` and `msg.value` of the initial smart contract, or ignore the appended data.
 
 
 ## Rationale
-This is an abstraction of the ideas behind Ethereum [ERC223](https://github.com/ethereum/EIPs/issues/223) and [ERC777](https://eips.ethereum.org/EIPS/eip-777), that contracts are called when they are receiving tokens or other assets. With this proposal, we can allow contracts to receive any information over a standardised interface. As this function is generic and only the send `typeId` changes, smart contract accounts that can upgrade its behaviour using the **UniversalReceiverDelegate** technique can be created. UniversalReceiverDelegate functionality COULD be implemented using `call`, or `delegatecall`, both of which have different security properties.
+This is an abstraction of the ideas behind [ERC223] and [ERC777], that contracts are called when they are receiving tokens or other assets. 
+
+With this proposal, we can allow contracts to receive any information over a standardised interface. 
+
+As this function is generic and only the sent `typeId` changes, smart contract accounts that can upgrade its behaviour using the **UniversalReceiverDelegate** technique can be created. 
+
+The UniversalReceiverDelegate functionality COULD be implemented using `call`, or `delegatecall`, both of which have different security properties.
 
 ## Implementation
 
-An implementation can be found in the [lukso-network/lsp-smart-contracts](https://github.com/lukso-network/lsp-smart-contracts/tree/develop/contracts/LSP1UniversalReceiver) repository.
+An implementation can be found in the [lukso-network/lsp-smart-contracts] repository.
 
 ### UniversalReceiver Example:
 
-After transfering token from `TokenABC` to `MyWallet`, the owner of `MyWallet` contract can know looking at the UniversalReceiver event emitted that the `typeId` is `_TOKEN_RECEIVING_HASH` and then he could look into the `data` to know the token sender address and the amount sent.
+After transfering token from `TokenABC` to `MyWallet`, the owner of `MyWallet` contract can know, by looking at the emitted UniversalReceiver event, that the `typeId` is `_TOKEN_RECEIVING_HASH`. 
+
+Enabling the owner to know the token sender address and the amount sent by looking into the `data`.
 
 ```solidity
 // SPDX-License-Identifier: CC0-1.0
@@ -158,9 +172,9 @@ contract MyWallet is ERC165, ILSP1 {
 
 ### UniversalReceiverDelegate Example:
 
-This example is the same example written above except that `MyWallet` contract now delegate the universalReceiver functionality to a UniversalReceiverDelegate contract.
+This example is the same example written above except that `MyWallet` contract now delegates the universalReceiver functionality to a UniversalReceiverDelegate contract.
 
-The `TokenABC` contract will inform `MyWallet` contract about the transfer by calling the `universalReceiver(..)` function and this function will call the `universalReceiver(..)` function on the UniversalReceiverDelegate address set by the owner, to react on the transfer accordingly.
+The `TokenABC` contract will inform the `MyWallet` contract about the transfer by calling the `universalReceiver(..)` function. This function will then call the `universalReceiver(..)` function on the UniversalReceiverDelegate address set by the owner, to react on the transfer accordingly.
 
 ```solidity
 // SPDX-License-Identifier: CC0-1.0
@@ -198,7 +212,7 @@ contract MyWallet is ERC165, ILSP1 {
     }
 
     function setUniversalReceiverDelegate(address _newUniversalReceiverDelegate) public onlyOwner {
-        // The address set should support LSP1Delegate InterfaceID
+        // The address set SHOULD support LSP1Delegate InterfaceID
         universalReceiverDelegate = _newUniversalReceiverDelegate;
     }
 
@@ -244,13 +258,13 @@ contract UniversalReceiverDelegate is ERC165, ILSP1 {
     function universalReceiver(bytes32 typeId, bytes memory data) public payable returns (bytes memory) {
         // Any logic could be written here:
         // - Interfact with DeFi protocol contract to sell the new tokens received automatically.
-        // - Register the token received on other registery contract
+        // - Register the token received on other registery contract.
         // - Allow only tokens with `_TOKEN_RECEIVING_HASH` hash and reject the others.
         // - revert; so in this way the wallet will have the option to reject any token.
     }
     
     // The `msg.sender` of the caller contract and the `msg.value` sent to the caller contract if appended as extra calldata sent to the 
-    // delegate contract, can be retreived using these functions:
+    // delegate contract, can be retrieved using these functions:
     
   
     function _mainMsgSender() internal view virtual returns (address) {
@@ -286,3 +300,7 @@ interface ILSP1  /* is ERC165 */ {
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
 
 [ERC165]: <https://eips.ethereum.org/EIPS/eip-165>
+[ERC223]: <https://github.com/ethereum/EIPs/issues/223>
+[ERC777]: <https://eips.ethereum.org/EIPS/eip-777>
+[specification for the abi-encoding of `bytes`]: <https://docs.soliditylang.org/en/v0.8.19/abi-spec.html#formal-specification-of-the-encoding>
+[lukso-network/lsp-smart-contracts]: <https://github.com/lukso-network/lsp-smart-contracts/tree/develop/contracts/LSP1UniversalReceiver>
