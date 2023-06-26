@@ -218,7 +218,7 @@ ERC725Y JSON Schema `LSP3UniversalProfile`:
         "name": "LSP12IssuedAssetsMap:<address>",
         "key": "0x74ac2555c10b9349e78f0000<address>",
         "keyType": "Mapping",
-        "valueType": "(bytes4,bytes8)",
+        "valueType": "(bytes4,uint128)",
         "valueContent": "(Bytes4,Number)"
     },
 
