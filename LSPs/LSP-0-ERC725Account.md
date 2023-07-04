@@ -633,8 +633,8 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 [LSP1-UniversalReceiver interface id]: <./LSP-1-UniversalReceiver.md#specification>
 [`ValueReceived`]: <#valuereceived>
 [DataChanged]: <https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#datachanged>
-[DELEGATECALL]: <https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#execute>
-[magic value]: <(https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1271.md#specification>
+[DELEGATECALL]: <https://solidity-by-example.org/delegatecall/>
+[magic value]: <https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1271.md#specification>
 [ecrecover]: <https://docs.soliditylang.org/en/v0.8.17/solidity-by-example.html?highlight=ecrecover#recovering-the-message-signer-in-solidity>
 [failure value]: <https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1271.md#specification>
 [`Mapping`]: <./LSP-2-ERC725YJSONSchema.md#mapping>
