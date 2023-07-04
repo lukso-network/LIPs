@@ -48,7 +48,7 @@ function universalReceiver(bytes32 typeId, bytes memory data) external payable r
 
 Allows to be called by any external contract to inform the contract about any incoming transfers, interactions or simple information. 
 
-The `universalReceiver(...)` function can be customized to react on a different aspect of the call such as the `typeId`, the data sent, the caller or the value sent to the function, e.g, reacting on a token or a vault transfer. 
+The `universalReceiver(...)` function can be customized to react on a different aspect of the call such as the `typeId`, the data sent, the caller or the value sent to the function (_e.g, reacting on a token or a vault transfer_).
 
 _Parameters:_
 
@@ -90,7 +90,7 @@ UniversalReceiver delegation allows to forward the `universalReceiver(..)` call 
 
 ### Motivation
 
-The ability to react to upcoming actions with a logic hardcoded within the `universalReceiver(..)` function comes with limitations, as only a fixed functionality can be coded or the `UniversalReceiver` be fired. 
+The ability to react to upcoming actions with a logic hardcoded within the `universalReceiver(..)` function comes with limitations, as only a fixed functionality can be coded or the [`UniversalReceiver`](#universalreceiver-1) event be fired. 
 
 This section explains a way to forward the call to the `universalReceiver(..)` function to an external smart contract to extend and change funcitonality over time.
 
@@ -113,7 +113,7 @@ The **UniversalReceiverDelegate** smart contract can then understand the `msg.se
 ## Rationale
 This is an abstraction of the ideas behind [ERC223] and [ERC777], that contracts are called when they are receiving tokens or other assets. 
 
-With this proposal, we can allow contracts to receive any information over a standardised interface. 
+With this proposal, we can allow contracts to receive any information in a generic manner over a standardised interface. 
 
 As this function is generic and only the sent `typeId` changes, smart contract accounts that can upgrade its behaviour using the **UniversalReceiverDelegate** technique can be created. 
 
