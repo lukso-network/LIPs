@@ -51,6 +51,20 @@ The standard does not enforce a specific method for mapping function selectors t
 
 As an example, a mapping of function selectors to extension contracts can be used, such as a `mapping(bytes4 => address)`. However, any other data structure can also be used to map function selectors to extension contract addresses.
 
+If the contract implementing the LSP17 standard is an ERC725Y contract, the extension contracts COULD be stored under the following ERC725Y data key:
+
+```json
+{
+    "name": "LSP17Extension:<bytes4>",
+    "key": "0xcee78b4094da860110960000<bytes4>",
+    "keyType": "Mapping",
+    "valueType": "address",
+    "valueContent": "Address"
+}
+```
+
+The <bytes4\> is the `functionSelector` called on the account contract. Check [LSP2-ERC725YJSONSchema] to learn how to encode the data key.
+
 ## LSP17Extension Specification
 
 **LSP17-Extension** interface id according to [ERC165]: `0xcee78b40`.
@@ -77,7 +91,7 @@ function _extendableMsgValue() internal view virtual returns (uint256) {
 }
 ```
 
-The original calldata sent to the extendable contract can be retreived using this function:
+The original calldata sent to the extendable contract can be retrieved using this function:
 
 ```solidity
 function _extendableMsgData() internal view virtual returns (bytes memory) {

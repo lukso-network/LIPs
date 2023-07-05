@@ -502,7 +502,7 @@ Check [LSP1-UniversalReceiver] and [LSP2-ERC725YJSONSchema] for more information
 }
 ```
 
-> <bytes4\> is the `functionSelector` called on the account contract. Check [LSP2-ERC725YJSONSchema] to learn how to encode the key.
+> <bytes4\> is the `functionSelector` called on the account contract. Check [LSP2-ERC725YJSONSchema] to learn how to encode the data key.
 
 If there is a function called on the account and the function does not exist, the fallback function lookup an address stored under the data key attached above and forwards the call to it with the value of the `msg.sender` and `msg.value` appended as extra calldata.
 
