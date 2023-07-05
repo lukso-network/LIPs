@@ -103,6 +103,35 @@ The `universalReceiver(..)` function on the initial smart contract forwards the 
 
 The **UniversalReceiverDelegate** smart contract, can then understand the `msg.sender` and `msg.value` of the initial smart contract, or ignore the appended data.
 
+If the contract implementing the LSP1 standard is an ERC725Y, the address of the **UniversalReceiverDelegate** contract COULD be stored under the following ERC725Y data key:
+
+```json
+{
+    "name": "LSP1UniversalReceiverDelegate",
+    "key": "0x0cfc51aec37c55a4d0b1a65c6255c4bf2fbdf6277f3cc0730c45b828b6db8b47",
+    "keyType": "Singleton",
+    "valueType": "address",
+    "valueContent": "Address"
+}
+```
+
+Additionally, some specific **UniversalReceiverDelegate** contracts COULD be mapped to react on specific `typeId`. The address of each of these contracts for each specific `typeId` COULD be stored under the following ERC725Y data key:
+
+```json
+{
+    "name": "LSP1UniversalReceiverDelegate:<bytes32>",
+    "key": "0x0cfc51aec37c55a4d0b10000<bytes32>",
+    "keyType": "Mapping",
+    "valueType": "address",
+    "valueContent": "Address"
+}
+```
+
+The `<bytes32\>` in the data key name corresponds to the `typeId` passed to the `universalReceiver(..)` function. For example, for the typeId `0xcafecafecafecafecafecafecafecafecafecafebeefbeefbeefbeefbeefbeef`, the data key above will be constructed as follow:
+
+```
+0x0cfc51aec37c55a4d0b10000cafecafecafecafecafecafecafecafecafecafe
+```
 
 ## Rationale
 This is an abstraction of the ideas behind Ethereum [ERC223](https://github.com/ethereum/EIPs/issues/223) and [ERC777](https://eips.ethereum.org/EIPS/eip-777), that contracts are called when they are receiving tokens or other assets. With this proposal, we can allow contracts to receive any information over a standardised interface. As this function is generic and only the send `typeId` changes, smart contract accounts that can upgrade its behaviour using the **UniversalReceiverDelegate** technique can be created. UniversalReceiverDelegate functionality COULD be implemented using `call`, or `delegatecall`, both of which have different security properties.
