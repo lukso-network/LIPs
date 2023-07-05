@@ -481,8 +481,11 @@ These data keys are based on the [LSP2-ERC725YJSONSchema](./LSP-2-ERC725YJSONSch
 }
 ```
 
-Contains an array of addresses, that have some permission set.
-This is mainly useful for interfaces to know which address holds which permissions.
+Contains an array of addresses, that have some permission set. This is mainly useful for interfaces to know which address holds which permissions.
+
+Note that **this data key is OPTIONAL**. It is not necessary to add a controller under this data key if setting a new controller under [`AddressPermissions:Permissions:<address>`](#addresspermissionspermissionsaddress)
+
+
 
 For more information about how to access each index of the `AddressPermissions[]` array, see: [ERC725Y JSON Schema > `keyType` `Array`](./LSP-2-ERC725YJSONSchema.md#array)
 
