@@ -127,7 +127,11 @@ Additionally, some specific **UniversalReceiverDelegate** contracts COULD be map
 }
 ```
 
-> The `<bytes32\>` in the data key name corresponds to the `typeId` passed to the `universalReceiver(..)` function. 
+The `<bytes32\>` in the data key name corresponds to the `typeId` passed to the `universalReceiver(..)` function. For example, for the typeId `0xcafecafecafecafecafecafecafecafecafecafebeefbeefbeefbeefbeefbeef`, the data key above will be constructed as follow:
+
+```
+0x0cfc51aec37c55a4d0b10000cafecafecafecafecafecafecafecafecafecafe
+```
 
 ## Rationale
 This is an abstraction of the ideas behind Ethereum [ERC223](https://github.com/ethereum/EIPs/issues/223) and [ERC777](https://eips.ethereum.org/EIPS/eip-777), that contracts are called when they are receiving tokens or other assets. With this proposal, we can allow contracts to receive any information over a standardised interface. As this function is generic and only the send `typeId` changes, smart contract accounts that can upgrade its behaviour using the **UniversalReceiverDelegate** technique can be created. UniversalReceiverDelegate functionality COULD be implemented using `call`, or `delegatecall`, both of which have different security properties.

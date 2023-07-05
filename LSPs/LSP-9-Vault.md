@@ -291,6 +291,8 @@ The `<bytes32\>` in the data key name corresponds to the `typeId` passed to the 
 
 - MUST emit a [UniversalReceiver] event if the function was successful.
 
+Check the [**UniversalReceiver Delegation > Specification** section in LSP1-UniversalReceiver](./LSP-1-UniversalReceiver.md#universalreceiver-delegation) and [LSP2-ERC725YJSONSchema] for more information.
+
 ### Events
 
 #### ValueReceived

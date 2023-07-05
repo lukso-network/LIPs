@@ -63,7 +63,13 @@ If the contract implementing the LSP17 standard is an ERC725Y contract, the exte
 }
 ```
 
-The <bytes4\> is the `functionSelector` called on the account contract. Check [LSP2-ERC725YJSONSchema] to learn how to encode the data key.
+The <bytes4\> is the `functionSelector` called on the account contract. For instance, for the selector `0xaabbccdd`, the data key above would be constructed as:
+
+```
+0xcee78b4094da860110960000aabbccdd00000000000000000000000000000000
+```
+
+Check [LSP2-ERC725YJSONSchema] to learn how to encode the data key, and the [**Mapping**](./LSP-2-ERC725YJSONSchema.md#mapping) section to learn the padding rules.
 
 ## LSP17Extension Specification
 

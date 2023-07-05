@@ -488,7 +488,7 @@ The `<bytes32\>` in the data key name corresponds to the `typeId` passed to the 
 
 If the account delegates its universal receiver functionality to another smart contract, this smart contract address MUST be stored under the data key attached above. This call to this contract is performed when the `universalReceiver(bytes32,bytes)` function of the account is called with a specific typeId that it can react on. 
 
-Check [LSP1-UniversalReceiver] and [LSP2-ERC725YJSONSchema] for more information.
+Check the [**UniversalReceiver Delegation > Specification** section in LSP1-UniversalReceiver](./LSP-1-UniversalReceiver.md#universalreceiver-delegation) and [LSP2-ERC725YJSONSchema] for more information.
 
 #### LSP17Extension
 
@@ -506,7 +506,7 @@ Check [LSP1-UniversalReceiver] and [LSP2-ERC725YJSONSchema] for more information
 
 If there is a function called on the account and the function does not exist, the fallback function lookup an address stored under the data key attached above and forwards the call to it with the value of the `msg.sender` and `msg.value` appended as extra calldata.
 
-Check [LSP17-ContractExtension] and [LSP2-ERC725YJSONSchema] for more information.
+Check the [**LSP17Extension Specification** section in LSP17-ContractExtension](./LSP-17-ContractExtension.md#lsp17extendable-specification) and [LSP2-ERC725YJSONSchema] for more information.
 
 
 ### Graffiti 
