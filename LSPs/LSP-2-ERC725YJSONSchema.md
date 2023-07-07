@@ -300,7 +300,7 @@ Below is an example for the **Array** data key named `LSP12IssuedAssets[]`.
 
 ```solidity
 key: keccak256('LSP12IssuedAssets[]') = 0x7c8c3416d6cda87cd42c71ea1843df28ac4850354f988d55ee2eaa47b6dc05cd
-value: uint256 (array length) e.g. 0x00000000000000000000000000000002
+value: uint128 (array length) e.g. 0x00000000000000000000000000000002
 
 // array items
 
