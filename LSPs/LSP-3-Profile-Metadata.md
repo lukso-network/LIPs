@@ -1,6 +1,6 @@
 ---
 lip: 3
-title: Universal Profile Metadata
+title: Profile Metadata
 author: Fabian Vogelsteller <fabian@lukso.network> 
 discussions-to: https://discord.gg/E2rJPP4
 status: Draft
@@ -16,11 +16,11 @@ This standard describes a set of [ERC725Y](https://github.com/ethereum/EIPs/blob
  
 ## Abstract
 
-This standard, defines a set of data key-value pairs that are useful to create a public on-chain profile, based on an [ERC725Account](./LSP-0-ERC725Account.md).
+This standard, defines a set of data key-value pairs that are useful to create a public on-chain profile, based on an [ERC725Y](./LSP-0-ERC725Account.md).
 
 ## Motivation
 
-This standard describes meta data that can be added to an [ERC725Account](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-0-ERC725Account.md), to give it a profile like character.
+This standard describes meta data that can be added to an [ERC725Y](https://github.com/lukso-network/LIPs/blob/master/LSPs/LSP-0-ERC725Account.md), to give it a profile like character.
 
 ## Specification
 
@@ -180,7 +180,7 @@ Example:
 
 ## Rationale
 
-Universal Profile's metadata is important for creating a verifiable public account that is the source of asset issuance,
+Profile's metadata is important for creating a verifiable public account that is the source of asset issuance,
 or a verifiable public appearance. This metadata does not need to belong to a real world person, but gives the account a "recognisable face".
 
 ## Implementation
