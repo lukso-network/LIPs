@@ -61,7 +61,7 @@ Using a standardised schema over ERC725Y enables those data keys and values to b
 The advantage of such schema is to allow interfaces or smart contracts to better decode (read, parse and interpret) the data stored in an ERC725Y contract. It is less error-prone due to knowing data types upfront. On the other hand, it also enables interfaces and contracts to know how to correctly encode data, before being set on an ERC725Y contract.
 
 This schema is for example used in [ERC725](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) based smart contracts like
-[LSP0-ERC725Account](./LSP-0-ERC725Account.md#implementation) and [LSP4-DigitalAsset-Metadata](./LSP-4-DigitalAsset-Metadata.md#implementation).
+[LSP3-Profile-Metadata](./LSP-3-Profile-Metadata.md#implementation) and [LSP4-DigitalAsset-Metadata](./LSP-4-DigitalAsset-Metadata.md#implementation).
 
 ## Specification
 
