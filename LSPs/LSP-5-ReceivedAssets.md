@@ -23,7 +23,7 @@ This data key value standard describes a set of data keys that can be added to a
 The data key `LSP5ReceivedAssetsMap` exists so that smart contracts can detect if an address is present in the array (e.g. as done in the  [LSP1-UniversalReceiverDelegate](./LSP-1-UniversalReceiver.md)).
 
 ## Motivation
-This standard allows to create a decentralised portfolio of owned assets by a smart contract. See [LSP3 - UniversalProfile Metadata](./LSP-3-UniversalProfile-Metadata.md), or [LSP9 Vault](./LSP-9-Vault.md).
+This standard allows to create a decentralised portfolio of owned assets by a smart contract. See [LSP3 - Profile Metadata](./LSP-3-Profile-Metadata.md), or [LSP9 Vault](./LSP-9-Vault.md).
 
 ## Specification
 

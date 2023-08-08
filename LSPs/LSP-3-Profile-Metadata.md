@@ -1,6 +1,6 @@
 ---
 lip: 3
-title: Universal Profile Metadata
+title: Profile Metadata
 author: Fabian Vogelsteller <fabian@lukso.network> 
 discussions-to: https://discord.gg/E2rJPP4
 status: Draft
@@ -35,11 +35,11 @@ The supported standard SHOULD be `LSP3UniversalProfile`
 
 ```json
 {
-    "name": "SupportedStandards:LSP3UniversalProfile",
-    "key": "0xeafec4d89fa9619884b60000abe425d64acd861a49b8ddf5c0b6962110481f38",
+    "name": "SupportedStandards:LSP3Profile",
+    "key": "0xeafec4d89fa9619884b600005ef83ad9559033e6e941db7d7c495acdce616347",
     "keyType": "Mapping",
     "valueType": "bytes4",
-    "valueContent": "0xabe425d6"
+    "valueContent": "0x5ef83ad9"
 }
 ```
 
@@ -180,7 +180,7 @@ Example:
 
 ## Rationale
 
-Universal Profile's metadata is important for creating a verifiable public account that is the source of asset issuance,
+Profile's metadata is important for creating a verifiable public account that is the source of asset issuance,
 or a verifiable public appearance. This metadata does not need to belong to a real world person, but gives the account a "recognisable face".
 
 ## Implementation
@@ -193,11 +193,11 @@ ERC725Y JSON Schema `LSP3UniversalProfile`:
 ```json
 [
     {
-        "name": "SupportedStandards:LSP3UniversalProfile",
-        "key": "0xeafec4d89fa9619884b60000abe425d64acd861a49b8ddf5c0b6962110481f38",
+        "name": "SupportedStandards:LSP3Profile",
+        "key": "0xeafec4d89fa9619884b600005ef83ad9559033e6e941db7d7c495acdce616347",
         "keyType": "Mapping",
         "valueType": "bytes4",
-        "valueContent": "0xabe425d6"
+        "valueContent": "0x5ef83ad9"
     },
     {
         "name": "LSP3Profile",

@@ -20,7 +20,7 @@ The following two data keys (including their ERC725Y JSON schema) are proposed t
 The data key `LSP10VaultsMap` also helps to prevent adding duplications to the array, when automatically added via smart contract (e.g. a [LSP1-UniversalReceiverDelegate](./LSP-1-UniversalReceiver.md)).
 
 ## Motivation
-To be able to display received vaults in a profile we need to keep track of all received vaults contract addresses. This is important for [LSP3 UniversalProfile](./LSP-3-UniversalProfile.md), but also Assets smart contracts via [LSP5-ReceivedAssets](./LSP-5-ReceivedAssets.md) Standard.
+To be able to display received vaults in a profile we need to keep track of all received vaults contract addresses. This is important for [LSP0-ERC725Account](./LSP-0-ERC725Account.md).
 
 ## Specification
 

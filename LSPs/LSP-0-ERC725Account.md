@@ -48,7 +48,7 @@ This allows us to:
 - Make security upgradeable via a key manager smart contract (e.g. [LSP6-KeyManager]).
 - Allow any action that an EOA can do, and even add the ability to use `create2` through [ERC725X].
 - Allow the account to be informed and react to receiving assets through [LSP1-UniversalReceiver].
-- Define a number of data key/value pairs to attach profile and other information through additional standards like [LSP3-UniversalProfile-Metadata].
+- Define a number of data key/value pairs to attach profile and other information through additional standards like [LSP3-Profile-Metadata].
 - Allow signature verification through [ERC1271].
 - Execute any smart contract and deploy smart contracts.
 - Extend the account through additional standardisation of the key/value data stored.
@@ -620,7 +620,7 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 [ERC725Y]: <https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md#erc725y>
 [LSP1-UniversalReceiver]: <./LSP-1-UniversalReceiver.md>
 [LSP2-ERC725YJSONSchema]: <./LSP-2-ERC725YJSONSchema.md>
-[LSP3-UniversalProfile-Metadata]: <./LSP-3-UniversalProfile-Metadata.md>
+[LSP3-Profile-Metadata]: <./LSP-3-Profile-Metadata.md>
 [LSP6-KeyManager]: <./LSP-6-KeyManager.md>
 [LSP14-Ownable2Step]: <./LSP-14-Ownable2Step.md>
 [lukso-network/lsp-smart-contracts]: <https://github.com/lukso-network/lsp-smart-contracts/blob/develop/contracts/LSP0ERC725Account/LSP0ERC725AccountCore.sol>
