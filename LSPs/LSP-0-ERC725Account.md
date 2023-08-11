@@ -56,11 +56,18 @@ This allows us to:
 
 ## Specification
 
-**LSP0-ERC725Account** interface id according to [ERC165]: `0x3e89ad98`.
+**LSP0-ERC725Account** interface id according to [ERC165]: `0x24871b3d`.
 
-_This `bytes4` interface id is calculated as the XOR of the selector of [`batchCalls`](#batchcalls) function and the following standards: ERC725Y, ERC725X, LSP1-UniversalReceiver, ERC1271-isValidSignature, LSP14Ownable2Step, LSP17Extendable and LSP20CallVerification_.
+This `bytes4` interface id is calculated as the `XOR` of the following:
 
-Smart contracts implementing the LSP0 standard MUST implement the [ERC165] `supportsInterface(..)` function and MUST support the LSP0, ERC725X, ERC725Y, ERC1271, LSP1, LSP14, LSP17 and LSP20 interface ids.
+- the selector of the [`batchCalls(batchCalls[])`](#batchcalls) function signature
+- the ERC165 interface ID of the **[ERC725X]** standard.
+- the ERC165 interface ID of the **[ERC725Y]** standard.
+- the ERC165 interface ID of the **ERC1271** standard (= `isValidSignature(bytes32,bytes)` function selector).
+- the ERC165 interface ID of the **[LSP1-UniversalReceiver]** standard.
+- the ERC165 interface ID of the **[LSP14-Ownable2Step]** standard.
+- the ERC165 interface ID of the **[LSP17-ContractExtension]** standard.
+- the ERC165 interface ID of the **[LSP20-CallVerification]** standard.
 
 ### Methods
 
