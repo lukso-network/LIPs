@@ -79,7 +79,7 @@ This function is part of the [LSP20-CallVerification] specification, with additi
 
 - MUST verify the permission of the **`caller`** based on the **`receivedCalldata`** as defined in the [permission](#permissions) section.
 
-- MUST emit the [VerifiedCall](#verifiedcall) event after verifying permissions. 
+- MUST emit the [PermissionsVerified](#permissionsverified) event after verifying permissions. 
 
 - MUST set the reentrancy guard to true if the first 4 bytes of `receivedCalldata` are any function other than `setData(..)`/`setDataBatch(..)` and check for reentrancy permission if the call was reentrant.
 
@@ -133,7 +133,7 @@ function execute(bytes memory payload) external payable returns (bytes memory)
 
 Execute a payload on the linked [target](#target) contract.
 
-MUST fire the [VerifiedCall event](#verifiedcall).
+MUST fire the [PermissionsVerified event](#permissionsverified).
 
 _Parameters:_
 
@@ -166,7 +166,7 @@ function executeBatch(uint256[] memory values, bytes memory payloads[]) external
 
 Execute a batch of payloads on the linked [target](#target) contract.
 
-MUST fire the [VerifiedCall event](#verifiedcall) on each iteration.
+MUST fire the [PermissionsVerified event](#permissionsverified) on each iteration.
 
 _Parameters:_
 
@@ -191,7 +191,7 @@ function executeRelayCall(bytes memory signature, uint256 nonce, uint256 validit
 
 Allows anybody to execute a `payload` on the linked [target](#target) contract, given they have a valid signature, specific to the payload passed, from a permissioned controller.
 
-MUST fire the [VerifiedCall event](#verifiedcall).
+MUST fire the [PermissionsVerified event](#permissionsverified).
 
 _Parameters:_
 - `signature`: bytes65 ethereum signature.
@@ -242,7 +242,7 @@ function executeRelayCallBatch(bytes[] memory signatures, uint256[] memory nonce
 
 Allows anybody to execute a batch of `payloads` on the linked [target](#target) contract, given they have valid signatures specific to the payloads signed by permissioned controllers.
 
-MUST fire the [VerifiedCall event](#verifiedcall) on each iteration.
+MUST fire the [PermissionsVerified event](#permissionsverified) on each iteration.
 
 _Parameters:_
 
@@ -265,10 +265,10 @@ _Requirements:_
 
 ### Events
 
-#### VerifiedCall
+#### PermissionsVerified
 
 ```solidity
-event VerifiedCall(address indexed signer, uint256 indexed value, bytes4 indexed selector);
+event PermissionsVerified(address indexed signer, uint256 indexed value, bytes4 indexed selector);
 ```
 
 MUST be fired when the permissions of a call was successfully verified.
@@ -825,7 +825,7 @@ interface ILSP6  /* is ERC165 */ {
 
     // LSP6
 
-    event VerifiedCall(address indexed signer, uint256 indexed value, bytes4 indexed selector);
+    event PermissionsVerified(address indexed signer, uint256 indexed value, bytes4 indexed selector);
 
 
     function target() external view returns (address);
