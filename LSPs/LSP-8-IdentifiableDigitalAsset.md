@@ -30,9 +30,7 @@ A commonality with [LSP7 DigitalAsset][LSP7] is desired so that the two token im
 
 ## Specification
 
-[ERC165] interface id: `0x49399145`
-
-
+[ERC165] interface id: `0x622e7a01`
 
 These are the expected data keys for an LSP8 contract that can mints identifiable tokens (NFTs).
 
