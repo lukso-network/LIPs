@@ -6,7 +6,7 @@ discussions-to:
 status: Draft
 type: LSP
 created: 2021-08-03
-requires: ERC165, ERC1271, LSP2
+requires: ERC165, ERC1271, LSP2, LSP20, LSP25
 ---
 
 ## Simple Summary
@@ -38,9 +38,14 @@ Storing the permissions at the core [ERC725Account] itself, allows it to survive
 
 **LSP6-KeyManager** interface id according to [ERC165]: `0x627ca5d3`.
 
-Smart contracts implementing the LSP6 standard MUST implement the [ERC165] `supportsInterface(..)` function and MUST support the [ERC165], [ERC1271], [LSP20-CallVerification] and the LSP6 interface ids.
+Smart contracts implementing the LSP6 standard MUST implement and support the following standard and their interfaces:
+- [ERC165]
+- [ERC1271]
+- [LSP20-CallVerification]
+- [LSP25-ExecuteRelayCall] 
+- the LSP6 interface functions defined below.
 
-Every contract that supports the LSP6 standard SHOULD implement:
+Every contract that supports the LSP6 standard MUST implement:
 
 ### Methods
 
@@ -98,6 +103,46 @@ This function is part of the [LSP20-CallVerification] specification, with additi
 - MUST set the reentrancy guard to false if it's set to true. 
 
 - MUST return the magic value.
+
+#### executeRelayCall
+
+```solidity
+function executeRelayCall(
+    bytes memory signature, 
+    uint256 nonce, 
+    uint256 validityTimestamps, 
+    bytes memory payload
+) 
+    external 
+    payable 
+    returns (bytes memory)
+```
+
+This function is part of the [LSP25-ExecuteRelayCall] specification, with additional requirements as follow.
+
+- The address of the signer recovered from the signature MUST have the right permissions to execute the `payload`.
+- The event `PermissionsVerified` MUST be emitted after verifying the permissions of the signer address recovered.
+
+
+#### executeRelayCallBatch
+
+```solidity
+function executeRelayCallBatch(
+    bytes[] memory signatures, 
+    uint256[] memory nonces, 
+    uint256[] memory validityTimestamps, 
+    uint256[] memory values, 
+    bytes[] memory payloads
+) 
+    external 
+    payable 
+    returns (bytes[] memory)
+```
+
+This function is part of the [LSP25-ExecuteRelayCall] specification, with additional requirements as follow.
+
+- The address of the signer recovered **from each signature** in the `signatures[]` array MUST have the right permissions to execute the the associated payload in the `payloads[]` array.
+- The event `PermissionsVerified` MUST be emitted after verifying the permissions of **each signer address recovered**.
 
 #### execute
 
@@ -682,17 +727,15 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 
 
 [ERC165]: <https://eips.ethereum.org/EIPS/eip-165>
-[version 0 of EIP-191]: <https://github.com/ethereum/EIPs/blob/master/EIPS/eip-191.md#version-0x00>
-[ERC725 X or Y smart contract]: <https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md>
 [ERC1271]: <https://eips.ethereum.org/EIPS/eip-1271>
 [ERC1721 magic value]: <https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1271.md#specification>
 [ERC1271 fail value]: <https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1271.md#specification>
 [ERC725Account]: <./LSP-0-ERC725Account.md>
 [BitArray]: <./LSP-2-ERC725YJSONSchema.md#bitarray>
-[EIP191]: <https://eips.ethereum.org/EIPS/eip-191>
 [CALL]: <https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#execute>
 [STATICCALL]: <https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#execute>
 [DELEGATECALL]: <https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#execute>
 [CREATE]: <https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#execute>
 [CREATE2]: <https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#execute>
 [LSP20-CallVerification]: <./LSP-20-CallVerification.md>
+[LSP25-ExecuteRelayCall]: <./LSP-25-ExecuteRelayCall.md>
