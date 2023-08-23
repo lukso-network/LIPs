@@ -382,7 +382,7 @@ This function is part of the [ERC1271] specification, with additional requiremen
 
 - When the owner is an EOA, the function MUST return the [magic value] if the address recovered from the hash and the signature via [ecrecover] is the owner of the contract. Otherwise, MUST return the [failure value]. 
 
-- When the owner is a contract, it will call the `isValidsignature(bytes32,bytes)` function on the owner contract, and return the magicValue if the function returns the magicValue. In any other case such as non-standard return value or revert, it will return the [failure value) indicating an invalid signature.
+- When the owner is a contract, it will call the `isValidsignature(bytes32,bytes)` function on the owner contract, and return the magic value if the function returns the magic value. In any other case such as non-standard return value or revert, it will return the failure value indicating an invalid signature.
 
 #### universalReceiver
 
