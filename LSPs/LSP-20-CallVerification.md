@@ -30,7 +30,7 @@ Delegating the function call requirements to another smart contract enables a mo
 
 There are two distinct contracts involved in the Call Verification standard, each playing a different role in achieving the desired functionality: the contract that receives the initial function call and asks the verifier contract for verification and the verifier contract that handles the actual verification process.
 
-The contract receiving the function call and calling a verifier contract MUST support the `LSP20-CallVerification` interfaceId: `0x1a0eb6a5`, calculated as the first 4 bytes of the keccak256 of `"LSP20CallVerification"`. This interface ensures that the required behavior is available for performing the necessary verifications.
+The contract receiving the function call and calling a verifier contract MUST support the `LSP20-CallVerification` interfaceId: `0x1a0eb6a5`, calculated as the first 4 bytes of the keccak256 hash of the string  `"LSP20CallVerification"`. This interface ensures that the required behavior is available for performing the necessary verifications.
 
 The verifier contract receiving the verification call MUST support the `LSP20-CallVerifier` interfaceId: `0x480c0ec2`, calculated as the XOR of the functions mentioned below.
 
