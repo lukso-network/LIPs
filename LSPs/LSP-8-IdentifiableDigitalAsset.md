@@ -12,16 +12,21 @@ requires: ERC165, ERC725Y, LSP1, LSP2, LSP4
 <!--You can leave these HTML comments in your merged LIP and delete the visible duplicate text guides, they will not appear and may be helpful to refer to if you edit it again. This is the suggested template for new LIPs. Note that an LIP number will be assigned by an editor. When opening a pull request to submit your LIP, please use an abbreviated title in the filename, `lip-draft_title_abbrev.md`. The title should be 44 characters or less.-->
 
 ## Simple Summary
+
 <!--"If you can't explain it simply, you don't understand it well enough." Provide a simplified and layman-accessible explanation of the LIP.-->
+
 A standard interface for identifiable digital assets, allowing for tokens to be uniquely traded and given metadata using [ERC725Y][ERC725].
 
 ## Abstract
+
 <!--A short (~200 word) description of the technical issue being addressed.-->
+
 This standard defines an interface for tokens that are identified with a `tokenId`, based on [ERC721][ERC721]. A `bytes32` value is used for `tokenId` to allow many uses of token identification including numbers, contract addresses, and any other unique identifiers (_e.g:_ serial numbers, NFTs with unique names, hash values, etc...).
 
 This standard defines a set of data-key value pairs that are useful to know what the `tokenId` represents, and the associated metadata for each `tokenId`.
 
 ## Motivation
+
 <!--The motivation is critical for LIPs that want to change the Lukso protocol. It should clearly explain why the existing protocol specification is inadequate to address the problem that the LIP solves. LIP submissions without sufficient motivation may be rejected outright.-->
 
 This standard aims to support use cases not covered by [LSP7 DigitalAsset][LSP7], by using a `tokenId` instead of an amount of tokens to mint, burn, and transfer tokens. Each `tokenId` may have metadata (either as a on-chain [ERC725Y][ERC725] contract or off-chain JSON) in addition to the [LSP4 DigitalAsset-Metadata][LSP4#erc725ykeys] metadata of the smart contract that mints the tokens. In this way a minted token benefits from the flexibility & upgradability of the [ERC725Y][ERC725] standard, and transfering a token carries the history of ownership and metadata updates. This is beneficial for a new generation of NFTs.
@@ -50,21 +55,21 @@ The LSP8TokenIdType metadata key provides this information and describes how to 
 
 The `tokenId` type can be one of the following possible enum values.
 
-| Value | Type      | Description  |
-|:-----:|:---------:|--------------|
-| `1`   | `address` | each NFT is represented as its **own [ERC725Y] smart contract.** |
-| `2`   | `uint256` | each NFT is represented with a **unique number**. <br> This number is an incrementing count, where each minted token is assigned the next number.  |
-| `3`   | `bytes32` | each NFT is represented using a 32 bytes hash digest. |
-| `4`   | `bytes32` | each NFT is represented using a **32 characters long unique identifier** (e.g: a unique bytes sequence). |
-| `5`   | `string`  | each NFT is represented using a unique name (as a short utf8 encoded string, no more than 32 characters long) |
+| Value |   Type    | Description                                                                                                                                       |
+| :---: | :-------: | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+|  `1`  | `address` | each NFT is represented as its **own [ERC725Y] smart contract.**                                                                                  |
+|  `2`  | `uint256` | each NFT is represented with a **unique number**. <br> This number is an incrementing count, where each minted token is assigned the next number. |
+|  `3`  | `bytes32` | each NFT is represented using a 32 bytes hash digest.                                                                                             |
+|  `4`  | `bytes32` | each NFT is represented using a **32 characters long unique identifier** (e.g: a unique bytes sequence).                                          |
+|  `5`  | `string`  | each NFT is represented using a unique name (as a short utf8 encoded string, no more than 32 characters long)                                     |
 
 ```json
 {
-    "name": "LSP8TokenIdType",
-    "key": "0x715f248956de7ce65e94d9d836bfead479f7e70d69b718d47bfe7b00e05b4fe4",
-    "keyType": "Singleton",
-    "valueType": "uint256",
-    "valueContent": "Number"
+  "name": "LSP8TokenIdType",
+  "key": "0x715f248956de7ce65e94d9d836bfead479f7e70d69b718d47bfe7b00e05b4fe4",
+  "keyType": "Singleton",
+  "valueType": "uint256",
+  "valueContent": "Number"
 }
 ```
 
@@ -77,26 +82,25 @@ When metadata JSON is created for a tokenId, the URI COULD be stored in the stor
 The value stored under this data key is a tuple `(bytes4,string)` that contains the following elements:
 
 - `bytes4` = the 4 bytes identifier of the hash function used to generate the URI:
-    - if the tokenId is a hash (LSP8TokenIdType `3`): see details below.
-    - if the tokenId is any other LSP8TokenIdType: MUST be `0x00000000`.
+  - if the tokenId is a hash (LSP8TokenIdType `3`): see details below.
+  - if the tokenId is any other LSP8TokenIdType: MUST be `0x00000000`.
 - `string` = the URI where the metadata for the `tokenId` can be retrieved.
 
 ```json
 {
-    "name": "LSP8MetadataTokenURI:<address|uint256|bytes32|string>",
-    "key": "0x4690256ef7e93288012f0000<address|uint256|bytes32|string>",
-    "keyType": "Mapping",
-    "valueType": "(bytes4,string)",
-    "valueContent": "(Bytes4,URI)"
+  "name": "LSP8MetadataTokenURI:<address|uint256|bytes32|string>",
+  "key": "0x4690256ef7e93288012f0000<address|uint256|bytes32|string>",
+  "keyType": "Mapping",
+  "valueType": "(bytes4,string)",
+  "valueContent": "(Bytes4,URI)"
 }
 ```
 
 > For construction of the Mapping data key see: [LSP2 ERC725Y JSON Schema > `keyType = Mapping`][LSP2#mapping]
 
-
 **When `bytes4 = 0x00000000`**
 
-The URI of some NFTs could be alterable, for example in the case of NFTs that need their metadata to change overtime. 
+The URI of some NFTs could be alterable, for example in the case of NFTs that need their metadata to change overtime.
 
 In this case, the first `bytes4` in the tuple MUST be set to `0x00000000` (4 x zero bytes), which describes that the URI can be changed over the lifetime of the NFTs.
 
@@ -110,7 +114,6 @@ This can be obtained as follow:
 
 `keccak256('keccak256(utf8)')` = `0x`**`6f357c6a`**`956bf6b8a917ccf88cc1d3388ff8d646810d0393fe69ae7ee228004f`
 
-
 #### LSP8TokenMetadataBaseURI
 
 The base URI for the LSP8 tokenIds metadata.
@@ -120,19 +123,19 @@ The URI that points to the metadata of a tokenId MUST be created using the follo
 ⚠️ TokenIds MUST be in lowercase, even for the tokenId type `address`.
 
 - LSP8TokenIdType `2` (= `uint256`)<br>
-e.g. `http://mybase.uri/1234`
+  e.g. `http://mybase.uri/1234`
 - LSP8TokenIdType `1` (= `address`)<br>
-e.g. `http://mybase.uri/0x43fb7ab43a3a32f1e2d5326b651bbae713b02429`
+  e.g. `http://mybase.uri/0x43fb7ab43a3a32f1e2d5326b651bbae713b02429`
 - LSP8TokenIdType `3` or `4` (= `bytes32`)<br>
-e.g. `http://mybase.uri/e5fe3851d597a3aa8bbdf8d8289eb9789ca2c34da7a7c3d0a7c442a87b81d5c2`
+  e.g. `http://mybase.uri/e5fe3851d597a3aa8bbdf8d8289eb9789ca2c34da7a7c3d0a7c442a87b81d5c2`
 - LSP8TokenIdType `5`
-e.g. `http://mybase.uri/my_string`
+  e.g. `http://mybase.uri/my_string`
 
-Some Base URIs could be alterable, for example in the case of NFTs that need their metadata to change overtime. 
+Some Base URIs could be alterable, for example in the case of NFTs that need their metadata to change overtime.
 
 In this case, the first `bytes4` in the tuple (for the `valueType`/`valueContent`) MUST be set to `0x00000000` (4 x zero bytes), which describes that the URI can be changed over the lifetime of the NFTs.
 
-If the tokenId type is a hash (LSP8TokenIdType `3`), the first `bytes4` in the tuple represents the hash function. 
+If the tokenId type is a hash (LSP8TokenIdType `3`), the first `bytes4` in the tuple represents the hash function.
 
 _Example:_
 
@@ -144,14 +147,13 @@ This can be obtained as follow:
 
 `keccak256('keccak256(utf8)')` = `0x`**`6f357c6a`**`956bf6b8a917ccf88cc1d3388ff8d646810d0393fe69ae7ee228004f`
 
-
 ```json
 {
-    "name": "LSP8TokenMetadataBaseURI",
-    "key": "0x1a7628600c3bac7101f53697f48df381ddc36b9015e7d7c9c5633d1252aa2843",
-    "keyType": "Singleton",
-    "valueType": "(bytes4,string)",
-    "valueContent": "(Bytes4,URI)"
+  "name": "LSP8TokenMetadataBaseURI",
+  "key": "0x1a7628600c3bac7101f53697f48df381ddc36b9015e7d7c9c5633d1252aa2843",
+  "keyType": "Singleton",
+  "valueType": "(bytes4,string)",
+  "valueContent": "(Bytes4,URI)"
 }
 ```
 
@@ -167,11 +169,11 @@ If the `LSP8ReferencedFrom` data key is set, it MUST NOT be changeable.
 
 ```json
 {
-    "name": "LSP8ReferencedFrom",
-    "key": "0x87f2a937bb9848cae1880f2bbde878b2d26b490a9db08fd6d1458364a032769d",
-    "keyType": "Singleton",
-    "valueType": "(address,bytes32)",
-    "valueContent": "(Address,bytes32)"
+  "name": "LSP8ReferencedFrom",
+  "key": "0x87f2a937bb9848cae1880f2bbde878b2d26b490a9db08fd6d1458364a032769d",
+  "keyType": "Singleton",
+  "valueType": "(address,bytes32)",
+  "valueContent": "(Address,bytes32)"
 }
 ```
 
@@ -182,7 +184,6 @@ The JSON format of the [`LSP4Metadata`](./LSP-4-DigitalAsset-Metadata.md#lsp4met
 The `"attributes"` fields of the LSP4Metadata JSON can be used to describe the unique properties of the tokenId.
 
 ### Methods
-
 
 #### totalSupply
 
@@ -195,6 +196,7 @@ Returns the number of existing tokens.
 **Returns:** `uint256` the number of existing tokens.
 
 #### balanceOf
+
 ```solidity
 function balanceOf(address tokenOwner) external view returns (uint256);
 ```
@@ -302,7 +304,7 @@ _Requirements:_
 - `tokenId` must exist
 - caller must be current `tokenOwner` of `tokenId`.
 
-**Returns:** `bool`, TRUE if `operator` address is an operator of `tokenId`, FALSE otherwise. 
+**Returns:** `bool`, TRUE if `operator` address is an operator of `tokenId`, FALSE otherwise.
 
 #### getOperatorsOf
 
@@ -354,18 +356,17 @@ _Requirements:_
 
 - If the token sender is a contract that supports LSP1 interface, it SHOULD call the token sender's [`universalReceiver(...)`] function with the parameters below:
 
-    - `typeId`: keccak256('LSP8Tokens_SenderNotification') > `0xb23eae7e6d1564b295b4c3e3be402d9a2f0776c57bdf365903496f6fa481ab00`
-    - `data`: The data sent SHOULD be packed encoded and contain the `sender` (address), `receiver` (address), `tokenId` (bytes32) and the `data` (bytes) respectively. 
+  - `typeId`: keccak256('LSP8Tokens_SenderNotification') > `0xb23eae7e6d1564b295b4c3e3be402d9a2f0776c57bdf365903496f6fa481ab00`
+  - `data`: The data sent SHOULD be packed encoded and contain the `sender` (address), `receiver` (address), `tokenId` (bytes32) and the `data` (bytes) respectively.
 
 <br>
 
 - If the token recipient is a contract that supports LSP1 interface, it SHOULD call the token recipient's [`universalReceiver(...)`] function with the parameters below:
 
-    - `typeId`: keccak256('LSP8Tokens_RecipientNotification') >`0x0b084a55ebf70fd3c06fd755269dac2212c4d3f0f4d09079780bfa50c1b2984d`
-    - `data`: The data sent SHOULD be packed encoded and contain the `sender` (address), `receiver` (address), `tokenId` (bytes32) and the `data` (bytes) respectively.
+  - `typeId`: keccak256('LSP8Tokens_RecipientNotification') >`0x0b084a55ebf70fd3c06fd755269dac2212c4d3f0f4d09079780bfa50c1b2984d`
+  - `data`: The data sent SHOULD be packed encoded and contain the `sender` (address), `receiver` (address), `tokenId` (bytes32) and the `data` (bytes) respectively.
 
-
-**Note:** LSP1 Hooks MUST be implemented in any type of token transfer (mint, transfer, burn, transferBatch). 
+**Note:** LSP1 Hooks MUST be implemented in any type of token transfer (mint, transfer, burn, transferBatch).
 
 #### transferBatch
 
@@ -420,8 +421,8 @@ event RevokedOperator(address indexed operator, address indexed tokenOwner, byte
 
 MUST be emitted when `tokenOwner` disables `operator` for `tokenId`.
 
-
 ## Rationale
+
 <!--The rationale fleshes out the specification by describing what motivated the design and why particular design decisions were made. It should describe alternate designs that were considered and related work, e.g. how the feature is supported in other languages. The rationale may also provide evidence of consensus within the community, and should discuss important objections or concerns raised during discussion.-->
 
 There should be a base token standard that allows tracking unique assets for the LSP ecosystem of contracts, which will allow common tooling and clients to be built. Existing tools and clients that expect [ERC721][ERC721] can be made to work with this standard by using "compatability" contract extensions that match the desired interface.
@@ -447,6 +448,7 @@ When a token is changing owners (minting, transfering, burning) an attempt is ma
 The `force` parameter sent during `function transfer` SHOULD be used when notifying the token receiver, to determine if it must support [LSP1 UniversalReceiver][LSP1]. This is used to prevent accidental token transfers, which may results in lost tokens: non-contract addresses could be a copy paste issue, contracts not supporting [LSP1 UniversalReceiver][LSP1] might not be able to move tokens.
 
 ## Implementation
+
 <!--The implementations must be completed before any LIP is given status "Final", but it need not be completed before the LIP is accepted. While there is merit to the approach of reaching consensus on the specification and rationale before writing code, the principle of "rough consensus and running code" is still useful when it comes to resolving many discussions of API details.-->
 
 A implementation can be found in the [lukso-network/lsp-smart-contracts][LSP8.sol].
@@ -455,27 +457,27 @@ ERC725Y JSON Schema `LSP8IdentifiableDigitalAsset`:
 
 ```json
 [
-    {
-        "name": "LSP8TokenIdType",
-        "key": "0x715f248956de7ce65e94d9d836bfead479f7e70d69b718d47bfe7b00e05b4fe4",
-        "keyType": "Singleton",
-        "valueType": "uint256",
-        "valueContent": "Number"
-    },
-    {
-        "name": "LSP8MetadataAddress:<address|uint256|bytes32>",
-        "key": "0x73dcc7c3c4096cdc7f8a0000<address|uint256|bytes32>",
-        "keyType": "Mapping",
-        "valueType": "Mixed",
-        "valueContent": "Mixed"
-    },
-    {
-        "name": "LSP8MetadataJSON:<address|uint256|bytes32>",
-        "key": "0x9a26b4060ae7f7d5e3cd0000<address|uint256|bytes32>",
-        "keyType": "Mapping",
-        "valueType": "bytes",
-        "valueContent": "JSONURL"
-    }
+  {
+    "name": "LSP8TokenIdType",
+    "key": "0x715f248956de7ce65e94d9d836bfead479f7e70d69b718d47bfe7b00e05b4fe4",
+    "keyType": "Singleton",
+    "valueType": "uint256",
+    "valueContent": "Number"
+  },
+  {
+    "name": "LSP8MetadataAddress:<address|uint256|bytes32>",
+    "key": "0x73dcc7c3c4096cdc7f8a0000<address|uint256|bytes32>",
+    "keyType": "Mapping",
+    "valueType": "Mixed",
+    "valueContent": "Mixed"
+  },
+  {
+    "name": "LSP8MetadataJSON:<address|uint256|bytes32>",
+    "key": "0x9a26b4060ae7f7d5e3cd0000<address|uint256|bytes32>",
+    "keyType": "Mapping",
+    "valueType": "bytes",
+    "valueContent": "JSONURL"
+  }
 ]
 ```
 
@@ -492,7 +494,7 @@ interface ILSP8 is /* IERC165 */ {
     function owner() external view returns (address);
 
     function transferOwnership(address newOwner) external override; // onlyOwner
-    
+
     function renounceOwnership() external virtual; // onlyOwner
 
 
@@ -502,7 +504,7 @@ interface ILSP8 is /* IERC165 */ {
 
 
     function getData(bytes32 dataKey) external view returns (bytes memory value);
-    
+
     function setData(bytes32 dataKey, bytes memory value) external; // onlyOwner
 
     function getDataBatch(bytes32[] memory dataKeys) external view returns (bytes[] memory values);
@@ -543,17 +545,18 @@ interface ILSP8 is /* IERC165 */ {
 ```
 
 ## Copyright
+
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
 
-[ERC165]: <https://eips.ethereum.org/EIPS/eip-165>
-[ERC721]: <https://github.com/ethereum/EIPs/blob/master/EIPS/eip-721.md>
-[ERC725]: <https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md>
-[ERC725Y]: <https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#erc725y>
-[ERC777]: <https://github.com/ethereum/EIPs/blob/master/EIPS/eip-777.md>
-[LSP1]: <./LSP-1-UniversalReceiver.md>
-[LSP2#jsonurl]: <./LSP-2-ERC725YJSONSchema.md#JSONURL>
-[LSP2#mapping]: <./LSP-2-ERC725YJSONSchema.md#mapping>
-[LSP4#erc725ykeys]: <./LSP-4-DigitalAsset-Metadata.md#erc725ykeys>
-[LSP7]: <./LSP-7-DigitalAsset.md>
-[LSP8]: <./LSP-8-IdentifiableDigitalAsset.md>
-[LSP8.sol]: <https://github.com/lukso-network/lsp-universalprofile-smart-contracts/blob/develop/contracts/LSP8IdentifiableDigitalAsset/LSP8IdentifiableDigitalAsset.sol>
+[ERC165]: https://eips.ethereum.org/EIPS/eip-165
+[ERC721]: https://github.com/ethereum/EIPs/blob/master/EIPS/eip-721.md
+[ERC725]: https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md
+[ERC725Y]: https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#erc725y
+[ERC777]: https://github.com/ethereum/EIPs/blob/master/EIPS/eip-777.md
+[LSP1]: ./LSP-1-UniversalReceiver.md
+[LSP2#jsonurl]: ./LSP-2-ERC725YJSONSchema.md#JSONURL
+[LSP2#mapping]: ./LSP-2-ERC725YJSONSchema.md#mapping
+[LSP4#erc725ykeys]: ./LSP-4-DigitalAsset-Metadata.md#erc725ykeys
+[LSP7]: ./LSP-7-DigitalAsset.md
+[LSP8]: ./LSP-8-IdentifiableDigitalAsset.md
+[LSP8.sol]: https://github.com/lukso-network/lsp-universalprofile-smart-contracts/blob/develop/contracts/LSP8IdentifiableDigitalAsset/LSP8IdentifiableDigitalAsset.sol
