@@ -15,7 +15,7 @@ requires: ERC165, ERC725Y, LSP1, LSP2, LSP4
 
 <!--"If you can't explain it simply, you don't understand it well enough." Provide a simplified and layman-accessible explanation of the LIP.-->
 
-A standard interface for identifiable digital assets, allowing for tokens to be uniquely traded and given metadata using [ERC725Y][ERC725].
+The LSP8 Identifiable Digital Asset Standard defines a standard interface for uniquely identifiable digital assets. It allows tokens to be uniquely traded and given with metadata using [ERC725Y][ERC725] and [LSP4](./LSP-4-DigitalAsset-Metadata.md#lsp4metadata).
 
 ## Abstract
 
@@ -37,13 +37,15 @@ A commonality with [LSP7 DigitalAsset][LSP7] is desired so that the two token im
 
 [ERC165] interface id: `0x622e7a01`
 
+### ERC725Y Data Keys - LSP8 Contract
+
 These are the expected data keys for an LSP8 contract that can mints identifiable tokens (NFTs).
 
 This standard can also be combined with the data keys from [LSP4 DigitalAsset-Metadata.][LSP4#erc725ykeys].
 
-### ERC725Y Data Keys - LSP8 Contract
-
 #### LSP8TokenIdType
+
+This data key describes the type of the `tokenId` and can take one of the following enum values described in the table below.
 
 In the context of LSP8, a contract implementing the LSP8 standard represents a collection of unique non-fungible tokens (NFT). The LSP8 collection contract is responsible for minting these tokens.
 
@@ -51,9 +53,9 @@ Each token part of the collection is identifiable through its unique `tokenId`.
 
 However, these NFTs can be represented differently depending on the use case. This is referred to as the **type of the tokenId**.
 
-The LSP8TokenIdType metadata key provides this information and describes how to treat the NFTs parts of the LSP8 collection.
+The `LSP8TokenIdType` metadata key provides this information and describes how to treat the NFTs parts of the LSP8 collection.
 
-The `tokenId` type can be one of the following possible enum values.
+This MUST NOT be changeable, and set only during initialization of the LSP8 token contract.
 
 | Value |   Type    | Description                                                                                                                                       |
 | :---: | :-------: | :------------------------------------------------------------------------------------------------------------------------------------------------ | --- | --- |
@@ -61,7 +63,7 @@ The `tokenId` type can be one of the following possible enum values.
 |  `1`  | `string`  | each NFT is represented using a **unique name** (as a short **utf8 encoded string**, no more than 32 characters long)                             |
 |  `2`  | `bytes32` | each NFT is represented using a 32 bytes long **unique identifier**.                                                                              |
 |  `3`  | `bytes32` | each NFT is represented using a 32 bytes **hash digest**.                                                                                         |
-|  `4`  | `address` | each NFT is represented as its **own [ERC725Y] smart contract** that can hold its own metadata.                                                   |     |     |
+|  `4`  | `address` | each NFT is represented as its **own smart contract** that can hold its own metadata (_e.g [ERC725Y] compatible_).                                |     |     |
 
 ```json
 {
@@ -73,16 +75,18 @@ The `tokenId` type can be one of the following possible enum values.
 }
 ```
 
-This MUST NOT be changeable, and set only during initialization of the token.
-
 #### LSP8MetadataTokenURI:<tokenId>
+
+This data key stores the URI of the metadata for a specific `tokenId`.
+
+It consists of a `bytes4` identifier of the hash function and the URI string.
 
 When metadata JSON is created for a tokenId, the URI COULD be stored in the storage of the LSP8 contract.
 
 The value stored under this data key is a tuple `(bytes4,string)` that contains the following elements:
 
 - `bytes4` = the 4 bytes identifier of the hash function used to generate the URI:
-  - if the tokenId is a hash (LSP8TokenIdType `3`): see details below.
+  - if the tokenId is a hash (`LSP8TokenIdType` is `3`): _see details below_.
   - if the tokenId is any other LSP8TokenIdType: MUST be `0x00000000`.
 - `string` = the URI where the metadata for the `tokenId` can be retrieved.
 
@@ -116,11 +120,12 @@ This can be obtained as follow:
 
 #### LSP8TokenMetadataBaseURI
 
-The base URI for the LSP8 tokenIds metadata.
+This data key defines the base URI for the metadata of each `tokenId`s present in the LSP8 contract.
 
-The URI that points to the metadata of a tokenId MUST be created using the following pattern: `{LSP8TokenMetadataBaseURI}{tokenId}`
+The complete URI that points to the metadata of a specific tokenId MUST be formed by concatenating this base URI with the `tokenId`.
+As `{LSP8TokenMetadataBaseURI}{tokenId}`.
 
-⚠️ TokenIds MUST be in lowercase, even for the tokenId type `address`.
+⚠️ TokenIds MUST be in lowercase, even for the tokenId type `address` (= address not checksumed).
 
 - LSP8TokenIdType `2` (= `uint256`)<br>
   e.g. `http://mybase.uri/1234`
@@ -168,7 +173,7 @@ The **tokenId metadata contract** SHOULD contain the following ERC725Y data key 
 
 #### LSP8ReferenceContract
 
-The address of the LSP8 contract which minted this tokenId.
+This data key stores the address of the LSP8 contract that minted this specific `tokenId` (defined by the address of the **tokenId metadata contract**).
 
 It is a reference back to the LSP8 Collection it comes from.
 
@@ -186,9 +191,9 @@ If the `LSP8ReferenceContract` data key is set, it MUST NOT be changeable.
 
 ### LSP8 TokenId Metadata
 
-The JSON format of the [`LSP4Metadata`](./LSP-4-DigitalAsset-Metadata.md#lsp4metadata) data key can be used as a base for the metadata of a uniquely identifiable digital asset.
+The metadata for a specific of a uniquely identifiable digital asset (when this tokenId is represented by its own ERC725Y contract) can follow the JSON format of the [`LSP4Metadata`](./LSP-4-DigitalAsset-Metadata.md#lsp4metadata) data key.
 
-The `"attributes"` fields of the LSP4Metadata JSON can be used to describe the unique properties of the tokenId.
+This JSON format includes an `"attributes"` field to describe unique properties of the tokenId.
 
 ### Methods
 
