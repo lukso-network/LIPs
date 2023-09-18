@@ -6,7 +6,7 @@ discussions-to: https://discord.gg/E2rJPP4 (LUKSO), https://discord.gg/PQvJQtCV 
 status: Draft
 type: LSP
 created: 2021-09-02
-requires: ERC165, ERC173, ERC725Y, LSP1, LSP2, LSP4
+requires: ERC165, ERC173, ERC725Y, LSP1, LSP2, LSP4, LSP17
 ---
 
 <!--You can leave these HTML comments in your merged LIP and delete the visible duplicate text guides, they will not appear and may be helpful to refer to if you edit it again. This is the suggested template for new LIPs. Note that an LIP number will be assigned by an editor. When opening a pull request to submit your LIP, please use an abbreviated title in the filename, `lip-draft_title_abbrev.md`. The title should be 44 characters or less.-->
