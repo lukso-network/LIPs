@@ -250,7 +250,7 @@ For more informations about how to access each index of the `LSP4Creators[]` arr
 
 References the creator addresses for this asset. This data key exists so that smart contracts can detect whether the address of a creator is present in the `LSP4Creators[]` array without looping all over it on-chain. Moreover, it helps to identify at which index in the `LSP4Creators[]` the creator address is located for easy access and to change or remove this specific creator from the array. Finally, it also allows the detection of the interface supported by the creator.
 
-The `valueContent` MUST be constructed as follows: `bytes4(standardInterfaceId) + bytes8(indexNumber)`. 
+The `valueContent` MUST be constructed as follows: `bytes4(standardInterfaceId) + uint128(indexNumber)`. 
 Where:
 - `standardInterfaceId` = if the creator address is a smart contract, the [ERC165 interface ID](https://eips.ethereum.org/EIPS/eip-165) of the standard that the smart contract implements. Otherwise `0xffffffff` in the case where the creator address is:
   - an Externally Owned Account, or 
@@ -262,7 +262,7 @@ Where:
     "name": "LSP4CreatorsMap:<address>",
     "key": "0x6de85eaf5d982b4e5da00000<address>",
     "keyType": "Mapping",
-    "valueType": "(bytes4,bytes8)",
+    "valueType": "(bytes4,uint128)",
     "valueContent": "(Bytes4,Number)"
 }
 ```
@@ -319,7 +319,7 @@ ERC725Y JSON Schema `LSP4DigitalAsset`:
         "name": "LSP4CreatorsMap:<address>",
         "key": "0x6de85eaf5d982b4e5da00000<address>",
         "keyType": "Mapping",
-        "valueType": "(bytes4,bytes8)",
+        "valueType": "(bytes4,uint128)",
         "valueContent": "(Bytes4,Number)"
     }
 ]
