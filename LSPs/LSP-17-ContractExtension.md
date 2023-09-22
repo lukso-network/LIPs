@@ -118,7 +118,7 @@ If a validation mechanism exists in the extension contract, it should depend on 
 
 ## Security Considerations
 
-A function selector clash can occurs when two different function signatures hash to the same four-byte hash. Users needs to take extra care to avoid adding functions that map to a function selector already existing. 
+A function selector clash can occur when two different function signatures hash to the same four-byte hash. Users need to take extra care to avoid adding functions that map to a function selector already existing. 
 
 ## Rationale
 
