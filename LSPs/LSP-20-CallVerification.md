@@ -15,7 +15,7 @@ This standard introduces a mechanism for delegating the verification of a functi
  
 ## Abstract
 
-The Call Verification standard introduces a way for a smart contracts to delegate the conditions or requirements needed to call a specific function to another smart contract. 
+The Call Verification standard introduces a way for a smart contract to delegate the conditions or requirements needed to call a specific function to another smart contract. 
 
 This approach offers increased flexibility, where the call requirements can be checked before or/and after the execution of the function being called on another contract.
 
