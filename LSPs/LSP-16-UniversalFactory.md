@@ -520,7 +520,7 @@ Deploys a contract using the CREATE2 opcode with initialization (external call a
 
 The address where the contract will be deployed can be known in advance via the [computeAddress](#computeaddress) function.
 
-The `providedSalt` parameter is not used directly as the salt by the CREATE2 opcode. Instead, it is hashed via keccak256 with prepending a true boolean and the initializeCalldata parameter . See [generateSalt](#generatesalt) function for more details.
+The `providedSalt` parameter is not used directly as the salt by the CREATE2 opcode. Instead, it is hashed via keccak256 with prepending a true boolean and the initializeCalldata parameter. See [generateSalt](#generatesalt) function for more details.
 
 > `keccak256(abi.encodePacked(true, initializeCalldata, providedSalt))`
 
@@ -588,7 +588,7 @@ Deploys an ERC1167 minimal proxy contract using the CREATE2 opcode with initiali
 
 The address where the contract will be deployed can be known in advance via the [computeERC1167Address](#computeerc1167address) function.
 
-The `providedSalt` parameter is not used directly as the salt by the CREATE2 opcode. Instead, it is hashed via keccak256 with prepending a true boolean and the initializeCalldata parameter . See [generateSalt](#generatesalt) function for more details.
+The `providedSalt` parameter is not used directly as the salt by the CREATE2 opcode. Instead, it is hashed via keccak256 with prepending a true boolean and the initializeCalldata parameter. See [generateSalt](#generatesalt) function for more details.
 
 > `keccak256(abi.encodePacked(true, initializeCalldata, providedSalt))`
 
@@ -679,7 +679,7 @@ This maintains consistent deployment behaviour. Users are required to initialize
 
 **Return:**
 
-- `generatedSalt`: The generated salt which will be used for CREATE2 deploymen
+- `generatedSalt`: The generated salt which will be used for CREATE2 deployment
 
 
 ### Events
@@ -718,7 +718,7 @@ An implementation can be found in the [lukso-network/lsp-smart-contracts](https:
 
 ## Security Consideration
 
-Knowing that deploying a contract using the UniversalFactory will allow to deploy the same contract on other chains with the same address, people should be aware and watch out to use contracts that doesn't have a logic that protect against replay-attacks.
+Knowing that deploying a contract using the UniversalFactory will allow to deploy the same contract on other chains with the same address, people should be aware and watch out to use contracts that dont't have a logic that protects against replay-attacks.
 
 The constructor parameters or/and initialization data SHOULD NOT include any network-specific parameters (e.g: chain-id, a local token contract address), otherwise the deployed contract will not be recreated at the same address across different networks, thus defeating the purpose of the UniversalFactory.
 
