@@ -477,18 +477,25 @@ ERC725Y JSON Schema `LSP8IdentifiableDigitalAsset`:
     "valueContent": "Number"
   },
   {
-    "name": "LSP8MetadataAddress:<address|uint256|bytes32>",
-    "key": "0x73dcc7c3c4096cdc7f8a0000<address|uint256|bytes32>",
+    "name": "LSP8MetadataTokenURI:<address|uint256|bytes32|string>",
+    "key": "0x4690256ef7e93288012f0000<address|uint256|bytes32|string>",
     "keyType": "Mapping",
-    "valueType": "Mixed",
-    "valueContent": "Mixed"
+    "valueType": "(bytes4,string)",
+    "valueContent": "(Bytes4,URI)"
   },
   {
-    "name": "LSP8MetadataJSON:<address|uint256|bytes32>",
-    "key": "0x9a26b4060ae7f7d5e3cd0000<address|uint256|bytes32>",
-    "keyType": "Mapping",
-    "valueType": "bytes",
-    "valueContent": "JSONURL"
+    "name": "LSP8TokenMetadataBaseURI",
+    "key": "0x1a7628600c3bac7101f53697f48df381ddc36b9015e7d7c9c5633d1252aa2843",
+    "keyType": "Singleton",
+    "valueType": "(bytes4,string)",
+    "valueContent": "(Bytes4,URI)"
+  },
+  {
+    "name": "LSP8ReferenceContract",
+    "key": "0x708e7b881795f2e6b6c2752108c177ec89248458de3bf69d0d43480b3e5034e6",
+    "keyType": "Singleton",
+    "valueType": "(address,bytes32)",
+    "valueContent": "(Address,bytes32)"
   }
 ]
 ```
