@@ -718,7 +718,7 @@ An implementation can be found in the [lukso-network/lsp-smart-contracts](https:
 
 ## Security Consideration
 
-Knowing that deploying a contract using the UniversalFactory will allow to deploy the same contract on other chains with the same address, people should be aware and watch out to use contracts that dont't have a logic that protects against replay-attacks.
+Knowing that deploying a contract using the UniversalFactory will allow to deploy the same contract on other chains with the same address, people should be aware and watch out to use contracts that don't have a logic that protects against replay-attacks.
 
 The constructor parameters or/and initialization data SHOULD NOT include any network-specific parameters (e.g: chain-id, a local token contract address), otherwise the deployed contract will not be recreated at the same address across different networks, thus defeating the purpose of the UniversalFactory.
 
