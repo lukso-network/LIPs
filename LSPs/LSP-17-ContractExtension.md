@@ -34,6 +34,8 @@ Implementing a mechanism for attaching extensions to a specific contract not onl
 
 ## LSP17Extendable Specification
 
+### ERC165 Interface ID
+
 **LSP17-Extendable** interface id according to [ERC165]: `0xa918fa6b`.
 
 _This `bytes4` interface id is calculated as the first 4 bytes of the keccak256 of the word "LSP17Extendable" since there is no public functions available._
@@ -42,14 +44,21 @@ Smart contracts that adhere to the LSP17Extendable standard MUST include the `su
 
 They SHOULD also check whether the interface being queried is supported within the `supportsInterface(..)` extension, if it exists.
 
-Whenever a function is called on an extendable contract and the function does not exist, the fallback function of the extendable contract MUST call the function on the extension mapped using the `CALL` opcode. The calldata MUST be appended with 52 extra bytes as follows:
+### Behavior
 
+Whenever a function is called on an extendable contract and the function does not exist, the fallback function of the extendable contract MUST call the function on the extension mapped using the `CALL` opcode. 
+
+The calldata MUST be appended with 52 extra bytes as follows:
 - The `msg.sender` calling the extendable contract without any pad, MUST be 20 bytes.
 - The `msg.value` received to the extendable contract, MUST be 32 bytes.
 
 The standard does not enforce a specific method for mapping function selectors to the addresses of the extension contracts, nor does it require specific methods for setting and querying the addresses of the extensions.
 
 As an example, a mapping of function selectors to extension contracts can be used, such as a `mapping(bytes4 => address)`. However, any other data structure can also be used to map function selectors to extension contract addresses.
+
+> **Note:** the contract implementing the LSP17 Extendable sub-standard **does not enforce forwarding the amount of native tokens received (`msg.value`) to the extension**. It is up to the implementation to define this behavior and whether the native tokens received while calling a function that does not exist should be forwarded or not to the extension.
+
+### ERC725Y Data Key
 
 If the contract implementing the LSP17 standard is an ERC725Y contract, the extension contracts COULD be stored under the following ERC725Y data key:
 
@@ -69,7 +78,7 @@ The <bytes4\> is the `functionSelector` called on the account contract. For inst
 0xcee78b4094da860110960000aabbccdd00000000000000000000000000000000
 ```
 
-Check [LSP2-ERC725YJSONSchema] to learn how to encode the data key, and the [**Mapping**](./LSP-2-ERC725YJSONSchema.md#mapping) section to learn the padding rules.
+> See [LSP2-ERC725YJSONSchema] to learn how to encode the data key, and the [**Mapping**](./LSP-2-ERC725YJSONSchema.md#mapping) section to learn the padding rules.
 
 ## LSP17Extension Specification
 
