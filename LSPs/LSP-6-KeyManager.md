@@ -36,7 +36,7 @@ Storing the permissions at the core [ERC725Account] itself, allows it to survive
 
 ## Specification
 
-**LSP6-KeyManager** interface id according to [ERC165]: `0x627ca5d3`.
+**LSP6-KeyManager** interface id according to [ERC165]: `0x66918867`.
 
 Smart contracts implementing the LSP6 standard MUST implement and support the following standard and their interfaces:
 - [ERC165]
@@ -118,7 +118,7 @@ function executeRelayCall(
     returns (bytes memory)
 ```
 
-This function is part of the [LSP25-ExecuteRelayCall] specification, with additional requirements as follow.
+This function is part of the [LSP25-ExecuteRelayCall] specification, with additional requirements as follows.
 
 - The address of the signer recovered from the signature MUST have the right permissions to execute the `payload`.
 - The event `PermissionsVerified` MUST be emitted after verifying the permissions of the signer address recovered.
@@ -139,7 +139,7 @@ function executeRelayCallBatch(
     returns (bytes[] memory)
 ```
 
-This function is part of the [LSP25-ExecuteRelayCall] specification, with additional requirements as follow.
+This function is part of the [LSP25-ExecuteRelayCall] specification, with additional requirements as follows.
 
 - The address of the signer recovered **from each signature** in the `signatures[]` array MUST have the right permissions to execute the the associated payload in the `payloads[]` array.
 - The event `PermissionsVerified` MUST be emitted after verifying the permissions of **each signer address recovered**.

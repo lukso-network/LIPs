@@ -45,7 +45,7 @@ By having a common smart contract interface, applications and protocols can impl
 
 **LSP25-ExecuteRelayCall** interface id according to [ERC165]: `0x5ac79908`
 
-Smart contracts implementing the LSP6 standard MUST implement the [ERC165] `supportsInterface(..)` function and MUST support the [ERC165] and LSP25 interface ids.
+Smart contracts implementing the LSP25 standard MUST implement the [ERC165] `supportsInterface(..)` function and MUST support the [ERC165] and LSP25 interface ids.
 
 ## Methods
 
@@ -64,7 +64,7 @@ _Parameters:_
 
 _Returns:_ `uint256` , the current nonce.
 
-Payloads signed with incremental nonces on the same channel for the same signer are executed in order. e.g, in channel X, the payload nb two signed with the second nonce will not be successfully executed until the payload nb one signed with the first nonce has been executed.
+Payloads signed with incremental nonces on the same channel for the same signer are executed in order. e.g, in channel X, the second payload signed with the second nonce will not be successfully executed until the first payload signed with the first nonce has been executed.
 
 Payloads signed with nonces on different channels are executed independently from each other, regardless of when they got executed or if they got executed successfully or not. e.g, the payload signed with the fourth nonce on channel X can be successfully executed even if the payload signed with the first nonce of channel Y:
 
@@ -95,10 +95,11 @@ _Parameters:_
 
 - `signature`: A 65 bytes long ethereum signature.
 - `nonce`: MUST be the nonce of the address that signed the message. This can be obtained via the `getNonce(address address, uint256 channel)` function.
-- `validityTimestamps`: Two `uint128` timestamps concatenated together. The first timestamp determines from when the payload can be executed, the second timestamp determines a deadlines after which the payload is not valid anymore. If validityTimestamps is `0`, the payload is valid at indefinitely at any point in time and the checks for the timestamps are skipped.
-- `payload`: The abi-encoded function call to be executed on the linked target contract.
+- `validityTimestamps`: Two `uint128` timestamps concatenated together. The first timestamp determines from when the payload can be executed, and the second timestamp determines a deadline after which the payload is no longer valid. If `validityTimestamps` is `0`, the payload is valid indefinitely at any point in time and the checks for the timestamps are skipped.
+payload can be executed, the second timestamp determines a deadlines after which the payload is not valid anymore. If validityTimestamps is `0`, the payload is valid at indefinitely at any point in time and the checks for the timestamps are skipped.
+- `payload`: The abi-encoded function call to be executed. This could be a function to be called on the current contract implementing LSP25 or an external target contract.
 
-_Returns:_ `bytes` , the returned data as abi-decoded bytes of the call on ERC725 smart contract, if the call succeeded, otherwise revert with a reason-string.
+_Returns:_ `bytes`. If the call succeeded, these `bytes` MUST be the returned data as abi-decoded bytes of the function call defined by the `payload` parameter. Otherwise revert with a reason-string.
 
 _Requirements:_
 
