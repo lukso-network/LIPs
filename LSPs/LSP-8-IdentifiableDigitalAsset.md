@@ -35,7 +35,7 @@ A commonality with [LSP7 DigitalAsset][LSP7] is desired so that the two token im
 
 ## Specification
 
-[ERC165] interface id: `0x622e7a01`
+[ERC165] interface id: `0x1ae9ba1f`
 
 ### ERC725Y Data Keys - LSP8 Contract
 
