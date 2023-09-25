@@ -6,9 +6,8 @@ discussions-to:
 status: Draft
 type: LSP
 created: 2021-08-03
-requires: ERC165, ERC1271, LSP2
+requires: ERC165, ERC1271, LSP2, LSP20, LSP25
 ---
-
 
 ## Simple Summary
 
@@ -37,11 +36,16 @@ Storing the permissions at the core [ERC725Account] itself, allows it to survive
 
 ## Specification
 
-**LSP6-KeyManager** interface id according to [ERC165]: `0x38bb3cdb`.
+**LSP6-KeyManager** interface id according to [ERC165]: `0x66918867`.
 
-Smart contracts implementing the LSP6 standard MUST implement the [ERC165] `supportsInterface(..)` function and MUST support the [ERC165], [ERC1271], [LSP20-CallVerification] and the LSP6 interface ids.
+Smart contracts implementing the LSP6 standard MUST implement and support the following standard and their interfaces:
+- [ERC165]
+- [ERC1271]
+- [LSP20-CallVerification]
+- [LSP25-ExecuteRelayCall] 
+- the LSP6 interface functions defined below.
 
-Every contract that supports the LSP6 standard SHOULD implement:
+Every contract that supports the LSP6 standard MUST implement:
 
 ### Methods
 
@@ -100,30 +104,45 @@ This function is part of the [LSP20-CallVerification] specification, with additi
 
 - MUST return the magic value.
 
-#### getNonce
+#### executeRelayCall
 
 ```solidity
-function getNonce(address signer, uint128 channel) external view returns (uint256)
+function executeRelayCall(
+    bytes memory signature, 
+    uint256 nonce, 
+    uint256 validityTimestamps, 
+    bytes memory payload
+) 
+    external 
+    payable 
+    returns (bytes memory)
 ```
 
-Returns the latest nonce for a signer on a specific channel. A signer can choose a channel number arbitrarily and use this nonce to sign a payload that can be executed as a meta-transaction by any address via [executeRelayCall](#executeRelayCall)  function.
+This function is part of the [LSP25-ExecuteRelayCall] specification, with additional requirements as follows.
 
-_Parameters:_
+- The address of the signer recovered from the signature MUST have the right permissions to execute the `payload`.
+- The event `PermissionsVerified` MUST be emitted after verifying the permissions of the signer address recovered.
 
-- `signer`: the address of the signer of the transaction.
-- `channel` :  the channel which the signer wants to use for executing the transaction.
 
-_Returns:_ `uint256` , the current nonce.
+#### executeRelayCallBatch
 
-Payloads signed with incremental nonces on the same channel for the same signer are executed in order. e.g, in channel X, the payload nb two signed with the second nonce will not be successfully executed until the payload nb one signed with the first nonce has been executed.
+```solidity
+function executeRelayCallBatch(
+    bytes[] memory signatures, 
+    uint256[] memory nonces, 
+    uint256[] memory validityTimestamps, 
+    uint256[] memory values, 
+    bytes[] memory payloads
+) 
+    external 
+    payable 
+    returns (bytes[] memory)
+```
 
-Payloads signed with nonces on different channels are executed independently from each other, regardless of when they got executed or if they got executed successfully or not. e.g, the payload signed with the fourth nonce on channel X can be successfully executed even if the payload signed with the first nonce of channel Y:
-- was executed before.
-- was executed and reverted.
+This function is part of the [LSP25-ExecuteRelayCall] specification, with additional requirements as follows.
 
-> X and Y can be any arbitrary number between 0 and 2^128.
-
-Read [what are multi-channel nonces](#what-are-multi-channel-nonces).
+- The address of the signer recovered **from each signature** in the `signatures[]` array MUST have the right permissions to execute the the associated payload in the `payloads[]` array.
+- The event `PermissionsVerified` MUST be emitted after verifying the permissions of **each signer address recovered**.
 
 #### execute
 
@@ -182,85 +201,6 @@ _Requirements:_
 - The sum of each element of the `values` array MUST be equal to the value sent to the function.
 
 - MUST comply to the requirements of the [`execute(bytes)`](#execute) function.
-
-#### executeRelayCall
-
-```solidity
-function executeRelayCall(bytes memory signature, uint256 nonce, uint256 validityTimestamps, bytes memory payload) external payable returns (bytes memory)
-```
-
-Allows anybody to execute a `payload` on the linked [target](#target) contract, given they have a valid signature, specific to the payload passed, from a permissioned controller.
-
-MUST fire the [PermissionsVerified event](#permissionsverified).
-
-_Parameters:_
-- `signature`: bytes65 ethereum signature.
-- `nonce`: MUST be the nonce of the address that signed the message. This can be obtained via the `getNonce(address address, uint256 channel)` function.
-- `validityTimestamps`:	Two `uint128` timestamps concatenated together. The first timestamp determines from when the payload can be executed, the second timestamp determines a deadlines after which the payload is not valid anymore. If validityTimestamps is `0`, the payload is valid at indefinitely at any point in time and the checks for the timestamps are skipped.
-- `payload`: The abi-encoded function call to be executed on the linked target contract.
-
-
-_Returns:_ `bytes` , the returned data as abi-decoded bytes of the call on ERC725 smart contract, if the call succeeded, otherwise revert with a reason-string.
-
-_Requirements:_
-
-- The address recovered from the signature and the digest signed MUST have **permission(s)** for the action(s) being executed. Check [Permissions](#permissions) to know more.
-
-The digest signed MUST be constructed according to the [version 0 of EIP-191] with the following format:
-
-```
-0x19 <0x00> <KeyManager address> <LSP6_VERSION> <chainId> <nonce> <validityTimestamps> <value> <payload>
-```
-
-    - `0x19`: byte intended to ensure that the `signed_data` is not valid RLP.
-    - `0x00`: version 0 of the EIP191.
-    - `KeyManager address`: The address of the Key Manager executing the payload.
-    - `LSP6_VERSION`: Version relative to the LSP6KeyManager defined as a uint256 equal to 6.
-    - `chainId`: The chainId of the blockchain where the Key Manager is deployed, as a uint256.
-    - `nonce`: The nonce to sign the payload with, as a uint256.
-    - `validityTimestamps`: Two uint128 timestamps concatenated, the first timestamp determines from when the payload can be executed, the second timestamp delimits the end of the validity of the payload. If validityTimestamps is 0, the checks of the timestamps are skipped.
-    - `value`: The amount of native token to transfer to the linked target contract alongside the call.
-    - `payload`: The payload to be executed.
-
-These parameters MUST be packed encoded (not zero padded, leading `0`s are removed), then hashed with keccak256 to produce the digest.
-
-For signing, permissioned users should apply the same steps and sign the final hash got at the end.
-
-- The nonce passed to the function MUST be a valid nonce according to the [multi-channel nonce](#what-are-multi-channel-nonces) section.
-
-- MUST send the value passed by the caller to the call on the linked target contract.
-
-> Non payable functions will revert in case of calling them and passing value along the call.
-
-
-#### executeRelayCallBatch
-
-```solidity
-function executeRelayCallBatch(bytes[] memory signatures, uint256[] memory nonces, uint256[] memory validityTimestamps, uint256[] memory values, bytes[] memory payloads) external payable returns (bytes[] memory)
-```
-
-
-Allows anybody to execute a batch of `payloads` on the linked [target](#target) contract, given they have valid signatures specific to the payloads signed by permissioned controllers.
-
-MUST fire the [PermissionsVerified event](#permissionsverified) on each iteration.
-
-_Parameters:_
-
-- `signatures`: An array of bytes65 ethereum signature.
-- `nonce`: An array of nonces from the address/es that signed the digests. This can be obtained via the `getNonce(address address, uint256 channel)` function.
-- `values`: An array of native token amounts to transfer to the linked [target](#target) contract alongside the call on each iteration.
-- `validityTimestamps`:	An array of `uint256` formed of Two `uint128` timestamps concatenated, the first timestamp determines from when the payload can be executed, the second timestamp delimits the end of the validity of the payload. If validityTimestamps is `0`, the checks of the timestamps are skipped.
-- `payloads`: An array of calldata payloads to be executed on the linked [target](#target) contract on each iteration.
-
-_Returns:_ `bytes[]` , an array of returned as abi-decoded array of `bytes[]` of the linked target contract, if the calls succeeded, otherwise revert with a reason-string.
-
-_Requirements:_
-
-- MUST comply to the requirements of the [`executeRelayCall(bytes,uint256,bytes)`](#executerelaycall) function.
-
-- The parameters length MUST be equal.
-
-- The sum of each element of the `values` array MUST be equal to the total value sent to the function.
 
 
 ### Events
@@ -704,63 +644,6 @@ By setting the value to `0xeafec4d89fa9619884b6` in the list of allowed ERC725Y 
 
 <br>
 
-### What are multi-channel nonces
-
-This concept was taken from <https://github.com/amxx/permit#out-of-order-execution>.
-
-Using nonces prevent old signed transactions from being replayed again (replay attacks). A nonce is an arbitrary number that can be used just once in a transaction.
-
-#### Problem of Sequential Nonces
-
-With native transactions, nonces are strictly sequential. This means that messages with sequential nonces must be executed in order. For instance, in order for message number 4 to be executed, it must wait for message number 3 to complete.
-
-However, **sequential nonces come with the following limitation**:
-
-Some users may want to sign multiple message, allowing the transfer of different assets to different recipients. In that case, the recipient want to be able to use / transfer their assets whenever they want, and will certainly not want to wait on anyone before signing another transaction.
-
- This is where **out-of-order execution** comes in.
-
-#### Introducing multi-channel nonces
-
-Out-of-order execution is achieved by using multiple independent channels. Each channel's nonce behaves as expected, but different channels are independent. This means that messages 2, 3, and 4 of `channel 0` must be executed sequentially, but message 3 of channel 1 is independent, and only depends on message 2 of `channel 1`.
-
-The benefit is that the signer key can determine for which channel to sign the nonces. Relay services will have to understand the channel the signer choose and execute the transactions of each channel in the right order, to prevent failing transactions.
-
-#### Nonces in the KeyManager
-
-The Key Manager allows out-of-order execution of messages by using nonces through multiple channels.
-
- Nonces are represented as `uint256` from the concatenation of two `uint128` : the `channelId` and the `nonceId`.
-
- - left most 128 bits : `channelId`
- - right most 128 bits: `nonceId`
-
-
-![multi-channel-nonce](https://user-images.githubusercontent.com/31145285/133292580-42817340-104e-48c5-832b-533842b98d26.jpg)
-
-<p align="center"><i> Example of multi channel nonce, where channelId = 5 and nonceId = 1 </i></p>
-
-
-The current nonce can be queried using:
-
-```solidity
-function getNonce(address _address, uint256 _channel) public view returns (uint256)
-```
-Since the `channelId` represents the left-most 128 bits, using a minimal value like 1 will return a huge `nonce` number: `2**128` equal to 3402823669209384634633746074317682114**56**.
-
-After the signed transaction is executed the `nonceId` will be incremented by 1, this will increment the `nonce` by 1 as well because the nonceId represents the first 128 bits of the nonce so it will be 3402823669209384634633746074317682114**57**.
-
-```solidity
-
-_nonces[signer][nonce >> 128]++
-
-```
-`nonce >> 128` represents the channel which the signer chose for executing the transaction. After looking up the nonce of the signer at that specific channel it will be incremented by 1 `++`.<br>
-
-For sequential messages, users could use channel `0` and for out-of-order messages they could use channel `n`.
-
-**Important:** It's up to the user to choose the channel that he wants to sign multiple sequential orders on it, not necessary `0`.
-
 ## Rationale
 <!--The rationale fleshes out the specification by describing what motivated the design and why particular design decisions were made. It should describe alternate designs that were considered and related work, e.g. how the feature is supported in other languages. The rationale may also provide evidence of consensus within the community, and should discuss important objections or concerns raised during discussion.-->
 This standard was inspired by how files permissions are designed in UNIX based file systems.
@@ -830,17 +713,10 @@ interface ILSP6  /* is ERC165 */ {
 
     function target() external view returns (address);
 
-    function getNonce(address from, uint128 channelId) external view returns (uint256);
-
 
     function execute(bytes calldata payload) external payable returns (bytes memory);
 
     function executeBatch(uint256[] calldata values, bytes[] calldata payloads) external payable returns (bytes[] memory);
-
-
-    function executeRelayCall(bytes calldata signature, uint256 nonce, uint256 validityTimestamps, bytes calldata payload) external payable returns (bytes memory);
-
-    function executeRelayCallBatch(bytes[] calldata signatures, uint256[] calldata nonces, uint256[] calldata validityTimestamps, uint256[] calldata values, bytes[] calldata payloads) external payable returns (bytes[] memory);
 
 }
 ```
@@ -851,17 +727,15 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 
 
 [ERC165]: <https://eips.ethereum.org/EIPS/eip-165>
-[version 0 of EIP-191]: <https://github.com/ethereum/EIPs/blob/master/EIPS/eip-191.md#version-0x00>
-[ERC725 X or Y smart contract]: <https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md>
 [ERC1271]: <https://eips.ethereum.org/EIPS/eip-1271>
 [ERC1721 magic value]: <https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1271.md#specification>
 [ERC1271 fail value]: <https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1271.md#specification>
 [ERC725Account]: <./LSP-0-ERC725Account.md>
 [BitArray]: <./LSP-2-ERC725YJSONSchema.md#bitarray>
-[EIP191]: <https://eips.ethereum.org/EIPS/eip-191>
 [CALL]: <https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#execute>
 [STATICCALL]: <https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#execute>
 [DELEGATECALL]: <https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#execute>
 [CREATE]: <https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#execute>
 [CREATE2]: <https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#execute>
 [LSP20-CallVerification]: <./LSP-20-CallVerification.md>
+[LSP25-ExecuteRelayCall]: <./LSP-25-ExecuteRelayCall.md>
