@@ -6,16 +6,16 @@ discussions-to:
 status: Draft
 type: LSP
 created: 2023-03-15
-requires: 
+requires:
 ---
 
 ## Simple Summary
 
 This standard introduces a mechanism for delegating the verification of a function call to another contract.
- 
+
 ## Abstract
 
-The Call Verification standard introduces a way for a smart contract to delegate the conditions or requirements needed to call a specific function to another smart contract. 
+The Call Verification standard introduces a way for a smart contract to delegate the conditions or requirements needed to call a specific function to another smart contract.
 
 This approach offers increased flexibility, where the call requirements can be checked before or/and after the execution of the function being called on another contract.
 
@@ -25,14 +25,13 @@ In certain situations, a smart contract may need to modify the conditions or req
 
 Delegating the function call requirements to another smart contract enables a more dynamic and adaptable approach. This makes it easier to update, modify, or enhance the requirements without affecting the primary contract's functionality. The Call Verification standard aims to provide a solution that allows contracts to be more versatile and adaptable in response to changing conditions or requirements.
 
-
 ## Specification
 
 There are two distinct contracts involved in the Call Verification standard, each playing a different role in achieving the desired functionality: the contract that receives the initial function call and asks the verifier contract for verification and the verifier contract that handles the actual verification process.
 
-The contract receiving the function call and calling a verifier contract MUST support the `LSP20-CallVerification` interfaceId: `0x1a0eb6a5`, calculated as the first 4 bytes of the keccak256 hash of the string  `"LSP20CallVerification"`. This interface ensures that the required behavior is available for performing the necessary verifications.
+The contract receiving the function call and calling a verifier contract MUST support the `LSP20-CallVerification` interfaceId: `0x1a0eb6a5`, calculated as the first 4 bytes of the keccak256 hash of the string `"LSP20CallVerification"`. This interface ensures that the required behavior is available for performing the necessary verifications.
 
-The verifier contract receiving the verification call MUST support the `LSP20-CallVerifier` interfaceId: `0x480c0ec2`, calculated as the XOR of the functions mentioned below.
+The verifier contract receiving the verification call MUST support the `LSP20-CallVerifier` interfaceId: `0xc9dfc532`, calculated as the XOR of the functions mentioned below.
 
 ### Methods
 
@@ -41,7 +40,7 @@ Smart contracts implementing the LSP20-CallVerifier interfaceId SHOULD implement
 #### lsp20VerifyCall
 
 ```solidity
-function lsp20VerifyCall(address caller, uint256 value, bytes memory receivedCalldata) external returns (bytes4 magicValue);
+function lsp20VerifyCall(address callee, address caller, uint256 value, bytes memory receivedCalldata) external returns (bytes4 magicValue);
 ```
 
 This function is the pre-verification function.
@@ -50,21 +49,21 @@ It can be used to run any form of verification mechanism **prior to** running th
 
 _Parameters:_
 
+- `callee`: The address of the contract that implements the LSP20 interface.
 - `caller`: The address who called the function on the contract delegating the verification mechanism.
-- `value`:  The value sent by the caller to the function called on the contract delegating the verification mechanism.
+- `value`: The value sent by the caller to the function called on the contract delegating the verification mechanism.
 - `receivedCalldata`: The calldata sent by the caller to the contract delegating the verification mechanism.
 
-_Returns:_ 
+_Returns:_
 
 - `magicValue`: the magic value determining if the verification succeeded or not.
 
 _Requirements_
 
-- the `bytes4` magic value returned MUST be of the following format: 
+- the `bytes4` magic value returned MUST be of the following format:
   - the first 3 bytes MUST be the `lsp20VerifyCall(..)` function selector = this determines if the call to the function is allowed.
   - any value for the last 4th byte is accepted.
   - if the 4th byte is `0x01`, this determines if the `lsp20VerifyCallResult(..)` function should be called after the original function call (The byte that invokes the `lsp20VerifyCallResult(..)` function is strictly `0x01`).
-
 
 #### lsp20VerifyCallResult
 
@@ -83,7 +82,7 @@ _Parameters:_
   - if the function being called returns some data, the `callResult` MUST be the value returned by the function being called as abi-encoded `bytes`.
   - if the function being called does not return any data, the `callResult` MUST be an empty `bytes`.
 
-_Returns:_ 
+_Returns:_
 
 - `magicValue`: the magic value determining if the verification succeeded or not.
 
@@ -134,5 +133,5 @@ interface ILSP20  /* is ERC165 */ {
 
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
 
-[ERC165]: <https://eips.ethereum.org/EIPS/eip-165>
-[lukso-network/lsp-smart-contracts]: <https://github.com/lukso-network/lsp-smart-contracts/blob/develop/contracts/>
+[ERC165]: https://eips.ethereum.org/EIPS/eip-165
+[lukso-network/lsp-smart-contracts]: https://github.com/lukso-network/lsp-smart-contracts/blob/develop/contracts/
