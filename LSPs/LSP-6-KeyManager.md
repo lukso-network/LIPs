@@ -33,16 +33,16 @@ The benefit of a KeyManager is to externalise the permission logic from [ERC725Y
 
 Storing the permissions at the core [ERC725Account] itself, allows it to survive KeyManager upgrades and opens the door to add additional KeyManager logic in the future, without loosing already set address permissions.
 
-
 ## Specification
 
 **LSP6-KeyManager** interface id according to [ERC165]: `0x66918867`.
 
 Smart contracts implementing the LSP6 standard MUST implement and support the following standard and their interfaces:
+
 - [ERC165]
 - [ERC1271]
 - [LSP20-CallVerification]
-- [LSP25-ExecuteRelayCall] 
+- [LSP25-ExecuteRelayCall]
 - the LSP6 interface functions defined below.
 
 Every contract that supports the LSP6 standard MUST implement:
@@ -56,6 +56,7 @@ function target() external view returns (address)
 ```
 
 Returns the `address` of the target smart contract controlled by this Key Manager. The controlled smart contract can be one of the following:
+
 - ERC725X contract
 - ERC725Y contract
 - an ERC725 contract, implementing both ERC725X and ERC725Y (e.g: an [ERC725Account]).
@@ -70,7 +71,6 @@ This function is part of the [ERC1271] specification, with additional requiremen
 
 - MUST recover the address from the hash and the signature and return the [ERC1721 magic value] if the address recovered have the [**SIGN Permission**](#sign), if not, MUST return the [ERC1271 fail value].
 
-
 #### lsp20VerifyCall
 
 ```solidity
@@ -83,12 +83,11 @@ This function is part of the [LSP20-CallVerification] specification, with additi
 
 - MUST verify the permission of the **`caller`** based on the **`receivedCalldata`** as defined in the [permission](#permissions) section.
 
-- MUST emit the [PermissionsVerified](#permissionsverified) event after verifying permissions. 
+- MUST emit the [PermissionsVerified](#permissionsverified) event after verifying permissions.
 
 - MUST set the reentrancy guard to true if the first 4 bytes of `receivedCalldata` are any function other than `setData(..)`/`setDataBatch(..)` and check for reentrancy permission if the call was reentrant.
 
 - MUST return the magic value with the `0x01` bytes that indicates that `lsp20VerifyCallResult(..)` MUST be invoked.
-
 
 #### lsp20VerifyCallResult
 
@@ -100,7 +99,7 @@ This function is part of the [LSP20-CallVerification] specification, with additi
 
 - MUST be called only by the linked [target](#target).
 
-- MUST set the reentrancy guard to false if it's set to true. 
+- MUST set the reentrancy guard to false if it's set to true.
 
 - MUST return the magic value.
 
@@ -108,13 +107,13 @@ This function is part of the [LSP20-CallVerification] specification, with additi
 
 ```solidity
 function executeRelayCall(
-    bytes memory signature, 
-    uint256 nonce, 
-    uint256 validityTimestamps, 
+    bytes memory signature,
+    uint256 nonce,
+    uint256 validityTimestamps,
     bytes memory payload
-) 
-    external 
-    payable 
+)
+    external
+    payable
     returns (bytes memory)
 ```
 
@@ -123,19 +122,18 @@ This function is part of the [LSP25-ExecuteRelayCall] specification, with additi
 - The address of the signer recovered from the signature MUST have the right permissions to execute the `payload`.
 - The event `PermissionsVerified` MUST be emitted after verifying the permissions of the signer address recovered.
 
-
 #### executeRelayCallBatch
 
 ```solidity
 function executeRelayCallBatch(
-    bytes[] memory signatures, 
-    uint256[] memory nonces, 
-    uint256[] memory validityTimestamps, 
-    uint256[] memory values, 
+    bytes[] memory signatures,
+    uint256[] memory nonces,
+    uint256[] memory validityTimestamps,
+    uint256[] memory values,
     bytes[] memory payloads
-) 
-    external 
-    payable 
+)
+    external
+    payable
     returns (bytes[] memory)
 ```
 
@@ -164,18 +162,17 @@ _Requirements:_
 
 - The first 4 bytes of the `payload` payload MUST correspond to one of the function selector on the ERC725 smart contract such as:
 
-    - [`setData(bytes32,bytes)`](./LSP-0-ERC725Account.md#setdata)
-    - [`setDataBatch(bytes32[],bytes[])`](./LSP-0-ERC725Account.md#setdatabatch)
-    - [`execute(uint256,address,uint256,bytes)`](./LSP-0-ERC725Account.md#execute)
-    - [`transferOwnership(address)`](./LSP-0-ERC725Account.md#transferownership)
-    - [`acceptOwnership()`](./LSP-0-ERC725Account.md#acceptownership)
+  - [`setData(bytes32,bytes)`](./LSP-0-ERC725Account.md#setdata)
+  - [`setDataBatch(bytes32[],bytes[])`](./LSP-0-ERC725Account.md#setdatabatch)
+  - [`execute(uint256,address,uint256,bytes)`](./LSP-0-ERC725Account.md#execute)
+  - [`transferOwnership(address)`](./LSP-0-ERC725Account.md#transferownership)
+  - [`acceptOwnership()`](./LSP-0-ERC725Account.md#acceptownership)
 
 - MUST send the value passed by the caller to the call on the linked target.
 
 > Non payable functions will revert in case of calling them and passing value along the call.
 
 - The caller MUST have **permission** for the action being executed. Check [Permissions](#permissions) to know more.
-
 
 #### executeBatch
 
@@ -202,7 +199,6 @@ _Requirements:_
 
 - MUST comply to the requirements of the [`execute(bytes)`](#execute) function.
 
-
 ### Events
 
 #### PermissionsVerified
@@ -215,7 +211,7 @@ MUST be fired when the permissions of a call was successfully verified.
 
 ### Permissions
 
-The permissions MUST be checked against the following address, depending on 
+The permissions MUST be checked against the following address, depending on
 the function/method being called:
 
 - against the **caller** parameter in the cases of [`lsp20VerifyCall(address,uint256,bytes)`](#lsp20verifycall).
@@ -256,7 +252,7 @@ BitArray representation: `0x0000000000000000000000000000000000000000000000000000
 
 - Allows changing permissions for an existing controller address under the [`AddressPermissions:Permissions:<address>`](#addresspermissionspermissionsaddress) data key.
 
-- Allows changing existing restrictions for the call operations such as [CALL](#call), [STATICCALL](#staticcall), and [DELEGATECALL](#delegatecall) and [SETDATA](#setdata) permissions stored respectively under the [`AddressPermissions:AllowedCalls:<address>`](#addresspermissionsallowedcallsaddress)  and [`AddressPermissions:AllowedERC725YDataKeys:<address>`](#addresspermissionsallowederc725ydatakeysaddress).
+- Allows changing existing restrictions for the call operations such as [CALL](#call), [STATICCALL](#staticcall), and [DELEGATECALL](#delegatecall) and [SETDATA](#setdata) permissions stored respectively under the [`AddressPermissions:AllowedCalls:<address>`](#addresspermissionsallowedcallsaddress) and [`AddressPermissions:AllowedERC725YDataKeys:<address>`](#addresspermissionsallowederc725ydatakeysaddress).
 
 The value of these data keys SHOULD be validated before being set to avoid edge cases.
 
@@ -267,7 +263,6 @@ The value of these data keys SHOULD be validated before being set to avoid edge 
 BitArray representation: `0x0000000000000000000000000000000000000000000000000000000000000008`
 
 - Allows adding new extension address/es for new function selectors stored under [LSP17Extension](./LSP-0-ERC725Account.md#lsp17extension) data key.
-
 
 #### `CHANGEEXTENSIONS`
 
@@ -287,20 +282,17 @@ BitArray representation: `0x0000000000000000000000000000000000000000000000000000
 
 - Allows changing existing UniversalReceiverDelegate address/es stored under [LSP1UniversalReceiverDelegate](./LSP-0-ERC725Account.md#lsp1universalreceiverdelegate) and [Mapped LSP1UniversalReceiverDelegate](./LSP-0-ERC725Account.md#mapped-lsp1universalreceiverdelegate) data keys.
 
-
 #### `REENTRANCY`
 
 BitArray representation: `0x0000000000000000000000000000000000000000000000000000000000000080`
 
 - Allows reentering the public [`execute(bytes)`](#execute), [`executeBatch(uint256[],bytes[])`](#executebatch), [`executeRelayCall(bytes,uint256,bytes)`](#executerelaycall) and [`executeRelayCallBatch(bytes[],uint256[],uint256[],bytes[])`](#executerelaycallbatch) functions.
 
-
 #### `SUPER_TRANSFERVALUE`
 
 BitArray representation: `0x0000000000000000000000000000000000000000000000000000000000000100`
 
 - Allows transferring value from the target contract through [`execute(..)`](./LSP-0-ERC725Account.md#execute) function of the target without any restrictions.
-
 
 #### `TRANSFERVALUE`
 
@@ -316,7 +308,6 @@ BitArray representation: `0x0000000000000000000000000000000000000000000000000000
 
 - Allows executing a payload with [CALL] operation from the target contract through [`execute(..)`](./LSP-0-ERC725Account.md#execute) function of the target without any restrictions.
 
-
 #### `CALL`
 
 BitArray representation: `0x0000000000000000000000000000000000000000000000000000000000000800`
@@ -330,7 +321,6 @@ BitArray representation: `0x0000000000000000000000000000000000000000000000000000
 BitArray representation: `0x0000000000000000000000000000000000000000000000000000000000001000`
 
 - Allows executing a payload with [STATICCALL] operation from the target contract through [`execute(..)`](./LSP-0-ERC725Account.md#execute) function of the target without any restrictions.
-
 
 #### `STATICCALL`
 
@@ -346,7 +336,6 @@ BitArray representation: `0x0000000000000000000000000000000000000000000000000000
 
 - Allows executing a payload with [DELEGATECALL] operation from the target contract through [`execute(..)`](./LSP-0-ERC725Account.md#execute) function of the target without any restrictions.
 
-
 #### `DELEGATECALL`
 
 BitArray representation: `0x0000000000000000000000000000000000000000000000000000000000008000`
@@ -355,12 +344,11 @@ BitArray representation: `0x0000000000000000000000000000000000000000000000000000
 
 > Check [`AddressPermissions:AllowedCalls:<address>`](#addresspermissionsallowedcallsaddress) for more information about the restrictions.
 
-
 #### `DEPLOY`
 
 BitArray representation: `0x0000000000000000000000000000000000000000000000000000000000010000`
 
-- Allows creating a contract with [CREATE] and [CREATE2] operations from the target contract through [`execute(..)`](./LSP-0-ERC725Account.md#execute) function of the target. 
+- Allows creating a contract with [CREATE] and [CREATE2] operations from the target contract through [`execute(..)`](./LSP-0-ERC725Account.md#execute) function of the target.
 
 The permission `SUPER_TRANSFERVALUE` is REQUIRED to fund the contract with some native tokens while deploying it.
 
@@ -400,6 +388,12 @@ BitArray representation: `0x0000000000000000000000000000000000000000000000000000
 
 - Validates the signed messages by the target contract to be used for on/off-chain purposes.
 
+#### `EXECUTE_RELAY_CALL`
+
+BitArray representation: `0x0000000000000000000000000000000000000000000000000000000000400000`
+
+- Allows a controller's signed relay calls to be executable. This permission MUST be checked against the controller that signed the relay call.
+
 ### ERC725Y Data Keys
 
 **The permissions that the KeyManager reads, are stored on the controlled-contracts ERC725Y data key value store (for example an [ERC725Account](./LSP-0-ERC725Account.md))**
@@ -408,16 +402,15 @@ The following ERC725Y data keys are used to read permissions and restrictions of
 
 These data keys are based on the [LSP2-ERC725YJSONSchema](./LSP-2-ERC725YJSONSchema.md) standard, and use the key type **[`MappingWithGrouping`](./LSP-2-ERC725YJSONSchema.md#mappingwithgrouping)**
 
-
 #### AddressPermissions[]
 
 ```json
 {
-    "name": "AddressPermissions[]",
-    "key": "0xdf30dba06db6a30e65354d9a64c609861f089545ca58c6b4dbe31a5f338cb0e3",
-    "keyType": "Array",
-    "valueType": "address",
-    "valueContent": "Address"
+  "name": "AddressPermissions[]",
+  "key": "0xdf30dba06db6a30e65354d9a64c609861f089545ca58c6b4dbe31a5f338cb0e3",
+  "keyType": "Array",
+  "valueType": "address",
+  "valueContent": "Address"
 }
 ```
 
@@ -425,37 +418,33 @@ Contains an array of addresses, that have some permission set. This is mainly us
 
 Note that **this data key is OPTIONAL**. It is not necessary to add a controller under this data key if setting a new controller under [`AddressPermissions:Permissions:<address>`](#addresspermissionspermissionsaddress)
 
-
-
 For more information about how to access each index of the `AddressPermissions[]` array, see: [ERC725Y JSON Schema > `keyType` `Array`](./LSP-2-ERC725YJSONSchema.md#array)
 
 #### AddressPermissions:Permissions:\<address\>
 
 ```json
 {
-    "name": "AddressPermissions:Permissions:<address>",
-    "key": "0x4b80742de2bf82acb3630000<address>",
-    "keyType": "MappingWithGrouping",
-    "valueType": "bytes32",
-    "valueContent": "BitArray"
+  "name": "AddressPermissions:Permissions:<address>",
+  "key": "0x4b80742de2bf82acb3630000<address>",
+  "keyType": "MappingWithGrouping",
+  "valueType": "bytes32",
+  "valueContent": "BitArray"
 }
 ```
 
-
-Contains a set of permissions for an address. Permissions defines what an address **can do on** the target contract (*eg: edit the data key-value store via SETDATA*), or **can perform on behalf of** the target.
+Contains a set of permissions for an address. Permissions defines what an address **can do on** the target contract (_eg: edit the data key-value store via SETDATA_), or **can perform on behalf of** the target.
 
 Since the `valueType` of this data key is `bytes32`, up to 255 different permissions can be defined. This includes the [default permissions](#permissions) defined. Custom permissions can be defined on top of the default one.
-
 
 #### AddressPermissions:AllowedCalls:\<address\>
 
 ```json
 {
-    "name": "AddressPermissions:AllowedCalls:<address>",
-    "key": "0x4b80742de2bf393a64c70000<address>",
-    "keyType": "MappingWithGrouping",
-    "valueType": "(bytes4,address,bytes4,bytes4)[CompactBytesArray]",
-    "valueContent": "(BitArray,Address,Bytes4,Bytes4)"
+  "name": "AddressPermissions:AllowedCalls:<address>",
+  "key": "0x4b80742de2bf393a64c70000<address>",
+  "keyType": "MappingWithGrouping",
+  "valueType": "(bytes4,address,bytes4,bytes4)[CompactBytesArray]",
+  "valueContent": "(BitArray,Address,Bytes4,Bytes4)"
 }
 ```
 
@@ -474,14 +463,14 @@ The full list of allowed calls MUST be constructed as a [CompactBytesArray](./LS
 - `0020`: **0020** in decimals is **32**, the total number of bytes of the four elements below concatenated together.
 - `callRestrictions`: A bitArray that represents the list of restricted call types applied for this allowed call (address - interfaceId - function).
 
-    The call restrictions are defined with specific bits, starting from the least significant bit (the rightmost bit): 
+  The call restrictions are defined with specific bits, starting from the least significant bit (the rightmost bit):
 
-    - transferValue `00000001`
-    - call `00000010`
-    - staticcall `00000100`
-    - delegatecall `00001000` 
+  - transferValue `00000001`
+  - call `00000010`
+  - staticcall `00000100`
+  - delegatecall `00001000`
 
-    Custom implementations of the LSP6 Standard can add more operations as needed.
+  Custom implementations of the LSP6 Standard can add more operations as needed.
 
 - `allowedAddress`: The address called by the target contract.
 - `allowedInterfaceId`: The ERC165 interface id being supported by the contract called from the target.
@@ -489,11 +478,9 @@ The full list of allowed calls MUST be constructed as a [CompactBytesArray](./LS
 
 - If the value of the data key is **empty**, execution is disallowed.
 
-- `restrictionOperations` MUST NOT discarded. 
+- `restrictionOperations` MUST NOT discarded.
 
-- Check is discarded for an element if the value is full `ff` bytes. e.g, `0xffffffff` for interfaceIds and function selectors and `0xffffffffffffffffffffffffffffffffffffffff` for addresses. There MUST be at most 2 discarded checks, meaning `0xffffffffffffffffffffffffffffffffffffffffffffffffffffffff` data key is disallowed. 
-
-
+- Check is discarded for an element if the value is full `ff` bytes. e.g, `0xffffffff` for interfaceIds and function selectors and `0xffffffffffffffffffffffffffffffffffffffff` for addresses. There MUST be at most 2 discarded checks, meaning `0xffffffffffffffffffffffffffffffffffffffffffffffffffffffff` data key is disallowed.
 
 **Example 1:**
 
@@ -505,7 +492,7 @@ If controller A has [CALL](#permissions) permission, and have the following valu
 
 The `restrictionOperations` is **`0x00000002`**, meaning that the restrictions above only applies when the operation **[CALL](https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#execute)** is being executed.
 
-The controller A is allowed to interact via the **CALL** operation with the function selector **`0xbb11bb11`** on the **`0xcafecafecafecafecafecafecafecafecafecafe`** address as long as the address supports **`0x11223344`** interfaceId through [ERC165]. 
+The controller A is allowed to interact via the **CALL** operation with the function selector **`0xbb11bb11`** on the **`0xcafecafecafecafecafecafecafecafecafecafe`** address as long as the address supports **`0x11223344`** interfaceId through [ERC165].
 
 <br>
 
@@ -520,6 +507,7 @@ If controller B has [DELEGATECALL](#permissions) permission, and have the follow
 The `restrictionOperations` on both elements is **`0x00000004`**, it means that the restrictions above only applies when the operation **[DELEGATECALL](https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#execute)** is being executed.
 
 The controller B is allowed to interact with:
+
 - the address **`0xcafecafecafecafecafecafecafecafecafecafe`** **only via DELEGATECALL** without any restriction on the interfaceId or the function selector.
 - **any address** supporting the **`0x68686868`** interfaceId without any restriction on the function.
 
@@ -537,7 +525,6 @@ The `restrictionOperations` is **`0x00000002`**, it means that the restrictions 
 
 Given that the controller B have the **DELEGATECALL** Permission and the restrictions only applies for the **CALL** operation, any execution of **DELEGATECALL** operation will fail even to the function **`0xbb11bb11`** on **`0xcafecafecafecafecafecafecafecafecafecafe`** address.
 
-
 <br>
 
 **Example 4:**
@@ -551,12 +538,12 @@ If controller B has [TRANSFERVALUE](#permissions) and [CALL](#permissions) permi
 The `callRestrictions` is **`0x00000003`**, it means that the restrictions above applies when the operation **[CALL](https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#execute)** or **[TRANSFERVALUE](https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#execute)** is being executed.
 
 The controller B is allowed to **CALL** or **TransferValue** to:
-- the contract deployed at address **`0xcafecafecafecafecafecafecafecafecafecafe`** as long as this contract supports the interfaceId **`0x11223344`** through [ERC165]. 
+
+- the contract deployed at address **`0xcafecafecafecafecafecafecafecafecafecafe`** as long as this contract supports the interfaceId **`0x11223344`** through [ERC165].
 - only the function with selector **`0xbb11bb11`** on this contract.
 - this function on this contract with or without transferring value at the same time (because of the additional **TransferValue** in the `callRestrictions`).
 
 <br>
-
 
 **Example 5:**
 
@@ -573,17 +560,17 @@ Each element of the compact bytes array have a different `restrictionOperations`
 - **`0x000000002`** for the second element allowing the controller B to only **Call** any function on any contract that support the interface ID **`0x68686868`** through [ERC165].
 
 <br>
- 
+
 
 #### AddressPermissions:AllowedERC725YDataKeys:\<address\>
 
 ```json
 {
-    "name": "AddressPermissions:AllowedERC725YDataKeys:<address>",
-    "key": "0x4b80742de2bf866c29110000<address>",
-    "keyType": "MappingWithGrouping",
-    "valueType": "bytes[CompactBytesArray]",
-    "valueContent": "Bytes"
+  "name": "AddressPermissions:AllowedERC725YDataKeys:<address>",
+  "key": "0x4b80742de2bf866c29110000<address>",
+  "keyType": "MappingWithGrouping",
+  "valueType": "bytes[CompactBytesArray]",
+  "valueContent": "Bytes"
 }
 ```
 
@@ -603,14 +590,13 @@ The compact bytes array MUST be constructed in this format according to [LSP2-ER
 Below is an example based on a [LSP2 Mapping](./LSP-2-ERC725YJSONSchema.md#Mapping) key type, where first word = `SupportedStandards`, and second word = `LSP3UniversalProfile`.
 
 ```js
-name: "SupportedStandards:LSP3UniversalProfile"
-key: 0xeafec4d89fa9619884b60000abe425d64acd861a49b8ddf5c0b6962110481f38
+name: "SupportedStandards:LSP3UniversalProfile";
+key: 0xeafec4d89fa9619884b60000abe425d64acd861a49b8ddf5c0b6962110481f38;
 ```
 
 <br>
 
 **Example 1:**
-
 
 - If address A has [SETDATA](#setdata) permission, and have the following value for AllowedERC725YDataKeys:
 
@@ -618,6 +604,7 @@ key: 0xeafec4d89fa9619884b60000abe425d64acd861a49b8ddf5c0b6962110481f38
 > 0x 0020 eafec4d89fa9619884b60000abe425d64acd861a49b8ddf5c0b6962110481f38
 > 0x0020eafec4d89fa9619884b60000abe425d64acd861a49b8ddf5c0b6962110481f38
 ```
+
 > 0020 (32 in decimals) is the length of the data key to be set.
 
 Resolve to:
@@ -634,6 +621,7 @@ Address A is only allowed to set the value for the data key attached above.
 > 0x 000a eafec4d89fa9619884b6 0020 beefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeef
 > 0x000aeafec4d89fa9619884b60020beefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeef
 ```
+
 > 000a (10 in decimals) is the length of the `eafec4d89fa9619884b6` prefix
 
 Resolve to:
@@ -645,16 +633,18 @@ By setting the value to `0xeafec4d89fa9619884b6` in the list of allowed ERC725Y 
 <br>
 
 ## Rationale
+
 <!--The rationale fleshes out the specification by describing what motivated the design and why particular design decisions were made. It should describe alternate designs that were considered and related work, e.g. how the feature is supported in other languages. The rationale may also provide evidence of consensus within the community, and should discuss important objections or concerns raised during discussion.-->
+
 This standard was inspired by how files permissions are designed in UNIX based file systems.
 
 Files are assigned permissions as a 3 digit numbers, where each of the 3 digits is an octal value representing a set of permissions.
-The octal value is calculated as the sum of permissions, where *read* = **4**, *write* = **2**, and *execute* = **1**
+The octal value is calculated as the sum of permissions, where _read_ = **4**, _write_ = **2**, and _execute_ = **1**
 
-To illustrate, for a file set with permission `755`, the group permission (second digit) would be *read* and *execute* (See figure below). Each number is simply a **three binary placeholder, each one holding the number that correspond to the access level in r, w, x order**.
-
+To illustrate, for a file set with permission `755`, the group permission (second digit) would be _read_ and _execute_ (See figure below). Each number is simply a **three binary placeholder, each one holding the number that correspond to the access level in r, w, x order**.
 
 ## Implementation
+
 <!--The implementations must be completed before any LIP is given status "Final", but it need not be completed before the LIP is accepted. While there is merit to the approach of reaching consensus on the specification and rationale before writing code, the principle of "rough consensus and running code" is still useful when it comes to resolving many discussions of API details.-->
 
 A implementation can be found in the [lukso-network/universalprofile-smart-contracts](https://github.com/lukso-network/lsp-universalprofile-smart-contracts/blob/main/contracts/LSP6KeyManager/LSP6KeyManager.sol);
@@ -664,34 +654,34 @@ ERC725Y JSON Schema `LSP6KeyManager`, set at the target(#target) contract:
 
 ```json
 [
-    {
-        "name": "AddressPermissions[]",
-        "key": "0xdf30dba06db6a30e65354d9a64c609861f089545ca58c6b4dbe31a5f338cb0e3",
-        "keyType": "Array",
-        "valueType": "address",
-        "valueContent": "Address"
-    },
-    {
-        "name": "AddressPermissions:Permissions:<address>",
-        "key": "0x4b80742de2bf82acb3630000<address>",
-        "keyType": "MappingWithGrouping",
-        "valueType": "bytes32",
-        "valueContent": "BitArray"
-    },
-    {
-        "name": "AddressPermissions:AllowedCalls:<address>",
-        "key": "0x4b80742de2bf393a64c70000<address>",
-        "keyType": "MappingWithGrouping",
-        "valueType": "(bytes4,address,bytes4,bytes4)[CompactBytesArray]",
-        "valueContent": "(BitArray,Address,Bytes4,Bytes4)"
-    },
-    {
-        "name": "AddressPermissions:AllowedERC725YDataKeys:<address>",
-        "key": "0x4b80742de2bf866c29110000<address>",
-        "keyType": "MappingWithGrouping",
-        "valueType": "bytes[CompactBytesArray]",
-        "valueContent": "Bytes"
-    }
+  {
+    "name": "AddressPermissions[]",
+    "key": "0xdf30dba06db6a30e65354d9a64c609861f089545ca58c6b4dbe31a5f338cb0e3",
+    "keyType": "Array",
+    "valueType": "address",
+    "valueContent": "Address"
+  },
+  {
+    "name": "AddressPermissions:Permissions:<address>",
+    "key": "0x4b80742de2bf82acb3630000<address>",
+    "keyType": "MappingWithGrouping",
+    "valueType": "bytes32",
+    "valueContent": "BitArray"
+  },
+  {
+    "name": "AddressPermissions:AllowedCalls:<address>",
+    "key": "0x4b80742de2bf393a64c70000<address>",
+    "keyType": "MappingWithGrouping",
+    "valueType": "(bytes4,address,bytes4,bytes4)[CompactBytesArray]",
+    "valueContent": "(BitArray,Address,Bytes4,Bytes4)"
+  },
+  {
+    "name": "AddressPermissions:AllowedERC725YDataKeys:<address>",
+    "key": "0x4b80742de2bf866c29110000<address>",
+    "keyType": "MappingWithGrouping",
+    "valueType": "bytes[CompactBytesArray]",
+    "valueContent": "Bytes"
+  }
 ]
 ```
 
@@ -725,17 +715,16 @@ interface ILSP6  /* is ERC165 */ {
 
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
 
-
-[ERC165]: <https://eips.ethereum.org/EIPS/eip-165>
-[ERC1271]: <https://eips.ethereum.org/EIPS/eip-1271>
-[ERC1721 magic value]: <https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1271.md#specification>
-[ERC1271 fail value]: <https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1271.md#specification>
-[ERC725Account]: <./LSP-0-ERC725Account.md>
-[BitArray]: <./LSP-2-ERC725YJSONSchema.md#bitarray>
-[CALL]: <https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#execute>
-[STATICCALL]: <https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#execute>
-[DELEGATECALL]: <https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#execute>
-[CREATE]: <https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#execute>
-[CREATE2]: <https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#execute>
-[LSP20-CallVerification]: <./LSP-20-CallVerification.md>
-[LSP25-ExecuteRelayCall]: <./LSP-25-ExecuteRelayCall.md>
+[ERC165]: https://eips.ethereum.org/EIPS/eip-165
+[ERC1271]: https://eips.ethereum.org/EIPS/eip-1271
+[ERC1721 magic value]: https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1271.md#specification
+[ERC1271 fail value]: https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1271.md#specification
+[ERC725Account]: ./LSP-0-ERC725Account.md
+[BitArray]: ./LSP-2-ERC725YJSONSchema.md#bitarray
+[CALL]: https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#execute
+[STATICCALL]: https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#execute
+[DELEGATECALL]: https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#execute
+[CREATE]: https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#execute
+[CREATE2]: https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#execute
+[LSP20-CallVerification]: ./LSP-20-CallVerification.md
+[LSP25-ExecuteRelayCall]: ./LSP-25-ExecuteRelayCall.md
