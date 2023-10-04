@@ -392,7 +392,7 @@ BitArray representation: `0x0000000000000000000000000000000000000000000000000000
 
 BitArray representation: `0x0000000000000000000000000000000000000000000000000000000000400000`
 
-- Allows signing a relay call.
+- Allows a controller's signed relay calls to be executable. This permission MUST be checked against the controller that signed the relay call.
 
 ### ERC725Y Data Keys
 
