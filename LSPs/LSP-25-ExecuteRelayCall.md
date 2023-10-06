@@ -55,7 +55,7 @@ Smart contracts implementing the LSP25 standard MUST implement the [ERC165] `sup
 function getNonce(address signer, uint128 channel) external view returns (uint256)
 ```
 
-Returns the latest nonce for a signer on a specific channel. A signer can choose a channel number arbitrarily and use this nonce to sign a payload that can be executed as a meta-transaction by any address via [executeRelayCall](#executeRelayCall) function.
+Returns the latest nonce for a signer on a specific channel. A signer can choose a channel number arbitrarily and use this nonce to sign a calldata payload that can be executed as a meta-transaction by any address via [executeRelayCall](#executeRelayCall) function.
 
 _Parameters:_
 
@@ -64,9 +64,9 @@ _Parameters:_
 
 _Returns:_ `uint256` , the current nonce.
 
-Payloads signed with incremental nonces on the same channel for the same signer are executed in order. e.g, in channel X, the second payload signed with the second nonce will not be successfully executed until the first payload signed with the first nonce has been executed.
+Calldata payloads signed with incremental nonces on the same channel for the same signer are executed in order. e.g, in channel X, the second calldata payload signed with the second nonce will not be successfully executed until the first calldata payload signed with the first nonce has been executed.
 
-Payloads signed with nonces on different channels are executed independently from each other, regardless of when they got executed or if they got executed successfully or not. e.g, the payload signed with the fourth nonce on channel X can be successfully executed even if the payload signed with the first nonce of channel Y:
+Calldata payloads signed with nonces on different channels are executed independently from each other, regardless of when they got executed or if they got executed successfully or not. e.g, the calldata payload signed with the fourth nonce on channel X can be successfully executed even if the calldata payload signed with the first nonce of channel Y:
 
 - was executed before.
 - was executed and reverted.
@@ -79,24 +79,24 @@ Read [what are multi-channel nonces](#what-are-multi-channel-nonces).
 
 ```solidity
 function executeRelayCall(
-    bytes memory signature, 
-    uint256 nonce, 
-    uint256 validityTimestamps, 
+    bytes memory signature,
+    uint256 nonce,
+    uint256 validityTimestamps,
     bytes memory payload
-) 
-    external 
-    payable 
+)
+    external
+    payable
     returns (bytes memory)
 ```
 
-Allows anybody to execute a `payload` given they have a valid signature from a signer. The signature MUST be formed according to the [LSP25 Signature specification format](#signature-format).
+Allows anybody to execute a calldata `payload` given they have a valid signature from a signer. The signature MUST be formed according to the [LSP25 Signature specification format](#signature-format).
 
 _Parameters:_
 
 - `signature`: A 65 bytes long ethereum signature.
 - `nonce`: MUST be the nonce of the address that signed the message. This can be obtained via the `getNonce(address address, uint256 channel)` function.
-- `validityTimestamps`: Two `uint128` timestamps concatenated together. The first timestamp determines from when the payload can be executed, and the second timestamp determines a deadline after which the payload is no longer valid. If `validityTimestamps` is `0`, the payload is valid indefinitely at any point in time and the checks for the timestamps are skipped.
-payload can be executed, the second timestamp determines a deadlines after which the payload is not valid anymore. If validityTimestamps is `0`, the payload is valid at indefinitely at any point in time and the checks for the timestamps are skipped.
+- `validityTimestamps`: Two `uint128` timestamps concatenated together. The first timestamp determines from when the calldata payload can be executed, and the second timestamp determines a deadline after which the payload is no longer valid. If `validityTimestamps` is `0`, the payload is valid indefinitely at any point in time and the checks for the timestamps are skipped.
+  payload can be executed, the second timestamp determines a deadlines after which the calldata payload is not valid anymore. If validityTimestamps is `0`, the calldata payload is valid at indefinitely at any point in time and the checks for the timestamps are skipped.
 - `payload`: The abi-encoded function call to be executed. This could be a function to be called on the current contract implementing LSP25 or an external target contract.
 
 _Returns:_ `bytes`. If the call succeeded, these `bytes` MUST be the returned data as abi-decoded bytes of the function call defined by the `payload` parameter. Otherwise revert with a reason-string.
@@ -115,25 +115,25 @@ See the section [**Signature Format**](#signature-format) below to learn how to 
 
 ```solidity
 function executeRelayCallBatch(
-    bytes[] memory signatures, 
-    uint256[] memory nonces, 
-    uint256[] memory validityTimestamps, 
-    uint256[] memory values, 
+    bytes[] memory signatures,
+    uint256[] memory nonces,
+    uint256[] memory validityTimestamps,
+    uint256[] memory values,
     bytes[] memory payloads
-) 
-    external 
-    payable 
+)
+    external
+    payable
     returns (bytes[] memory)
 ```
 
-Allows anybody to execute a batch of `payloads` given they have valid signatures from signers. Each signature MUST be formed according to the [LSP25 Signature specification format](#signature-format).
+Allows anybody to execute a batch of calldata `payloads` given they have valid signatures from signers. Each signature MUST be formed according to the [LSP25 Signature specification format](#signature-format).
 
 _Parameters:_
 
 - `signatures`: An array of bytes65 ethereum signature.
 - `nonce`: An array of nonces from the address/es that signed the digests. This can be obtained via the `getNonce(address address, uint256 channel)` function.
 - `values`: An array of native token amounts to transfer to the linked [target](#target) contract alongside the call on each iteration.
-- `validityTimestamps`: An array of `uint256` formed of Two `uint128` timestamps concatenated, the first timestamp determines from when the payload can be executed, the second timestamp delimits the end of the validity of the payload. If validityTimestamps is `0`, the checks of the timestamps are skipped.
+- `validityTimestamps`: An array of `uint256` formed of Two `uint128` timestamps concatenated, the first timestamp determines from when the calldata payload can be executed, the second timestamp delimits the end of the validity of the calldata payload. If validityTimestamps is `0`, the checks of the timestamps are skipped.
 - `payloads`: An array of calldata payloads to be executed on the linked [target](#target) contract on each iteration.
 
 _Returns:_ `bytes[]` , an array of returned as abi-decoded array of `bytes[]` of the linked target contract, if the calls succeeded, otherwise revert with a reason-string.
@@ -153,22 +153,22 @@ In order to submit relay calls successfully, users MUST sign the relay calls to 
 The hash digest that MUST be signed MUST be constructed according to the [version 0 of EIP-191] with the following format:
 
 ```
-0x19 <0x00> <Implementation address> <LSP25_VERSION> <chainId> <nonce> <validityTimestamps> <value> <payload>
+0x19 <0x00> <Implementation address> <LSP25_VERSION> <chainId> <nonce> <validityTimestamps> <value> <calldata>
 ```
 
 The table below breakdown each parameters in details:
 
-| Value                    | Type | Description                                                                                                                                                                                                                                            |
-| ------------------------ | ---- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `0x19`                   | `bytes1`     | byte intended to ensure that the `signed_data` is not valid RLP.                                                                                                                                                                                       |
-| `0x00`                   | `bytes1`     | version `0` of [EIP191].                                                                                                                                                                                                                               |
-| `Implementation address` | `address`    | The address of the Key Manager executing the payload.                                                                                                                                                                                                  |
-| `LSP25_VERSION`          | `uint256`    | Version relative to the LSP25ExecuteRelayCall standard defined equal to `25`.                                                                                                                                                                                |
-| `chainId`                | `uint256`    | The chainId of the blockchain where the Key Manager is deployed.                                                                                                                                                                         |
-| `nonce`                  | `uint256`    | The nonce to sign the payload with                                                                                                                                                                                                      |
-| `validityTimestamps`     | `uint256`    | Two `uint128` timestamps concatenated, the first timestamp determines from when the payload can be executed, the second timestamp delimits the end of the validity of the payload. If validityTimestamps is 0, the checks of the timestamps are skipped. |
-| `value`                  | `uint256`    | The amount of native token to transfer to the linked target contract alongside the call.                                                                                                                                                               |
-| `payload`                | `bytes`      | The payload to be executed.                                                                                                                                                                                                                            |
+| Value                    | Type      | Description                                                                                                                                                                                                                                                                |
+| ------------------------ | --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `0x19`                   | `bytes1`  | byte intended to ensure that the `signed_data` is not valid RLP.                                                                                                                                                                                                           |
+| `0x00`                   | `bytes1`  | version `0` of [EIP191].                                                                                                                                                                                                                                                   |
+| `Implementation address` | `address` | The address of the contract implementing LSP25 that will execute the calldata.                                                                                                                                                                                             |
+| `LSP25_VERSION`          | `uint256` | Version relative to the LSP25ExecuteRelayCall standard defined equal to `25`.                                                                                                                                                                                              |
+| `chainId`                | `uint256` | The chainId of the blockchain where the Key Manager is deployed.                                                                                                                                                                                                           |
+| `nonce`                  | `uint256` | The nonce to sign the calldata with.                                                                                                                                                                                                                                       |
+| `validityTimestamps`     | `uint256` | Two `uint128` timestamps concatenated, the first timestamp determines from when the calldata payload can be executed, the second timestamp delimits the end of the validity of the calldata payload. If validityTimestamps is 0, the checks of the timestamps are skipped. |
+| `value`                  | `uint256` | The amount of native token to transfer to the linked target contract alongside the call.                                                                                                                                                                                   |
+| `calldata`               | `bytes`   | The abi-encoded function call to be executed.                                                                                                                                                                                                                              |
 
 These parameters **MUST be packed encoded** (not zero padded, leading `0`s are removed), then hashed with keccak256 to produce the hash digest.
 
@@ -274,9 +274,9 @@ interface ILSP25 /* is ERC165 */  {
     uint256 nonce,
     uint256 validityTimestamps,
     bytes calldata payload
-  ) 
-    external 
-    payable 
+  )
+    external
+    payable
     returns (bytes memory);
 
   function executeRelayCallBatch(
@@ -285,9 +285,9 @@ interface ILSP25 /* is ERC165 */  {
     uint256[] calldata validityTimestamps,
     uint256[] calldata values,
     bytes[] calldata payloads
-  ) 
-    external 
-    payable 
+  )
+    external
+    payable
     returns (bytes[] memory);
 }
 ```
@@ -296,7 +296,6 @@ interface ILSP25 /* is ERC165 */  {
 
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
 
-
-[ERC165]: <https://eips.ethereum.org/EIPS/eip-165>
-[version 0 of EIP-191]: <https://github.com/ethereum/EIPs/blob/master/EIPS/eip-191.md#version-0x00>
-[EIP191]: <https://eips.ethereum.org/EIPS/eip-191>
+[ERC165]: https://eips.ethereum.org/EIPS/eip-165
+[version 0 of EIP-191]: https://github.com/ethereum/EIPs/blob/master/EIPS/eip-191.md#version-0x00
+[EIP191]: https://eips.ethereum.org/EIPS/eip-191
