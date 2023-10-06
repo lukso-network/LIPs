@@ -119,7 +119,8 @@ function executeRelayCall(
 
 This function is part of the [LSP25-ExecuteRelayCall] specification, with additional requirements as follows.
 
-- The address of the signer recovered from the signature MUST have the right permissions to execute the `payload`.
+- The Key Manager's address MUST be used for the `<Implementation address>` in the LSP25 [**Signature Format**](./LSP-25-ExecuteRelayCall.md#signature-format) when generating signature for execute relay calls.
+- The address of the signer recovered from the signature MUST have the right permissions to execute the calldata `payload`.
 - The event `PermissionsVerified` MUST be emitted after verifying the permissions of the signer address recovered.
 
 #### executeRelayCallBatch
@@ -139,7 +140,8 @@ function executeRelayCallBatch(
 
 This function is part of the [LSP25-ExecuteRelayCall] specification, with additional requirements as follows.
 
-- The address of the signer recovered **from each signature** in the `signatures[]` array MUST have the right permissions to execute the the associated payload in the `payloads[]` array.
+- The Key Manager's address MUST be used for the `<Implementation address>` in the LSP25 [**Signature Format**](./LSP-25-ExecuteRelayCall.md#signature-format) to generate each signatures in the batch.
+- The address of the signer recovered **from each signature** in the `signatures[]` array MUST have the right permissions to execute the the associated calldata payload in the `payloads[]` array.
 - The event `PermissionsVerified` MUST be emitted after verifying the permissions of **each signer address recovered**.
 
 #### execute
@@ -560,7 +562,6 @@ Each element of the compact bytes array have a different `restrictionOperations`
 - **`0x000000002`** for the second element allowing the controller B to only **Call** any function on any contract that support the interface ID **`0x68686868`** through [ERC165].
 
 <br>
-
 
 #### AddressPermissions:AllowedERC725YDataKeys:\<address\>
 
