@@ -58,12 +58,12 @@ The `LSP8TokenIdType` metadata key provides this information and describes how t
 This MUST NOT be changeable, and set only during initialization of the LSP8 token contract.
 
 | Value |   Type    | Description                                                                                                                                       |
-| :---: | :-------: | :------------------------------------------------------------------------------------------------------------------------------------------------ | --- | --- |
+| :---: | :-------: | :------------------------------------------------------------------------------------------------------------------------------------------------ |
 |  `0`  | `uint256` | each NFT is represented with a **unique number**. <br> This number is an incrementing count, where each minted token is assigned the next number. |
 |  `1`  | `string`  | each NFT is represented using a **unique name** (as a short **utf8 encoded string**, no more than 32 characters long)                             |
 |  `2`  | `bytes32` | each NFT is represented using a 32 bytes long **unique identifier**.                                                                              |
 |  `3`  | `bytes32` | each NFT is represented using a 32 bytes **hash digest**.                                                                                         |
-|  `4`  | `address` | each NFT is represented as its **own smart contract** that can hold its own metadata (_e.g [ERC725Y] compatible_).                                |     |     |
+|  `4`  | `address` | each NFT is represented as its **own smart contract** that can hold its own metadata (_e.g [ERC725Y] compatible_).                                |
 
 ```json
 {
