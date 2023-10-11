@@ -40,7 +40,7 @@ Smart contracts implementing the LSP20-CallVerifier interfaceId SHOULD implement
 #### lsp20VerifyCall
 
 ```solidity
-function lsp20VerifyCall(address callee, address caller, uint256 value, bytes memory receivedCalldata) external returns (bytes4 magicValue);
+function lsp20VerifyCall(address callee, address caller, uint256 value, bytes memory receivedCalldata) external returns (bytes4 returnedStatus);
 ```
 
 This function is the pre-verification function.
@@ -56,11 +56,11 @@ _Parameters:_
 
 _Returns:_
 
-- `magicValue`: the magic value determining if the verification succeeded or not.
+- `returnedStatus`: the status determining if the verification succeeded or not.
 
 _Requirements_
 
-- the `bytes4` magic value returned MUST be of the following format:
+- the `bytes4` success value returned MUST be of the following format:
   - the first 3 bytes MUST be the `lsp20VerifyCall(..)` function selector = this determines if the call to the function is allowed.
   - any value for the last 4th byte is accepted.
   - if the 4th byte is `0x01`, this determines if the `lsp20VerifyCallResult(..)` function should be called after the original function call (The byte that invokes the `lsp20VerifyCallResult(..)` function is strictly `0x01`).
@@ -68,7 +68,7 @@ _Requirements_
 #### lsp20VerifyCallResult
 
 ```solidity
-function lsp20VerifyCallResult(bytes32 callHash, bytes memory callResult) external returns (bytes4 magicValue);
+function lsp20VerifyCallResult(bytes32 callHash, bytes memory callResult) external returns (bytes4 returnedStatus);
 ```
 
 This function is the **post-verification** function.
@@ -84,7 +84,7 @@ _Parameters:_
 
 _Returns:_
 
-- `magicValue`: the magic value determining if the verification succeeded or not.
+- `returnedStatus`: the status determining if the verification succeeded or not.
 
 _Requirements_
 
@@ -95,7 +95,7 @@ _Requirements_
 When calling the functions `lsp20VerifyCall(...)` and `lsp20VerifyCallResult(...)`, the LSP20 standard does not differentiate between:
 
 - if a revert occurred when calling one of these functions.
-- if these functions executed successfully but returned a non-magic value.
+- if these functions executed successfully but returned a non-success value.
 
 Both of these scenarios mean that the verification failed when calling the contract that implements the LSP20 interface.
 
@@ -122,7 +122,7 @@ An implementation can be found in the [lukso-network/lsp-smart-contracts] reposi
 ```solidity
 interface ILSP20  /* is ERC165 */ {
 
-  function lsp20VerifyCall(address caller, uint256 value, bytes memory receivedCalldata) external returns (bytes4 magicValue);
+  function lsp20VerifyCall(address caller, uint256 value, bytes memory receivedCalldata) external returns (bytes4 returnedStatus);
 
   function lsp20VerifyCallResult(bytes32 callHash, bytes memory callResult) external returns (bytes4);
 
