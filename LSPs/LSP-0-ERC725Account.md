@@ -380,9 +380,9 @@ function isValidSignature(bytes32 hash, bytes memory signature) external view re
 
 This function is part of the [ERC1271] specification, with additional requirements as follows:
 
-- When the owner is an EOA, the function MUST return the [magic value] if the address recovered from the hash and the signature via [ecrecover] is the owner of the contract. Otherwise, MUST return the [failure value]. 
+- When the owner is an EOA, the function MUST return the [success value] if the address recovered from the hash and the signature via [ecrecover] is the owner of the contract. Otherwise, MUST return the [failure value]. 
 
-- When the owner is a contract, it will call the `isValidsignature(bytes32,bytes)` function on the owner contract, and return the magic value if the function returns the magic value. In any other case such as non-standard return value or revert, it will return the failure value indicating an invalid signature.
+- When the owner is a contract, it will call the `isValidsignature(bytes32,bytes)` function on the owner contract, and return the success value if the function returns the success value. In any other case such as non-standard return value or revert, it will return the failure value indicating an invalid signature.
 
 #### universalReceiver
 
@@ -568,7 +568,7 @@ interface ILSP0  /* is ERC165 */ {
         
     // ERC1271
     
-    function isValidSignature(bytes32 hash, bytes memory signature) external view returns (bytes4 magicValue);
+    function isValidSignature(bytes32 hash, bytes memory signature) external view returns (bytes4 returnedStatus);
     
     
     // LSP0 (ERC725Account)
@@ -641,7 +641,7 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 [`ValueReceived`]: <#valuereceived>
 [DataChanged]: <https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#datachanged>
 [DELEGATECALL]: <https://solidity-by-example.org/delegatecall/>
-[magic value]: <https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1271.md#specification>
+[success value]: <https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1271.md#specification>
 [ecrecover]: <https://docs.soliditylang.org/en/v0.8.17/solidity-by-example.html?highlight=ecrecover#recovering-the-message-signer-in-solidity>
 [failure value]: <https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1271.md#specification>
 [`Mapping`]: <./LSP-2-ERC725YJSONSchema.md#mapping>

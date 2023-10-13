@@ -69,12 +69,12 @@ function isValidSignature(bytes32 hash, bytes memory signature) external view re
 
 This function is part of the [ERC1271] specification, with additional requirements as follows:
 
-- MUST recover the address from the hash and the signature and return the [ERC1721 magic value] if the address recovered have the [**SIGN Permission**](#sign), if not, MUST return the [ERC1271 fail value].
+- MUST recover the address from the hash and the signature and return the [ERC1721 success value] if the address recovered have the [**SIGN Permission**](#sign), if not, MUST return the [ERC1271 fail value].
 
 #### lsp20VerifyCall
 
 ```solidity
-function lsp20VerifyCall(address caller, uint256 value, bytes memory receivedCalldata) external returns (bytes4 magicValue);
+function lsp20VerifyCall(address caller, uint256 value, bytes memory receivedCalldata) external returns (bytes4 returnedStatus);
 ```
 
 This function is part of the [LSP20-CallVerification] specification, with additional requirements as follows:
@@ -87,12 +87,12 @@ This function is part of the [LSP20-CallVerification] specification, with additi
 
 - MUST set the reentrancy guard to true if the first 4 bytes of `receivedCalldata` are any function other than `setData(..)`/`setDataBatch(..)` and check for reentrancy permission if the call was reentrant.
 
-- MUST return the magic value with the `0x01` bytes that indicates that `lsp20VerifyCallResult(..)` MUST be invoked.
+- MUST return the success value with the `0x01` bytes that indicates that `lsp20VerifyCallResult(..)` MUST be invoked.
 
 #### lsp20VerifyCallResult
 
 ```solidity
-function lsp20VerifyCallResult(bytes32 callHash, bytes memory callResult) external returns (bytes4 magicValue);
+function lsp20VerifyCallResult(bytes32 callHash, bytes memory callResult) external returns (bytes4 returnedStatus);
 ```
 
 This function is part of the [LSP20-CallVerification] specification, with additional requirements as follows:
@@ -101,7 +101,7 @@ This function is part of the [LSP20-CallVerification] specification, with additi
 
 - MUST set the reentrancy guard to false if it's set to true.
 
-- MUST return the magic value.
+- MUST return the success value.
 
 #### executeRelayCall
 
@@ -694,7 +694,7 @@ interface ILSP6  /* is ERC165 */ {
 
     // ERC1271
 
-    function isValidSignature(bytes32 hash, bytes memory signature) external view returns (bytes4 magicValue);
+    function isValidSignature(bytes32 hash, bytes memory signature) external view returns (bytes4 returnedStatus);
 
 
     // LSP6
@@ -718,7 +718,7 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 
 [ERC165]: https://eips.ethereum.org/EIPS/eip-165
 [ERC1271]: https://eips.ethereum.org/EIPS/eip-1271
-[ERC1721 magic value]: https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1271.md#specification
+[ERC1721 success value]: https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1271.md#specification
 [ERC1271 fail value]: https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1271.md#specification
 [ERC725Account]: ./LSP-0-ERC725Account.md
 [BitArray]: ./LSP-2-ERC725YJSONSchema.md#bitarray
