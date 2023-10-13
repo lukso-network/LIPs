@@ -37,6 +37,8 @@ A commonality with [LSP7 DigitalAsset][LSP7] is desired so that the two token im
 
 [ERC165] interface id: `0x1ae9ba1f`
 
+The LSP8 interface ID is calculated as the XOR of the LSP8 interface (see [interface cheat-sheet below](#interface-cheat-sheet)) and the [LSP17 Extendable interface ID](./LSP-17-ContractExtension.md#erc165-interface-id).
+
 ### ERC725Y Data Keys - LSP8 Contract
 
 These are the expected data keys for an LSP8 contract that can mints identifiable tokens (NFTs).
@@ -256,7 +258,7 @@ _Parameters:_
 #### authorizeOperator
 
 ```solidity
-function authorizeOperator(address operator, bytes32 tokenId) external;
+function authorizeOperator(address operator, bytes32 tokenId, bytes memory operatorNotificationData) external;
 ```
 
 Makes `operator` address an operator of `tokenId`.
@@ -267,6 +269,7 @@ _Parameters:_
 
 - `operator` the address to authorize as an operator.
 - `tokenId` the token to enable operator status to.
+- `operatorNotificationData` the data to send when notifying the operator via LSP1.
 
 _Requirements:_
 
@@ -278,7 +281,7 @@ _Requirements:_
 #### revokeOperator
 
 ```solidity
-function revokeOperator(address operator, bytes32 tokenId) external;
+function revokeOperator(address operator, bytes32 tokenId, bytes memory operatorNotificationData) external;
 ```
 
 Removes `operator` address as an operator of `tokenId`.
@@ -289,6 +292,7 @@ _Parameters:_
 
 - `operator` the address to revoke as an operator.
 - `tokenId` the token to disable operator status to.
+- `operatorNotificationData` the data to send when notifying the operator via LSP1.
 
 _Requirements:_
 
@@ -548,9 +552,9 @@ interface ILSP8 is /* IERC165 */ {
 
     function tokenIdsOf(address tokenOwner) external view returns (bytes32[] memory);
 
-    function authorizeOperator(address operator, bytes32 tokenId) external;
+    function authorizeOperator(address operator, bytes32 tokenId, bytes memory operatorNotificationData) external;
 
-    function revokeOperator(address operator, bytes32 tokenId) external;
+    function revokeOperator(address operator, bytes32 tokenId, bytes memory operatorNotificationData) external;
 
     function isOperatorFor(address operator, bytes32 tokenId) external view returns (bool);
 

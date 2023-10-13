@@ -35,6 +35,8 @@ A commonality with [LSP8 IdentifiableDigitalAsset][LSP8] is desired so that the 
 
 [ERC165] interface id: `0x05519512`
 
+The LSP7 interface ID is calculated as the XOR of the LSP7 interface (see [interface cheat-sheet below](#interface-cheat-sheet)) and the [LSP17 Extendable interface ID](./LSP-17-ContractExtension.md#erc165-interface-id).
+
 ### ERC725Y Data Keys
 
 This standard also expects data keys from [LSP4 DigitalAsset-Metadata][LSP4#erc725ykeys].
@@ -80,7 +82,7 @@ _Parameters:_
 #### authorizeOperator
 
 ```solidity
-function authorizeOperator(address operator, uint256 amount) external;
+function authorizeOperator(address operator, uint256 amount, bytes memory operatorNotificationData) external;
 ```
 
 Sets `amount` as the amount of tokens `operator` address has access to from callers tokens.
@@ -94,6 +96,7 @@ _Parameters:_
 
 - `operator` the address to authorize as an operator.
 - `amount` the amount of tokens operator has access to.
+- `operatorNotificationData` the data to send when notifying the operator via LSP1.
 
 _Requirements:_
 
@@ -103,7 +106,7 @@ _Requirements:_
 #### revokeOperator
 
 ```solidity
-function revokeOperator(address operator) external;
+function revokeOperator(address operator, bytes memory operatorNotificationData) external;
 ```
 
 Removes `operator` address as an operator of callers tokens.
@@ -113,6 +116,7 @@ MUST emit a [RevokedOperator event](#revokedoperator).
 _Parameters:_
 
 - `operator` the address to revoke as an operator.
+- `operatorNotificationData` the data to send when notifying the operator via LSP1.
 
 _Requirements:_
 
@@ -133,6 +137,20 @@ _Parameters:_
 - `operator` the address to query operator status for.
 
 **Returns:** `uint256`, the amount of tokens `operator` has access to from `tokenOwner`.
+
+### getOperatorsOf
+
+```solidity
+function getOperatorsOf(address tokenOwner) external view returns (address[] memory);
+```
+
+Returns a list of operators allowed to transfer tokens on behalf of a `tokenOwner` from its balance. Their balance can be queried via [`authorizedAmountFor(address,address)`](#authorizedamountfor)
+
+_Parameters:_
+
+- `tokenOwner` the address to query the list of operators for.
+
+**Returns:** `address[]`, a list of token `operator`s for `tokenOwner`.
 
 #### transfer
 
@@ -299,11 +317,13 @@ interface ILSP7 is /* IERC165 */ {
 
     function balanceOf(address tokenOwner) external view returns (uint256);
 
-    function authorizeOperator(address operator, uint256 amount) external;
+    function authorizeOperator(address operator, uint256 amount, bytes memory operatorNotificationData) external;
 
-    function revokeOperator(address to, uint256 amount) external;
+    function revokeOperator(address to, bytes memory operatorNotificationData) external;
 
     function authorizedAmountFor(address operator, address tokenOwner) external view returns (uint256);
+
+    function getOperatorsOf(address tokenOwner) external view returns (address[] memory);
 
     function transfer(address from, address to, uint256 amount, bool force, bytes memory data) external;
 
