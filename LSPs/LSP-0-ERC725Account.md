@@ -395,12 +395,10 @@ This function is part of the [LSP1-UniversalReceiver] specification, with additi
 - MUST emit a [`ValueReceived`] event before external calls if the function receives native tokens.
 
 - If an `address` is stored under the data key attached below and this address is a contract:
-  - forwards the call to the [`universalReceiver(bytes32,bytes)`] function on the contract at this address **ONLY IF** this contract supports the [LSP1-UniversalReceiver interface id].
-  - if the contract at this address does not support the [LSP1-UniversalReceiver interface id], execution continues normally.
+  - forwards the call to the [`universalReceiverDelegate(address,uint256,bytes32,bytes)`] function on the contract at this address **ONLY IF** this contract supports the [LSP1-UniversalReceiverDelegate interface id].
+  - if the contract at this address does not support the [LSP1-UniversalReceiverDelegate interface id], execution continues normally.
   
 - If there is no `address` stored under this data key, execution continues normally. 
-
-The `msg.data` is appended with the caller address as bytes20 and the `msg.value` received as bytes32 before calling the external contract, allowing the receiving contract to know the initial caller and the value sent.
 
 ```json
 {
@@ -413,12 +411,11 @@ The `msg.data` is appended with the caller address as bytes20 and the `msg.value
 ```
 
 - If an `address` is stored under the data key attached below and this address is a contract:
-  - forwards the call to the [`universalReceiver(bytes32,bytes)`] function on the contract at this address **ONLY IF** this contract supports the [LSP1-UniversalReceiver interface id].
-  - if the contract at this address does not support the [LSP1-UniversalReceiver interface id], execution continues normally.
+  - forwards the call to the [`universalReceiverDelegate(address,uint256,bytes32,bytes)`] function on the contract at this address **ONLY IF** this contract supports the [LSP1-UniversalReceiverDelegate interface id].
+  - if the contract at this address does not support the [LSP1-UniversalReceiverDelegate interface id], execution continues normally.
 
 - If there is no `address` stored under this data key, execution continues normally. 
 
-The `msg.data` is appended with the caller address as bytes20 and the `msg.value` received as bytes32 before calling the external contract, allowing the receiving contract to know the initial caller and the value sent.
 
 ```json
 {
@@ -432,7 +429,7 @@ The `msg.data` is appended with the caller address as bytes20 and the `msg.value
 
 > <bytes32\> is the `typeId` passed to the `universalReceiver(..)` function. Check [LSP2-ERC725YJSONSchema] to learn how to encode the key.
 
-- MUST return the returned value of the `universalReceiver(bytes32,bytes)` function on both retrieved contract abi-encoded as bytes. If there is no addresses stored under the data keys above or the call was not forwarded to them, the return value is the two empty bytes abi-encoded as bytes. 
+- MUST return the returned value of the `universalReceiverDelegate(address,uint256,bytes32,bytes)` function on both retrieved contract abi-encoded as bytes. If there is no addresses stored under the data keys above or the call was not forwarded to them, the return value is the two empty bytes abi-encoded as bytes. 
 
 - MUST emit a [UniversalReceiver] event if the function was successful.
 
@@ -637,7 +634,9 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 [`lsp20VerifyCallResult(..)`]: <./LSP-20-CallVerification.md#lsp20verifycallresult>
 [UniversalReceiver]: <./LSP-1-UniversalReceiver.md#events>
 [`universalReceiver(bytes32,bytes)`]: <./LSP-1-UniversalReceiver.md#universalreceiver>
+[`universalReceiverDelegate(address,uint256,bytes32,bytes)`]: <./LSP-1-UniversalReceiver.md#universalreceiverdelegate>
 [LSP1-UniversalReceiver interface id]: <./LSP-1-UniversalReceiver.md#specification>
+[LSP1-UniversalReceiverDelegate interface id]: <./LSP-1-UniversalReceiver.md#specification>
 [`ValueReceived`]: <#valuereceived>
 [DataChanged]: <https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#datachanged>
 [DELEGATECALL]: <https://solidity-by-example.org/delegatecall/>
