@@ -35,7 +35,7 @@ Storing the permissions at the core [ERC725Account] itself, allows it to survive
 
 ## Specification
 
-**LSP6-KeyManager** interface id according to [ERC165]: `0x66918867`.
+**LSP6-KeyManager** interface id according to [ERC165]: `0x23f34c62`.
 
 Smart contracts implementing the LSP6 standard MUST implement and support the following standard and their interfaces:
 
@@ -716,16 +716,16 @@ interface ILSP6  /* is ERC165 */ {
 
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
 
-[ERC165]: https://eips.ethereum.org/EIPS/eip-165
-[ERC1271]: https://eips.ethereum.org/EIPS/eip-1271
-[ERC1721 success value]: https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1271.md#specification
-[ERC1271 fail value]: https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1271.md#specification
-[ERC725Account]: ./LSP-0-ERC725Account.md
-[BitArray]: ./LSP-2-ERC725YJSONSchema.md#bitarray
-[CALL]: https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#execute
-[STATICCALL]: https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#execute
-[DELEGATECALL]: https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#execute
-[CREATE]: https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#execute
-[CREATE2]: https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#execute
-[LSP20-CallVerification]: ./LSP-20-CallVerification.md
-[LSP25-ExecuteRelayCall]: ./LSP-25-ExecuteRelayCall.md
+[erc165]: https://eips.ethereum.org/EIPS/eip-165
+[erc1271]: https://eips.ethereum.org/EIPS/eip-1271
+[erc1721 success value]: https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1271.md#specification
+[erc1271 fail value]: https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1271.md#specification
+[erc725account]: ./LSP-0-ERC725Account.md
+[bitarray]: ./LSP-2-ERC725YJSONSchema.md#bitarray
+[call]: https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#execute
+[staticcall]: https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#execute
+[delegatecall]: https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#execute
+[create]: https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#execute
+[create2]: https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#execute
+[lsp20-callverification]: ./LSP-20-CallVerification.md
+[lsp25-executerelaycall]: ./LSP-25-ExecuteRelayCall.md
