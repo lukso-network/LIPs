@@ -27,20 +27,23 @@ Delegating the function call requirements to another smart contract enables a mo
 
 ## Specification
 
-There are two distinct contracts involved in the Call Verification standard, each playing a different role in achieving the desired functionality: the contract that receives the initial function call and asks the verifier contract for verification and the verifier contract that handles the actual verification process.
+There are two distinct contracts involved in the LSP20 Call Verification standard, each playing a different role in achieving the desired functionality:
 
-The contract receiving the function call and calling a verifier contract MUST support the `LSP20-CallVerification` interfaceId: `0x1a0eb6a5`, calculated as the first 4 bytes of the keccak256 hash of the string `"LSP20CallVerification"`. This interface ensures that the required behavior is available for performing the necessary verifications.
+- the contract that receives the initial function call (**LSP20-CallVerification**) and asks the verifier contract for verification.
+- the verifier contract (**LSP20-CallVerifier**) that handles the actual verification process.
 
-The verifier contract receiving the verification call MUST support the `LSP20-CallVerifier` interfaceId: `0xc9dfc532`, calculated as the XOR of the functions mentioned below.
+The contract receiving the function call and calling a verifier contract MUST support the **LSP20-CallVerification** interfaceId: `0x1a0eb6a5`, calculated as the first 4 bytes of the keccak256 hash of the string `"LSP20CallVerification"`. This interface ensures that the required behavior is available for performing the necessary verifications.
+
+The verifier contract receiving the verification call MUST support the `LSP20-CallVerifier` interfaceId: `0x0d6ecac7`, calculated as the XOR of the functions mentioned below.
 
 ### Methods
 
-Smart contracts implementing the LSP20-CallVerifier interfaceId SHOULD implement both of the functions listed below:
+Smart contracts implementing the **LSP20-CallVerifier** interfaceId SHOULD implement both of the functions listed below:
 
 #### lsp20VerifyCall
 
 ```solidity
-function lsp20VerifyCall(address callee, address caller, uint256 value, bytes memory receivedCalldata) external returns (bytes4 returnedStatus);
+function lsp20VerifyCall(address requestor, address target, address caller, uint256 value, bytes memory callData) external returns (bytes4 returnedStatus);
 ```
 
 This function is the pre-verification function.
@@ -49,7 +52,8 @@ It can be used to run any form of verification mechanism **prior to** running th
 
 _Parameters:_
 
-- `callee`: The address of the contract that implements the LSP20 interface.
+- `requestor`: The address that requested to make the call to `target`.
+- `target`: The address of the contract that implements the `LSP20CallVerification` interface.
 - `caller`: The address who called the function on the contract delegating the verification mechanism.
 - `value`: The value sent by the caller to the function called on the contract delegating the verification mechanism.
 - `receivedCalldata`: The calldata sent by the caller to the contract delegating the verification mechanism.
@@ -61,9 +65,9 @@ _Returns:_
 _Requirements_
 
 - the `bytes4` success value returned MUST be of the following format:
-  - the first 3 bytes MUST be the `lsp20VerifyCall(..)` function selector = this determines if the call to the function is allowed.
+  - the first 3 bytes MUST be the `lsp20VerifyCall(address,address,address,uint256,bytes)` function selector. This determines if the call to the function is allowed or not.
   - any value for the last 4th byte is accepted.
-  - if the 4th byte is `0x01`, this determines if the `lsp20VerifyCallResult(..)` function should be called after the original function call (The byte that invokes the `lsp20VerifyCallResult(..)` function is strictly `0x01`).
+  - if the 4th byte is `0x01`, this determines if the `lsp20VerifyCallResult(bytes32,bytes)` function should be called after the original function call (The byte that invokes the `lsp20VerifyCallResult(bytes32,bytes)` function is strictly `0x01`).
 
 #### lsp20VerifyCallResult
 
@@ -77,7 +81,7 @@ It can be used to run any form of verification mechanism after having run the ac
 
 _Parameters:_
 
-- `callHash`: The keccak256 of the parameters of `lsp20VerifyCall(..)` parameters packed-encoded (concatened).
+- `callHash`: The keccak256 hash of the parameters of `lsp20VerifyCall(address,address,address,uint256,bytes)` parameters packed-encoded (concatened).
 - `callResult`: the result of the function being called on the contract delegating the verification mechanism.
   - if the function being called returns some data, the `callResult` MUST be the value returned by the function being called as abi-encoded `bytes`.
   - if the function being called does not return any data, the `callResult` MUST be an empty `bytes`.
@@ -88,7 +92,7 @@ _Returns:_
 
 _Requirements_
 
-- MUST return the `lsp20VerifyCallResult(..)` function selector if the call to the function is allowed.
+- MUST return the `lsp20VerifyCallResult(bytes32,bytes)` function selector if the call to the function is allowed.
 
 ### Handling Verification Result
 
@@ -122,7 +126,7 @@ An implementation can be found in the [lukso-network/lsp-smart-contracts] reposi
 ```solidity
 interface ILSP20  /* is ERC165 */ {
 
-  function lsp20VerifyCall(address caller, uint256 value, bytes memory receivedCalldata) external returns (bytes4 returnedStatus);
+  function lsp20VerifyCall(address requestor, address target, address caller, uint256 value, bytes memory receivedCalldata) external returns (bytes4 returnedStatus);
 
   function lsp20VerifyCallResult(bytes32 callHash, bytes memory callResult) external returns (bytes4);
 
@@ -133,5 +137,5 @@ interface ILSP20  /* is ERC165 */ {
 
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
 
-[ERC165]: https://eips.ethereum.org/EIPS/eip-165
+[erc165]: https://eips.ethereum.org/EIPS/eip-165
 [lukso-network/lsp-smart-contracts]: https://github.com/lukso-network/lsp-smart-contracts/blob/develop/contracts/
