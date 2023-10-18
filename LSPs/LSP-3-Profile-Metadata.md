@@ -76,49 +76,66 @@ The linked JSON file SHOULD have the following format:
         ],
         "tags": [ "string", "string", ... ], // tags related to the profile
         "avatar": [ // a 3D file avatar mostly in FBX and/or OBJ format, multiple file formats of an avatar can be added
-            {
-                "hashFunction": 'keccak256(bytes)',
-                "hash": 'string',
+            { // example of a hash based avatar verification
+                "verificationFunction": 'keccak256(bytes)',
+                "verificationData": 'string',
                 "url": 'string',
                 "fileType": 'string'
             },
-            ...
-            // OR link a DigitalAsset (NFT)
-            {  
+            { // example of a signature based avatar verification
+                "verificationFunction": 'ecdsa',
+                "verificationData": 'string',  // signer that signed the bytes of the image
+                "verificationSource": 'string' // e.g url returning the signature of the signed image
+                "url": 'string',
+                "fileType": 'string'
+            },
+            { // example of a NFT/smart contract based avatar
                 "address": Address, // the address of an LSP7 or LSP8
                 "tokenId": 32bytes  // (optional) if token contract is an LSP7
             }
         ]
         // below each image type SHOULD have different size of the same image, so that interfaces can choose which one to load for better loading performance
         "profileImage": [ // One image in different sizes, representing the profile.
-            {  
+            { // example of a hash based image verification
                 "width": Number,
                 "height": Number,
-                "hashFunction": 'keccak256(bytes)',
-                "hash": 'string', // bytes32 hex string of the image hash
+                "verificationFunction": 'keccak256(bytes)',
+                "verificationData": 'string', // bytes32 hex string of the image hash
                 "url": 'string'
             },
-            ...
-            // OR link a DigitalAsset (NFT)
-            {  
+            { // example of a signature based image verification
+                "width": Number,
+                "height": Number,
+                "verificationFunction": 'ecdsa',
+                "verificationData": 'string',  // signer that signed the bytes of the image
+                "verificationSource": 'string' // e.g url returning the signature of the signed image
+                "url": 'string'
+            },
+            { // example of a NFT/smart contract based image
                 "address": Address, // the address of an LSP7 or LSP8
                 "tokenId": 32bytes  // (optional) if token contract is an LSP7
-            },
+            }
         ],
         "backgroundImage": [ // Image in different sizes, that can be used in conjunction with profile image to give a more personal look to a profile.
-            { 
+            { // example of a hash based image verification
                 "width": Number,
                 "height": Number,
-                "hashFunction": 'keccak256(bytes)',
-                "hash": 'string', // bytes32 hex string of the image hash
+                "verificationFunction": 'keccak256(bytes)',
+                "verificationData": 'string', // bytes32 hex string of the image hash
                 "url": 'string'
             },
-            ...
-             // OR link a DigitalAsset (NFT)
-            {  
+            { // example of a signature based image verification
+                "width": Number,
+                "height": Number,
+                "verificationFunction": 'ecdsa',
+                "verificationData": 'string',  // signer that signed the bytes of the image
+                "verificationSource": 'string' // e.g url returning the signature of the signed image
+                "url": 'string'
+            },
+            { // example of a NFT/smart contract based image
                 "address": Address, // the address of an LSP7 or LSP8
                 "tokenId": 32bytes  // (optional) if token contract is an LSP7
-            },
+            }
         ]
     }
 }
@@ -138,8 +155,8 @@ Example:
         tags: [ 'brand', 'public profile' ],
         avatar: [
             {
-              hashFunction: 'keccak256(bytes)',
-              hash: '0x98fe032f81c43426fbcfb21c780c879667a08e2a65e8ae38027d4d61cdfe6f55',
+              verificationFunction: 'keccak256(bytes)',
+              verificationData: '0x98fe032f81c43426fbcfb21c780c879667a08e2a65e8ae38027d4d61cdfe6f55',
               url: 'ifps://QmPJESHbVkPtSaHntNVY5F6JDLW8v69M2d6khXEYGUMn7N',
               fileType: 'fbx'
             }
@@ -148,8 +165,8 @@ Example:
             {
                 width: 1800,
                 height: 1013,
-                hashFunction: 'keccak256(bytes)',
-                hash: '0x98fe032f81c43426fbcfb21c780c879667a08e2a65e8ae38027d4d61cdfe6f55',
+                verificationFunction: 'keccak256(bytes)',
+                verificationData: '0x98fe032f81c43426fbcfb21c780c879667a08e2a65e8ae38027d4d61cdfe6f55',
                 url: 'ifps://QmPJESHbVkPtSaHntNVY5F6JDLW8v69M2d6khXEYGUMn7N'
             },
             // OR use an NFT as profile image
@@ -162,15 +179,15 @@ Example:
             {
                 width: 1800,
                 height: 1013,
-                hashFunction: 'keccak256(bytes)',
-                hash: '0x98fe032f81c43426fbcfb21c780c879667a08e2a65e8ae38027d4d61cdfe6f55',
+                verificationFunction: 'keccak256(bytes)',
+                verificationData: '0x98fe032f81c43426fbcfb21c780c879667a08e2a65e8ae38027d4d61cdfe6f55',
                 url: 'ifps://QmPJESHbVkPtSaHntNVY5F6JDLW8v69M2d6khXEYGUMn7N'
             },
             {
                 width: 1024,
                 height: 576,
-                hashFunction: 'keccak256(bytes)',
-                hash: '0xfce1c7436a77a009a97e48e4e10c92e89fd95fe1556fc5c62ecef57cea51aa37',
+                verificationFunction: 'keccak256(bytes)',
+                verificationData: '0xfce1c7436a77a009a97e48e4e10c92e89fd95fe1556fc5c62ecef57cea51aa37',
                 url: 'ifps://QmZc9uMJxyUeUpuowJ7AD6MKoNTaWdVNcBj72iisRyM9Su'
             }
         ]
