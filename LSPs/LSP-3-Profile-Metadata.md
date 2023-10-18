@@ -100,7 +100,7 @@ The linked JSON file SHOULD have the following format:
                 "width": Number,
                 "height": Number,
                 "verificationFunction": 'keccak256(bytes)',
-                "verificationData": 'string', // bytes32 hex string of the image hash
+                "verificationData": 'string', // bytes32 hash of the image
                 "url": 'string'
             },
             { // example of a signature based image verification
@@ -121,7 +121,7 @@ The linked JSON file SHOULD have the following format:
                 "width": Number,
                 "height": Number,
                 "verificationFunction": 'keccak256(bytes)',
-                "verificationData": 'string', // bytes32 hex string of the image hash
+                "verificationData": 'string', // bytes32 hash of the image
                 "url": 'string'
             },
             { // example of a signature based image verification
