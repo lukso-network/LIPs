@@ -116,6 +116,7 @@ The linked JSON file SHOULD have the following format:
     "LSP4Metadata": {
         "name": "string", // name of the DigitalAsset if not defined in LSP4TokenName
         "description": "string",
+        "type": "string", // MUST be: "TOKEN", "NFT", LSP26NFT
         "links": [ // links related to DigitalAsset
             {
                 "title": "string", // a title for the link.
