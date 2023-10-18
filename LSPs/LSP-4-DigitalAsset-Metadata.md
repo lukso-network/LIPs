@@ -123,7 +123,8 @@ The linked JSON file SHOULD have the following format:
             },
             ...
         ],
-        "icon": [  // multiple sizes of the same icon
+        "icon": [ // SHOULD be used for LSP7 icons
+            // multiple sizes of the same icon
             {
                 "width": Number,
                 "height": Number,
@@ -133,8 +134,10 @@ The linked JSON file SHOULD have the following format:
             },
             ...
         ],
-        "images": [ // multiple images in different sizes, related to the DigitalAsset, image 0, should be the main image
-            [ // array of different sizes of the same image
+        "images": [ // COULD be used for LSP8 NFT art
+            // multiple images in different sizes, related to the DigitalAsset, image 0, should be the main image
+            // array of different sizes of the same image
+            [
                 {
                     "width": Number,
                     "height": Number,
@@ -146,7 +149,7 @@ The linked JSON file SHOULD have the following format:
             ],
             [...]
         ],
-        "assets": [
+        "assets": [ // SHOULD be used for any assets of the token (e.g. 3d assets, high res pictures or music, etc)
             {
                 "hashFunction": 'keccak256(bytes)',
                 "hash": 'string',
@@ -176,7 +179,7 @@ Example:
             { title: 'Twitter', url: 'https://twitter.com/goldenpig123' },
             { title: 'goldenpig.org', url: 'https://goldenpig.org' }
         ],
-        icon: [ // SHOULD be used for LSP7 icons
+        icon: [
             {
                 width: 256,
                 height: 256,
@@ -185,7 +188,7 @@ Example:
                 url: 'ifps://QmW5cF4r9yWeY1gUCtt7c6v3ve7Fzdg8CKvTS96NU9Uiwr'
             }
         ],
-        images: [ // SHOULD be used for LSP8 NFT art
+        images: [ // COULD be used for LSP8 NFT art
             [
                 {
                     width: 1024,
@@ -198,7 +201,7 @@ Example:
             ],
             ... // more images
         ],
-        assets: [{ // SHOULD be used for anything that can be added "on top" of the token (e.g. 3d assets or high res pictures or music)
+        assets: [{
             hashFunction: 'keccak256(bytes)',
             hash: '0x98fe032f81c43426fbcfb21c780c879667a08e2a65e8ae38027d4d61cdfe6f55',
             url: 'ifps://QmPJESHbVkPtSaHntNVY5F6JDLW8v69M2d6khXEYGUMn7N',
