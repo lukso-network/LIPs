@@ -67,7 +67,7 @@ This MUST NOT be changeable, and set only during initialization of the token.
 
 #### LSP4TokenSymbol
 
-A string representing the symbol for the token collection.
+A string representing the symbol for the token.
 
 The `LSP4TokenSymbol` data key is OPTIONAL. If this data key is present and used, the following requirements and recommendations apply:
 
@@ -90,6 +90,31 @@ _Recommendations_
   "valueContent": "String"
 }
 ```
+
+#### LSP4TokenType
+
+A string representing the type of token that this contract represents.
+NOTE: More token types COULD be added later.
+
+_Requirements_
+
+The string MUST be one of the following:
+
+- `TOKEN`: Only valid for LSP7, meaning its a generic token, where the `LSP4Metadata` represents the token information.
+- `NFT`: If the contract is LSP7, then the `LSP4Metadata` represents the information of a **single** NFT, that has multiple ownable amounts or IDs.
+- `COLLECTION`: If the contract is LSP8, then the `LSP4Metadata` represents the information of a the collection, and each individual token ID, has its own meta data depending on the `LSP8TokenIdType` and `LSP8MetadataTokenURI`. [See LSP8 for details](./LSP-8-IdentifiableDigitalAsset.md).
+<!-- - `LSP26NFT` -->
+
+```json
+{
+  "name": "LSP4TokenType",
+  "key": "0xe0261fa95db2eb3b5439bd033cda66d56b96f92f243a8228fd87550ed7bdfdb3",
+  "keyType": "Singleton",
+  "valueType": "string",
+  "valueContent": "String"
+}
+```
+
 
 #### LSP4Metadata
 
