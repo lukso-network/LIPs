@@ -52,7 +52,7 @@ The supported standard SHOULD be `LSP26SmartContractGeneratedImage`
     "name": "LSP26SmartContractGeneratedImage",
     "key": "0x66dd77705f8478e25be2bac9497eb3d614cd9054bcbbe0bbf7258139b6b06bd6",
     "keyType": "Singleton",
-    "valueType": "(bytes12,bytes)",
+    "valueType": "(bytes16,bytes)",
     "valueContent": "(String,String)"
 }
 ```
