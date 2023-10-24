@@ -98,20 +98,24 @@ NOTE: More token types COULD be added later.
 
 _Requirements_
 
-The string MUST be one of the following:
+This MUST NOT be changeable, and set only during initialization of the token contract.
 
-- `TOKEN`: Only valid for LSP7, meaning its a generic token, where the `LSP4Metadata` represents the token information.
-- `NFT`: If the contract is LSP7, then the `LSP4Metadata` represents the information of a **single** NFT, that has multiple ownable amounts or IDs.
-- `COLLECTION`: If the contract is LSP8, then the `LSP4Metadata` represents the information of a the collection, and each individual token ID, has its own meta data depending on the `LSP8TokenIdType` and `LSP8MetadataTokenURI`. [See LSP8 for details](./LSP-8-IdentifiableDigitalAsset.md).
+| Value |   Type    | Description                                                                                                                                       |
+| :---: | :-------: | :------------------------------------------------------------------------------------------------------------------------------------------------ |
+|  `0`  | `Token` | Only valid for LSP7, meaning its a generic token, where the `LSP4Metadata` represents the token information. |
+|  `1`  | `NFT`  | If the contract is LSP7, then the `LSP4Metadata` represents the information of a **single** NFT, that has multiple ownable amounts or IDs. `decimals` need to be `0` |
+|  `2`  | `Collection` | If the contract is LSP8, then the `LSP4Metadata` represents the information of a the collection, and each individual token ID, has its own meta data depending on the `LSP8TokenIdType` and `LSP8MetadataTokenURI`. [See LSP8 for details](./LSP-8-IdentifiableDigitalAsset.md).                 |
+
 <!-- - `LSP26NFT` -->
+
 
 ```json
 {
   "name": "LSP4TokenType",
   "key": "0xe0261fa95db2eb3b5439bd033cda66d56b96f92f243a8228fd87550ed7bdfdb3",
   "keyType": "Singleton",
-  "valueType": "string",
-  "valueContent": "String"
+  "valueType": "uint256",
+  "valueContent": "Number"
 }
 ```
 
