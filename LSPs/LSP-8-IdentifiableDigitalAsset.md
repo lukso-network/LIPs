@@ -95,7 +95,7 @@ The value stored under this data key is a tuple `(bytes4,string)` that contains 
 ```json
 {
   "name": "LSP8MetadataTokenURI:<address|uint256|bytes32|string>",
-  "key": "0x4690256ef7e93288012f0000<address|uint256|bytes32|string>",
+  "key": "0x1339e76a390b7b9ec9010000<address|uint256|bytes32|string>",
   "keyType": "Mapping",
   "valueType": "(bytes4,string)",
   "valueContent": "(Bytes4,URI)"
@@ -482,7 +482,7 @@ ERC725Y JSON Schema `LSP8IdentifiableDigitalAsset`:
   },
   {
     "name": "LSP8MetadataTokenURI:<address|uint256|bytes32|string>",
-    "key": "0x4690256ef7e93288012f0000<address|uint256|bytes32|string>",
+    "key": "0x1339e76a390b7b9ec9010000<address|uint256|bytes32|string>",
     "keyType": "Mapping",
     "valueType": "(bytes4,string)",
     "valueContent": "(Bytes4,URI)"
