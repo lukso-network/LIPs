@@ -35,7 +35,7 @@ A commonality with [LSP7 DigitalAsset][LSP7] is desired so that the two token im
 
 ## Specification
 
-[ERC165] interface id: `0x1ae9ba1f`
+[ERC165] interface id: `0x30dc5278`
 
 The LSP8 interface ID is calculated as the XOR of the LSP8 interface (see [interface cheat-sheet below](#interface-cheat-sheet)) and the [LSP17 Extendable interface ID](./LSP-17-ContractExtension.md#erc165-interface-id).
 
@@ -278,10 +278,19 @@ _Requirements:_
 - `operator` cannot be calling address.
 - `operator` cannot be the zero address.
 
+**LSP1 Hooks:**
+
+- If the operator is a contract that supports LSP1 interface, it SHOULD call operator's [`universalReceiver(...)`] function with the parameters below:
+
+  - `typeId`: keccak256('LSP8Tokens_OperatorNotification') > `0x8a1c15a8799f71b547e08e2bcb2e85257e81b0a07eee2ce6712549eef1f00970`
+  - `data`: The data sent SHOULD be abi encoded and contain the `tokenOwner` (address), `tokenId` (bytes32), and the `operatorNotificationData` (bytes) respectively.
+
+<br>
+
 #### revokeOperator
 
 ```solidity
-function revokeOperator(address operator, bytes32 tokenId, bytes memory operatorNotificationData) external;
+function revokeOperator(address operator, bytes32 tokenId, bool notify, bytes memory operatorNotificationData) external;
 ```
 
 Removes `operator` address as an operator of `tokenId`.
@@ -300,6 +309,15 @@ _Requirements:_
 - caller must be current `tokenOwner` of `tokenId`.
 - `operator` cannot be calling address.
 - `operator` cannot be the zero address.
+
+**LSP1 Hooks:**
+
+- If the notify boolean is set to true and the operator is a contract that supports LSP1 interface, it SHOULD call operator's [`universalReceiver(...)`] function with the parameters below:
+
+  - `typeId`: keccak256('LSP8Tokens_OperatorNotification') > `0x8a1c15a8799f71b547e08e2bcb2e85257e81b0a07eee2ce6712549eef1f00970`
+  - `data`: The data sent SHOULD be abi encoded and contain the `tokenOwner` (address), `tokenId` (bytes32), and the `operatorNotificationData` (bytes) respectively.
+
+<br>
 
 #### isOperatorFor
 
@@ -424,7 +442,7 @@ MUST be emitted when `tokenId` token is transferred from `from` to `to`.
 #### AuthorizedOperator
 
 ```solidity
-event AuthorizedOperator(address indexed operator, address indexed tokenOwner, bytes32 indexed tokenId);
+event AuthorizedOperator(address indexed operator, address indexed tokenOwner, bytes32 indexed tokenId, bytes operatorNotificationData);
 ```
 
 MUST be emitted when `tokenOwner` enables `operator` for `tokenId`.
@@ -432,7 +450,7 @@ MUST be emitted when `tokenOwner` enables `operator` for `tokenId`.
 #### RevokedOperator
 
 ```solidity
-event RevokedOperator(address indexed operator, address indexed tokenOwner, bytes32 indexed tokenId);
+event RevokedOperator(address indexed operator, address indexed tokenOwner, bytes32 indexed tokenId, bool notified, bytes operatorNotificationData);
 ```
 
 MUST be emitted when `tokenOwner` disables `operator` for `tokenId`.
@@ -539,9 +557,9 @@ interface ILSP8 is /* IERC165 */ {
 
     event Transfer(address operator, address indexed from, address indexed to, bytes32 indexed tokenId, bool force, bytes data);
 
-    event AuthorizedOperator(address indexed operator, address indexed tokenOwner, bytes32 indexed tokenId);
+    event AuthorizedOperator(address indexed operator, address indexed tokenOwner, bytes32 indexed tokenId, bytes operatorNotificationData);
 
-    event RevokedOperator(address indexed operator, address indexed tokenOwner, bytes32 indexed tokenId);
+    event RevokedOperator(address indexed operator, address indexed tokenOwner, bytes32 indexed tokenId, bool notified, bytes operatorNotificationData);
 
 
     function totalSupply() external view returns (uint256);
@@ -554,7 +572,7 @@ interface ILSP8 is /* IERC165 */ {
 
     function authorizeOperator(address operator, bytes32 tokenId, bytes memory operatorNotificationData) external;
 
-    function revokeOperator(address operator, bytes32 tokenId, bytes memory operatorNotificationData) external;
+    function revokeOperator(address operator, bytes32 tokenId, bool notify, bytes memory operatorNotificationData) external;
 
     function isOperatorFor(address operator, bytes32 tokenId) external view returns (bool);
 
