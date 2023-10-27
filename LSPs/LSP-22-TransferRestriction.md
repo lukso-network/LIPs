@@ -276,7 +276,7 @@ _Events_
 
 #### removeAsset
 
-The `removeAsset` function MUST be implemented to disassociate an asset from the owner if its restriction type is `TempLock` or `SoftLock`. The function transfers the ownership to the `zero address`. The `removeAsset` function checks if the `msg.sender` has the `CanRemove` or `isOperator` restriction permission. After approval, all `restrictionPermission` entries within the asset's `tokenPermissions` entry must be set to `None`. Upon removal, the asset MUST also be removed from the owner account's [LSP5] storage.
+The `removeAsset` function MUST be implemented to disassociate an asset from the owner if its restriction type is `TempLock` or `SoftLock`. The function transfers the ownership to the `zero address`. The `removeAsset` function checks if the `msg.sender` has the `CanRemove` or `isOperator` restriction permission. After approval, its `restrictionType` MUST be set to `HardLock` to block further interactions. Upon removal, the asset MUST also be removed from the owner account's [LSP5] storage.
 
 ```solidity
 function removeAsset(uint256 key) external;
