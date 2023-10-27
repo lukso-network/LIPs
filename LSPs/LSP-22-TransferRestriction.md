@@ -427,7 +427,7 @@ constructor() {
     domainSeparator = keccak256(abi.encode(
         DOMAIN_TYPEHASH,
         keccak256(bytes("<LockableAsset>")),        // hash of the asset's name
-        keccak256(bytes("<1>")),                    // version of the asset
+        keccak256(bytes("<1>")),                    // has of the asset version
         block.chainid,                              // chain ID
         address(this)                               // contract address
     ));
@@ -465,10 +465,10 @@ function lockAsset(
     ));
 
     // get the operator address based on hash and signature
-    address signer = ecrecover(digest, v, r, s);
+    address recovered_signer = ecrecover(digest, v, r, s);
 
     // retrieve the key permission of the signer
-    bytes32 lsp6key = keccak256(abi.encodePacked("0x4b80742de2bf866c29110000", _address));
+    bytes32 lsp6key = keccak256(abi.encodePacked("0x4b80742de2bf866c29110000", recovered_signer));
 
     // simplified instantiation of the LSP6 contract
     ownerContract = IExternalContract(owner);
