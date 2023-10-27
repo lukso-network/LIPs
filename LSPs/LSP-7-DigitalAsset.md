@@ -6,20 +6,25 @@ discussions-to: https://discord.gg/E2rJPP4 (LUKSO), https://discord.gg/PQvJQtCV 
 status: Draft
 type: LSP
 created: 2021-09-02
-requires: ERC165, ERC173, ERC725Y, LSP1, LSP2, LSP4
+requires: ERC165, ERC173, ERC725Y, LSP1, LSP2, LSP4, LSP17
 ---
 
 <!--You can leave these HTML comments in your merged LIP and delete the visible duplicate text guides, they will not appear and may be helpful to refer to if you edit it again. This is the suggested template for new LIPs. Note that an LIP number will be assigned by an editor. When opening a pull request to submit your LIP, please use an abbreviated title in the filename, `lip-draft_title_abbrev.md`. The title should be 44 characters or less.-->
 
 ## Simple Summary
+
 <!--"If you can't explain it simply, you don't understand it well enough." Provide a simplified and layman-accessible explanation of the LIP.-->
+
 A standard interface for digital assets, for either fungible or non-fungible tokens.
 
 ## Abstract
+
 <!--A short (~200 word) description of the technical issue being addressed.-->
+
 This standard defines an interface for tokens where minting and transfering is specified with an amount of tokens. It is based on [ERC20][ERC20] with some ideas from [ERC777][ERC777].
 
 ## Motivation
+
 <!--The motivation is critical for LIPs that want to change the Lukso protocol. It should clearly explain why the existing protocol specification is inadequate to address the problem that the LIP solves. LIP submissions without sufficient motivation may be rejected outright.-->
 
 This standard aims to support many token use cases, both fungible and non-fungible, to be used as the base implementation that is defined with other LSP standards in mind.
@@ -28,14 +33,15 @@ A commonality with [LSP8 IdentifiableDigitalAsset][LSP8] is desired so that the 
 
 ## Specification
 
-[ERC165] interface id: `0x5fcaac27`
+[ERC165] interface id: `0x05519512`
+
+The LSP7 interface ID is calculated as the XOR of the LSP7 interface (see [interface cheat-sheet below](#interface-cheat-sheet)) and the [LSP17 Extendable interface ID](./LSP-17-ContractExtension.md#erc165-interface-id).
 
 ### ERC725Y Data Keys
 
 This standard also expects data keys from [LSP4 DigitalAsset-Metadata][LSP4#erc725ykeys].
 
 ### Methods
-
 
 #### decimals
 
@@ -60,6 +66,7 @@ Returns the number of existing tokens.
 **Returns:** `uint256` the number of existing tokens.
 
 #### balanceOf
+
 ```solidity
 function balanceOf(address tokenOwner) external view returns (uint256);
 ```
@@ -75,7 +82,7 @@ _Parameters:_
 #### authorizeOperator
 
 ```solidity
-function authorizeOperator(address operator, uint256 amount) external;
+function authorizeOperator(address operator, uint256 amount, bytes memory operatorNotificationData) external;
 ```
 
 Sets `amount` as the amount of tokens `operator` address has access to from callers tokens.
@@ -89,6 +96,7 @@ _Parameters:_
 
 - `operator` the address to authorize as an operator.
 - `amount` the amount of tokens operator has access to.
+- `operatorNotificationData` the data to send when notifying the operator via LSP1.
 
 _Requirements:_
 
@@ -98,7 +106,7 @@ _Requirements:_
 #### revokeOperator
 
 ```solidity
-function revokeOperator(address operator) external;
+function revokeOperator(address operator, bytes memory operatorNotificationData) external;
 ```
 
 Removes `operator` address as an operator of callers tokens.
@@ -108,6 +116,7 @@ MUST emit a [RevokedOperator event](#revokedoperator).
 _Parameters:_
 
 - `operator` the address to revoke as an operator.
+- `operatorNotificationData` the data to send when notifying the operator via LSP1.
 
 _Requirements:_
 
@@ -128,6 +137,20 @@ _Parameters:_
 - `operator` the address to query operator status for.
 
 **Returns:** `uint256`, the amount of tokens `operator` has access to from `tokenOwner`.
+
+### getOperatorsOf
+
+```solidity
+function getOperatorsOf(address tokenOwner) external view returns (address[] memory);
+```
+
+Returns a list of operators allowed to transfer tokens on behalf of a `tokenOwner` from its balance. Their balance can be queried via [`authorizedAmountFor(address,address)`](#authorizedamountfor)
+
+_Parameters:_
+
+- `tokenOwner` the address to query the list of operators for.
+
+**Returns:** `address[]`, a list of token `operator`s for `tokenOwner`.
 
 #### transfer
 
@@ -154,23 +177,21 @@ _Requirements:_
 - `amount` tokens must be owned by `from`.
 - If the caller is not `from`, it must be an operator for `from` with access to at least `amount` tokens.
 
-
 **LSP1 Hooks:**
 
 - If the token sender is a contract that supports LSP1 interface, it SHOULD call the token sender's [`universalReceiver(...)`] function with the parameters below:
 
-    - `typeId`: keccak256('LSP7Tokens_SenderNotification') > `0x429ac7a06903dbc9c13dfcb3c9d11df8194581fa047c96d7a4171fc7402958ea`
-    - `data`: The data sent SHOULD be packed encoded and contain the `sender` (address), `receiver` (address), `amount` (uint256) and the `data` (bytes) respectively. 
+  - `typeId`: keccak256('LSP7Tokens_SenderNotification') > `0x429ac7a06903dbc9c13dfcb3c9d11df8194581fa047c96d7a4171fc7402958ea`
+  - `data`: The data sent SHOULD be packed encoded and contain the `sender` (address), `receiver` (address), `amount` (uint256) and the `data` (bytes) respectively.
 
 <br>
 
 - If the token recipient is a contract that supports LSP1 interface, it SHOULD call the token recipient's [`universalReceiver(...)`] function with the parameters below:
 
-    - `typeId`: keccak256('LSP7Tokens_RecipientNotification') >`0x20804611b3e2ea21c480dc465142210acf4a2485947541770ec1fb87dee4a55c`
-    - `data`: The data sent SHOULD be packed encoded and contain the `sender` (address), `receiver` (address), `amount` (uint256) and the `data` (bytes) respectively.
+  - `typeId`: keccak256('LSP7Tokens_RecipientNotification') >`0x20804611b3e2ea21c480dc465142210acf4a2485947541770ec1fb87dee4a55c`
+  - `data`: The data sent SHOULD be packed encoded and contain the `sender` (address), `receiver` (address), `amount` (uint256) and the `data` (bytes) respectively.
 
-
-**Note:** LSP1 Hooks MUST be implemented in any type of token transfer (mint, transfer, burn, transferBatch). 
+**Note:** LSP1 Hooks MUST be implemented in any type of token transfer (mint, transfer, burn, transferBatch).
 
 #### transferBatch
 
@@ -224,8 +245,8 @@ event RevokedOperator(address indexed operator, address indexed tokenOwner);
 
 MUST be emitted when `tokenOwner` disables `operator`.
 
-
 ## Rationale
+
 <!--The rationale fleshes out the specification by describing what motivated the design and why particular design decisions were made. It should describe alternate designs that were considered and related work, e.g. how the feature is supported in other languages. The rationale may also provide evidence of consensus within the community, and should discuss important objections or concerns raised during discussion.-->
 
 There should be a base token standard for the LSP ecosystem of contracts, which will allow common tooling and clients to be built. Existing tools and clients that expect [ERC20][ERC20] & [ERC777][ERC777] can be made to work with this standard by using "compatability" contract extensions that match the desired interface.
@@ -245,10 +266,10 @@ When a token is changing owners (minting, transfering, burning) an attempt is ma
 The `force` parameter sent during `function transfer` SHOULD be used when notifying the token receiver, to determine if it must support [LSP1 UniversalReceiver][LSP1]. This is used to prevent accidental token transfers, which may results in lost tokens: non-contract addresses could be a copy paste issue, contracts not supporting [LSP1 UniversalReceiver][LSP1] might not be able to move tokens.
 
 ## Implementation
+
 <!--The implementations must be completed before any LIP is given status "Final", but it need not be completed before the LIP is accepted. While there is merit to the approach of reaching consensus on the specification and rationale before writing code, the principle of "rough consensus and running code" is still useful when it comes to resolving many discussions of API details.-->
 
 A implementation can be found in the [lukso-network/lsp-smart-contracts][LSP7.sol];
-
 
 ## Interface Cheat Sheet
 
@@ -259,11 +280,11 @@ interface ILSP7 is /* IERC165 */ {
 
     event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
 
-   
+
     function owner() external view returns (address);
 
     function transferOwnership(address newOwner) external; // onlyOwner
-    
+
     function renounceOwnership() external; // onlyOwner
 
 
@@ -273,12 +294,12 @@ interface ILSP7 is /* IERC165 */ {
 
 
     function getData(bytes32 dataKey) external view returns (bytes memory value);
-    
+
     function setData(bytes32 dataKey, bytes memory value) external; // onlyOwner
 
-    function getData(bytes32[] memory dataKeys) external view returns (bytes[] memory values);
+    function getDataBatch(bytes32[] memory dataKeys) external view returns (bytes[] memory values);
 
-    function setData(bytes32[] memory dataKeys, bytes[] memory values) external; // onlyOwner
+    function setDataBatch(bytes32[] memory dataKeys, bytes[] memory values) external; // onlyOwner
 
 
     // LSP7
@@ -296,11 +317,13 @@ interface ILSP7 is /* IERC165 */ {
 
     function balanceOf(address tokenOwner) external view returns (uint256);
 
-    function authorizeOperator(address operator, uint256 amount) external;
+    function authorizeOperator(address operator, uint256 amount, bytes memory operatorNotificationData) external;
 
-    function revokeOperator(address to, uint256 amount) external;
+    function revokeOperator(address to, bytes memory operatorNotificationData) external;
 
     function authorizedAmountFor(address operator, address tokenOwner) external view returns (uint256);
+
+    function getOperatorsOf(address tokenOwner) external view returns (address[] memory);
 
     function transfer(address from, address to, uint256 amount, bool force, bytes memory data) external;
 
@@ -310,13 +333,13 @@ interface ILSP7 is /* IERC165 */ {
 ```
 
 ## Copyright
+
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
 
-
-[ERC165]: <https://eips.ethereum.org/EIPS/eip-165>
-[ERC20]: <https://github.com/ethereum/EIPs/blob/master/EIPS/eip-20.md>
-[ERC777]: <https://github.com/ethereum/EIPs/blob/master/EIPS/eip-777.md>
-[LSP1]: <./LSP-1-UniversalReceiver.md>
-[LSP4#erc725ykeys]: <./LSP-4-DigitalAsset-Metadata.md#erc725ykeys>
-[LSP8]: <./LSP-8-IdentifiableDigitalAsset.md>
-[LSP7.sol]: <https://github.com/lukso-network/lsp-universalprofile-smart-contracts/blob/main/contracts/LSP7DigitalAsset/LSP7DigitalAsset.sol>
+[ERC165]: https://eips.ethereum.org/EIPS/eip-165
+[ERC20]: https://github.com/ethereum/EIPs/blob/master/EIPS/eip-20.md
+[ERC777]: https://github.com/ethereum/EIPs/blob/master/EIPS/eip-777.md
+[LSP1]: ./LSP-1-UniversalReceiver.md
+[LSP4#erc725ykeys]: ./LSP-4-DigitalAsset-Metadata.md#erc725ykeys
+[LSP8]: ./LSP-8-IdentifiableDigitalAsset.md
+[LSP7.sol]: https://github.com/lukso-network/lsp-universalprofile-smart-contracts/blob/main/contracts/LSP7DigitalAsset/LSP7DigitalAsset.sol

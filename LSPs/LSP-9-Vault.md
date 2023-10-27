@@ -24,7 +24,7 @@ This standard defines a vault that can hold assets and interact with other contr
 
 ## Specification
 
-**LSP9-Vault** interface id according to [ERC165]: `0x19331ad1`.
+**LSP9-Vault** interface id according to [ERC165]: `0x28af17e6`.
 
 _This `bytes4` interface id is calculated as the XOR of the selector of batchCalls function and the following standards: ERC725Y, ERC725X, LSP1-UniversalReceiver, LSP14Ownable2Step and LSP17Extendable._
 
@@ -166,10 +166,10 @@ This function is part of the [ERC725X] specification, with additional requiremen
 - MUST emit a [`ValueReceived`] event before external calls or contract creation if the function receives native tokens.
 
 
-#### execute (Array)
+#### executeBatch
 
 ```solidity
-function execute(uint256[] memory operationsType, address[] memory targets, uint256[] memory values, bytes[] memory datas) external payable returns (bytes[] memory);
+function executeBatch(uint256[] memory operationsType, address[] memory targets, uint256[] memory values, bytes[] memory datas) external payable returns (bytes[] memory);
 ```
 This function is part of the [ERC725X] specification, with additional requirements as follows:
 
@@ -187,10 +187,10 @@ function getData(bytes32 dataKey) external view returns (bytes memory);
 This function is part of the [ERC725Y] specification.
 
 
-#### getData
+#### getDataBatch
 
 ```solidity
-function getData(bytes32[] memory dataKeys) external view returns (bytes[] memory);
+function getDataBatch(bytes32[] memory dataKeys) external view returns (bytes[] memory);
 ```
 
 This function is part of the [ERC725Y] specification.
@@ -210,10 +210,10 @@ This function is part of the [ERC725Y] specification, with additional requiremen
 - MUST emit only the first 256 bytes of the dataValue parameter in the [DataChanged] event.
 
 
-#### setData (Array)
+#### setDataBatch
 
 ```solidity
-function setData(bytes32[] memory dataKeys, bytes[] memory dataValues) external;
+function setDataBatch(bytes32[] memory dataKeys, bytes[] memory dataValues) external;
 ```
 
 This function is part of the [ERC725Y] specification, with additional requirements as follows:
@@ -235,9 +235,11 @@ This function is part of the [LSP1] specification, with additional requirements 
 
 - MUST emit a [`ValueReceived`] event before external calls if the function receives native tokens.
 
-- If an `address` is stored under the data key attached below and and this address is a contract that supports the [LSP1UniversalReceiver interface id], forwards the call to the [`universalReceiver(bytes32,bytes)`] function on the address retreived. If there is no address stored under this data key, execution continues normally. 
-
-The `msg.data` is appended with the caller address as bytes20 and the `msg.value` received as bytes32 before calling the external contract, allowing the receiving contract to know the initial caller and the value sent.
+- If an `address` is stored under the data key attached below and this address is a contract:
+  - forwards the call to the [`universalReceiverDelegate(address,uint256,bytes32,bytes)`] function on the contract at this address **ONLY IF** this contract supports the [LSP1UniversalReceiverDelegate interface id].
+  - if the contract at this address does not supports the [LSP1UniversalReceiverDelegate interface id], execution continues normally.
+  
+- If there is no `address` stored under this data key, execution continues normally. 
 
 ```json
 {
@@ -249,9 +251,11 @@ The `msg.data` is appended with the caller address as bytes20 and the `msg.value
 }
 ```
 
-- If an `address` is stored under the data key attached below and and this address is a contract that supports the [LSP1UniversalReceiver interface id], forwards the call to the [`universalReceiver(bytes32,bytes)`] function on the address retreived. If there is no address stored under this data key, execution continues normally. 
-
-The `msg.data` is appended with the caller address as bytes20 and the `msg.value` received as bytes32 before calling the external contract, allowing the receiving contract to know the initial caller and the value sent.
+- If an `address` is stored under the data key attached below and this address is a contract:
+  - forwards the call to the [`universalReceiverDelegate(address,uint256,bytes32,bytes)`] function on the contract at this address **ONLY IF** this contract supports the [LSP1UniversalReceiverDelegate interface id].
+  - if the contract at this address does not supports the [LSP1UniversalReceiverDelegate interface id], execution continues normally.
+  
+- If there is no `address` stored under this data key, execution continues normally. 
 
 ```json
 {
@@ -263,11 +267,27 @@ The `msg.data` is appended with the caller address as bytes20 and the `msg.value
 }
 ```
 
-> <bytes32\> is the `typeId` passed to the `universalReceiver(..)` function. Check [LSP2-ERC725YJSONSchema] to learn how to encode the key.
+The `<bytes32\>` in the data key name corresponds to the `typeId` passed to the `universalReceiver(..)` function. 
 
-- MUST return the returned value of the `universalReceiver(bytes32,bytes)` function on both retreived contract abi-encoded as bytes. If there is no addresses stored under the data keys above or the call was not forwarded to them, the return value is the two empty bytes abi-encoded as bytes. 
+> **Warning**
+> When constructing this data key for a specific `typeId`, unique elements of the typeId SHOULD NOT be on the right side because of trimming rules.
+> 
+> The `<bytes32>` is trimmed on the right side to keep only the first 20 bytes. Therefore, implementations SHOULD ensure that the first 20 bytes are unique to avoid clashes.
+> For example, the `bytes32 typeId` below:
+> 
+> ```
+> 0x1111222233334444555566667777888899990000aaaabbbbccccddddeeeeffff
+> ```
+> 
+> will be trimmed to `0x1111222233334444555566667777888899990000`.
+> 
+> See the section about the trimming rules for the key type [`Mapping`](./LSP-2-ERC725YJSONSchema.md#mapping) in [LSP2-ERC725YJSONSchema] to learn how to encode this data key.
+
+- MUST return the returned value of the `universalReceiverDelegate(address,uint256,bytes32,bytes)` function on both retreived contract abi-encoded as bytes. If there is no addresses stored under the data keys above or the call was not forwarded to them, the return value is the two empty bytes abi-encoded as bytes. 
 
 - MUST emit a [UniversalReceiver] event if the function was successful.
+
+Check the [**UniversalReceiver Delegation > Specification** section in LSP1-UniversalReceiver](./LSP-1-UniversalReceiver.md#universalreceiver-delegation) and [LSP2-ERC725YJSONSchema] for more information.
 
 ### Events
 
@@ -335,6 +355,16 @@ If there is a function called on the vault and the function does not exist, the 
 
 Check [LSP17-ContractExtension] and [LSP2-ERC725YJSONSchema] for more information.
 
+### Graffiti 
+
+Graffiti refers to the arbitrary messages or data sent to an **LSP9-Vault** contract that do not match any existing function selectors, such as `execute(..)`, `setData(..)`, etc. These bytes, often carrying a message or additional information, are usually not intended to invoke specific functions within the contract. 
+
+When the vault is called with specific bytes that do not match any function selector, it will first check its storage to see if there are any extensions set for these function selectors (bytes). If no extension is found, the call will typically revert. However, to emulate the behavior of calling an Externally Owned Account (EOA) with random bytes (which always passes), an exception has been made for the `0x00000000` selector.
+
+When the vault is called with data that starts with `0x00000000`, it will first check for extensions. If none are found, the call will still pass, allowing it to match the behavior of calling an EOA and enabling the ability to send arbitrary messages to the vault. For example, one might receive a message like "This is a gift" while sending native tokens. 
+
+Additionally, it is possible to set an extension for the `0x00000000` selector. With this custom extension, you can define specific logic that runs when someone sends graffiti to your vault. For instance, you may choose to disallow sending graffiti by reverting the transaction, impose a fee for sending graffiti, or emit the graffiti on an external contract. This flexibility allows for various use cases and interactions with graffiti in the LSP9Vaults contracts.
+
 ## Rationale
 
 The ERC725Y general data key value store allows for the ability to add any kind of information to the contract, which allows future use cases. The general execution allows full interactability with any smart contract or address. And the universal receiver allows the reaction to any future asset.
@@ -390,7 +420,7 @@ interface ILSP9  /* is ERC165 */ {
     
     function execute(uint256 operationType, address to, uint256 value, bytes memory data) external payable returns (bytes memory); // onlyOwner
     
-    function execute(uint256[] memory operationsType, address[] memory targets, uint256[] memory values, bytes[] memory datas) external payable returns(bytes[] memory); // onlyOwner
+    function executeBatch(uint256[] memory operationsType, address[] memory targets, uint256[] memory values, bytes[] memory datas) external payable returns(bytes[] memory); // onlyOwner
     
     
     // ERC725Y
@@ -402,9 +432,9 @@ interface ILSP9  /* is ERC165 */ {
     
     function setData(bytes32 dataKey, bytes memory dataValue) external; // onlyOwner
     
-    function getData(bytes32[] memory dataKeys) external view returns (bytes[] memory dataValues);
+    function getDataBatch(bytes32[] memory dataKeys) external view returns (bytes[] memory dataValues);
     
-    function setData(bytes32[] memory dataKeys, bytes[] memory dataValues) external; // onlyOwner
+    function setDataBatch(bytes32[] memory dataKeys, bytes[] memory dataValues) external; // onlyOwner
     
     
     // LSP9 (LSP9Vault)
@@ -470,6 +500,8 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 [LSP17-ContractExtension]: <./LSP-17-ContractExtension.md>
 [UniversalReceiver]: <./LSP-1-UniversalReceiver.md#events>
 [`universalReceiver(bytes32,bytes)`]: <./LSP-1-UniversalReceiver.md#universalreceiver>
+[`universalReceiverDelegate(address,uint256,bytes32,bytes)`]: <./LSP-1-UniversalReceiver.md#universalreceiverDelegate>
 [LSP1UniversalReceiver interface id]: <./LSP-1-UniversalReceiver.md#specification>
+[LSP1UniversalReceiverDelegate interface id]: <./LSP-1-UniversalReceiver.md#specification>
 [`ValueReceived`]: <#valuereceived>
 [DataChanged]: <https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#datachanged>

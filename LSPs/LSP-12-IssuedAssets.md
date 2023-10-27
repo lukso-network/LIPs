@@ -59,7 +59,7 @@ For more info about how to access each index of the `LSP12IssuedAssets[]` array,
 
 References issued smart contract assets, like tokens (_e.g.: [LSP7 Digital Assets](./LSP-7-DigitalAsset)_) and NFTs (_e.g.: [LSP8 Identifiable Digital Assets](./LSP-8-IdentifiableDigitalAsset)_). This data key exists so that smart contracts can detect whether the address of an asset is present in the `LSP12IssuedAssets[]` array without looping all over it on-chain. Moreover, it helps to identify at which index in the `LSP12IssuedAssets[]` the asset address is located for easy access and to change or remove this specific asset from the array. Finally, it also allows the detection of the interface supported by the asset.
 
-The data value MUST be constructed as follows: `bytes4(standardInterfaceId) + bytes8(indexNumber)`. Where:
+The data value MUST be constructed as follows: `bytes4(standardInterfaceId) + uint128(indexNumber)`. Where:
 - `standardInterfaceId` = the [ERC165 interface ID](https://eips.ethereum.org/EIPS/eip-165) of the standard that the token or asset smart contract implements (if the ERC165 interface ID is unknown, `standardInterfaceId = 0xffffffff`).
 - `indexNumber` = the index in the [`LSP12IssuedAssets[]` Array](#LSP12Issuedassets)
 
@@ -70,7 +70,7 @@ Value example: `0x5fcaac27000000000000000c` (interfaceId: `0x5fcaac27` for a [LS
     "name": "LSP12IssuedAssetsMap:<address>",
     "key": "0x74ac2555c10b9349e78f0000<address>",
     "keyType": "Mapping",
-    "valueType": "(bytes4,bytes8)",
+    "valueType": "(bytes4,uint128)",
     "valueContent": "(Bytes4,Number)"
 }
 ```
@@ -93,7 +93,7 @@ ERC725Y JSON Schema `LSP12IssuedAssets`:
         "name": "LSP12IssuedAssetsMap:<address>",
         "key": "0x74ac2555c10b9349e78f0000<address>",
         "keyType": "Mapping",
-        "valueType": "(bytes4,bytes8)",
+        "valueType": "(bytes4,uint128)",
         "valueContent": "(Bytes4,Number)"
     }
 ]

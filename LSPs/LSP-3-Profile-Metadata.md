@@ -1,6 +1,6 @@
 ---
 lip: 3
-title: Universal Profile Metadata
+title: Profile Metadata
 author: Fabian Vogelsteller <fabian@lukso.network> 
 discussions-to: https://discord.gg/E2rJPP4
 status: Draft
@@ -35,11 +35,11 @@ The supported standard SHOULD be `LSP3UniversalProfile`
 
 ```json
 {
-    "name": "SupportedStandards:LSP3UniversalProfile",
-    "key": "0xeafec4d89fa9619884b60000abe425d64acd861a49b8ddf5c0b6962110481f38",
+    "name": "SupportedStandards:LSP3Profile",
+    "key": "0xeafec4d89fa9619884b600005ef83ad9559033e6e941db7d7c495acdce616347",
     "keyType": "Mapping",
     "valueType": "bytes4",
-    "valueContent": "0xabe425d6"
+    "valueContent": "0x5ef83ad9"
 }
 ```
 
@@ -81,6 +81,12 @@ The linked JSON file SHOULD have the following format:
                 "hash": 'string',
                 "url": 'string',
                 "fileType": 'string'
+            },
+            ...
+            // OR link a DigitalAsset (NFT)
+            {  
+                "address": Address, // the address of an LSP7 or LSP8
+                "tokenId": 32bytes  // (optional) if token contract is an LSP7
             }
         ]
         // below each image type SHOULD have different size of the same image, so that interfaces can choose which one to load for better loading performance
@@ -174,7 +180,7 @@ Example:
 
 ## Rationale
 
-Universal Profile's metadata is important for creating a verifiable public account that is the source of asset issuance,
+Profile's metadata is important for creating a verifiable public account that is the source of asset issuance,
 or a verifiable public appearance. This metadata does not need to belong to a real world person, but gives the account a "recognisable face".
 
 ## Implementation
@@ -187,11 +193,11 @@ ERC725Y JSON Schema `LSP3UniversalProfile`:
 ```json
 [
     {
-        "name": "SupportedStandards:LSP3UniversalProfile",
-        "key": "0xeafec4d89fa9619884b60000abe425d64acd861a49b8ddf5c0b6962110481f38",
+        "name": "SupportedStandards:LSP3Profile",
+        "key": "0xeafec4d89fa9619884b600005ef83ad9559033e6e941db7d7c495acdce616347",
         "keyType": "Mapping",
         "valueType": "bytes4",
-        "valueContent": "0xabe425d6"
+        "valueContent": "0x5ef83ad9"
     },
     {
         "name": "LSP3Profile",
@@ -212,7 +218,7 @@ ERC725Y JSON Schema `LSP3UniversalProfile`:
         "name": "LSP12IssuedAssetsMap:<address>",
         "key": "0x74ac2555c10b9349e78f0000<address>",
         "keyType": "Mapping",
-        "valueType": "(bytes4,bytes8)",
+        "valueType": "(bytes4,uint128)",
         "valueContent": "(Bytes4,Number)"
     },
 

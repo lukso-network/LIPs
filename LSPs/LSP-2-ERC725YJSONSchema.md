@@ -61,7 +61,7 @@ Using a standardised schema over ERC725Y enables those data keys and values to b
 The advantage of such schema is to allow interfaces or smart contracts to better decode (read, parse and interpret) the data stored in an ERC725Y contract. It is less error-prone due to knowing data types upfront. On the other hand, it also enables interfaces and contracts to know how to correctly encode data, before being set on an ERC725Y contract.
 
 This schema is for example used in [ERC725](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) based smart contracts like
-[LSP3-UniversalProfile](./LSP-3-UniversalProfile-Metadata.md#implementation) and [LSP4-DigitalAsset-Metadata](./LSP-4-DigitalAsset-Metadata.md#implementation).
+[LSP3-Profile-Metadata](./LSP-3-Profile-Metadata.md#implementation) and [LSP4-DigitalAsset-Metadata](./LSP-4-DigitalAsset-Metadata.md#implementation).
 
 ## Specification
 
@@ -300,7 +300,7 @@ Below is an example for the **Array** data key named `LSP12IssuedAssets[]`.
 
 ```solidity
 key: keccak256('LSP12IssuedAssets[]') = 0x7c8c3416d6cda87cd42c71ea1843df28ac4850354f988d55ee2eaa47b6dc05cd
-value: uint256 (array length) e.g. 0x00000000000000000000000000000002
+value: uint128 (array length) e.g. 0x00000000000000000000000000000002
 
 // array items
 
