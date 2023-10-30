@@ -283,7 +283,7 @@ _Requirements:_
 - If the operator is a contract that supports LSP1 interface, it SHOULD call operator's [`universalReceiver(...)`] function with the parameters below:
 
   - `typeId`: keccak256('LSP8Tokens_OperatorNotification') > `0x8a1c15a8799f71b547e08e2bcb2e85257e81b0a07eee2ce6712549eef1f00970`
-  - `data`: The data sent SHOULD be abi encoded and contain the `tokenOwner` (address), `tokenId` (bytes32), and the `operatorNotificationData` (bytes) respectively.
+  - `data`: The data sent SHOULD be abi encoded and contain the `tokenOwner` (address), `tokenId` (bytes32), `isAuthorized` (boolean), and the `operatorNotificationData` (bytes) respectively.
 
 <br>
 
@@ -315,7 +315,7 @@ _Requirements:_
 - If the notify boolean is set to true and the operator is a contract that supports LSP1 interface, it SHOULD call operator's [`universalReceiver(...)`] function with the parameters below:
 
   - `typeId`: keccak256('LSP8Tokens_OperatorNotification') > `0x8a1c15a8799f71b547e08e2bcb2e85257e81b0a07eee2ce6712549eef1f00970`
-  - `data`: The data sent SHOULD be abi encoded and contain the `tokenOwner` (address), `tokenId` (bytes32), and the `operatorNotificationData` (bytes) respectively.
+  - `data`: The data sent SHOULD be abi encoded and contain the `tokenOwner` (address), `tokenId` (bytes32), `isAuthorized` (boolean), and the `operatorNotificationData` (bytes) respectively.
 
 <br>
 
