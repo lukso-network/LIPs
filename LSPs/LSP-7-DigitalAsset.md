@@ -157,6 +157,10 @@ _Parameters:_
 - `addedAmount` the amount to add to the existing allowance of tokens operator has access to.
 - `operatorNotificationData` the data to send when notifying the operator via LSP1.
 
+_Requirements:_
+
+- `operator`'s original allowance cannot be zero.
+
 **LSP1 Hooks:**
 
 - If the operator is a contract that supports LSP1 interface, it SHOULD call operator's [`universalReceiver(...)`] function with the parameters below:
