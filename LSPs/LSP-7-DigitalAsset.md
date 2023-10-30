@@ -107,7 +107,7 @@ _Requirements:_
 
 - If the operator is a contract that supports LSP1 interface, it SHOULD call operator's [`universalReceiver(...)`] function with the parameters below:
 
-  - `typeId`: keccak256('LSP7Tokens_OperatorNotification') > `0x386072cc5a58e61263b434c722725f21031cd06e7c552cfaa06db5de8a320dbc`
+  - `typeId`: `keccak256('LSP7Tokens_OperatorNotification')` > `0x386072cc5a58e61263b434c722725f21031cd06e7c552cfaa06db5de8a320dbc`
   - `data`: The data sent SHOULD be abi encoded and contain the `tokenOwner` (address), `amount` (uint256) , and the `operatorNotificationData` (bytes) respectively.
 
 <br>
@@ -135,9 +135,9 @@ _Requirements:_
 
 **LSP1 Hooks:**
 
-- If the notify parameter is set to true, and the operator is a contract that supports LSP1 interface, it SHOULD call operator's [`universalReceiver(...)`] function with the parameters below:
+- If the `notify` parameter is set to `true`, and the operator is a contract that supports LSP1 interface, it SHOULD call operator's [`universalReceiver(...)`] function with the parameters below:
 
-  - `typeId`: keccak256('LSP7Tokens_OperatorNotification') > `0x386072cc5a58e61263b434c722725f21031cd06e7c552cfaa06db5de8a320dbc`
+  - `typeId`: `keccak256('LSP7Tokens_OperatorNotification')` > `0x386072cc5a58e61263b434c722725f21031cd06e7c552cfaa06db5de8a320dbc`
   - `data`: The data sent SHOULD be abi encoded and contain the `tokenOwner` (address), `amount` (uint256) (0 in case of revoke), and the `operatorNotificationData` (bytes) respectively.
 
 <br>
@@ -165,7 +165,7 @@ _Requirements:_
 
 - If the operator is a contract that supports LSP1 interface, it SHOULD call operator's [`universalReceiver(...)`] function with the parameters below:
 
-  - `typeId`: keccak256('LSP7Tokens_OperatorNotification') > `0x386072cc5a58e61263b434c722725f21031cd06e7c552cfaa06db5de8a320dbc`
+  - `typeId`: `keccak256('LSP7Tokens_OperatorNotification')` > `0x386072cc5a58e61263b434c722725f21031cd06e7c552cfaa06db5de8a320dbc`
   - `data`: The data sent SHOULD be abi encoded and contain the `tokenOwner` (address), `amount` (uint256) (new allowance) , and the `operatorNotificationData` (bytes) respectively.
 
 <be>
@@ -188,7 +188,7 @@ _Parameters:_
 
 - If the operator is a contract that supports LSP1 interface, it SHOULD call operator's [`universalReceiver(...)`] function with the parameters below:
 
-  - `typeId`: keccak256('LSP7Tokens_OperatorNotification') > `0x386072cc5a58e61263b434c722725f21031cd06e7c552cfaa06db5de8a320dbc`
+  - `typeId`: `keccak256('LSP7Tokens_OperatorNotification')` > `0x386072cc5a58e61263b434c722725f21031cd06e7c552cfaa06db5de8a320dbc`
   - `data`: The data sent SHOULD be abi encoded and contain the `tokenOwner` (address), `amount` (uint256) (new allowance) , and the `operatorNotificationData` (bytes) respectively.
 
 <br>
