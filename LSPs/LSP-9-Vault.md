@@ -44,7 +44,7 @@ The receive function allows for receiving native tokens.
 
 - In case of receiving native tokens, it Must invoke the logic of `universalReceiver(bytes32 typeId, bytes memory receivedData)` internally with the following parameters:
 
-  - `typeId`: Unique identifier, the keccak256 of `LSP0ValueReceived` > `0x9c4705229491d365fb5434052e12a386d6771d976bea61070a8c694e8affea3d`.
+  - `typeId`: Unique identifier, the keccak256 of `LSP9ValueReceived` > `0x468cd1581d7bc001c3b685513d2b929b55437be34700410383d58f3aa1ea0abc`.
   - `receivedData`: Empty data. ('0x').
 
 - MUST emit a [`UniversalReceiver`] event when receiving native tokens.
@@ -64,7 +64,7 @@ This function is part of the [LSP17] specification, with additional requirements
   - In case no value has been sent, return.
 
   - In case value has been sent, invoke the logic of `universalReceiver(bytes32 typeId, bytes memory receivedData)` internally with the following parameters:
-    - `typeId`: Unique identifier, the keccak256 of `LSP0ValueReceived` > `0x9c4705229491d365fb5434052e12a386d6771d976bea61070a8c694e8affea3d`.
+    - `typeId`: Unique identifier, the keccak256 of `LSP9ValueReceived` > `0x468cd1581d7bc001c3b685513d2b929b55437be34700410383d58f3aa1ea0abc`.
     - `receivedData`: The calldata recevied.
 
 - MUST check for address of the extension and the boolean under the following ERC725Y Data Key, and call the extension.
@@ -87,7 +87,7 @@ This function is part of the [LSP17] specification, with additional requirements
 
 - In case where the value is not forwarded to the extension, the logic of `universalReceiver(bytes32 typeId, bytes memory receivedData)` MUST be invoked internally with the following parameters:
 
-  - `typeId`: Unique identifier, the keccak256 of `LSP0ValueReceived` > `0x9c4705229491d365fb5434052e12a386d6771d976bea61070a8c694e8affea3d`.
+  - `typeId`: Unique identifier, the keccak256 of `LSP9ValueReceived` > `0x468cd1581d7bc001c3b685513d2b929b55437be34700410383d58f3aa1ea0abc`.
   - `receivedData`: The calldata.
 
 - MUST emit a [`UniversalReceiver`] event when receiving native tokens.
@@ -194,7 +194,7 @@ This function is part of the [ERC725X] specification, with additional requiremen
 - MUST emit a [`UniversalReceiver`] event when receiving native tokens with the following parameters:
   - `from`: The address calling the execute function
   - `value`: The amount of native tokens sent by the caller
-  - `typeId`: Unique identifier, the keccak256 of `LSP9ValueReceived` > `0x9c4705229491d365fb5434052e12a386d6771d976bea61070a8c694e8affea3d`.
+  - `typeId`: Unique identifier, the keccak256 of `LSP9ValueReceived` > `0x468cd1581d7bc001c3b685513d2b929b55437be34700410383d58f3aa1ea0abc`.
   - `receivedData`: The function selector of the `execute(..)` function.
   - `returnedData`: Empty bytes.
 
@@ -211,7 +211,7 @@ This function is part of the [ERC725X] specification, with additional requiremen
 - MUST emit a [`UniversalReceiver`] event when receiving native tokens with the following parameters:
   - `from`: The address calling the execute function
   - `value`: The amount of native tokens sent by the caller
-  - `typeId`: Unique identifier, the keccak256 of `LSP0ValueReceived` > `0x9c4705229491d365fb5434052e12a386d6771d976bea61070a8c694e8affea3d`.
+  - `typeId`: Unique identifier, the keccak256 of `LSP9ValueReceived` > `0x468cd1581d7bc001c3b685513d2b929b55437be34700410383d58f3aa1ea0abc`.
   - `receivedData`: The function selector of the `executeBatch(..)` function.
   - `returnedData`: Empty bytes.
 
@@ -273,13 +273,13 @@ This function is part of the [LSP1] specification, with additional requirements 
 
 - In case of receiving native tokens, it Must invoke the logic of `universalReceiver(bytes32 typeId, bytes memory receivedData)` internally with the following parameters:
 
-  - `typeId`: Unique identifier, the keccak256 of `LSP0ValueReceived` > `0x9c4705229491d365fb5434052e12a386d6771d976bea61070a8c694e8affea3d`.
+  - `typeId`: Unique identifier, the keccak256 of `LSP9ValueReceived` > `0x468cd1581d7bc001c3b685513d2b929b55437be34700410383d58f3aa1ea0abc`.
   - `receivedData`: The fulll calldata (function selector + arguments).
 
 - MUST emit a [`UniversalReceiver`] event when receiving native tokens with the following parameters:
   - `from`: The address calling the `universalReceiver(..)` function
   - `value`: The amount of native tokens sent by the caller
-  - `typeId`: Unique identifier, the keccak256 of `LSP0ValueReceived` > `0x9c4705229491d365fb5434052e12a386d6771d976bea61070a8c694e8affea3d`.
+  - `typeId`: Unique identifier, the keccak256 of `LSP9ValueReceived` > `0x468cd1581d7bc001c3b685513d2b929b55437be34700410383d58f3aa1ea0abc`.
   - `receivedData`: The fulll calldata (function selector + arguments).
   - `returnedData`: The return value of the UniversalReceiverDelegate contracts.
 
