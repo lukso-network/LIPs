@@ -67,8 +67,8 @@ If the contract implementing the LSP17 standard is an ERC725Y contract, the exte
     "name": "LSP17Extension:<bytes4>",
     "key": "0xcee78b4094da860110960000<bytes4>",
     "keyType": "Mapping",
-    "valueType": "address",
-    "valueContent": "Address"
+    "valueType": "(address,bytes1)",
+    "valueContent": "(Address,bool)"
 }
 ```
 
@@ -77,6 +77,8 @@ The <bytes4\> is the `functionSelector` called on the account contract. For inst
 ```
 0xcee78b4094da860110960000aabbccdd00000000000000000000000000000000
 ```
+
+The boolean (1 byte) at the end, can be used to describe whether the value should be forwarded to the extension or not.
 
 > See [LSP2-ERC725YJSONSchema] to learn how to encode the data key, and the [**Mapping**](./LSP-2-ERC725YJSONSchema.md#mapping) section to learn the padding rules.
 

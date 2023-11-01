@@ -42,7 +42,12 @@ receive() external payable;
 
 The receive function allows for receiving native tokens.
 
-MUST emit a [`ValueReceived`] event when receiving native token.
+- In case of receiving native tokens, it Must invoke the logic of `universalReceiver(bytes32 typeId, bytes memory receivedData)` internally with the following parameters:
+
+  - `typeId`: Unique identifier, the keccak256 of `LSP0ValueReceived` > `0x9c4705229491d365fb5434052e12a386d6771d976bea61070a8c694e8affea3d`.
+  - `receivedData`: Empty data. ('0x').
+
+- MUST emit a [`UniversalReceiver`] event when receiving native tokens.
 
 
 #### fallback
@@ -54,21 +59,40 @@ fallback() external payable;
 This function is part of the [LSP17] specification, with additional requirements as follows:
 
 - MUST be payable.
-- MUST emit a [`ValueReceived`] event if value was sent alongside some calldata.
-- MUST return if the data sent to the contract is less than 4 bytes in length.
-- MUST check for address of the extension under the following ERC725Y Data Key, and call the extension.
+
+- If the data sent to the contract is less than 4 bytes in length:
+  - In case no value has been sent, return.
+
+  - In case value has been sent, invoke the logic of `universalReceiver(bytes32 typeId, bytes memory receivedData)` internally with the following parameters:
+    - `typeId`: Unique identifier, the keccak256 of `LSP0ValueReceived` > `0x9c4705229491d365fb5434052e12a386d6771d976bea61070a8c694e8affea3d`.
+    - `receivedData`: The calldata recevied.
+
+- MUST check for address of the extension and the boolean under the following ERC725Y Data Key, and call the extension.
 
 ```json
 {
     "name": "LSP17Extension:<bytes4>",
     "key": "0xcee78b4094da860110960000<bytes4>",
     "keyType": "Mapping",
-    "valueType": "address",
-    "valueContent": "Address"
+    "valueType": "(address, bytes1)",
+    "valueContent": "(Address, bool)"
 }
 ```
 
 > <bytes4\> is the `functionSelector` called on the vault contract. Check [LSP2-ERC725YJSONSchema] to learn how to encode the key.
+
+- If the data stored is just 20 bytes, representing an address, or 21 bytes with the boolean set to false (anything other than `0x01`), call the extension according to the [LSP17-ContractExtension] specification without sending the value received to the extension.
+
+- If the data stored is 21 bytes with the boolean set to true (strictly `0x01`), call the extension according to the [LSP17-ContractExtension] specification with sending the value received to the extension. (Does not change that the value MUST be appended as bytes to the call)
+
+- In case where the value is not forwarded to the extension, the logic of `universalReceiver(bytes32 typeId, bytes memory receivedData)` MUST be invoked internally with the following parameters:
+
+  - `typeId`: Unique identifier, the keccak256 of `LSP0ValueReceived` > `0x9c4705229491d365fb5434052e12a386d6771d976bea61070a8c694e8affea3d`.
+  - `receivedData`: The calldata.
+
+- MUST emit a [`UniversalReceiver`] event when receiving native tokens.
+
+- MUST NOT revert when there is no extension set for `0x00000000`.
 
 - MUST NOT revert when there is no extension set for `0x00000000`.
 
@@ -122,7 +146,11 @@ This function is part of the [LSP14] specification, with additional requirements
 function renounceOwnership() external;
 ```
 
-This function is part of the [LSP14] specification.
+This function is part of the [LSP14] specification with additional requirements as follows:
+
+- MUST override the LSP14 Type IDs triggered by using `renounceOwnership(..)` to the ones below:
+
+  - `keccak256('LSP9OwnershipTransferred_SenderNotification')` > `0x0c622e58e6b7089ae35f1af1c86d997be92fcdd8c9509652022d41aa65169471`
 
 
 #### batchCalls
@@ -163,7 +191,12 @@ This function is part of the [ERC725X] specification, with additional requiremen
 
 - MUST revert when the operation type is DELEGATECALL.
 
-- MUST emit a [`ValueReceived`] event before external calls or contract creation if the function receives native tokens.
+- MUST emit a [`UniversalReceiver`] event when receiving native tokens with the following parameters:
+  - `from`: The address calling the execute function
+  - `value`: The amount of native tokens sent by the caller
+  - `typeId`: Unique identifier, the keccak256 of `LSP9ValueReceived` > `0x9c4705229491d365fb5434052e12a386d6771d976bea61070a8c694e8affea3d`.
+  - `receivedData`: The function selector of the `execute(..)` function.
+  - `returnedData`: Empty bytes.
 
 
 #### executeBatch
@@ -175,7 +208,12 @@ This function is part of the [ERC725X] specification, with additional requiremen
 
 - MUST revert when one of the operations type is DELEGATECALL.
 
-- MUST emit a [`ValueReceived`] event before external calls or contract creation if the function receives native tokens.
+- MUST emit a [`UniversalReceiver`] event when receiving native tokens with the following parameters:
+  - `from`: The address calling the execute function
+  - `value`: The amount of native tokens sent by the caller
+  - `typeId`: Unique identifier, the keccak256 of `LSP0ValueReceived` > `0x9c4705229491d365fb5434052e12a386d6771d976bea61070a8c694e8affea3d`.
+  - `receivedData`: The function selector of the `executeBatch(..)` function.
+  - `returnedData`: Empty bytes.
 
 
 #### getData
@@ -233,7 +271,17 @@ function universalReceiver(bytes32 typeId, bytes memory receivedData) external p
 
 This function is part of the [LSP1] specification, with additional requirements as follows:
 
-- MUST emit a [`ValueReceived`] event before external calls if the function receives native tokens.
+- In case of receiving native tokens, it Must invoke the logic of `universalReceiver(bytes32 typeId, bytes memory receivedData)` internally with the following parameters:
+
+  - `typeId`: Unique identifier, the keccak256 of `LSP0ValueReceived` > `0x9c4705229491d365fb5434052e12a386d6771d976bea61070a8c694e8affea3d`.
+  - `receivedData`: The fulll calldata (function selector + arguments).
+
+- MUST emit a [`UniversalReceiver`] event when receiving native tokens with the following parameters:
+  - `from`: The address calling the `universalReceiver(..)` function
+  - `value`: The amount of native tokens sent by the caller
+  - `typeId`: Unique identifier, the keccak256 of `LSP0ValueReceived` > `0x9c4705229491d365fb5434052e12a386d6771d976bea61070a8c694e8affea3d`.
+  - `receivedData`: The fulll calldata (function selector + arguments).
+  - `returnedData`: The return value of the UniversalReceiverDelegate contracts.
 
 - If an `address` is stored under the data key attached below and this address is a contract:
   - forwards the call to the [`universalReceiverDelegate(address,uint256,bytes32,bytes)`] function on the contract at this address **ONLY IF** this contract supports the [LSP1UniversalReceiverDelegate interface id].
@@ -289,16 +337,6 @@ The `<bytes32\>` in the data key name corresponds to the `typeId` passed to the 
 
 Check the [**UniversalReceiver Delegation > Specification** section in LSP1-UniversalReceiver](./LSP-1-UniversalReceiver.md#universalreceiver-delegation) and [LSP2-ERC725YJSONSchema] for more information.
 
-### Events
-
-#### ValueReceived
-
-```solidity
-event ValueReceived(address indexed sender, uint256 indexed value);
-```
-
-MUST be emitted when a native token transfer was received.
-
 
 ### ERC725Y Data Keys
 
@@ -344,14 +382,18 @@ Check [LSP1-UniversalReceiver] and [LSP2-ERC725YJSONSchema] for more information
     "name": "LSP17Extension:<bytes4>",
     "key": "0xcee78b4094da860110960000<bytes4>",
     "keyType": "Mapping",
-    "valueType": "address",
-    "valueContent": "Address"
+    "valueType": "(address, bytes1)",
+    "valueContent": "(Address, bool)"
 }
 ```
 
 > <bytes4\> is the `functionSelector` called on the vault contract. Check [LSP2-ERC725YJSONSchema] to learn how to encode the key.
 
 If there is a function called on the vault and the function does not exist, the fallback function lookup an address stored under the data key attached above and forwards the call to it with the value of the `msg.sender` and `msg.value` appended as extra calldata.
+
+If the data stored is just 20 bytes, representing an address, or 21 bytes with the boolean set to false (anything other than `0x01`), the extension will be called without sending the value received to the extension.
+
+If the data stored is 21 bytes with the boolean set to true (strictly `0x01`), the extension will be called with sending the value received to the extension. (Does not change that the value MUST be appended to the call)
 
 Check [LSP17-ContractExtension] and [LSP2-ERC725YJSONSchema] for more information.
 
@@ -398,8 +440,8 @@ ERC725Y JSON Schema `LSP9Vault`:
     "name":"LSP17Extension:<bytes4>",
     "key":"0xcee78b4094da860110960000<bytes4>",
     "keyType":"Mapping",
-    "valueType":"address",
-    "valueContent":"Address"
+    "valueType":"(address, bytes1)",
+    "valueContent":"(Address, bool)"
   }
 ]
 ```
@@ -438,8 +480,6 @@ interface ILSP9  /* is ERC165 */ {
     
     
     // LSP9 (LSP9Vault)
-      
-    event ValueReceived(address indexed sender, uint256 indexed value);
     
     
     receive() external payable;

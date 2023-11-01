@@ -13,7 +13,6 @@ requires: ERC165, ERC725X, ERC725Y, ERC1271, LSP1, LSP2, LSP14, LSP17, LSP20
 ## Simple Summary
 
 This standard describes a version of an [ERC725] smart contract, that represents a blockchain account.
- 
 ## Abstract
 
 This standard defines a blockchain-based account system that can be used by humans, machines, or other smart contracts.
@@ -81,8 +80,12 @@ receive() external payable;
 
 The receive function allows for receiving native tokens.
 
-MUST emit a [`ValueReceived`] event when receiving native tokens.
+- In case of receiving native tokens, it Must invoke the logic of `universalReceiver(bytes32 typeId, bytes memory receivedData)` internally with the following parameters:
 
+  - `typeId`: Unique identifier, the keccak256 of `LSP0ValueReceived` > `0x9c4705229491d365fb5434052e12a386d6771d976bea61070a8c694e8affea3d`.
+  - `receivedData`: Empty data. ('0x').
+
+- MUST emit a [`UniversalReceiver`] event when receiving native tokens.
 
 #### fallback
 
@@ -93,24 +96,40 @@ fallback() external payable;
 This function is part of the [LSP17-ContractExtension] specification, with additional requirements as follows:
 
 - MUST be payable.
-- MUST emit a [`ValueReceived`] event if value was sent alongside some calldata.
-- MUST return if the data sent to the contract is less than 4 bytes in length.
-- MUST check for address of the extension under the following [ERC725Y] Data Key, call the extension and behave according to [LSP17-ContractExtension] specification.
+
+- If the data sent to the contract is less than 4 bytes in length:
+  - In case no value has been sent, return.
+
+  - In case value has been sent, invoke the logic of `universalReceiver(bytes32 typeId, bytes memory receivedData)` internally with the following parameters:
+    - `typeId`: Unique identifier, the keccak256 of `LSP0ValueReceived` > `0x9c4705229491d365fb5434052e12a386d6771d976bea61070a8c694e8affea3d`.
+    - `receivedData`: The calldata recevied.
+
+- MUST check for address of the extension and the boolean under the following [ERC725Y] Data Key, call the extension and behave according to [LSP17-ContractExtension] specification.
 
 ```json
 {
     "name": "LSP17Extension:<bytes4>",
     "key": "0xcee78b4094da860110960000<bytes4>",
     "keyType": "Mapping",
-    "valueType": "address",
-    "valueContent": "Address"
+    "valueType": "(address, bytes1)",
+    "valueContent": "(Address, bool)"
 }
 ```
 
 > <bytes4\> is the `functionSelector` called on the account contract. Check [LSP2-ERC725YJSONSchema] to learn how to encode the key.
 
+- If the data stored is just 20 bytes, representing an address, or 21 bytes with the boolean set to false (anything other than `0x01`), call the extension according to the [LSP17-ContractExtension] specification without sending the value received to the extension.
+
+- If the data stored is 21 bytes with the boolean set to true (strictly `0x01`), call the extension according to the [LSP17-ContractExtension] specification with sending the value received to the extension. (Does not change that the value MUST be appended as bytes to the call)
+
+- In case where the value is not forwarded to the extension, the logic of `universalReceiver(bytes32 typeId, bytes memory receivedData)` MUST be invoked internally with the following parameters:
+
+  - `typeId`: Unique identifier, the keccak256 of `LSP0ValueReceived` > `0x9c4705229491d365fb5434052e12a386d6771d976bea61070a8c694e8affea3d`.
+  - `receivedData`: The calldata.
+
 - MUST NOT revert when there is no extension set for `0x00000000`.
 
+- MUST emit a [`UniversalReceiver`] event when receiving native tokens.
 
 #### supportsInterface
 
@@ -126,16 +145,16 @@ This function is part of the [ERC165] specification, with additional requirement
 
   - If there is no address, execution ends normally.
 
-
 ```json
 {
     "name": "LSP17Extension:<bytes4>",
     "key": "0xcee78b4094da860110960000<bytes4>",
     "keyType": "Mapping",
-    "valueType": "address",
-    "valueContent": "Address"
+    "valueType": "(address, bytes1)",
+    "valueContent": "(Address, bool)"
 }
 ```
+
 > <bytes4\> is the `functionSelector` of `supportsInterface(bytes4)` function. Check [LSP2-ERC725YJSONSchema] to learn how to encode the key.
 
 #### owner
@@ -146,7 +165,6 @@ function owner() external view returns (address);
 
 This function is part of the [LSP14-Ownable2Step] specification.
 
-
 #### pendingOwner
 
 ```solidity
@@ -154,7 +172,6 @@ function pendingOwner() external view returns (address);
 ```
 
 This function is part of the [LSP14-Ownable2Step] specification.
-
 
 #### transferOwnership
 
@@ -164,7 +181,7 @@ function transferOwnership(address newPendingOwner) external;
 
 This function is part of the [LSP14-Ownable2Step] specification, with additional requirements as follows:
 
-- MUST allow the owner to call the function. 
+- MUST allow the owner to call the function.
 
 - If the caller is not the owner, the function MUST call the [`lsp20VerifyCall(..)`] function on the [owner](#owner) as per the [LSP20-CallVerification] specification.
 
@@ -174,13 +191,13 @@ This function is part of the [LSP14-Ownable2Step] specification, with additional
 
 - If the `lsp20VerifyCall(..)` function is called and returns bytes4 where the first bytes3 match the first bytes3 of the `lsp20VerifyCall(..)` selector, and the last byte is strictly `0x01`, the function MUST call the [`lsp20VerifyCallResult(..)`] function on the [owner](#owner) as per the [LSP20-CallVerification] specification.
 
-  The function MUST be called **after the execution of the transferOwnership logic**, passing the hash of the caller, value sent, and data sent concatenated, and the result of the `transferOwnership(..)` function represented by empty bytes as a second parameter. 
+  The function MUST be called **after the execution of the transferOwnership logic**, passing the hash of the caller, value sent, and data sent concatenated, and the result of the `transferOwnership(..)` function represented by empty bytes as a second parameter.
 
   The call will pass if the bytes4 returned by the `lsp20VerifyCallResult(..)` function equals the `lsp20VerifyCallResult(..)` function selector, otherwise MUST revert.
 
 - MUST override the LSP14 Type ID triggered by using `transferOwnership(..)` to the one below:
 
-    - `keccak256('LSP0OwnershipTransferStarted')` > `0xe17117c9d2665d1dbeb479ed8058bbebde3c50ac50e2e65619f60006caac6926`
+  - `keccak256('LSP0OwnershipTransferStarted')` > `0xe17117c9d2665d1dbeb479ed8058bbebde3c50ac50e2e65619f60006caac6926`
 
 #### acceptOwnership
 
@@ -190,11 +207,23 @@ function acceptOwnership() external;
 
 This function is part of the [LSP14-Ownable2Step] specification, with additional requirements as follows:
 
+- If the caller is not the pending owner, the function MUST call the [`lsp20VerifyCall(..)`] function on the [pending owner](#pendingowner) as per the [LSP20-CallVerification] specification.
+
+  The function MUST be called **before the execution of the acceptOwnership logic**, passing the caller, value sent to the function, and the data sent (function selector + arguments + extra calldata) as parameters.
+
+  The function SHOULD only continue executing if the `lsp20VerifyCall(..)` function returns bytes4 where the first bytes3 match the first bytes3 of the `lsp20VerifyCall(..)` selector, otherwise MUST revert.
+
+- If the `lsp20VerifyCall(..)` function is called and returns bytes4 where the first bytes3 match the first bytes3 of the `lsp20VerifyCall(..)` selector, and the last byte is strictly `0x01`, the function MUST call the [`lsp20VerifyCallResult(..)`] function on the [pending owner](#pendingowner) as per the [LSP20-CallVerification] specification.
+
+  The function MUST be called **after the execution of the transferOwnership logic**, passing the hash of the caller, value sent, and data sent concatenated, and the result of the `acceptOwnership` function represented by empty bytes as a second parameter.
+
+  The call will pass if the bytes4 returned by the `lsp20VerifyCallResult(..)` function equals the `lsp20VerifyCallResult(..)` function selector, otherwise MUST revert.
+
 - MUST override the LSP14 Type IDs triggered by using `accceptOwnership(..)` to the ones below:
 
-    - `keccak256('LSP0OwnershipTransferred_SenderNotification')` > `0xa4e59c931d14f7c8a7a35027f92ee40b5f2886b9fdcdb78f30bc5ecce5a2f814`
-    
-    - `keccak256('LSP0OwnershipTransferred_RecipientNotification')` > `0xceca317f109c43507871523e82dc2a3cc64dfa18f12da0b6db14f6e23f995538`
+  - `keccak256('LSP0OwnershipTransferred_SenderNotification')` > `0xa4e59c931d14f7c8a7a35027f92ee40b5f2886b9fdcdb78f30bc5ecce5a2f814`
+
+  - `keccak256('LSP0OwnershipTransferred_RecipientNotification')` > `0xceca317f109c43507871523e82dc2a3cc64dfa18f12da0b6db14f6e23f995538`
 
 #### renounceOwnership
 
@@ -204,19 +233,23 @@ function renounceOwnership() external;
 
 This function is part of the [LSP14-Ownable2Step] specification with additional requirements as follows:
 
-- MUST allow the owner to call the function. 
+- MUST allow the owner to call the function.
 
 - If the caller is not the owner, the function MUST call the [`lsp20VerifyCall(..)`] function on the [owner](#owner) as per the [LSP20-CallVerification] specification.
 
-  The function MUST be called **before the execution of the renounceOwnership logic**, passing the caller, value sent to the function, and the data sent (function selector + arguments + extra calldata) as parameters. 
+  The function MUST be called **before the execution of the renounceOwnership logic**, passing the caller, value sent to the function, and the data sent (function selector + arguments + extra calldata) as parameters.
 
   The function SHOULD only continue executing if the `lsp20VerifyCall(..)` function returns bytes4 where the first bytes3 match the first bytes3 of the `lsp20VerifyCall(..)` selector, otherwise MUST revert.
 
 - If the `lsp20VerifyCall(..)` function is called and returns bytes4 where the first bytes3 match the first bytes3 of the `lsp20VerifyCall(..)` selector, and the last byte is strictly `0x01`, the function MUST call the [`lsp20VerifyCallResult(..)`] function on the [owner](#owner) as per the [LSP20-CallVerification] specification.
 
-  The function MUST be called **after the execution of the renounceOwnership logic**, passing the hash of the caller, value sent, and data sent concatenated, and the result of the `renounceOwnership(..)` function represented by empty bytes as a second parameter. 
+  The function MUST be called **after the execution of the renounceOwnership logic**, passing the hash of the caller, value sent, and data sent concatenated, and the result of the `renounceOwnership(..)` function represented by empty bytes as a second parameter.
 
   The call will pass if the bytes4 returned by the `lsp20VerifyCallResult(..)` function equals the `lsp20VerifyCallResult(..)` function selector, otherwise MUST revert.
+
+- MUST override the LSP14 Type IDs triggered by using `renounceOwnership(..)` to the ones below:
+
+  - `keccak256('LSP0OwnershipTransferred_SenderNotification')` > `0xa4e59c931d14f7c8a7a35027f92ee40b5f2886b9fdcdb78f30bc5ecce5a2f814`
   
 #### batchCalls
 
@@ -224,10 +257,9 @@ This function is part of the [LSP14-Ownable2Step] specification with additional 
 function batchCalls(bytes[] calldata functionCalls) external returns (bytes[] memory results)
 ```
 
-Enables the execution of a batch of encoded function calls on the current contract in a single transaction, provided as an array of bytes. 
+Enables the execution of a batch of encoded function calls on the current contract in a single transaction, provided as an array of bytes.
 
 MUST use the [DELEGATECALL] opcode to execute each call in the same context of the current contract.
-
 
 _Parameters:_
 
@@ -236,16 +268,13 @@ _Parameters:_
 The data field can be:
 
 - an array of ABI-encoded function calls such as an array of ABI-encoded execute, setData, transferOwnership or any LSP0 functions.
-- an array of bytes which will resolve to the fallback function to be checked for an extension. 
-
+- an array of bytes which will resolve to the fallback function to be checked for an extension.
 
 _Requirements:_
 
-- MUST NOT be payable. 
-
+- MUST NOT be payable.
 
 _Returns:_ `results` , an array of bytes containing the return values of each executed function call.
-
 
 #### execute
 
@@ -255,7 +284,7 @@ function execute(uint256 operationType, address target, uint256 value, bytes mem
 
 This function is part of the [ERC725X] specification, with additional requirements as follows:
 
-- MUST allow the owner to call the function. 
+- MUST allow the owner to call the function.
 
 - If the caller is not the owner, the function MUST call the [`lsp20VerifyCall(..)`] function on the [owner](#owner) as per the [LSP20-CallVerification] specification.
 
@@ -265,25 +294,30 @@ This function is part of the [ERC725X] specification, with additional requiremen
 
 - If the `lsp20VerifyCall(..)` function is called and returns bytes4 where the first bytes3 match the first bytes3 of the `lsp20VerifyCall(..)` selector, and the last byte is strictly `0x01`, the function MUST call the [`lsp20VerifyCallResult(..)`] function on the [owner](#owner) as per the [LSP20-CallVerification] specification.
 
-  The function MUST be called **after the execution of the `execute(...)` function logic is completed**, passing the hash of the caller, value and data sent concatenated, and the result of the `execute(..)` function represented by the encoding as `bytes` the result of the call or the address of the contract created as a second parameter. 
+  The function MUST be called **after the execution of the `execute(...)` function logic is completed**, passing the hash of the caller, value and data sent concatenated, and the result of the `execute(..)` function represented by the encoding as `bytes` the result of the call or the address of the contract created as a second parameter.
 
   The call will pass if the bytes4 returned by the `lsp20VerifyCallResult(..)` function equals the `lsp20VerifyCallResult(..)` function selector, otherwise MUST revert.
   
-- MUST emit a [`ValueReceived`] event before external calls or contract creation if the function receives native tokens.
-
+- MUST emit a [`UniversalReceiver`] event when receiving native tokens with the following parameters:
+  - `from`: The address calling the execute function
+  - `value`: The amount of native tokens sent by the caller
+  - `typeId`: Unique identifier, the keccak256 of `LSP0ValueReceived` > `0x9c4705229491d365fb5434052e12a386d6771d976bea61070a8c694e8affea3d`.
+  - `receivedData`: The function selector of the `execute(..)` function.
+  - `returnedData`: Empty bytes.
 
 #### executeBatch
 
 ```solidity
 function executeBatch(uint256[] memory operationsType, address[] memory targets, uint256[] memory values, bytes[] memory datas) external payable returns (bytes[] memory);
 ```
+
 This function is part of the [ERC725X] specification, with additional requirements as follows:
 
-- MUST allow the owner to call the function. 
+- MUST allow the owner to call the function.
 
 - If the caller is not the owner, the function MUST call the [`lsp20VerifyCall(..)`] function on the [owner](#owner) as per the [LSP20-CallVerification] specification.
 
-  The function MUST be called **before the execution of the execute logic**, passing the caller, value sent to the function, and the data sent (function selector + arguments + extra calldata) as parameters. 
+  The function MUST be called **before the execution of the execute logic**, passing the caller, value sent to the function, and the data sent (function selector + arguments + extra calldata) as parameters.
 
   The function SHOULD only continue executing if the `lsp20VerifyCall(..)` function returns bytes4 where the first bytes3 match the first bytes3 of the `lsp20VerifyCall(..)` selector, otherwise MUST revert.
 
@@ -293,8 +327,12 @@ This function is part of the [ERC725X] specification, with additional requiremen
 
   The call will pass if the bytes4 returned by the `lsp20VerifyCallResult(..)` function equals the `lsp20VerifyCallResult(..)` function selector, otherwise MUST revert.
 
-- MUST emit a [`ValueReceived`] event before external calls or contract creation if the function receives native tokens.
-
+- MUST emit a [`UniversalReceiver`] event when receiving native tokens with the following parameters:
+  - `from`: The address calling the execute function
+  - `value`: The amount of native tokens sent by the caller
+  - `typeId`: Unique identifier, the keccak256 of `LSP0ValueReceived` > `0x9c4705229491d365fb5434052e12a386d6771d976bea61070a8c694e8affea3d`.
+  - `receivedData`: The function selector of the `executeBatch(..)` function.
+  - `returnedData`: Empty bytes.
 
 #### getData
 
@@ -304,7 +342,6 @@ function getData(bytes32 dataKey) external view returns (bytes memory);
 
 This function is part of the [ERC725Y] specification.
 
-
 #### getDataBatch
 
 ```solidity
@@ -312,7 +349,6 @@ function getDataBatch(bytes32[] memory dataKeys) external view returns (bytes[] 
 ```
 
 This function is part of the [ERC725Y] specification.
-
 
 #### setData
 
@@ -322,11 +358,11 @@ function setData(bytes32 dataKey, bytes memory dataValue) external payable;
 
 This function is part of the [ERC725Y] specification, with additional requirements as follows:
 
-- MUST allow the owner to call the function. 
+- MUST allow the owner to call the function.
 
-- If the caller is not the owner, the function MUST call the [`lsp20VerifyCall(..)`] function on the [owner](#owner) as per the [LSP20-CallVerification] specification. 
+- If the caller is not the owner, the function MUST call the [`lsp20VerifyCall(..)`] function on the [owner](#owner) as per the [LSP20-CallVerification] specification.
 
-  The function MUST be called **before the execution of the setData logic**, passing the caller, value sent to the function, and the data sent (function selector + arguments + extra calldata) as parameters. 
+  The function MUST be called **before the execution of the setData logic**, passing the caller, value sent to the function, and the data sent (function selector + arguments + extra calldata) as parameters.
 
   The function SHOULD only continue executing if the `lsp20VerifyCall(..)` function returns bytes4 where the first bytes3 match the first bytes3 of the `lsp20VerifyCall(..)` selector, otherwise MUST revert.
 
@@ -338,10 +374,14 @@ This function is part of the [ERC725Y] specification, with additional requiremen
   
 - MUST be payable.
 
-- MUST emit a [`ValueReceived`] event if value was sent along the function call.
+- MUST emit a [`UniversalReceiver`] event when receiving native tokens with the following parameters:
+  - `from`: The address calling the execute function
+  - `value`: The amount of native tokens sent by the caller
+  - `typeId`: Unique identifier, the keccak256 of `LSP0ValueReceived` > `0x9c4705229491d365fb5434052e12a386d6771d976bea61070a8c694e8affea3d`.
+  - `receivedData`: The function selector of the `setData(..)` function.
+  - `returnedData`: Empty bytes.
 
 - MUST emit only the first 256 bytes of the dataValue parameter in the [DataChanged] event.
-
 
 #### setDataBatch
 
@@ -351,11 +391,11 @@ function setDataBatch(bytes32[] memory dataKeys, bytes[] memory dataValues) exte
 
 This function is part of the [ERC725Y] specification, with additional requirements as follows:
 
-- MUST allow the owner to call the function. 
+- MUST allow the owner to call the function.
 
 - If the caller is not the owner, the function MUST call the [`lsp20VerifyCall(..)`] function on the [owner](#owner) as per the [LSP20-CallVerification] specification.
 
-  The function MUST be called **before the execution of the setDataBatch logic**, passing the caller, value sent to the function, and the data sent (function selector + arguments + extra calldata) as parameters. 
+  The function MUST be called **before the execution of the setDataBatch logic**, passing the caller, value sent to the function, and the data sent (function selector + arguments + extra calldata) as parameters.
 
   The function SHOULD only continue executing if the `lsp20VerifyCall(..)` function returns bytes4 where the first bytes3 match the first bytes3 of the `lsp20VerifyCall(..)` selector, otherwise MUST revert.
 
@@ -367,10 +407,14 @@ This function is part of the [ERC725Y] specification, with additional requiremen
   
 - MUST be payable.
 
-- MUST emit a [`ValueReceived`] event if value was sent along the function call.
+- MUST emit a [`UniversalReceiver`] event when receiving native tokens with the following parameters:
+  - `from`: The address calling the execute function
+  - `value`: The amount of native tokens sent by the caller
+  - `typeId`: Unique identifier, the keccak256 of `LSP0ValueReceived` > `0x9c4705229491d365fb5434052e12a386d6771d976bea61070a8c694e8affea3d`.
+  - `receivedData`: The function selector of the `setDataBatch(..)` function.
+  - `returnedData`: Empty bytes.
 
 - MUST emit only the first 256 bytes of the dataValue parameter in the [DataChanged] event.
-
 
 #### isValidSignature
 
@@ -380,7 +424,7 @@ function isValidSignature(bytes32 hash, bytes memory signature) external view re
 
 This function is part of the [ERC1271] specification, with additional requirements as follows:
 
-- When the owner is an EOA, the function MUST return the [success value] if the address recovered from the hash and the signature via [ecrecover] is the owner of the contract. Otherwise, MUST return the [failure value]. 
+- When the owner is an EOA, the function MUST return the [success value] if the address recovered from the hash and the signature via [ecrecover] is the owner of the contract. Otherwise, MUST return the [failure value].
 
 - When the owner is a contract, it will call the `isValidsignature(bytes32,bytes)` function on the owner contract, and return the success value if the function returns the success value. In any other case such as non-standard return value or revert, it will return the failure value indicating an invalid signature.
 
@@ -392,13 +436,23 @@ function universalReceiver(bytes32 typeId, bytes memory receivedData) external p
 
 This function is part of the [LSP1-UniversalReceiver] specification, with additional requirements as follows:
 
-- MUST emit a [`ValueReceived`] event before external calls if the function receives native tokens.
+- In case of receiving native tokens, it Must invoke the logic of `universalReceiver(bytes32 typeId, bytes memory receivedData)` internally with the following parameters:
+
+  - `typeId`: Unique identifier, the keccak256 of `LSP0ValueReceived` > `0x9c4705229491d365fb5434052e12a386d6771d976bea61070a8c694e8affea3d`.
+  - `receivedData`: The fulll calldata (function selector + arguments).
+
+- MUST emit a [`UniversalReceiver`] event when receiving native tokens with the following parameters:
+  - `from`: The address calling the `universalReceiver(..)` function
+  - `value`: The amount of native tokens sent by the caller
+  - `typeId`: Unique identifier, the keccak256 of `LSP0ValueReceived` > `0x9c4705229491d365fb5434052e12a386d6771d976bea61070a8c694e8affea3d`.
+  - `receivedData`: The fulll calldata (function selector + arguments).
+  - `returnedData`: The return value of the UniversalReceiverDelegate contracts.
 
 - If an `address` is stored under the data key attached below and this address is a contract:
   - forwards the call to the [`universalReceiverDelegate(address,uint256,bytes32,bytes)`] function on the contract at this address **ONLY IF** this contract supports the [LSP1-UniversalReceiverDelegate interface id].
   - if the contract at this address does not support the [LSP1-UniversalReceiverDelegate interface id], execution continues normally.
   
-- If there is no `address` stored under this data key, execution continues normally. 
+- If there is no `address` stored under this data key, execution continues normally.
 
 ```json
 {
@@ -414,8 +468,7 @@ This function is part of the [LSP1-UniversalReceiver] specification, with additi
   - forwards the call to the [`universalReceiverDelegate(address,uint256,bytes32,bytes)`] function on the contract at this address **ONLY IF** this contract supports the [LSP1-UniversalReceiverDelegate interface id].
   - if the contract at this address does not support the [LSP1-UniversalReceiverDelegate interface id], execution continues normally.
 
-- If there is no `address` stored under this data key, execution continues normally. 
-
+- If there is no `address` stored under this data key, execution continues normally.
 
 ```json
 {
@@ -429,20 +482,9 @@ This function is part of the [LSP1-UniversalReceiver] specification, with additi
 
 > <bytes32\> is the `typeId` passed to the `universalReceiver(..)` function. Check [LSP2-ERC725YJSONSchema] to learn how to encode the key.
 
-- MUST return the returned value of the `universalReceiverDelegate(address,uint256,bytes32,bytes)` function on both retrieved contract abi-encoded as bytes. If there is no addresses stored under the data keys above or the call was not forwarded to them, the return value is the two empty bytes abi-encoded as bytes. 
+- MUST return the returned value of the `universalReceiverDelegate(address,uint256,bytes32,bytes)` function on both retrieved contract abi-encoded as bytes. If there is no addresses stored under the data keys above or the call was not forwarded to them, the return value is the two empty bytes abi-encoded as bytes.
 
 - MUST emit a [UniversalReceiver] event if the function was successful.
-
-### Events
-
-#### ValueReceived
-
-```solidity
-event ValueReceived(address indexed sender, uint256 indexed value);
-```
-
-MUST be emitted when a native token transfer was received.
-
 
 ### ERC725Y Data Keys
 
@@ -458,7 +500,7 @@ MUST be emitted when a native token transfer was received.
 }
 ```
 
-If the account delegates its universal receiver functionality to another smart contract, this smart contract address MUST be stored under the data key attached above. This call to this contract is performed when the `universalReceiver(bytes32,bytes)` function of the account is called and can react on the whole call regardless of the typeId. 
+If the account delegates its universal receiver functionality to another smart contract, this smart contract address MUST be stored under the data key attached above. This call to this contract is performed when the `universalReceiver(bytes32,bytes)` function of the account is called and can react on the whole call regardless of the typeId.
 
 Check [LSP1-UniversalReceiver] and [LSP2-ERC725YJSONSchema] for more information.
 
@@ -474,23 +516,23 @@ Check [LSP1-UniversalReceiver] and [LSP2-ERC725YJSONSchema] for more information
 }
 ```
 
-The `<bytes32\>` in the data key name corresponds to the `typeId` passed to the `universalReceiver(..)` function. 
+The `<bytes32\>` in the data key name corresponds to the `typeId` passed to the `universalReceiver(..)` function.
 
 > **Warning**
 > When constructing this data key for a specific `typeId`, unique elements of the typeId SHOULD NOT be on the right side because of trimming rules.
-> 
+>
 > The `<bytes32>` is trimmed on the right side to keep only the first 20 bytes. Therefore, implementations SHOULD ensure that the first 20 bytes are unique to avoid clashes.
 > For example, the `bytes32 typeId` below:
-> 
+>
 > ```
 > 0x1111222233334444555566667777888899990000aaaabbbbccccddddeeeeffff
 > ```
-> 
+>
 > will be trimmed to `0x1111222233334444555566667777888899990000`.
-> 
+>
 > See the section about the trimming rules for the key type [`Mapping`] in [LSP2-ERC725YJSONSchema] to learn how to encode this data key.
 
-If the account delegates its universal receiver functionality to another smart contract, this smart contract address MUST be stored under the data key attached above. This call to this contract is performed when the `universalReceiver(bytes32,bytes)` function of the account is called with a specific typeId that it can react on. 
+If the account delegates its universal receiver functionality to another smart contract, this smart contract address MUST be stored under the data key attached above. This call to this contract is performed when the `universalReceiver(bytes32,bytes)` function of the account is called with a specific typeId that it can react on.
 
 Check the [**UniversalReceiver Delegation > Specification** section in LSP1-UniversalReceiver](./LSP-1-UniversalReceiver.md#universalreceiver-delegation) and [LSP2-ERC725YJSONSchema] for more information.
 
@@ -501,8 +543,8 @@ Check the [**UniversalReceiver Delegation > Specification** section in LSP1-Univ
     "name": "LSP17Extension:<bytes4>",
     "key": "0xcee78b4094da860110960000<bytes4>",
     "keyType": "Mapping",
-    "valueType": "address",
-    "valueContent": "Address"
+    "valueType": "(address, bytes1)",
+    "valueContent": "(Address, bool)"
 }
 ```
 
@@ -510,16 +552,19 @@ Check the [**UniversalReceiver Delegation > Specification** section in LSP1-Univ
 
 If there is a function called on the account and the function does not exist, the fallback function lookup an address stored under the data key attached above and forwards the call to it with the value of the `msg.sender` and `msg.value` appended as extra calldata.
 
+If the data stored is just 20 bytes, representing an address, or 21 bytes with the boolean set to false (anything other than `0x01`), the extension will be called without sending the value received to the extension.
+
+If the data stored is 21 bytes with the boolean set to true (strictly `0x01`), the extension will be called with sending the value received to the extension. (Does not change that the value MUST be appended to the call)
+
 Check the [**LSP17Extension Specification** section in LSP17-ContractExtension](./LSP-17-ContractExtension.md#lsp17extendable-specification) and [LSP2-ERC725YJSONSchema] for more information.
 
+### Graffiti
 
-### Graffiti 
-
-Graffiti refers to the arbitrary messages or data sent to an **LSP0-ERC725Account** contract that do not match any existing function selectors, such as `execute(..)`, `setData(..)`, etc. These bytes, often carrying a message or additional information, are usually not intended to invoke specific functions within the contract. 
+Graffiti refers to the arbitrary messages or data sent to an **LSP0-ERC725Account** contract that do not match any existing function selectors, such as `execute(..)`, `setData(..)`, etc. These bytes, often carrying a message or additional information, are usually not intended to invoke specific functions within the contract.
 
 When the account is called with specific bytes that do not match any function selector, it will first check its storage to see if there are any extensions set for these function selectors (bytes). If no extension is found, the call will typically revert. However, to emulate the behavior of calling an Externally Owned Account (EOA) with random bytes (which always passes), an exception has been made for the `0x00000000` selector.
 
-When the account is called with data that starts with `0x00000000`, it will first check for extensions. If none are found, the call will still pass, allowing it to match the behavior of calling an EOA and enabling the ability to send arbitrary messages to the account. For example, one might receive a message like "This is a gift" while sending native tokens. 
+When the account is called with data that starts with `0x00000000`, it will first check for extensions. If none are found, the call will still pass, allowing it to match the behavior of calling an EOA and enabling the ability to send arbitrary messages to the account. For example, one might receive a message like "This is a gift" while sending native tokens.
 
 Additionally, it is possible to set an extension for the `0x00000000` selector. With this custom extension, you can define specific logic that runs when someone sends graffiti to your account. For instance, you may choose to disallow sending graffiti by reverting the transaction, impose a fee for sending graffiti, or emit the graffiti on an external contract. This flexibility allows for various use cases and interactions with graffiti in the LSP0ERC725Account contracts.
 
@@ -569,8 +614,6 @@ interface ILSP0  /* is ERC165 */ {
     
     
     // LSP0 (ERC725Account)
-      
-    event ValueReceived(address indexed sender, uint256 indexed value);
 
     receive() external payable;
     
@@ -633,11 +676,8 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 [`lsp20VerifyCall(..)`]: <./LSP-20-CallVerification.md#lsp20verifycall>
 [`lsp20VerifyCallResult(..)`]: <./LSP-20-CallVerification.md#lsp20verifycallresult>
 [UniversalReceiver]: <./LSP-1-UniversalReceiver.md#events>
-[`universalReceiver(bytes32,bytes)`]: <./LSP-1-UniversalReceiver.md#universalreceiver>
 [`universalReceiverDelegate(address,uint256,bytes32,bytes)`]: <./LSP-1-UniversalReceiver.md#universalreceiverdelegate>
-[LSP1-UniversalReceiver interface id]: <./LSP-1-UniversalReceiver.md#specification>
 [LSP1-UniversalReceiverDelegate interface id]: <./LSP-1-UniversalReceiver.md#specification>
-[`ValueReceived`]: <#valuereceived>
 [DataChanged]: <https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#datachanged>
 [DELEGATECALL]: <https://solidity-by-example.org/delegatecall/>
 [success value]: <https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1271.md#specification>
