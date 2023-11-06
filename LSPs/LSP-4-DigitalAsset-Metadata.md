@@ -128,17 +128,21 @@ The linked JSON file SHOULD have the following format:
             { // example of a verificationData based image verification
                 "width": Number,
                 "height": Number,
-                "verificationFunction": 'keccak256(bytes)',
-                "verificationData": 'string', // bytes32 hash of the image
-                "url": 'string'
+                "url": 'string',
+                "verification": {
+                    "method": 'keccak256(bytes)',
+                    "data": 'string', // bytes32 hash of the image
+                }
             },
             { // example of a signature based image verification
                 "width": Number,
                 "height": Number,
-                "verificationFunction": 'ecdsa',
-                "verificationData": 'string', // signer that signed the bytes of the image
-                "verificationSource": 'string' // e.g url returning the signature of the signed image
-                "url": 'string'
+                "url": 'string',
+                "verification": {
+                    "method": 'ecdsa',
+                    "data": 'string', // signer that signed the bytes of the image
+                    "source": 'string' // e.g url returning the signature of the signed image
+                }
             },
             { // example of a NFT/smart contract based image
                 "address": Address, // the address of an LSP7 or LSP8
@@ -153,17 +157,21 @@ The linked JSON file SHOULD have the following format:
                 { // example of a verificationData based image verification
                     "width": Number,
                     "height": Number,
-                    "verificationFunction": 'keccak256(bytes)',
-                    "verificationData": 'string', // bytes32 hash of the image
-                    "url": 'string'
+                    "url": 'string',
+                    "verification": {
+                        "method": 'keccak256(bytes)',
+                        "data": 'string', // bytes32 hash of the image
+                    }
                 },
                 { // example of a signature based image verification
                     "width": Number,
                     "height": Number,
-                    "verificationFunction": 'ecdsa',
-                    "verificationData": 'string',  // signer that signed the bytes of the image
-                    "verificationSource": 'string' // e.g url returning the signature of the signed image
-                    "url": 'string'
+                    "url": 'string',
+                    "verification": {
+                        "method": 'ecdsa',
+                        "data": 'string', // signer that signed the bytes of the image
+                        "source": 'string' // e.g url returning the signature of the signed image
+                    }
                 },
                 { // example of a NFT/smart contract based image
                     "address": Address, // the address of an LSP7 or LSP8
@@ -175,10 +183,12 @@ The linked JSON file SHOULD have the following format:
         ],
         "assets": [ // SHOULD be used for any assets of the token (e.g. 3d assets, high res pictures or music, etc)
             {
-                "verificationFunction": 'keccak256(bytes)',
-                "verificationData": 'string',
                 "url": 'string',
-                "fileType": 'string'
+                "fileType": 'string',
+                "verification": {
+                    "method": 'keccak256(bytes)',
+                    "data": 'string', // bytes32 hash of the asset
+                }
             },
             { // example of a NFT/smart contract based asset
                 "address": Address, // the address of an LSP7 or LSP8
@@ -211,9 +221,11 @@ Example:
             {
                 width: 256,
                 height: 256,
-                verificationFunction: 'keccak256(bytes)',
-                verificationData: '0x01299df007997de92a820c6c2ec1cb2d3f5aa5fc1adf294157de563eba39bb6f',
-                url: 'ifps://QmW5cF4r9yWeY1gUCtt7c6v3ve7Fzdg8CKvTS96NU9Uiwr'
+                url: 'ifps://QmW5cF4r9yWeY1gUCtt7c6v3ve7Fzdg8CKvTS96NU9Uiwr',
+                verification: {
+                    method: 'keccak256(bytes)',
+                    data: '0x01299df007997de92a820c6c2ec1cb2d3f5aa5fc1adf294157de563eba39bb6f',
+                }
             }
         ],
         images: [ // COULD be used for LSP8 NFT art
@@ -221,17 +233,21 @@ Example:
                 {
                     width: 1024,
                     height: 974,
-                    verificationFunction: 'keccak256(bytes)',
-                    verificationData: '0xa9399df007997de92a820c6c2ec1cb2d3f5aa5fc1adf294157de563eba39bb6e',
-                    url: 'ifps://QmW4wM4r9yWeY1gUCtt7c6v3ve7Fzdg8CKvTS96NU9Uiwr'
+                    url: 'ifps://QmW4wM4r9yWeY1gUCtt7c6v3ve7Fzdg8CKvTS96NU9Uiwr',
+                    verification: {
+                        method: 'keccak256(bytes)',
+                        data: '0xa9399df007997de92a820c6c2ec1cb2d3f5aa5fc1adf294157de563eba39bb6e',
+                    }
                 },
                 ... // more image sizes
             ],
             ... // more images
         ],
         assets: [{
-            verificationFunction: 'keccak256(bytes)',
-            verificationData: '0x98fe032f81c43426fbcfb21c780c879667a08e2a65e8ae38027d4d61cdfe6f55',
+            verification: {
+                method: 'keccak256(bytes)',
+                data: '0x98fe032f81c43426fbcfb21c780c879667a08e2a65e8ae38027d4d61cdfe6f55',
+            },
             url: 'ifps://QmPJESHbVkPtSaHntNVY5F6JDLW8v69M2d6khXEYGUMn7N',
             fileType: 'fbx'
         }],
