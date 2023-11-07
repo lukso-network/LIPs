@@ -1,7 +1,7 @@
 ---
 lip: 17
 title: Contract Extension
-author: 
+author:
 discussions-to: https://discord.gg/E2rJPP4
 status: Draft
 type: LSP
@@ -12,7 +12,7 @@ requires: ERC165
 ## Simple Summary
 
 This standard describes a mechanism for adding additional functionality to a contract after it has been deployed, through the use of extensions.
- 
+
 ## Abstract
 
 This proposal defines two types of contracts:
@@ -46,9 +46,10 @@ They SHOULD also check whether the interface being queried is supported within t
 
 ### Behavior
 
-Whenever a function is called on an extendable contract and the function does not exist, the fallback function of the extendable contract MUST call the function on the extension mapped using the `CALL` opcode. 
+Whenever a function is called on an extendable contract and the function does not exist, the fallback function of the extendable contract MUST call the function on the extension mapped using the `CALL` opcode.
 
 The calldata MUST be appended with 52 extra bytes as follows:
+
 - The `msg.sender` calling the extendable contract without any pad, MUST be 20 bytes.
 - The `msg.value` received to the extendable contract, MUST be 32 bytes.
 
@@ -64,11 +65,11 @@ If the contract implementing the LSP17 standard is an ERC725Y contract, the exte
 
 ```json
 {
-    "name": "LSP17Extension:<bytes4>",
-    "key": "0xcee78b4094da860110960000<bytes4>",
-    "keyType": "Mapping",
-    "valueType": "address",
-    "valueContent": "Address"
+  "name": "LSP17Extension:<bytes4>",
+  "key": "0xcee78b4094da860110960000<bytes4>",
+  "keyType": "Mapping",
+  "valueType": "(address, bytes1)",
+  "valueContent": "(Address, bool)"
 }
 ```
 
@@ -76,6 +77,14 @@ The <bytes4\> is the `functionSelector` called on the account contract. For inst
 
 ```
 0xcee78b4094da860110960000aabbccdd00000000000000000000000000000000
+```
+
+The boolean at the end can be used to specify whether the value sent to the extendable contract should be sent to the extension or stay in the extendable contract.
+
+For example, having the `0x01` at the end, signal that the boolean is true, which means that the value should be sent along the extension call.
+
+```
+0xcee78b4094da860110960000aabbccdd0000000000000000000000000000000001
 ```
 
 > See [LSP2-ERC725YJSONSchema] to learn how to encode the data key, and the [**Mapping**](./LSP-2-ERC725YJSONSchema.md#mapping) section to learn the padding rules.
@@ -118,7 +127,7 @@ If a validation mechanism exists in the extension contract, it should depend on 
 
 ## Security Considerations
 
-A function selector clash can occur when two different function signatures hash to the same four-byte hash. Users need to take extra care to avoid adding functions that map to a function selector already existing. 
+A function selector clash can occur when two different function signatures hash to the same four-byte hash. Users need to take extra care to avoid adding functions that map to a function selector already existing.
 
 ## Rationale
 
@@ -138,5 +147,5 @@ An implementation can be found in the [lukso-network/lsp-smart-contracts](https:
 
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
 
-[ERC165]: <https://eips.ethereum.org/EIPS/eip-165>
-[EIP-2535 Diamonds, Multi-Facet Proxy]: <https://eips.ethereum.org/EIPS/eip-2535>
+[ERC165]: https://eips.ethereum.org/EIPS/eip-165
+[EIP-2535 Diamonds, Multi-Facet Proxy]: https://eips.ethereum.org/EIPS/eip-2535
