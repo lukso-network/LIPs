@@ -68,8 +68,8 @@ If the contract implementing the LSP17 standard is an ERC725Y contract, the exte
   "name": "LSP17Extension:<bytes4>",
   "key": "0xcee78b4094da860110960000<bytes4>",
   "keyType": "Mapping",
-  "valueType": "(address, bytes1)",
-  "valueContent": "(Address, bool)"
+  "valueType": "(address, bool)",
+  "valueContent": "(Address, Boolean)"
 }
 ```
 
@@ -81,10 +81,14 @@ The <bytes4\> is the `functionSelector` called on the account contract. For inst
 
 The boolean at the end can be used to specify whether the value sent to the extendable contract should be sent to the extension or stay in the extendable contract.
 
-For example, having the `0x01` at the end, signal that the boolean is true, which means that the value should be sent along the extension call.
+For example, having this boolean set to `true` (as a `0x01` hex byte) means that the value received should be forwarded to the extension.
 
 ```
-0xcee78b4094da860110960000aabbccdd0000000000000000000000000000000001
+                        address
+  vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+0xcafecafecafecafecafecafecafecafecafecafe01
+                                          ^^
+                                         true
 ```
 
 > See [LSP2-ERC725YJSONSchema] to learn how to encode the data key, and the [**Mapping**](./LSP-2-ERC725YJSONSchema.md#mapping) section to learn the padding rules.

@@ -86,10 +86,10 @@ MUST emit a [`OwnershipTransferredStarted`](#ownershiptransferstarted) event onc
 
 **LSP1 Hooks:**
 
-- If the new owner address supports LSP1 interface, SHOULD call the new owner's [`universalReceiver(...)`] function with the default parameters below:
+- If the new owner address supports [LSP1](./LSP-1-UniversalReceiver.md) interface, SHOULD call the new owner's [`universalReceiver(...)`] function with the default parameters below:
 
   - `typeId`: `keccak256('LSP14OwnershipTransferStarted')` > `0xee9a7c0924f740a2ca33d59b7f0c2929821ea9837ce043ce91c1823e9c4e52c0`
-  - `data`: The data sent SHOULD be abi encoded and contain the `currentOwner` (address) and `pendingOwner` (address) respectively.
+  - `data`: The data sent SHOULD be abi encoded and contain the [current owner](#owner) (`address`) and the [pending owner](#pendingowner) (`address`) respectively.
 
 The Type ID associated with this hook COULD be altered in a contract that inherits from LSP14. This allows for more straightforward identification of the contract whose ownership is being transferred. Example where the LSP14 type ID is overriden can be found in [LSP0](LSP-0-ERC725Account.md#transferownership) and [LSP9](LSP-9-Vault.md#transferownership) standards.
 
@@ -111,15 +111,15 @@ MUST emit a [`OwnershipTransferred`](https://eips.ethereum.org/EIPS/eip-173#spec
 
 **LSP1 Hooks:**
 
-- If the previous owner is a contract that supports LSP1 interface, SHOULD call the previous owner's [`universalReceiver(...)`] function with the default parameters below:
+- If the previous owner is a contract that supports [LSP1](./LSP-1-UniversalReceiver.md) interface, SHOULD call the previous owner's [`universalReceiver(...)`] function with the default parameters below:
 
   - `typeId`: `keccak256('LSP14OwnershipTransferred_SenderNotification')` > `0xa124442e1cc7b52d8e2ede2787d43527dc1f3ae0de87f50dd03e27a71834f74c`
-  - `data`: The data sent SHOULD be abi encoded and contain the `previousOwner` (address) and `newOwner` (address) respectively.
+  - `data`: The data sent SHOULD be abi encoded and contain the [previous owner](#owner) (`address`) and the new owner (`address`) respectively.
 
-- If the new owner is a contract that supports LSP1 interface, SHOULD call the new owner's [`universalReceiver(...)`] function with the default parameters below:
+- If the new owner is a contract that supports [LSP1](./LSP-1-UniversalReceiver.md) interface, SHOULD call the new owner's [`universalReceiver(...)`] function with the default parameters below:
 
   - `typeId`: `keccak256('LSP14OwnershipTransferred_RecipientNotification')` > `0xe32c7debcb817925ba4883fdbfc52797187f28f73f860641dab1a68d9b32902c`
-  - `data`: The data sent SHOULD be abi encoded and contain the `previousOwner` (address) and `newOwner` (address) respectively.
+  - `data`: The data sent SHOULD be abi encoded and contain the [previous owner](#owner) (`address`) and the new owner (`address`) respectively.
 
 The Type IDs associated with these hooks can be altered in a contract that inherits from LSP14. This allows for more straightforward identification of the contract whose ownership is being transferred. Examples where the LSP14 type IDs are overriden can be found in the [LSP0](LSP-0-ERC725Account.md#acceptownerhsip) and [LSP9](LSP-9-Vault.md#acceptownership) standards.
 
@@ -144,10 +144,10 @@ MUST emit [`OwnershipTransferred`](https://eips.ethereum.org/EIPS/eip-173#specif
 
 **LSP1 Hooks:**
 
-- If the previous owner is a contract that supports LSP1 interface, SHOULD call the previous owner's [`universalReceiver(...)`] function with the default parameters below on the second renounce ownership call:
+- If the previous owner is a contract that supports [LSP1](./LSP-1-UniversalReceiver.md) interface, SHOULD call the previous owner's [`universalReceiver(...)`] function with the default parameters below on the second renounce ownership call:
 
   - `typeId`: `keccak256('LSP14OwnershipTransferred_SenderNotification')` > `0xa124442e1cc7b52d8e2ede2787d43527dc1f3ae0de87f50dd03e27a71834f74c`
-  - `data`: The data sent SHOULD be abi encoded and contain the `previousOwner` (address) and `newOwner` (address) respectively.
+  - `data`: The data sent SHOULD be abi encoded and contain the [previous owner](#owner) (`address`) and the new owner (`address`) respectively.
 
 ### Events
 

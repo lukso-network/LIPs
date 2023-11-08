@@ -15,23 +15,23 @@ The **ERC725Account** standard outlines a blockchain smart contract account that
 
 ## Abstract
 
-This standard defines a blockchain-based account system that can be used by humans, machines, organizations or other smart contracts.
+This standard defines a blockchain-based account system that humans, machines, organizations or other smart contracts can use.
 
 Key functionalities of this account system include:
 
-- **Dynamic Information Attachment**: Leveraging [ERC725Y] for adding generic information to the account post-deployment.
+- **Dynamic Information Attachment**: leverages [ERC725Y] to add generic information to the account post-deployment.
 
-- **Generic Execution**: Utilizing [ERC725X] to grant the account the capability to interact with other contracts, manage token transfers, and initiate contract creation with different operations.
+- **Generic Execution**: utilises [ERC725X] to grant the account the capability to interact with other contracts, manage token transfers, and initiate contract creation with different operations.
 
-- **Signature Verification**: Utilizing [ERC1271] to verify whether the signature on behalf of the account is valid.
+- **Signature Verification**: uses [ERC1271] to verify whether the signature on behalf of the account is valid.
 
-- **Notifications and Reactivity**: Through [LSP1-UniversalReceiver], enabling the account to be aware of assets or any other information and react accordingly (e.g., denying specific tokens).
+- **Notifications and Reactivity**: with [LSP1-UniversalReceiver], enable the account to be aware of assets or any other information and react accordingly (e.g., denying specific tokens).
 
-- **Secured Ownership Management**: Enforced by [LSP14-Ownable2Step], ensuring transfer of ownership is secured through a 2-step process.
+- **Secured Ownership Management**: enforced by [LSP14-Ownable2Step], ensures transfer of ownership is secured through a 2-step process.
 
-- **Future-Proof Functionalitys**: Through [LSP17-ContractExtension], allowing the account to extend and support new standardized functions and interfaceIds over time.
+- **Future-Proof Functionalitys**: through [LSP17-ContractExtension], allows the account to be extended and support new standardized functions and interfaceIds over time.
 
-- **Streamlined Account Interaction**: Via [LSP20-CallVerification], enabling direct function calls on the account from addresses other than the owner, with verification of the call occurring on the owner if it is a contract.
+- **Streamlined Account Interaction**: via [LSP20-CallVerification], to make interactions with the account easier, enables direct function calls on the account from addresses other than the owner, with verification of the call occurring on the owner if it is a contract.
 
 ## Motivation
 
@@ -39,13 +39,13 @@ Key functionalities of this account system include:
 
 Using Externally Owned Accounts (EOAs) as main accounts poses challenges in different aspects. The significant limitations include:
 
-- **No Information Attachment**: EOAs cannot store data that is readeable by off-chain clients or other smart contracts.
+- **No Information Attachment**: EOAs can not store data readable by off-chain clients or other smart contracts.
 
-- **Weak Security**:The account, represented by a public key is controlled by its corresponding private key; if the private key leaks or is lost, all associated assets, reputation, and control over other smart contracts are also lost.
+- **Weak Security**:the account, represented by a public key is controlled by its corresponding private key. If the private key leaks or is lost, all associated assets, reputation, and control over other smart contracts are also lost.
 
-- **Exclusive Control**: Sharing the private key with other entities is not an option, as possession equals full control. This exclusivity prevents delegation of certain access rights, social recovery, and other shared security measures.
+- **Exclusive Control**: sharing the private key with other entities is not an option, as possession equals full control. This exclusivity prevents delegating certain access rights, social recovery, and other shared security measures.
 
-- **Information Tracking Limitation**: EOAs do not allow for the internal tracking of asset transfers, followers, or other information. As a result, account holders must depend on external blockchain explorers to monitor their transaction history, which introduce inconvenience and slow down information access.
+- **Information Tracking Limitation**: EOAs do not allow for the internal tracking of asset transfers, followers, or other information. As a result, account holders must depend on external blockchain explorers to monitor their transaction history, which introduces inconvenience and slows down information access.
 
 ### Lack of Standardization of Accounts
 
