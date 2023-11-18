@@ -1,27 +1,30 @@
 ---
 lip: 1
 title: Universal Receiver
-author: JG Carvalho (@jgcarv), Fabian Vogelsteller <@frozeman> 
+author: JG Carvalho (@jgcarv), Fabian Vogelsteller <@frozeman>
 discussions-to: https://discord.gg/E2rJPP4
 status: Draft
 type: LSP
 created: 2019-09-01
 requires: ERC165
 ---
- 
 
 ## Simple Summary
+
 <!--"If you can't explain it simply, you don't understand it well enough." Provide a simplified and layman-accessible explanation of the LIP.-->
+
 An entry function enabling a contract to receive arbitrary information.
 
 ## Abstract
+
 <!--A short (~200 word) description of the technical issue being addressed.-->
+
 Similar to a smart contract's fallback function, which allows a contract to be notified of an incoming transaction with a value, the [`universalReceiver(bytes32,bytes)`](#universalReceiver) function allows for any contract to receive information about any interaction.
 
 This allows receiving contracts to react on incoming transfers or other interactions.
 
-
 ## Motivation
+
 There is often the need to inform other smart contracts about actions another smart contract did perform.
 
 A good example are token transfers, where the token smart contract should inform receiving contracts about the transfer.
@@ -46,7 +49,7 @@ Every contract that complies with the LSP1-UniversalReceiver standard MUST imple
 function universalReceiver(bytes32 typeId, bytes memory data) external payable returns (bytes memory)
 ```
 
-Allows to be called by any external contract to inform the contract about any incoming transfers, interactions or simple information. 
+Allows to be called by any external contract to inform the contract about any incoming transfers, interactions or simple information.
 
 The `universalReceiver(...)` function can be customized to react on a different aspect of the call such as the `typeId`, the data sent, the caller or the value sent to the function (_e.g, reacting on a token or a vault transfer_).
 
@@ -83,20 +86,18 @@ _Values:_
 
 - `returnedValue` is the data returned by the `universalReceiver(..)` function.
 
-
 ## UniversalReceiver Delegation
 
 UniversalReceiver delegation allows to forward the `universalReceiver(..)` call on one contract to another external contract, allowing for upgradeability and changing behaviour of the initial `universalReceiver(..)` call.
 
 ### Motivation
 
-The ability to react to upcoming actions with a logic hardcoded within the `universalReceiver(..)` function comes with limitations, as only a fixed functionality can be coded or the [`UniversalReceiver`](#universalreceiver-1) event be fired. 
+The ability to react to upcoming actions with a logic hardcoded within the `universalReceiver(..)` function comes with limitations, as only a fixed functionality can be coded or the [`UniversalReceiver`](#universalreceiver-1) event be fired.
 
 This section explains a way to forward the call to the `universalReceiver(..)` function to an external smart contract to extend and change funcitonality over time.
 
 The delegation works by simply forwarding a call to the `universalReceiver(..)` function to a delegated smart contract calling the `universalReceiverDelegate(..)` function on the external smart contract.
 As the external smart contract doesn't know about the inital `msg.sender` and the `msg.value`, this specification proposes to add these values as arguments. This allows the external contract to know the full context of the initial `universalReceiver` call and react accordingly.
-
 
 ### Specification
 
@@ -122,7 +123,7 @@ _Parameters:_
 
 - `typeId` is the hash of a standard, or the type relative to the `data` received.
 
-- `data` is a byteArray of arbitrary data. Receiving contracts should take the `typeId` in consideration to properly decode the `data`. 
+- `data` is a byteArray of arbitrary data. Receiving contracts should take the `typeId` in consideration to properly decode the `data`.
 
 _Returns:_ `bytes`, which can be used to encode response values.
 
@@ -130,11 +131,11 @@ If the contract implementing the LSP1 standard is an ERC725Y, the address of the
 
 ```json
 {
-    "name": "LSP1UniversalReceiverDelegate",
-    "key": "0x0cfc51aec37c55a4d0b1a65c6255c4bf2fbdf6277f3cc0730c45b828b6db8b47",
-    "keyType": "Singleton",
-    "valueType": "address",
-    "valueContent": "Address"
+  "name": "LSP1UniversalReceiverDelegate",
+  "key": "0x0cfc51aec37c55a4d0b1a65c6255c4bf2fbdf6277f3cc0730c45b828b6db8b47",
+  "keyType": "Singleton",
+  "valueType": "address",
+  "valueContent": "Address"
 }
 ```
 
@@ -142,11 +143,11 @@ Additionally, some specific **UniversalReceiverDelegate** contracts COULD be map
 
 ```json
 {
-    "name": "LSP1UniversalReceiverDelegate:<bytes32>",
-    "key": "0x0cfc51aec37c55a4d0b10000<bytes32>",
-    "keyType": "Mapping",
-    "valueType": "address",
-    "valueContent": "Address"
+  "name": "LSP1UniversalReceiverDelegate:<bytes32>",
+  "key": "0x0cfc51aec37c55a4d0b10000<bytes32>",
+  "keyType": "Mapping",
+  "valueType": "address",
+  "valueContent": "Address"
 }
 ```
 
@@ -157,11 +158,12 @@ The `<bytes32\>` in the data key name corresponds to the `typeId` passed to the 
 ```
 
 ## Rationale
-This is an abstraction of the ideas behind [ERC223] and [ERC777], that contracts are called when they are receiving tokens or other assets. 
 
-With this proposal, we can allow contracts to receive any information in a generic manner over a standardised interface. 
+This is an abstraction of the ideas behind [ERC223] and [ERC777], that contracts are called when they are receiving tokens or other assets.
 
-As this function is generic and only the sent `typeId` changes, smart contract accounts that can upgrade its behaviour using the **UniversalReceiverDelegate** technique can be created. 
+With this proposal, we can allow contracts to receive any information in a generic manner over a standardised interface.
+
+As this function is generic and only the sent `typeId` changes, smart contract accounts that can upgrade its behaviour using the **UniversalReceiverDelegate** technique can be created.
 
 The UniversalReceiverDelegate functionality COULD be implemented using `call`, or `delegatecall`, both of which have different security properties.
 
@@ -171,7 +173,7 @@ An implementation can be found in the [lukso-network/lsp-smart-contracts] reposi
 
 ### UniversalReceiver Example:
 
-After transfering token from `TokenABC` to `MyWallet`, the owner of `MyWallet` contract can know, by looking at the emitted UniversalReceiver event, that the `typeId` is `_TOKEN_RECEIVING_HASH`. 
+After transfering token from `TokenABC` to `MyWallet`, the owner of `MyWallet` contract can know, by looking at the emitted UniversalReceiver event, that the `typeId` is `_TOKEN_RECEIVING_HASH`.
 
 Enabling the owner to know the token sender address and the amount sent by looking into the `data`.
 
@@ -190,7 +192,7 @@ contract TokenABC {
     function sendToken(address to, uint256 amount) public {
         balance[msg.sender] -= amount;
         balance[to] += amount;
-        _informTheReceiver(to, amount); 
+        _informTheReceiver(to, amount);
     }
 
     function _informTheReceiver(address receiver, uint256 amount) internal {
@@ -236,7 +238,7 @@ contract TokenABC {
 
     function sendToken(address to, uint256 amount) public onlyOwner {
         balance[to] += amount;
-        _informTheReceiver(to, amount); 
+        _informTheReceiver(to, amount);
     }
 
     function _informTheReceiver(address receiver, uint256 amount) internal {
@@ -270,7 +272,7 @@ contract MyWallet is ERC165, ILSP1 {
 
             // Call the universalReceiverDelegate function on universalReceiverDelegate address
             returnedData = ILSP1(universalReceiverDelegate).universalReceiverDelegate(msg.sender, msg.value, typeId, data);
-     
+
 
         emit UniversalReceiver(msg.sender, msg.value, typeId, data, returnedData);
         return returnedData;
@@ -288,7 +290,7 @@ contract UniversalReceiverDelegate is ERC165, ILSP1 {
         _registerInterface(_INTERFACE_ID_LSP1_DELEGATE);
     }
 
-    function universalReceiverDelegate(address caller, uint256 value, bytes32 typeId, bytes memory data) public payable returns (bytes memory) {
+    function universalReceiverDelegate(address caller, uint256 value, bytes32 typeId, bytes memory data) public returns (bytes memory) {
         // Any logic could be written here:
         // - Interfact with DeFi protocol contract to sell the new tokens received automatically.
         // - Register the token received on other registery contract.
@@ -305,27 +307,27 @@ contract UniversalReceiverDelegate is ERC165, ILSP1 {
 interface ILSP1  /* is ERC165 */ {
 
     event UniversalReceiver(address indexed from, uint256 value, bytes32 indexed typeId, bytes receivedData, bytes returnedValue);
-    
-    
+
+
     function universalReceiver(bytes32 typeId, bytes memory data) external payable returns (bytes memory);
-    
+
 }
 
 interface ILSP1Delegate  /* is ERC165 */ {
-    
-    
-    function universalReceiverDelegate(address caller, uint256 value, bytes32 typeId, bytes memory data) external payable returns (bytes memory);
-    
+
+
+    function universalReceiverDelegate(address caller, uint256 value, bytes32 typeId, bytes memory data) external returns (bytes memory);
+
 }
-    
+
 ```
 
 ## Copyright
 
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
 
-[ERC165]: <https://eips.ethereum.org/EIPS/eip-165>
-[ERC223]: <https://github.com/ethereum/EIPs/issues/223>
-[ERC777]: <https://eips.ethereum.org/EIPS/eip-777>
-[specification for the abi-encoding of `bytes`]: <https://docs.soliditylang.org/en/v0.8.19/abi-spec.html#formal-specification-of-the-encoding>
-[lukso-network/lsp-smart-contracts]: <https://github.com/lukso-network/lsp-smart-contracts/tree/develop/contracts/LSP1UniversalReceiver>
+[ERC165]: https://eips.ethereum.org/EIPS/eip-165
+[ERC223]: https://github.com/ethereum/EIPs/issues/223
+[ERC777]: https://eips.ethereum.org/EIPS/eip-777
+[specification for the abi-encoding of `bytes`]: https://docs.soliditylang.org/en/v0.8.19/abi-spec.html#formal-specification-of-the-encoding
+[lukso-network/lsp-smart-contracts]: https://github.com/lukso-network/lsp-smart-contracts/tree/develop/contracts/LSP1UniversalReceiver
