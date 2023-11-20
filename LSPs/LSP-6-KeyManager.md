@@ -602,8 +602,8 @@ key: 0xeafec4d89fa9619884b600005ef83ad9559033e6e941db7d7c495acdce616347;
 - If address A has [SETDATA](#setdata) permission, and have the following value for AllowedERC725YDataKeys:
 
 ```
-> 0x 0020 eafec4d89fa9619884b60000abe425d64acd861a49b8ddf5c0b6962110481f38
-> 0x0020eafec4d89fa9619884b60000abe425d64acd861a49b8ddf5c0b6962110481f38
+> 0x 0020 eafec4d89fa9619884b600005ef83ad9559033e6e941db7d7c495acdce616347
+> 0x0020eafec4d89fa9619884b600005ef83ad9559033e6e941db7d7c495acdce616347
 ```
 
 > 0020 (32 in decimals) is the length of the data key to be set.
