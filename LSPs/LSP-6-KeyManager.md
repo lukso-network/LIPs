@@ -588,11 +588,11 @@ The compact bytes array MUST be constructed in this format according to [LSP2-ER
 - `length of the data key prefix`: The length of the prefix of the data key which the rest is dynamic. MUST be a number between `1` and `32`.
 - `data key prefix`: The prefix of the data key to be checked against the data keys being set.
 
-Below is an example based on a [LSP2 Mapping](./LSP-2-ERC725YJSONSchema.md#Mapping) key type, where first word = `SupportedStandards`, and second word = `LSP3Profile`.
+Below is an example based on a [LSP2 Mapping](./LSP-2-ERC725YJSONSchema.md#Mapping) key type, where first word = `ConferenceGifts`, and second word = `T-Shirts`.
 
 ```js
-name: "SupportedStandards:LSP3Profile";
-key: 0xeafec4d89fa9619884b600005ef83ad9559033e6e941db7d7c495acdce616347;
+name: "ConferenceGifts:T-Shirts";
+key: 0x7a656c43e4182913e58d0000f17f6dbeb50c4aa08cbe43e33198df7ed7f4e900;
 ```
 
 <br>
@@ -602,8 +602,8 @@ key: 0xeafec4d89fa9619884b600005ef83ad9559033e6e941db7d7c495acdce616347;
 - If address A has [SETDATA](#setdata) permission, and have the following value for AllowedERC725YDataKeys:
 
 ```
-> 0x 0020 eafec4d89fa9619884b600005ef83ad9559033e6e941db7d7c495acdce616347
-> 0x0020eafec4d89fa9619884b600005ef83ad9559033e6e941db7d7c495acdce616347
+> 0x 0020 7a656c43e4182913e58d0000f17f6dbeb50c4aa08cbe43e33198df7ed7f4e900
+> 0x00207a656c43e4182913e58d0000f17f6dbeb50c4aa08cbe43e33198df7ed7f4e900
 ```
 
 > 0020 (32 in decimals) is the length of the data key to be set.
@@ -629,7 +629,7 @@ Resolve to:
 
 Address B is only allowed to set the value for the data `0xbeefbeef..beef` data key and any data key that starts with `0xeafec4d89fa9619884b6`.
 
-By setting the value to `0xeafec4d89fa9619884b6` in the list of allowed ERC725Y data keys, one address can set any data key **starting with the first word `SupportedStandards:...`**.
+By setting the value to `0x7a656c43e4182913e58d` in the list of allowed ERC725Y data keys, one address can set any data key **starting with the first word `ConferencesGifts:...`**. This means that this address can set any sub-mapping data keys of `ConferencesGifts` (not only the sub-mapping `T-Shirts` from the example above).
 
 <br>
 
