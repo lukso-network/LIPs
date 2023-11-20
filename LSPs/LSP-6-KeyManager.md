@@ -588,11 +588,11 @@ The compact bytes array MUST be constructed in this format according to [LSP2-ER
 - `length of the data key prefix`: The length of the prefix of the data key which the rest is dynamic. MUST be a number between `1` and `32`.
 - `data key prefix`: The prefix of the data key to be checked against the data keys being set.
 
-Below is an example based on a [LSP2 Mapping](./LSP-2-ERC725YJSONSchema.md#Mapping) key type, where first word = `ConferenceGifts`, and second word = `T-Shirts`.
+Below is an example based on a [LSP2 Mapping](./LSP-2-ERC725YJSONSchema.md#Mapping) key type, where first word = `MyCoolGroupName`, and second word = `MySuperItem`.
 
 ```js
-name: "ConferenceGifts:T-Shirts";
-key: 0x7a656c43e4182913e58d0000f17f6dbeb50c4aa08cbe43e33198df7ed7f4e900;
+name: "MyCoolGroupName:MySuperItem";
+key: 0x49b3e05bd43c5ac82f1000000a0b207005afb968993d50cd35b2b56d5531a7e1;
 ```
 
 <br>
@@ -602,8 +602,8 @@ key: 0x7a656c43e4182913e58d0000f17f6dbeb50c4aa08cbe43e33198df7ed7f4e900;
 - If address A has [SETDATA](#setdata) permission, and have the following value for AllowedERC725YDataKeys:
 
 ```
-> 0x 0020 7a656c43e4182913e58d0000f17f6dbeb50c4aa08cbe43e33198df7ed7f4e900
-> 0x00207a656c43e4182913e58d0000f17f6dbeb50c4aa08cbe43e33198df7ed7f4e900
+> 0x 0020 49b3e05bd43c5ac82f1000000a0b207005afb968993d50cd35b2b56d5531a7e1
+> 0x002049b3e05bd43c5ac82f1000000a0b207005afb968993d50cd35b2b56d5531a7e1
 ```
 
 > 0020 (32 in decimals) is the length of the data key to be set.
@@ -619,17 +619,17 @@ Address A is only allowed to set the value for the data key attached above.
 - If address B has [SETDATA](#setdata) permission, and have the following value for AllowedERC725YDataKeys:
 
 ```
-> 0x 000a eafec4d89fa9619884b6 0020 beefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeef
-> 0x000aeafec4d89fa9619884b60020beefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeef
+> 0x 000a 49b3e05bd43c5ac82f10 0020 beefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeef
+> 0x000a49b3e05bd43c5ac82f100020beefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeef
 ```
 
-> 000a (10 in decimals) is the length of the `eafec4d89fa9619884b6` prefix
+> 000a (10 in decimals) is the length of the `49b3e05bd43c5ac82f10` prefix
 
 Resolve to:
 
-Address B is only allowed to set the value for the data `0xbeefbeef..beef` data key and any data key that starts with `0xeafec4d89fa9619884b6`.
+Address B is only allowed to set the value for the data `0xbeefbeef..beef` data key and any data key that starts with `0x49b3e05bd43c5ac82f10`.
 
-By setting the value to `0x7a656c43e4182913e58d` in the list of allowed ERC725Y data keys, one address can set any data key **starting with the first word `ConferencesGifts:...`**. This means that this address can set any sub-mapping data keys of `ConferencesGifts` (not only the sub-mapping `T-Shirts` from the example above).
+By setting the value to `0x49b3e05bd43c5ac82f10` in the list of allowed ERC725Y data keys, one address can set any data key **starting with the first word `MyCoolGroupName:...`**. This means that this address can set any sub-mapping data keys of `MyCoolGroupName` (not only the sub-mapping `MySuperItem` from the example above).
 
 <br>
 
