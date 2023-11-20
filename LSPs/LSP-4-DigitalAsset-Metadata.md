@@ -103,8 +103,8 @@ This MUST NOT be changeable, and set only during initialization of the token con
 | Value |   Type    | Description                                                                                                                                       |
 | :---: | :-------: | :------------------------------------------------------------------------------------------------------------------------------------------------ |
 |  `0`  | `Token` | Only valid for LSP7, meaning its a generic token, where the `LSP4Metadata` represents the token information. |
-|  `1`  | `NFT`  | If the contract is LSP7 or LSP8, then the `LSP4Metadata` represents the information of a **single** NFT item, that has multiple ownable amounts or IDs. If its an LSP7 contract, the `decimals` function SHOULD to return `0`. |
-|  `2`  | `Collection` | Only valid for LSP7. The `LSP4Metadata` represents the information of a the collection, and each individual token ID, requires its metadata depending on the `LSP8TokenIdType` and `LSP8MetadataTokenURI`. [See LSP8 for details](./LSP-8-IdentifiableDigitalAsset.md).                 |
+|  `1`  | `NFT`  | If the contract is LSP7 or LSP8, then the `LSP4Metadata` represents the information of a **single** NFT, that has multiple ownable amounts or IDs. If its an LSP7 contract, the `decimals` function MUST return `0`. Each individual token ID COULD have its own custom metadata specific for the token ID, but MUST NOT be different NFTs. Those COULD be set using `LSP8TokenIdType` and `LSP8MetadataTokenURI`. [See LSP8 for details](./LSP-8-IdentifiableDigitalAsset.md).  |
+|  `2`  | `Collection` | Only valid for LSP8. The `LSP4Metadata` represents the information of a the collection, and each individual token ID MUST have its own metadata set using `LSP8TokenIdType` and `LSP8MetadataTokenURI`. [See LSP8 for details](./LSP-8-IdentifiableDigitalAsset.md).                 |
 
 <!-- - `LSP26NFT` -->
 
