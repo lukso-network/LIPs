@@ -322,8 +322,28 @@ A **Mapping** data key is constructed using:
 
 `<mixed type>` can be one of `uint<M>`, `address`, `bool` or `bytes<M>` types.
 
-- `uint<M>`, `bool` will be left padded and left-cut, if larger than `20 bytes`.
-- `bytes<M>` and `address` and static word hashes (`bytes32`) will be left padded, but right-cut, if larger than `20 bytes`.
+**The following padding and cutting rules apply:**
+
+#### Left padded types
+
+- `bool` will be left padded and left-cut
+- `uint<M>` will be left padded and **left-cut if `M` is larger `160` bits** (= the 20 right most bytes are kept).
+
+#### Right padded types
+
+- `bytes<N>` will be right padded and **right cut if `N` is larger `20 bytes`** (= the 20 left most bytes are kept).
+
+#### Unpadded types
+
+- `address`, `bytes20` and `uint160` are kept as they are since they are exactly 20 bytes long.
+
+| `valueType`            | Left padded | Right padded | Left cut | Right cut |
+| :--------------------- | :---------: | :----------: | :------: | :-------: |
+| `bool`                 |     ✅      |              |          |           |
+| `uint8` to `uint152`   |     ✅      |              |          |           |
+| `bytes1` to `bytes19`  |             |      ✅      |          |           |
+| `uint168` to `uint256` |             |              |    ✅    |           |
+| `bytes21` to `bytes32` |             |              |          |    ✅     |
 
 _example:_
 
@@ -335,12 +355,12 @@ MyKeyName:MyMapName // 0x35e6950bc8d21a1699e58328a3c4066df5803bb0b570d0150cb3819
 MyKeyName:<address> // 0xcafecafecafecafecafecafecafecafecafecafe
 "0x35e6950bc8d21a1699e50000cafecafecafecafecafecafecafecafecafecafe"
 
-MyKeyName:<uint32> // 4081242941
+MyKeyName:<uint32> // 4081242941 (in decimal) = 0xf342d33d (in hex)
 "0x35e6950bc8d21a1699e5000000000000000000000000000000000000f342d33d"
 
 
 MyKeyName:<bytes4> // 0xabcd1234
-"0x35e6950bc8d21a1699e5000000000000000000000000000000000000abcd1234"
+"0x35e6950bc8d21a1699e50000abcd123400000000000000000000000000000000"
 
 MyKeyName:<bytes32> // 0xaaaabbbbccccddddeeeeffff111122223333444455556666777788889999aaaa
 "0x35e6950bc8d21a1699e50000aaaabbbbccccddddeeeeffff1111222233334444"
