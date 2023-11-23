@@ -32,6 +32,7 @@ requires: ERC725Y
   - [Tuples of `valueType`](#tuples-of-valuetype)
 - [ValueContent](#valuecontent)
   - [BitArray](#bitarray)
+  - [VERIFIEDURL](#verifiedurl)
   - [AssetURL](#asseturl)
   - [JSONURL](#jsonurl)
 - [Rationale](#rationale)
@@ -85,9 +86,9 @@ The table below describes each entries with their available options.
 | :------------------------------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | [`name`](#name)                 | the name of the data key                                                                                                                                                                                                                                                                                                                                                                          |
 | [`key`](#key)                   | the **unique identifier** of the data key                                                                                                                                                                                                                                                                                                                                                         |
-| [`keyType`](#keyType)           | _How_ the data key must be treated <hr> [`Singleton`](#Singleton) <br> [`Array`](#Array) <br> [`Mapping`](#mapping) <br> [`MappingWithGrouping`](#mappingwithgrouping)                                                                                                                                                                                                                            |
-| [`valueType`](#valueType)       | _How_ a value MUST be decoded <hr> `bool` <br> `string` <br> `address` <br> `uintN` <br> `intN` <br> `bytesN` <br> `bytes` <br> `uintN[]` <br> `intN[]` <br> `string[]` <br> `address[]` <br> `bytes[]` <br> [`bytes[CompactBytesArray]`](#bytescompactbytesarray) <br> [`bytesN[CompactBytesArray]`](#bytesncompactbytesarray) <br> Tuple: [`(valueType1,valueType2,...)`](#tuples-of-valuetype) |
-| [`valueContent`](#valueContent) | _How_ a value SHOULD be interpreted <hr> `Boolean` <br> `String` <br> `Address` <br> `Number` <br> `BytesN` <br> `Bytes` <br> `Keccak256` <br> [`BitArray`](#BitArray) <br> `URL` <br> [`AssetURL`](#AssetURL) <br> [`JSONURL`](#JSONURL) <br> `Markdown` <br> `Literal` (_e.g.:_ `0x1345ABCD...`)                                                                                                |
+| [`keyType`](#keytype)           | _How_ the data key must be treated <hr> [`Singleton`](#singleton) <br> [`Array`](#array) <br> [`Mapping`](#mapping) <br> [`MappingWithGrouping`](#mappingwithgrouping)                                                                                                                                                                                                                            |
+| [`valueType`](#valuetype)       | _How_ a value MUST be decoded <hr> `bool` <br> `string` <br> `address` <br> `uintN` <br> `intN` <br> `bytesN` <br> `bytes` <br> `uintN[]` <br> `intN[]` <br> `string[]` <br> `address[]` <br> `bytes[]` <br> [`bytes[CompactBytesArray]`](#bytescompactbytesarray) <br> [`bytesN[CompactBytesArray]`](#bytesncompactbytesarray) <br> Tuple: [`(valueType1,valueType2,...)`](#tuples-of-valuetype) |
+| [`valueContent`](#valuecontent) | _How_ a value SHOULD be interpreted <hr> `Boolean` <br> `String` <br> `Address` <br> `Number` <br> `BytesN` <br> `Bytes` <br> `Keccak256` <br> [`BitArray`](#bitarray) <br> `URL` <br> [`VerifiedURL`](#verifiedurl) <br> [`AssetURL`](#AssetURL) <br> [`JSONURL`](#JSONURL) <br> `Markdown` <br> `Literal` (_e.g.:_ `0x1345ABCD...`)                                                             |
 
 ### Data Key Name
 
@@ -183,21 +184,22 @@ An interface could decode both values retrieved under these data keys as `string
 
 Valid `valueContent` are:
 
-| `valueContent`          | Description                                                                           |
-| ----------------------- | ------------------------------------------------------------------------------------- |
-| `Boolean`               | a boolean value (`true` or `false`)                                                   |
-| `String`                | an UTF8 encoded string                                                                |
-| `Address`               | an address                                                                            |
-| `Number`                | a Number (positive or negative, depending on the `keyType`)                           |
-| `BytesN`                | a bytes value of **fixed-size** `N`, from `bytes1` up to `bytes32`                    |
-| `Bytes`                 | a bytes value of **dynamic-size**                                                     |
-| `Keccak256`             | a 32 bytes long hash digest, obtained from the keccak256 hashing algorithm            |
-| `BitArray`              | an array of single `1` or `0` bits                                                    |
-| `URL`                   | an URL encoded as an UTF8 string                                                      |
-| [`AssetURL`](#asseturl) | The content contains the hash function, hash and link to the asset file               |
-| [`JSONURL`](#jsonurl)   | hash function, hash and link to the JSON file                                         |
-| `Markdown`              | a structured Markdown mostly encoded as UTF8 string                                   |
-| `0x1345ABCD...`         | a **literal** value, when the returned value is expected to equal some specific bytes |
+| `valueContent`                | Description                                                                                                                        |
+| ----------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| `Boolean`                     | a boolean value (`true` or `false`)                                                                                                |
+| `String`                      | an UTF8 encoded string                                                                                                             |
+| `Address`                     | an address                                                                                                                         |
+| `Number`                      | a Number (positive or negative, depending on the `keyType`)                                                                        |
+| `BytesN`                      | a bytes value of **fixed-size** `N`, from `bytes1` up to `bytes32`                                                                 |
+| `Bytes`                       | a bytes value of **dynamic-size**                                                                                                  |
+| `Keccak256`                   | a 32 bytes long hash digest, obtained from the keccak256 hashing algorithm                                                         |
+| `BitArray`                    | an array of single `1` or `0` bits                                                                                                 |
+| `URL`                         | an URL encoded as an UTF8 string                                                                                                   |
+| [`VerifiedURL`](#verifiedurl) | The content contains respectively the verification method, the length of the verification data, the verification data, and the url |
+| [`AssetURL`](#asseturl)       | The content contains the hash function, hash and link to the asset file                                                            |
+| [`JSONURL`](#jsonurl)         | hash function, hash and link to the JSON file                                                                                      |
+| `Markdown`                    | a structured Markdown mostly encoded as UTF8 string                                                                                |
+| `0x1345ABCD...`               | a **literal** value, when the returned value is expected to equal some specific bytes                                              |
 
 The `valueContent` field can also define a tuple of value contents (for instance, when the `valueType` is a tuple of types, as described above). In this case, each value content MUST be defined between parentheses. For instance: `(Bytes4,Number)`.
 
@@ -633,7 +635,85 @@ Setting multiple permissions like `TRANSFER VALUE + CALL + SET DATA` will result
 
 The idea is to always read the value of a **BitArray** data key as binary digits, while its content is always written as a `bytes1` (in hex) in the ERC725Y contract storage.
 
-### AssetURL
+### VerifiedURL
+
+**VerifiedURL** is a concept aimed at ensuring the authenticity and integrity of content stored. This system contains two primary components:
+
+#### 1. **The Verification Object**
+
+```json
+verification: {
+   method:
+   data:
+   source:
+}
+```
+
+The verification object consisting of three fields:
+
+- **method**: This field specifies the method of verification. Verification can vary being hash reference, signature reference, etc .. Some methods that can be used for example include 'keccak256(utf8)', where the verification relies on hashing the UTF-8 encoded content, or 'ecdsa', indicating that the verification uses the ECDSA signature scheme.
+
+- **data**: The data varies based on the verification method. For example, for 'keccak256(utf8)', the data would be the hash of the content, while for 'ecdsa', it would be the address that signed the data.
+
+- **source**: The source varies based on the verification method. It remains undefined for methods like 'keccak256(utf8)', where the hash is generated and stored internally and doesn't require an external source. In contrast, for 'ecdsa', the source could be the URL of the signature.
+
+#### 2. **The URL**
+
+The URL is the link to the content being verified.
+
+**Example: Constructing a VerifiedURL**
+
+The creation of a VerifiedURL involves the concatenation of various elements:
+
+1. **verification method**: First 4 bytes of the `keccak256('method')`. For instance, `keccak256('keccak256(bytes)')` may yield a hash function identifier like `0x8019f9b1`.
+2. **verification data and source length indicator**: 2 bytes indicating the length of the data and the source fields.
+3. **verification data and source**: These fields are concatenated following the length indicator. Their content varies based on the verification method.
+4. **URL**: The actual URL of the content is appended.
+
+The following shows an example of how to encode a VerifiedURL:
+
+```js
+const json = JSON.stringify({
+    myProperty: 'is a string',
+    anotherProperty: {
+        sdfsdf: 123456
+    }
+})
+
+// get the bytes4 representation of the verification method
+const verificationMethod = web3.utils.keccak256('keccak256(utf8)').substr(0, 10)
+> '0x6f357c6a'
+
+// get the verification data
+const verificationData = web3.utils.keccak256(json)
+> '0x820464ddfac1bec070cc14a8daf04129871d458f2ca94368aae8391311af6361'
+
+// no source is defined
+
+// get the verification data length and padd it as 2 bytes
+const verificationDatalength = web3.utils.padLeft(web3.utils.numberToHex((verificationData.substring(2).length) / 2), 4);
+> 0x0020
+
+// store the JSON anywhere and encode the URL
+const url = web3.utils.utf8ToHex('ifps://QmYr1VJLwerg6pEoscdhVGugo39pa6rycEZLjtRPDfW84UAx')
+> '0x696670733a2f2f516d597231564a4c776572673670456f73636468564775676f3339706136727963455a4c6a7452504466573834554178'
+
+
+// final result (to be stored on chain)
+const VerifiedURL = verificationMethod  +  verificationDatalength.substring(2) +  verificationData.substring(2) + url.substring(2)
+                    ^                      ^                                      ^                   ^
+                    0x6f357c6a          +  0020                                +  820464ddfac1be... + 696670733a2f2...
+
+// structure of the VerifiedURL
+0x6f357c6a + 0020 +  820464ddfac1bec070cc14a8daf04129871d458f2ca94368aae8391311af6361 + 696670733a2f2f516d597231564a4c776572673670456f73636468564775676f3339706136727963455a4c6a7452504466573834554178
+^                ^                         ^                                             ^
+keccak256(utf8)  verificationDatalength    verificationData                              encoded URL
+
+// example value
+0x6f357c6a0020820464ddfac1bec070cc14a8daf04129871d458f2ca94368aae8391311af6361696670733a2f2f516d597231564a4c776572673670456f73636468564775676f3339706136727963455a4c6a7452504466573834554178
+```
+
+### AssetURL (DEPRECATED)
 
 The content is bytes containing the following format:
 `bytes4(keccack256('hashFunction'))` + `bytes32(keccack256(assetBytes))` + `utf8ToHex('AssetURL')`
@@ -680,7 +760,7 @@ keccak256(utf8)    hash                                                         
 0x8019f9b1d47cf10786205bb08ce508e91c424d413d0f6c48e24dbfde2920d16a9561a723697066733a2f2f516d57346e554e7933767476723344785a48754c66534c6e687a4b4d6532576d67735573454750504668385a7470
 ```
 
-### JSONURL
+### JSONURL (DEPRECATED)
 
 The content is bytes containing the following format:
 `bytes4(keccak256('hashFunction'))` + `bytes32(keccak256(JSON.stringify(JSON)))` + `utf8ToHex('JSONURL')`
