@@ -327,11 +327,14 @@ A **Mapping** data key is constructed using:
 #### Left padded types
 
 - `bool` will be left padded and left-cut
-- `uint<M>` will be left padded and **left-cut if `M` is larger `160` bits** (= the 20 right most bytes are kept).
+- `uint<M>` will be left padded and **left-cut if `M` is larger than `160` bits** (= the 20 right most bytes are kept).
 
 #### Right padded types
 
-- `bytes<N>` will be right padded and **right cut if `N` is larger `20 bytes`** (= the 20 left most bytes are kept).
+- `bytes<N>` will be right padded and **right cut if `N` is larger than `20 bytes`** (= the 20 left most bytes are kept).
+- `bytes` and `string` will be:
+  - right padded if they contain less than 20 bytes / characters
+  - right cut if they contain more than 20 bytes / characters
 
 #### Unpadded types
 
@@ -339,11 +342,11 @@ A **Mapping** data key is constructed using:
 
 | `valueType`            | Left padded | Right padded | Left cut | Right cut |
 | :--------------------- | :---------: | :----------: | :------: | :-------: |
-| `bool`                 |     ✅      |              |          |           |
-| `uint8` to `uint152`   |     ✅      |              |          |           |
-| `bytes1` to `bytes19`  |             |      ✅      |          |           |
-| `uint168` to `uint256` |             |              |    ✅    |           |
-| `bytes21` to `bytes32` |             |              |          |    ✅     |
+| `bool`                 |     ✔️      |              |          |           |
+| `uint8` to `uint152`   |     ✔️      |              |          |           |
+| `bytes1` to `bytes19`  |             |      ✔️      |          |           |
+| `uint168` to `uint256` |             |              |    ✔️    |           |
+| `bytes21` to `bytes32` |             |              |          |    ✔️     |
 
 _example:_
 
