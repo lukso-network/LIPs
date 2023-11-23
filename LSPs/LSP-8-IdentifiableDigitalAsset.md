@@ -15,13 +15,13 @@ requires: ERC165, ERC725Y, LSP1, LSP2, LSP4, LSP17
 
 <!--"If you can't explain it simply, you don't understand it well enough." Provide a simplified and layman-accessible explanation of the LIP.-->
 
-The LSP8 Identifiable Digital Asset Standard defines a standard interface for uniquely identifiable digital assets. It allows tokens to be uniquely traded and given with metadata using [ERC725Y][ERC725] and [LSP4](./LSP-4-DigitalAsset-Metadata.md#lsp4metadata).
+The LSP8 Identifiable Digital Asset Standard defines a standard interface for uniquely identifiable digital assets. It allows tokens to be uniquely traded and given with metadata using [ERC725Y][erc725] and [LSP4](./LSP-4-DigitalAsset-Metadata.md#lsp4metadata).
 
 ## Abstract
 
 <!--A short (~200 word) description of the technical issue being addressed.-->
 
-This standard defines an interface for tokens that are identified with a `tokenId`, based on [ERC721][ERC721]. A `bytes32` value is used for `tokenId` to allow many uses of token identification including numbers, contract addresses, and any other unique identifiers (_e.g:_ serial numbers, NFTs with unique names, hash values, etc...).
+This standard defines an interface for tokens that are identified with a `tokenId`, based on [ERC721][erc721]. A `bytes32` value is used for `tokenId` to allow many uses of token identification including numbers, contract addresses, and any other unique identifiers (_e.g:_ serial numbers, NFTs with unique names, hash values, etc...).
 
 This standard defines a set of data-key value pairs that are useful to know what the `tokenId` represents, and the associated metadata for each `tokenId`.
 
@@ -29,9 +29,9 @@ This standard defines a set of data-key value pairs that are useful to know what
 
 <!--The motivation is critical for LIPs that want to change the Lukso protocol. It should clearly explain why the existing protocol specification is inadequate to address the problem that the LIP solves. LIP submissions without sufficient motivation may be rejected outright.-->
 
-This standard aims to support use cases not covered by [LSP7 DigitalAsset][LSP7], by using a `tokenId` instead of an amount of tokens to mint, burn, and transfer tokens. Each `tokenId` may have metadata (either as a on-chain [ERC725Y][ERC725] contract or off-chain JSON) in addition to the [LSP4 DigitalAsset-Metadata][LSP4#erc725ykeys] metadata of the smart contract that mints the tokens. In this way a minted token benefits from the flexibility & upgradability of the [ERC725Y][ERC725] standard, and transfering a token carries the history of ownership and metadata updates. This is beneficial for a new generation of NFTs.
+This standard aims to support use cases not covered by [LSP7 DigitalAsset][lsp7], by using a `tokenId` instead of an amount of tokens to mint, burn, and transfer tokens. Each `tokenId` may have metadata (either as a on-chain [ERC725Y][erc725] contract or off-chain JSON) in addition to the [LSP4 DigitalAsset-Metadata][lsp4#erc725ykeys] metadata of the smart contract that mints the tokens. In this way a minted token benefits from the flexibility & upgradability of the [ERC725Y][erc725] standard, and transfering a token carries the history of ownership and metadata updates. This is beneficial for a new generation of NFTs.
 
-A commonality with [LSP7 DigitalAsset][LSP7] is desired so that the two token implementations use similar naming for functions, events, and using hooks to notify token senders and receivers using LSP1.
+A commonality with [LSP7 DigitalAsset][lsp7] is desired so that the two token implementations use similar naming for functions, events, and using hooks to notify token senders and receivers using LSP1.
 
 ## Specification
 
@@ -43,7 +43,7 @@ The LSP8 interface ID is calculated as the XOR of the LSP8 interface (see [inter
 
 These are the expected data keys for an LSP8 contract that can mints identifiable tokens (NFTs).
 
-This standard can also be combined with the data keys from [LSP4 DigitalAsset-Metadata.][LSP4#erc725ykeys].
+This standard can also be combined with the data keys from [LSP4 DigitalAsset-Metadata.][lsp4#erc725ykeys].
 
 #### LSP8TokenIdType
 
@@ -59,13 +59,13 @@ The `LSP8TokenIdType` metadata key provides this information and describes how t
 
 This MUST NOT be changeable, and set only during initialization of the LSP8 token contract.
 
-| Value |   Type    | Description                                                                                                                                       |
-| :---: | :-------: | :------------------------------------------------------------------------------------------------------------------------------------------------ |
-|  `0`  | `uint256` | each NFT is represented with a **unique number**. <br> This number is an incrementing count, where each minted token is assigned the next number. |
-|  `1`  | `string`  | each NFT is represented using a **unique name** (as a short **utf8 encoded string**, no more than 32 characters long)                             |
-|  `2`  | `bytes32` | each NFT is represented using a 32 bytes long **unique identifier**.                                                                              |
-|  `3`  | `bytes32` | each NFT is represented using a 32 bytes **hash digest**.                                                                                         |
-|  `4`  | `address` | each NFT is represented as its **own smart contract** that can hold its own metadata (_e.g [ERC725Y] compatible_).                                |
+| Value |   Type    |      Name      | Description                                                                                                                                       |
+| :---: | :-------: | :------------: | :------------------------------------------------------------------------------------------------------------------------------------------------ |
+|  `0`  | `uint256` |     Number     | each NFT is represented with a **unique number**. <br> This number is an incrementing count, where each minted token is assigned the next number. |
+|  `1`  | `string`  |     String     | each NFT is represented using a **unique name** (as a short **utf8 encoded string**, no more than 32 characters long)                             |
+|  `2`  | `bytes32` |  Unique Bytes  | each NFT is represented using a 32 bytes long **unique identifier**.                                                                              |
+|  `3`  | `bytes32` |      Hash      | each NFT is represented using a 32 bytes **hash digest**.                                                                                         |
+|  `4`  | `address` | Smart Contract | each NFT is represented as its **own smart contract** that can hold its own metadata (_e.g [ERC725Y] compatible_).                                |
 
 ```json
 {
@@ -76,6 +76,22 @@ This MUST NOT be changeable, and set only during initialization of the LSP8 toke
   "valueContent": "Number"
 }
 ```
+
+A `tokenId` is always represented as a `bytes32` value. Depending on the tokenId types defined above, the padding of the `bytes32` value is different.
+
+| LSP8TokenIdType                     | Left padded | right padded | Padding rule to convert to `bytes32`                                                                                                                                                 |
+| :---------------------------------- | :---------: | :----------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `0` - `uint256` - Number            |     ✔️      |              | For tokenId number `5` -> `0x0000000000000000000000000000000000000000000000000000000000000005`                                                                                       |
+| `1` - `string` - String             |             |      ✔️      | For tokenId `my-nft` -> `0x6d792d6e66740000000000000000000000000000000000000000000000000000` (each character encoded as utf8 hex)                                                    |
+| `2` - `bytes32` - Unique Identifier |             |      ✔️      | For any bytes less than 32 bytes like tokenId `0xaabbccddee` -> `0xaabbccddee000000000000000000000000000000000000000000000000000000`                                                 |
+| `3` - `bytes32` - Hash Digest       |             |              | No padding applies, since the hash digest is always 32 bytes. For instance for tokenId `keccak256('My NFT')` -> `0x262a8c3566f2abe9247c206cf8d622e0a44ac99a7d54c23e212de32181cf185f` |
+| `4` - `address` - Smart Contract    |     ✔️      |              | For tokenId metadata contract at address `0x8ae2dD3E422530b5c2FC1061e6b5f43f5677033f` -> `0x0000000000000000000000008ae2dD3E422530b5c2FC1061e6b5f43f5677033f`                        |
+
+This value must be padded according to the padding rules specified in the table above to generate the `bytes32 tokenId` that will be passed as parameter to the functions below:
+
+- when being transferred via [`transfer(address,address,bytes32,bool,bytes)`](#transfer)) or [`transferBatch(address[],address[],bytes32[],bool,bytes[])`](#transferbatch).
+- when querying the owner for the tokenId via [`tokenOwnerOf(bytes32)`](#tokenownerof).
+- when performing operators related operations via [`authorizeOperator(address,bytes32,bytes)`](#authorizeoperator), [`revokeOperator(address,bytes32,bool,bytes)`](#revokeoperator), [`isOperatorFor(address,bytes32)`](#isoperatorfor), [`getOperatorsOf(bytes32)`](#getoperatorsof).
 
 #### LSP8MetadataTokenURI:<tokenId>
 
@@ -102,7 +118,7 @@ The value stored under this data key is a tuple `(bytes4,string)` that contains 
 }
 ```
 
-> For construction of the Mapping data key see: [LSP2 ERC725Y JSON Schema > `keyType = Mapping`][LSP2#mapping]
+> For construction of the Mapping data key see: [LSP2 ERC725Y JSON Schema > `keyType = Mapping`][lsp2#mapping]
 
 **When `bytes4 = 0x00000000`**
 
@@ -376,7 +392,7 @@ _Parameters:_
 - `to` the receiving address.
 - `from` and `to` cannot be the same address.
 - `tokenId` the token to transfer.
-- `force` when set to TRUE, `to` may be any address; when set to FALSE `to` must be a contract that supports [LSP1 UniversalReceiver][LSP1] and successfully processes a call to `universalReceiver(bytes32 typeId, bytes memory data)`.
+- `force` when set to TRUE, `to` may be any address; when set to FALSE `to` must be a contract that supports [LSP1 UniversalReceiver][lsp1] and successfully processes a call to `universalReceiver(bytes32 typeId, bytes memory data)`.
 - `data` additional data the caller wants included in the emitted event, and sent in the hooks to `from` and `to` addresses.
 
 _Requirements:_
@@ -417,7 +433,7 @@ _Parameters:_
 - `from` the list of sending addresses.
 - `to` the list of receiving addresses.
 - `tokenId` the list of tokens to transfer.
-- `force` when set to TRUE, `to` may be any address; when set to FALSE `to` must be a contract that supports [LSP1 UniversalReceiver][LSP1] and successfully processes a call to `universalReceiver(bytes32 typeId, bytes memory data)`.
+- `force` when set to TRUE, `to` may be any address; when set to FALSE `to` must be a contract that supports [LSP1 UniversalReceiver][lsp1] and successfully processes a call to `universalReceiver(bytes32 typeId, bytes memory data)`.
 - `data` the list of additional data the caller wants included in the emitted event, and sent in the hooks to `from` and `to` addresses.
 
 _Requirements:_
@@ -459,7 +475,7 @@ MUST be emitted when `tokenOwner` disables `operator` for `tokenId`.
 
 <!--The rationale fleshes out the specification by describing what motivated the design and why particular design decisions were made. It should describe alternate designs that were considered and related work, e.g. how the feature is supported in other languages. The rationale may also provide evidence of consensus within the community, and should discuss important objections or concerns raised during discussion.-->
 
-There should be a base token standard that allows tracking unique assets for the LSP ecosystem of contracts, which will allow common tooling and clients to be built. Existing tools and clients that expect [ERC721][ERC721] can be made to work with this standard by using "compatability" contract extensions that match the desired interface.
+There should be a base token standard that allows tracking unique assets for the LSP ecosystem of contracts, which will allow common tooling and clients to be built. Existing tools and clients that expect [ERC721][erc721] can be made to work with this standard by using "compatability" contract extensions that match the desired interface.
 
 ### Token Identifier
 
@@ -469,23 +485,23 @@ The choice of `bytes32 tokenId` allows a wide variety of applications including 
 
 ### Operators
 
-To clarify the ability of an address to access tokens from another address, `operator` was chosen as the name for functions, events and variables in all cases. This is originally from [ERC777][ERC777] standard and replaces the `approve` functionality from [ERC721][ERC721].
+To clarify the ability of an address to access tokens from another address, `operator` was chosen as the name for functions, events and variables in all cases. This is originally from [ERC777][erc777] standard and replaces the `approve` functionality from [ERC721][erc721].
 
 ### Token Transfers
 
-There is only one transfer function, which is aware of operators. This deviates from [ERC721][ERC721] and [ERC777][ERC777] which added functions specifically for the token owner to use, and for those with access to tokens. By having a single function to call this makes it simple to move tokens, and the caller will be exposed in the `Transfer` event as an indexed value.
+There is only one transfer function, which is aware of operators. This deviates from [ERC721][erc721] and [ERC777][erc777] which added functions specifically for the token owner to use, and for those with access to tokens. By having a single function to call this makes it simple to move tokens, and the caller will be exposed in the `Transfer` event as an indexed value.
 
 ### Usage of hooks
 
-When a token is changing owners (minting, transfering, burning) an attempt is made to notify the token sender and receiver using [LSP1 UniversalReceiver][LSP1] interface. The implementation uses `_notifyTokenSender` and `_notifyTokenReceiver` as the internal functions to process this.
+When a token is changing owners (minting, transfering, burning) an attempt is made to notify the token sender and receiver using [LSP1 UniversalReceiver][lsp1] interface. The implementation uses `_notifyTokenSender` and `_notifyTokenReceiver` as the internal functions to process this.
 
-The `force` parameter sent during `function transfer` SHOULD be used when notifying the token receiver, to determine if it must support [LSP1 UniversalReceiver][LSP1]. This is used to prevent accidental token transfers, which may results in lost tokens: non-contract addresses could be a copy paste issue, contracts not supporting [LSP1 UniversalReceiver][LSP1] might not be able to move tokens.
+The `force` parameter sent during `function transfer` SHOULD be used when notifying the token receiver, to determine if it must support [LSP1 UniversalReceiver][lsp1]. This is used to prevent accidental token transfers, which may results in lost tokens: non-contract addresses could be a copy paste issue, contracts not supporting [LSP1 UniversalReceiver][lsp1] might not be able to move tokens.
 
 ## Implementation
 
 <!--The implementations must be completed before any LIP is given status "Final", but it need not be completed before the LIP is accepted. While there is merit to the approach of reaching consensus on the specification and rationale before writing code, the principle of "rough consensus and running code" is still useful when it comes to resolving many discussions of API details.-->
 
-A implementation can be found in the [lukso-network/lsp-smart-contracts][LSP8.sol].
+A implementation can be found in the [lukso-network/lsp-smart-contracts][lsp8.sol].
 
 ERC725Y JSON Schema `LSP8IdentifiableDigitalAsset`:
 
@@ -589,15 +605,15 @@ interface ILSP8 is /* IERC165 */ {
 
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
 
-[ERC165]: https://eips.ethereum.org/EIPS/eip-165
-[ERC721]: https://github.com/ethereum/EIPs/blob/master/EIPS/eip-721.md
-[ERC725]: https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md
-[ERC725Y]: https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#erc725y
-[ERC777]: https://github.com/ethereum/EIPs/blob/master/EIPS/eip-777.md
-[LSP1]: ./LSP-1-UniversalReceiver.md
-[LSP2#jsonurl]: ./LSP-2-ERC725YJSONSchema.md#JSONURL
-[LSP2#mapping]: ./LSP-2-ERC725YJSONSchema.md#mapping
-[LSP4#erc725ykeys]: ./LSP-4-DigitalAsset-Metadata.md#erc725ykeys
-[LSP7]: ./LSP-7-DigitalAsset.md
-[LSP8]: ./LSP-8-IdentifiableDigitalAsset.md
-[LSP8.sol]: https://github.com/lukso-network/lsp-universalprofile-smart-contracts/blob/develop/contracts/LSP8IdentifiableDigitalAsset/LSP8IdentifiableDigitalAsset.sol
+[erc165]: https://eips.ethereum.org/EIPS/eip-165
+[erc721]: https://github.com/ethereum/EIPs/blob/master/EIPS/eip-721.md
+[erc725]: https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md
+[erc725y]: https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#erc725y
+[erc777]: https://github.com/ethereum/EIPs/blob/master/EIPS/eip-777.md
+[lsp1]: ./LSP-1-UniversalReceiver.md
+[lsp2#jsonurl]: ./LSP-2-ERC725YJSONSchema.md#JSONURL
+[lsp2#mapping]: ./LSP-2-ERC725YJSONSchema.md#mapping
+[lsp4#erc725ykeys]: ./LSP-4-DigitalAsset-Metadata.md#erc725ykeys
+[lsp7]: ./LSP-7-DigitalAsset.md
+[lsp8]: ./LSP-8-IdentifiableDigitalAsset.md
+[lsp8.sol]: https://github.com/lukso-network/lsp-universalprofile-smart-contracts/blob/develop/contracts/LSP8IdentifiableDigitalAsset/LSP8IdentifiableDigitalAsset.sol
