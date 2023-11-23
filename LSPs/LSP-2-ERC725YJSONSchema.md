@@ -651,26 +651,29 @@ verification: {
 
 The verification object consisting of three fields:
 
-- **method**: This field specifies the method of verification. Verification can vary being hash reference, signature reference, etc .. Some methods that can be used for example include 'keccak256(utf8)', where the verification relies on hashing the UTF-8 encoded content, or 'ecdsa', indicating that the verification uses the ECDSA signature scheme.
+- **method**: This field specifies the method of verification. Verification can vary being hash reference, signature reference, etc .. Some methods that can be used for example include `'keccak256(utf8)'`, where the verification relies on hashing the UTF-8 encoded content, or `'ecdsa'`, indicating that the verification uses the ECDSA signature scheme.
 
-- **data**: The data varies based on the verification method. For example, for 'keccak256(utf8)', the data would be the hash of the content, while for 'ecdsa', it would be the address that signed the data.
+- **data**: The data varies based on the verification method. For example, for `'keccak256(utf8)'`, the data would be the hash of the content, while for `'ecdsa'`, it would be the address that signed the data.
 
-- **source**: The source varies based on the verification method. It remains undefined for methods like 'keccak256(utf8)', where the hash is generated and stored internally and doesn't require an external source. In contrast, for 'ecdsa', the source could be the URL of the signature.
+- **source**: The source varies based on the verification method. It remains undefined for methods like `'keccak256(utf8)'`, where the hash is generated and stored internally and doesn't require an external source. In contrast, for `'ecdsa'`, the source could be the URL of the signature.
 
 #### 2. **The URL**
 
 The URL is the link to the content being verified.
 
+<hr>
+
 **Example: Constructing a VerifiedURL**
 
 The creation of a VerifiedURL involves the concatenation of various elements:
 
-1. **verification method**: First 4 bytes of the `keccak256('method')`. For instance, `keccak256('keccak256(bytes)')` may yield a hash function identifier like `0x8019f9b1`.
+1. **verification method**: First 4 bytes of the `keccak256('method')`.
 2. **verification data and source length indicator**: 2 bytes indicating the length of the data and the source fields.
 3. **verification data and source**: These fields are concatenated following the length indicator. Their content varies based on the verification method.
 4. **URL**: The actual URL of the content is appended.
 
-The following shows an example of how to encode a VerifiedURL:
+The following shows an example of how to encode a VerifiedURL that will be verified based on the `keccak256('utf')` verification method.
+In such scenario, the verification data is the keccak256 of the utf8 of the content, no source will exist, and the URL will be pointing to the content.
 
 ```js
 const json = JSON.stringify({
