@@ -641,7 +641,7 @@ The idea is to always read the value of a **BitArray** data key as binary digits
 
 #### 1. **The Verification Object**
 
-```json
+```js
 verification: {
    method:
    data:
