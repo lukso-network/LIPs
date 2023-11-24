@@ -125,36 +125,64 @@ The linked JSON file SHOULD have the following format:
         ],
         "icon": [ // SHOULD be used for LSP7 icons
             // multiple sizes of the same icon
-            {
+            { // example of a verificationData based image verification
                 "width": Number,
                 "height": Number,
-                "hashFunction": 'keccak256(bytes)',
-                "hash": 'string', // bytes32 hex string of the image hash
+                "verificationFunction": 'keccak256(bytes)',
+                "verificationData": 'string', // bytes32 hash of the image
                 "url": 'string'
             },
+            { // example of a signature based image verification
+                "width": Number,
+                "height": Number,
+                "verificationFunction": 'ecdsa',
+                "verificationData": 'string', // signer that signed the bytes of the image
+                "verificationSource": 'string' // e.g url returning the signature of the signed image
+                "url": 'string'
+            },
+            { // example of a NFT/smart contract based image
+                "address": Address, // the address of an LSP7 or LSP8
+                "tokenId": 32bytes  // (optional) if token contract is an LSP7
+            }
             ...
         ],
         "images": [ // COULD be used for LSP8 NFT art
             // multiple images in different sizes, related to the DigitalAsset, image 0, should be the main image
             // array of different sizes of the same image
             [
-                {
+                { // example of a verificationData based image verification
                     "width": Number,
                     "height": Number,
-                    "hashFunction": 'keccak256(bytes)',
-                    "hash": 'string', // bytes32 hex string of the image hash
+                    "verificationFunction": 'keccak256(bytes)',
+                    "verificationData": 'string', // bytes32 hash of the image
                     "url": 'string'
                 },
+                { // example of a signature based image verification
+                    "width": Number,
+                    "height": Number,
+                    "verificationFunction": 'ecdsa',
+                    "verificationData": 'string',  // signer that signed the bytes of the image
+                    "verificationSource": 'string' // e.g url returning the signature of the signed image
+                    "url": 'string'
+                },
+                { // example of a NFT/smart contract based image
+                    "address": Address, // the address of an LSP7 or LSP8
+                    "tokenId": 32bytes  // (optional) if token contract is an LSP7
+                }
                 ...
             ],
             [...]
         ],
         "assets": [ // SHOULD be used for any assets of the token (e.g. 3d assets, high res pictures or music, etc)
             {
-                "hashFunction": 'keccak256(bytes)',
-                "hash": 'string',
+                "verificationFunction": 'keccak256(bytes)',
+                "verificationData": 'string',
                 "url": 'string',
                 "fileType": 'string'
+            },
+            { // example of a NFT/smart contract based asset
+                "address": Address, // the address of an LSP7 or LSP8
+                "tokenId": 32bytes  // (optional) if token contract is an LSP7
             }
         ],
         "attributes": [
@@ -183,8 +211,8 @@ Example:
             {
                 width: 256,
                 height: 256,
-                hashFunction: 'keccak256(bytes)',
-                hash: '0x01299df007997de92a820c6c2ec1cb2d3f5aa5fc1adf294157de563eba39bb6f',
+                verificationFunction: 'keccak256(bytes)',
+                verificationData: '0x01299df007997de92a820c6c2ec1cb2d3f5aa5fc1adf294157de563eba39bb6f',
                 url: 'ifps://QmW5cF4r9yWeY1gUCtt7c6v3ve7Fzdg8CKvTS96NU9Uiwr'
             }
         ],
@@ -193,8 +221,8 @@ Example:
                 {
                     width: 1024,
                     height: 974,
-                    hashFunction: 'keccak256(bytes)',
-                    hash: '0xa9399df007997de92a820c6c2ec1cb2d3f5aa5fc1adf294157de563eba39bb6e',
+                    verificationFunction: 'keccak256(bytes)',
+                    verificationData: '0xa9399df007997de92a820c6c2ec1cb2d3f5aa5fc1adf294157de563eba39bb6e',
                     url: 'ifps://QmW4wM4r9yWeY1gUCtt7c6v3ve7Fzdg8CKvTS96NU9Uiwr'
                 },
                 ... // more image sizes
@@ -202,8 +230,8 @@ Example:
             ... // more images
         ],
         assets: [{
-            hashFunction: 'keccak256(bytes)',
-            hash: '0x98fe032f81c43426fbcfb21c780c879667a08e2a65e8ae38027d4d61cdfe6f55',
+            verificationFunction: 'keccak256(bytes)',
+            verificationData: '0x98fe032f81c43426fbcfb21c780c879667a08e2a65e8ae38027d4d61cdfe6f55',
             url: 'ifps://QmPJESHbVkPtSaHntNVY5F6JDLW8v69M2d6khXEYGUMn7N',
             fileType: 'fbx'
         }],

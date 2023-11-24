@@ -33,7 +33,7 @@ A commonality with [LSP8 IdentifiableDigitalAsset][LSP8] is desired so that the 
 
 ## Specification
 
-[ERC165] interface id: `0x05519512`
+[ERC165] interface id: `0xdaa746b7`
 
 The LSP7 interface ID is calculated as the XOR of the LSP7 interface (see [interface cheat-sheet below](#interface-cheat-sheet)) and the [LSP17 Extendable interface ID](./LSP-17-ContractExtension.md#erc165-interface-id).
 
@@ -103,10 +103,19 @@ _Requirements:_
 - `operator` cannot be calling address.
 - `operator` cannot be the zero address.
 
+**LSP1 Hooks:**
+
+- If the operator is a contract that supports LSP1 interface, it SHOULD call operator's [`universalReceiver(...)`] function with the parameters below:
+
+  - `typeId`: `keccak256('LSP7Tokens_OperatorNotification')` > `0x386072cc5a58e61263b434c722725f21031cd06e7c552cfaa06db5de8a320dbc`
+  - `data`: The data sent SHOULD be abi encoded and contain the `tokenOwner` (address), `amount` (uint256) , and the `operatorNotificationData` (bytes) respectively.
+
+<br>
+
 #### revokeOperator
 
 ```solidity
-function revokeOperator(address operator, bytes memory operatorNotificationData) external;
+function revokeOperator(address operator, bool notify, bytes memory operatorNotificationData) external;
 ```
 
 Removes `operator` address as an operator of callers tokens.
@@ -116,12 +125,73 @@ MUST emit a [RevokedOperator event](#revokedoperator).
 _Parameters:_
 
 - `operator` the address to revoke as an operator.
+- `notify` the boolean indicating whether to notify the operator via LSP1 or not.
 - `operatorNotificationData` the data to send when notifying the operator via LSP1.
 
 _Requirements:_
 
 - `operator` cannot be calling address.
 - `operator` cannot be the zero address.
+
+**LSP1 Hooks:**
+
+- If the `notify` parameter is set to `true`, and the operator is a contract that supports LSP1 interface, it SHOULD call operator's [`universalReceiver(...)`] function with the parameters below:
+
+  - `typeId`: `keccak256('LSP7Tokens_OperatorNotification')` > `0x386072cc5a58e61263b434c722725f21031cd06e7c552cfaa06db5de8a320dbc`
+  - `data`: The data sent SHOULD be abi encoded and contain the `tokenOwner` (address), `amount` (uint256) (0 in case of revoke), and the `operatorNotificationData` (bytes) respectively.
+
+<br>
+
+
+#### increaseAllowance
+
+```solidity
+function increaseAllowance(address operator, uint256 addedAmount, bytes memory operatorNotificationData) external;
+```
+
+Increase the allowance of `operator` by `addedAmount`. This is an alternative approach to {authorizeOperator} that can be used as a mitigation for the double spending allowance problem. Notify the operator based on the LSP1-UniversalReceiver standard.
+
+_Parameters:_
+
+- `operator` the address to increase allowance as an operator.
+- `addedAmount` the amount to add to the existing allowance of tokens operator has access to.
+- `operatorNotificationData` the data to send when notifying the operator via LSP1.
+
+_Requirements:_
+
+- `operator`'s original allowance cannot be zero.
+
+**LSP1 Hooks:**
+
+- If the operator is a contract that supports LSP1 interface, it SHOULD call operator's [`universalReceiver(...)`] function with the parameters below:
+
+  - `typeId`: `keccak256('LSP7Tokens_OperatorNotification')` > `0x386072cc5a58e61263b434c722725f21031cd06e7c552cfaa06db5de8a320dbc`
+  - `data`: The data sent SHOULD be abi encoded and contain the `tokenOwner` (address), `amount` (uint256) (new allowance) , and the `operatorNotificationData` (bytes) respectively.
+
+<be>
+
+#### decreaseAllowance
+
+```solidity
+function decreaseAllowance(address operator, uint256 subtractedAmount, bytes memory operatorNotificationData) external;
+```
+
+Decrease the allowance of `operator` by `subtractedAmount`. This is an alternative approach to {authorizeOperator} that can be used as a mitigation for the double spending allowance problem. Notify the operator based on the LSP1-UniversalReceiver standard.
+
+_Parameters:_
+
+- `operator` the address to decrease allowance as an operator.
+- `subtractedAmount` the amount to substract to the existing allowance of tokens operator has access to.
+- `operatorNotificationData` the data to send when notifying the operator via LSP1.
+
+**LSP1 Hooks:**
+
+- If the operator is a contract that supports LSP1 interface, it SHOULD call operator's [`universalReceiver(...)`] function with the parameters below:
+
+  - `typeId`: `keccak256('LSP7Tokens_OperatorNotification')` > `0x386072cc5a58e61263b434c722725f21031cd06e7c552cfaa06db5de8a320dbc`
+  - `data`: The data sent SHOULD be abi encoded and contain the `tokenOwner` (address), `amount` (uint256) (new allowance) , and the `operatorNotificationData` (bytes) respectively.
+
+<br>
 
 #### authorizedAmountFor
 
@@ -232,7 +302,7 @@ MUST be emitted when `amount` tokens is transferred from `from` to `to`.
 #### AuthorizedOperator
 
 ```solidity
-event AuthorizedOperator(address indexed operator, address indexed tokenOwner, uint256 amount);
+event AuthorizedOperator(address indexed operator, address indexed tokenOwner, uint256 amount, bytes operatorNotificationData);
 ```
 
 MUST be emitted when `tokenOwner` enables `operator` for `amount` tokens.
@@ -240,7 +310,7 @@ MUST be emitted when `tokenOwner` enables `operator` for `amount` tokens.
 #### RevokedOperator
 
 ```solidity
-event RevokedOperator(address indexed operator, address indexed tokenOwner);
+event RevokedOperator(address indexed operator, address indexed tokenOwner, bool notify, bytes memory operatorNotificationData);
 ```
 
 MUST be emitted when `tokenOwner` disables `operator`.
@@ -306,9 +376,9 @@ interface ILSP7 is /* IERC165 */ {
 
     event Transfer(address indexed operator, address indexed from, address indexed to, uint256 amount, bool force, bytes data);
 
-    event AuthorizedOperator(address indexed operator, address indexed tokenOwner, uint256 indexed amount);
+    event AuthorizedOperator(address indexed operator, address indexed tokenOwner, uint256 indexed amount, bytes operatorNotificationData);
 
-    event RevokedOperator(address indexed operator, address indexed tokenOwner);
+    event RevokedOperator(address indexed operator, address indexed tokenOwner, bool notify, bytes operatorNotificationData);
 
 
     function decimals() external view returns (uint8);
@@ -319,7 +389,11 @@ interface ILSP7 is /* IERC165 */ {
 
     function authorizeOperator(address operator, uint256 amount, bytes memory operatorNotificationData) external;
 
-    function revokeOperator(address to, bytes memory operatorNotificationData) external;
+    function revokeOperator(address to, bool notify, bytes memory operatorNotificationData) external;
+
+    function increaseAllowance(address operator, uint256 addedAmount, bytes memory operatorNotificationData) external;
+
+    function decreaseAllowance(address operator, uint256 subtractedAmount, bytes memory operatorNotificationData) external;
 
     function authorizedAmountFor(address operator, address tokenOwner) external view returns (uint256);
 
@@ -328,6 +402,7 @@ interface ILSP7 is /* IERC165 */ {
     function transfer(address from, address to, uint256 amount, bool force, bytes memory data) external;
 
     function transferBatch(address[] memory from, address[] memory to, uint256[] memory amount, bool force, bytes[] memory data) external;
+    
 }
 
 ```
