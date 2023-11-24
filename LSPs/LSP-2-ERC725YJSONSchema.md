@@ -15,25 +15,25 @@ requires: ERC725Y
 - [Abstract](#abstract)
 - [Motivation](#motivation)
 - [Specification](#specification)
-  * [Data Key Name](#data-key-name)
-  * [Data Key Hash](#data-key-hash)
-  * [Key Type](#key-type)
-  * [Value Type](#value-type)
-  * [Value Content](#value-content)
-    + [valueContent when `valueType` or `keyType` is an array](#valuecontent-when-valuetype-or-keytype-is-an-array)
+  - [Data Key Name](#data-key-name)
+  - [Data Key Hash](#data-key-hash)
+  - [Key Type](#key-type)
+  - [Value Type](#value-type)
+  - [Value Content](#value-content)
+    - [valueContent when `valueType` or `keyType` is an array](#valuecontent-when-valuetype-or-keytype-is-an-array)
 - [keyType](#keytype)
-  * [Singleton](#singleton)
-  * [Array](#array)
-  * [Mapping](#mapping)
-  * [MappingWithGrouping](#mappingwithgrouping)
+  - [Singleton](#singleton)
+  - [Array](#array)
+  - [Mapping](#mapping)
+  - [MappingWithGrouping](#mappingwithgrouping)
 - [ValueType](#valuetype)
-  * [bytes[CompactBytesArray]](#bytescompactbytesarray)
-  * [bytesN[CompactBytesArray]](#bytesncompactbytesarray)
-  * [Tuples of `valueType`](#tuples-of-valuetype)
+  - [bytes[CompactBytesArray]](#bytescompactbytesarray)
+  - [bytesN[CompactBytesArray]](#bytesncompactbytesarray)
+  - [Tuples of `valueType`](#tuples-of-valuetype)
 - [ValueContent](#valuecontent)
-  * [BitArray](#bitarray)
-  * [AssetURL](#asseturl)
-  * [JSONURL](#jsonurl)
+  - [BitArray](#bitarray)
+  - [AssetURL](#asseturl)
+  - [JSONURL](#jsonurl)
 - [Rationale](#rationale)
 - [Implementation](#implementation)
 - [Copyright](#copyright)
@@ -71,23 +71,23 @@ To make ERC725Y data keys readable, we describe a data key-value pair as a JSON 
 
 ```json
 {
-    "name": "...",
-    "key": "...",
-    "keyType": "...",
-    "valueType": "...",
-    "valueContent": "..."
+  "name": "...",
+  "key": "...",
+  "keyType": "...",
+  "valueType": "...",
+  "valueContent": "..."
 }
 ```
 
 The table below describes each entries with their available options.
 
-| Title                                 | Description                   |
-|:--------------------------------------|:------------------------------|
-|[`name`](#name)                        | the name of the data key      |
-|[`key`](#key)                          | the **unique identifier** of the data key |
-|[`keyType`](#keyType)                  | *How* the data key must be treated <hr> [`Singleton`](#Singleton) <br> [`Array`](#Array) <br> [`Mapping`](#mapping) <br> [`MappingWithGrouping`](#mappingwithgrouping) |
-|[`valueType`](#valueType)              | *How* a value MUST be decoded <hr> `bool` <br> `string` <br> `address` <br> `uintN` <br> `intN` <br> `bytesN` <br> `bytes` <br> `uintN[]` <br> `intN[]` <br> `string[]` <br> `address[]` <br> `bytes[]` <br> [`bytes[CompactBytesArray]`](#bytescompactbytesarray) <br> [`bytesN[CompactBytesArray]`](#bytesncompactbytesarray) <br> Tuple: [`(valueType1,valueType2,...)`](#tuples-of-valuetype) |
-|[`valueContent`](#valueContent)| *How* a value SHOULD be interpreted <hr> `Boolean` <br> `String` <br> `Address` <br> `Number` <br> `BytesN` <br> `Bytes` <br> `Keccak256` <br> [`BitArray`](#BitArray) <br> `URL` <br> [`AssetURL`](#AssetURL) <br> [`JSONURL`](#JSONURL) <br> `Markdown` <br> `Literal` (*e.g.:* `0x1345ABCD...`) |
+| Title                           | Description                                                                                                                                                                                                                                                                                                                                                                                       |
+| :------------------------------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| [`name`](#name)                 | the name of the data key                                                                                                                                                                                                                                                                                                                                                                          |
+| [`key`](#key)                   | the **unique identifier** of the data key                                                                                                                                                                                                                                                                                                                                                         |
+| [`keyType`](#keyType)           | _How_ the data key must be treated <hr> [`Singleton`](#Singleton) <br> [`Array`](#Array) <br> [`Mapping`](#mapping) <br> [`MappingWithGrouping`](#mappingwithgrouping)                                                                                                                                                                                                                            |
+| [`valueType`](#valueType)       | _How_ a value MUST be decoded <hr> `bool` <br> `string` <br> `address` <br> `uintN` <br> `intN` <br> `bytesN` <br> `bytes` <br> `uintN[]` <br> `intN[]` <br> `string[]` <br> `address[]` <br> `bytes[]` <br> [`bytes[CompactBytesArray]`](#bytescompactbytesarray) <br> [`bytesN[CompactBytesArray]`](#bytesncompactbytesarray) <br> Tuple: [`(valueType1,valueType2,...)`](#tuples-of-valuetype) |
+| [`valueContent`](#valueContent) | _How_ a value SHOULD be interpreted <hr> `Boolean` <br> `String` <br> `Address` <br> `Number` <br> `BytesN` <br> `Bytes` <br> `Keccak256` <br> [`BitArray`](#BitArray) <br> `URL` <br> [`AssetURL`](#AssetURL) <br> [`JSONURL`](#JSONURL) <br> `Markdown` <br> `Literal` (_e.g.:_ `0x1345ABCD...`)                                                                                                |
 
 ### Data Key Name
 
@@ -99,27 +99,24 @@ In scenarios where an ERC725Y data key is part of an LSP Standard, the data key 
 - `N`: the **Standard Number** this data key refers to.
 - `KeyName`: base of the data key name. Should represent the meaning of a value stored behind the data key.
 
-*e.g.:* `MyCustomKeyName` or `LSP4TokenName`
-
+_e.g.:_ `MyCustomKeyName` or `LSP4TokenName`
 
 ### Data Key Hash
 
 The `key` is a `bytes32` value that acts as the **unique identifier** for the data key, and is what is used to retrive the data value from a ERC725Y smart contract via `ERC725Y.getData(bytes32 dataKey)` or `ERC725Y.getData(bytes32[] dataKeys)`.
 
-Usually `keccak256` hashing algorithm is used to generate the `bytes32` data key. However, *how* the data key is constructed varies, depending on the `keyType`.
-
+Usually `keccak256` hashing algorithm is used to generate the `bytes32` data key. However, _how_ the data key is constructed varies, depending on the `keyType`.
 
 ### Key Type
 
 The `keyType` determines the format of the data key(s).
 
-| `keyType`                     | Description                           | Example                        |
-|-------------------------------|---------------------------------------|--------------------------------|
-| [`Singleton`](#singleton)     | A simple data key                     | `bytes32(keccak256("MyKeyName"))`<br> --- <br> `MyKeyName` -->  `0x35e6950bc8d21a1699e58328a3c4066df5803bb0b570d0150cb3819288e764b2` |
-| [`Array`](#array)             | An array spanning multiple ERC725Y data keys  | `bytes32(keccak256("MyKeyName[]"))` <br> --- <br> `MyKeyName[]` -->   `0x24f6297f3abd5a8b82f1a48cee167cdecef40aa98fbf14534ea3539f66ca834c`|
-| [`Mapping`](#mapping)         | A data key that consist of 2 sections, where the last section can also be a dynamic value         | `bytes10(keccak256("MyKeyName"))` +<br>`bytes2(0)` +<br>`bytes20(keccak256("MyMapName") or <mixed type>)` <br> --- <br> `MyKeyName:MyMapName` -->  `0x35e6950bc8d21a1699e5000075060e3cd7d40450e94d415fb5992ced9ad8f058` |
-| [`MappingWithGrouping`](#mappingwithgrouping)  | A data key that consist of 3 sections, where the last two sections can also be dynamic values | `bytes6(keccak256("MyKeyName"))` +<br>`bytes4(keccak256("MyMapName") or <mixed type>)` +<br>`bytes2(0)` +<br>`bytes20(keccak256("MySubMapName") or <mixed type>)` <br> --- <br> `MyKeyName:MyMapName:<address>` -->  `0x35e6950bc8d275060e3c0000cafecafecafecafecafecafecafecafecafecafe` |
-
+| `keyType`                                     | Description                                                                                   | Example                                                                                                                                                                                                                                                                                  |
+| --------------------------------------------- | --------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [`Singleton`](#singleton)                     | A simple data key                                                                             | `bytes32(keccak256("MyKeyName"))`<br> --- <br> `MyKeyName` --> `0x35e6950bc8d21a1699e58328a3c4066df5803bb0b570d0150cb3819288e764b2`                                                                                                                                                      |
+| [`Array`](#array)                             | An array spanning multiple ERC725Y data keys                                                  | `bytes32(keccak256("MyKeyName[]"))` <br> --- <br> `MyKeyName[]` --> `0x24f6297f3abd5a8b82f1a48cee167cdecef40aa98fbf14534ea3539f66ca834c`                                                                                                                                                 |
+| [`Mapping`](#mapping)                         | A data key that consist of 2 sections, where the last section can also be a dynamic value     | `bytes10(keccak256("MyKeyName"))` +<br>`bytes2(0)` +<br>`bytes20(keccak256("MyMapName") or <mixed type>)` <br> --- <br> `MyKeyName:MyMapName` --> `0x35e6950bc8d21a1699e5000075060e3cd7d40450e94d415fb5992ced9ad8f058`                                                                   |
+| [`MappingWithGrouping`](#mappingwithgrouping) | A data key that consist of 3 sections, where the last two sections can also be dynamic values | `bytes6(keccak256("MyKeyName"))` +<br>`bytes4(keccak256("MyMapName") or <mixed type>)` +<br>`bytes2(0)` +<br>`bytes20(keccak256("MySubMapName") or <mixed type>)` <br> --- <br> `MyKeyName:MyMapName:<address>` --> `0x35e6950bc8d275060e3c0000cafecafecafecafecafecafecafecafecafecafe` |
 
 ### Value Type
 
@@ -132,32 +129,33 @@ The `valueType` is relevant for interfaces to know how a value MUST be encoded/d
 
 The `valueType` can also be useful for typecasting. It enables contracts or interfaces to know how to manipulate the data and the limitations behind its type. To illustrate, an interface could know that it cannot set the value to `300` if its `valueType` is `uint8` (max `uint8` allowed = `255`).
 
-| `valueType`                    | Description |
-|--------------------------------|-------------|
-| `bool`                      | a value as either **true** or **false** |
-| `string`                       | an UTF8 encoded string  |
-| `address`                      | a 20 bytes long address |
-| `uintN`                        | an **unsigned** integer (= only positive number) of size `N`  |
-| `bytesN`                       | a bytes value of **fixed-size** `N`, from `bytes1` up to `bytes32` |
-| `bytes`                        | a bytes value of **dynamic-size** |
-| `uintN[]`                      | an array of **signed** integers |
-| `string[]`                     | an array of UTF8 encoded strings |
-| `address[]`                    | an array of addresses |
-| `bytes[]`                      | an array of dynamic size bytes  |
-| `bytesN[]`                     | an array of fixed size bytes  |
-| [`bytes[CompactBytesArray]`](#bytescompactbytesarray)     | a compacted bytes array of dynamic size bytes  |
-| [`bytesN[CompactBytesArray]`](#bytesncompactbytesarray)    | a compacted bytes array of fixed size bytes  |
-| Tuple: [`(valueType1,valueType2,...)`](#tuples-of-valuetype) | a tuple of valueTypes|
+| `valueType`                                                  | Description                                                        |
+| ------------------------------------------------------------ | ------------------------------------------------------------------ |
+| `bool`                                                       | a value as either **true** or **false**                            |
+| `string`                                                     | an UTF8 encoded string                                             |
+| `address`                                                    | a 20 bytes long address                                            |
+| `uintN`                                                      | an **unsigned** integer (= only positive number) of size `N`       |
+| `bytesN`                                                     | a bytes value of **fixed-size** `N`, from `bytes1` up to `bytes32` |
+| `bytes`                                                      | a bytes value of **dynamic-size**                                  |
+| `uintN[]`                                                    | an array of **signed** integers                                    |
+| `string[]`                                                   | an array of UTF8 encoded strings                                   |
+| `address[]`                                                  | an array of addresses                                              |
+| `bytes[]`                                                    | an array of dynamic size bytes                                     |
+| `bytesN[]`                                                   | an array of fixed size bytes                                       |
+| [`bytes[CompactBytesArray]`](#bytescompactbytesarray)        | a compacted bytes array of dynamic size bytes                      |
+| [`bytesN[CompactBytesArray]`](#bytesncompactbytesarray)      | a compacted bytes array of fixed size bytes                        |
+| Tuple: [`(valueType1,valueType2,...)`](#tuples-of-valuetype) | a tuple of valueTypes                                              |
 
 ### Value Content
 
-The `valueContent` of a LSP2 Schema describes how to interpret the content of the returned *decoded* value.
+The `valueContent` of a LSP2 Schema describes how to interpret the content of the returned _decoded_ value.
 
 Knowing how to interpret the data retrieved under a data key is is the first step in understanding how to handle it. Interfaces can use the `valueContent` to adapt their behaviour or know how to display data fetched from an ERC725Y smart contract.
 
 As an example, a string could be interpreted in multiple ways, such as:
-- a single word, or a sequence of words (*e.g.: "My Custom Token Name"*)
-- an URL (*e.g.: "ipfs://QmW4nUNy3vtvr3DxZHuLfSLnhzKMe2WmgsUsEGPPFh8Ztp"*)
+
+- a single word, or a sequence of words (_e.g.: "My Custom Token Name"_)
+- an URL (_e.g.: "ipfs://QmW4nUNy3vtvr3DxZHuLfSLnhzKMe2WmgsUsEGPPFh8Ztp"_)
 
 Using the following two LSP2 schemas as examples:
 
@@ -179,26 +177,27 @@ Using the following two LSP2 schemas as examples:
 ```
 
 An interface could decode both values retrieved under these data keys as `string`, but:
+
 - display the profile description as plain text.
 - display the website URL as an external link.
 
 Valid `valueContent` are:
 
-| `valueContent`    | Description  |
-|---|---|
-| `Boolean`         | a boolean value (`true` or `false`) |
-| `String`          | an UTF8 encoded string |
-| `Address`         | an address |
-| `Number`          | a Number (positive or negative, depending on the `keyType`)  |
-| `BytesN`          | a bytes value of **fixed-size** `N`, from `bytes1` up to `bytes32`  |
-| `Bytes`           | a bytes value of **dynamic-size** |
-| `Keccak256`       | a 32 bytes long hash digest, obtained from the keccak256 hashing algorithm |
-| `BitArray`        | an array of single `1` or `0` bits |
-| `URL`             | an URL encoded as an UTF8 string |
-| [`AssetURL`](#asseturl)   | The content contains the hash function, hash and link to the asset file  |
-| [`JSONURL`](#jsonurl)     |  hash function, hash and link to the JSON file |
-| `Markdown`        | a structured Markdown mostly encoded as UTF8 string  |
-| `0x1345ABCD...`   | a **literal** value, when the returned value is expected to equal some specific bytes |
+| `valueContent`          | Description                                                                           |
+| ----------------------- | ------------------------------------------------------------------------------------- |
+| `Boolean`               | a boolean value (`true` or `false`)                                                   |
+| `String`                | an UTF8 encoded string                                                                |
+| `Address`               | an address                                                                            |
+| `Number`                | a Number (positive or negative, depending on the `keyType`)                           |
+| `BytesN`                | a bytes value of **fixed-size** `N`, from `bytes1` up to `bytes32`                    |
+| `Bytes`                 | a bytes value of **dynamic-size**                                                     |
+| `Keccak256`             | a 32 bytes long hash digest, obtained from the keccak256 hashing algorithm            |
+| `BitArray`              | an array of single `1` or `0` bits                                                    |
+| `URL`                   | an URL encoded as an UTF8 string                                                      |
+| [`AssetURL`](#asseturl) | The content contains the hash function, hash and link to the asset file               |
+| [`JSONURL`](#jsonurl)   | hash function, hash and link to the JSON file                                         |
+| `Markdown`              | a structured Markdown mostly encoded as UTF8 string                                   |
+| `0x1345ABCD...`         | a **literal** value, when the returned value is expected to equal some specific bytes |
 
 The `valueContent` field can also define a tuple of value contents (for instance, when the `valueType` is a tuple of types, as described above). In this case, each value content MUST be defined between parentheses. For instance: `(Bytes4,Number)`.
 
@@ -219,11 +218,11 @@ Reading the ERC725Y storage using this data key will return an array of abi-enco
 
 ```json
 {
-    "name": "MySocialMediaProfiles",
-    "key": "0x161761c54f6b013a4b4cbb1247f703c94ae5dfe32081554ad861781f48d47513",
-    "keyType": "Singleton",
-    "valueType": "string[]",
-    "valueContent": "URL"
+  "name": "MySocialMediaProfiles",
+  "key": "0x161761c54f6b013a4b4cbb1247f703c94ae5dfe32081554ad861781f48d47513",
+  "keyType": "Singleton",
+  "valueType": "string[]",
+  "valueContent": "URL"
 }
 ```
 
@@ -237,11 +236,11 @@ Below is an example of a Singleton data key type:
 
 ```json
 {
-    "name": "MyKeyName",
-    "key": "0x35e6950bc8d21a1699e58328a3c4066df5803bb0b570d0150cb3819288e764b2",
-    "keyType": "Singleton",
-    "valueType": "...",
-    "valueContent": "..."
+  "name": "MyKeyName",
+  "key": "0x35e6950bc8d21a1699e58328a3c4066df5803bb0b570d0150cb3819288e764b2",
+  "keyType": "Singleton",
+  "valueType": "...",
+  "valueContent": "..."
 }
 ```
 
@@ -251,8 +250,8 @@ Below is an example of a Singleton data key type:
 
 An array of elements, where each element has the same `valueType`.
 
-> *The advantage of the `keyType` Array over a standard array of elements like `address[]`, is that the amount of elements that can be stored is unlimited.
-> Storing an encoded array as a value, will require a set amount of gas, which can exceed the block gas limit.*
+> _The advantage of the `keyType` Array over a standard array of elements like `address[]`, is that the amount of elements that can be stored is unlimited.
+> Storing an encoded array as a value, will require a set amount of gas, which can exceed the block gas limit._
 
 **Requirements:**
 
@@ -268,16 +267,18 @@ A data key of **Array** type MUST have the following requirements:
 For the **Array** `keyType`, the initial `key` contains the total number of elements stored in the Array (= array length). It is constructed using `bytes32(keccak256(KeyName))`.
 
 Each Array element can be accessed through its own `key`. The `key` of an Array element consists of `bytes16(keccak256(KeyName)) + bytes16(uint128(ArrayElementIndex))`, where:
+
 - `bytes16(keccak256(KeyName))` = The first 16 bytes are the keccak256 hash of the full Array data key `name` (including the `[]`) (e.g.: `LSP12IssuedAssets[]`)
 - `bytes16(uint128(ArrayElementIndex))` = the position (= index) of the element in the array (**NB**: elements index access start at `0`)
 
 > **Note:** an ERC725Y data key of keyType Array can contain up to `max(uint128)` elements. This is because:
+>
 > - the value stored under the Array length data key,
 > - the index part of an Array index data key,
 >
 > are both 16 bytes long, which is equivalent to a `uint128`.
 
-*example:*
+_example:_
 
 Below is an example for the **Array** data key named `LSP12IssuedAssets[]`.
 
@@ -286,15 +287,15 @@ Below is an example for the **Array** data key named `LSP12IssuedAssets[]`.
   - value: `0x00000000000000000000000000000002` (2 elements)
 - element 1: key: `0x7c8c3416d6cda87cd42c71ea1843df2800000000000000000000000000000000`, value: `0x123...` (index 0)
 - element 2: key: `0x7c8c3416d6cda87cd42c71ea1843df2800000000000000000000000000000001`, value: `0x321...` (index 1)
-...
+  ...
 
 ```json
 {
-    "name": "LSP12IssuedAssets[]",
-    "key": "0x7c8c3416d6cda87cd42c71ea1843df28ac4850354f988d55ee2eaa47b6dc05cd",
-    "keyType": "Array",
-    "valueType": "address", // describes the type of each element
-    "valueContent": "Address" // describes the value of each element
+  "name": "LSP12IssuedAssets[]",
+  "key": "0x7c8c3416d6cda87cd42c71ea1843df28ac4850354f988d55ee2eaa47b6dc05cd",
+  "keyType": "Array",
+  "valueType": "address", // describes the type of each element
+  "valueContent": "Address" // describes the value of each element
 }
 ```
 
@@ -321,10 +322,10 @@ A **Mapping** data key is constructed using:
 
 `<mixed type>` can be one of `uint<M>`, `address`, `bool` or `bytes<M>` types.
 
-- `uint<M>`, `bool`  will be left padded and left-cut, if larger than `20 bytes`.
+- `uint<M>`, `bool` will be left padded and left-cut, if larger than `20 bytes`.
 - `bytes<M>` and `address` and static word hashes (`bytes32`) will be left padded, but right-cut, if larger than `20 bytes`.
 
-*example:*
+_example:_
 
 ```js
 // Examples:
@@ -366,13 +367,13 @@ A **MappingWithGrouping** data key is constructed using:
 
 `<mixed type>` can be one of `uint<M>`, `address`, `bool` or `bytes<M>` types.
 
-- `uint<M>`, `bool`  will be left padded and left-cut, if it's larger than the max bytes of that section.
+- `uint<M>`, `bool` will be left padded and left-cut, if it's larger than the max bytes of that section.
 - `bytes<M>` and `address` and static word hashes (`bytes32`) will be left padded, but right-cut, if it's larger than the max bytes of that section.
-
 
 e.g. `AddressPermissions:Permissions:<address>` > `0x4b80742de2bf 82acb363 0000 cafecafecafecafecafecafecafecafecafecafe`.
 
-*example:*
+_example:_
+
 ```js
 // Examples:
 MyKeyName:MyMapName:MySubMapName // 0x35e6950bc8d21a1699e58328a3c4066df5803bb0b570d0150cb3819288e764b2 + 0x75060e3cd7d40450e94d415fb5992ced9ad8f058649e805951f558364152f9ed + 0x221cba00b07da22c3775601ffea5d3406df100dbb7b1c86cb2fe3739f0fe79a1
@@ -406,7 +407,6 @@ MyKeyName:<bytes32>:<bool> // 0xaaaabbbbccccddddeeeeffff111122223333444455556666
 }
 ```
 
-
 ## ValueType
 
 ### bytes[CompactBytesArray]
@@ -416,11 +416,11 @@ A `bytes[CompactBytesArray]` represents an array of `bytes` values _encoded in a
 In a compact bytes array of `bytes`, each element is prefixed with 2 bytes to specify its length.
 
 For instance, `0xaabbccdd` in a `bytes[CompactBytesArray]` is encoded as `0x0004aabbccdd`, where:
+
 - `0x0004` = `4` represents the total number of `bytes` in `0xaabbccdd`.
 - `0xaabbccdd` is the actual value of the element.
 
 > **Note:** the maximum length of each element is 65535, because two bytes (equivalent to a `uint16`) are used to store the length of each element and the maximum value of a `uint16` is 65535.
-
 
 _example_
 
@@ -445,6 +445,7 @@ Like a `bytes[CompactBytesArray]` a `bytesN[CompactBytesArray]` represents an ar
 In a compact bytes array of `bytesN`, each element is prefixed with 1 byte that specify the length `N`.
 
 For instance, in a `bytes8[CompactBytesArray]` an entry like `0x1122334455667788` is encoded as `0x00081122334455667788`, where:
+
 - `0x0008` = `8` to represent that `0x1122334455667788` contains 8 bytes.
 - `0x1122334455667788` is the actual value of the element.
 
@@ -484,11 +485,9 @@ Tuples of valueTypes offer a convenient way to store more than one information u
 0xcafecafecafecafecafecafecafecafecafecafebeefbeef
 ```
 
-The main purpose why tuples of valueTypes exist in LSP2 is because it offers a way to store more than one information under a data key. For instance (address,bytes4) is a useful tuple to 
-
+The main purpose why tuples of valueTypes exist in LSP2 is because it offers a way to store more than one information under a data key. For instance (address,bytes4) is a useful tuple to
 
 LSP2 tuples are different than Solidity tuples. **In Solidity, values defined in the tuple are padded. In the case of LSP2 they are not.**
-
 
 In the case of tuple of `valueType`s, the types MUST be defined between parentheses, comma separated without parentheses.
 
@@ -502,15 +501,16 @@ For a schema that includes the following tuple as `valueType`.
 
 ```json
 {
-    "name": "...",
-    "key": "...",
-    "keyType": "...",
-    "valueType": "(bytes4,bytes8)",
-    "valueContent": "..."
+  "name": "...",
+  "key": "...",
+  "keyType": "...",
+  "valueType": "(bytes4,bytes8)",
+  "valueContent": "..."
 }
 ```
 
 And the following values:
+
 - `bytes4` value = `0xcafecafe`
 - `bytes8` value = `0xbeefbeefbeefbeef`
 
@@ -526,15 +526,16 @@ For a schema that includes the following tuple as `valueType`.
 
 ```json
 {
-    "name": "...",
-    "key": "...",
-    "keyType": "...",
-    "valueType": "(bytes8,address)",
-    "valueContent": "..."
+  "name": "...",
+  "key": "...",
+  "keyType": "...",
+  "valueType": "(bytes8,address)",
+  "valueContent": "..."
 }
 ```
 
 And the following values:
+
 - `bytes4` value = `0xca11ab1eca11ab1e`
 - `bytes8` value = `0x95222290DD7278Aa3Ddd389Cc1E1d165CC4BAfe5`
 
@@ -550,15 +551,16 @@ For a schema that includes the following tuple as `valueType`.
 
 ```json
 {
-    "name": "...",
-    "key": "...",
-    "keyType": "...",
-    "valueType": "(address,uint128,bytes4,bool,bytes)",
-    "valueContent": "..."
+  "name": "...",
+  "key": "...",
+  "keyType": "...",
+  "valueType": "(address,uint128,bytes4,bool,bytes)",
+  "valueContent": "..."
 }
 ```
 
 And the following values:
+
 - `address` value = `0x388C818CA8B9251b393131C08a736A67ccB19297`
 - `uint128` value = the number `5,918` (`0x0000000000000000000000000000171E` in hex)
 - `bytes4` value = `0xf00df00d`
@@ -569,7 +571,6 @@ And the following values:
 0x388C818CA8B9251b393131C08a736A67ccB192970000000000000000000000000000171Ef00df00d01cafecafecafecafecafecafecafe
 ```
 
-
 ## ValueContent
 
 ### BitArray
@@ -578,23 +579,24 @@ A BitArray describes an array that contains a sequence of bits (`1`s and `0`s).
 
 Each bit can be either set (`1`) or not (`0`). The point of the BitArray `valueContent` is that there are only two possible values, so they can be stored in one bit.
 
-A BitArray can be used as a mapping of values to states (on/off, allowed/disallowed, locked/unlocked, valid/invalid), where the max number of available values that can be mapped is *n* bits.
+A BitArray can be used as a mapping of values to states (on/off, allowed/disallowed, locked/unlocked, valid/invalid), where the max number of available values that can be mapped is _n_ bits.
 
-*example:*
+_example:_
 
 The example shows how a `BitArray` value can be read and interpreted.
 
 ```json
 {
-    "name": "MyPermissions",
-    "key": "0xaacedf1d8b2cc85524a881760315208fb03c6c26538760922d6b9dee915fd66a",
-    "keyType": "Singleton",
-    "valueType": "bytes1",
-    "valueContent": "BitArray"
+  "name": "MyPermissions",
+  "key": "0xaacedf1d8b2cc85524a881760315208fb03c6c26538760922d6b9dee915fd66a",
+  "keyType": "Singleton",
+  "valueType": "bytes1",
+  "valueContent": "BitArray"
 }
 ```
 
 As the data key `name` suggests, it defines a list of (user-defined) permissions, where each permission maps to a single bit at position `n`.
+
 - When a bit at position `n` is set (`1`), the permission defined at position `n` will be set.
 - When a bit at position `n` is not set (`0`), the permission defined at position `n` will not be set.
 
@@ -602,9 +604,9 @@ Since the `valueType` is of type `bytes1`, this data key can hold 8 user-defined
 
 For instance, for the following permissions:
 
-| `SIGN` | `TRANSFER VALUE` | `DEPLOY` | `DELEGATE CALL` | `STATIC CALL` | `CALL` | `SET DATA` | `CHANGE OWNER` |
-|:----:|:----:|:----:|:----:|:----:|:----:|:----:|:----:|
-| `0` / `1` | `0` / `1` | `0` / `1` | `0` / `1` | `0` / `1` | `0` / `1` | `0` / `1` | `0` / `1` |
+|  `SIGN`   | `TRANSFER VALUE` | `DEPLOY`  | `DELEGATE CALL` | `STATIC CALL` |  `CALL`   | `SET DATA` | `CHANGE OWNER` |
+| :-------: | :--------------: | :-------: | :-------------: | :-----------: | :-------: | :--------: | :------------: |
+| `0` / `1` |    `0` / `1`     | `0` / `1` |    `0` / `1`    |   `0` / `1`   | `0` / `1` | `0` / `1`  |   `0` / `1`    |
 
 Setting only the permission `SET DATA` will result in the following `bytes1` value (and its binary representation)
 
@@ -614,8 +616,8 @@ Setting only the permission `SET DATA` will result in the following `bytes1` val
 ```
 
 | `SIGN` | `TRANSFER VALUE` | `DEPLOY` | `DELEGATE CALL` | `STATIC CALL` | `CALL` | `SET DATA` | `CHANGE OWNER` |
-|:----:|:----:|:----:|:----:|:----:|:----:|:----:|:----:|
-| `0` | `0` | `0` | `0` | `0` | `0` | `1` | `0` |
+| :----: | :--------------: | :------: | :-------------: | :-----------: | :----: | :--------: | :------------: |
+|  `0`   |       `0`        |   `0`    |       `0`       |      `0`      |  `0`   |    `1`     |      `0`       |
 
 Setting multiple permissions like `TRANSFER VALUE + CALL + SET DATA` will result in the following `bytes1` value (and its binary representation)
 
@@ -626,8 +628,8 @@ Setting multiple permissions like `TRANSFER VALUE + CALL + SET DATA` will result
 ```
 
 | `SIGN` | `TRANSFER VALUE` | `DEPLOY` | `DELEGATE CALL` | `STATIC CALL` | `CALL` | `SET DATA` | `CHANGE OWNER` |
-|:----:|:----:|:----:|:----:|:----:|:----:|:----:|:----:|
-| `0` | `1` | `0` | `0` | `0` | `1` | `1` | `0` |
+| :----: | :--------------: | :------: | :-------------: | :-----------: | :----: | :--------: | :------------: |
+|  `0`   |       `1`        |   `0`    |       `0`       |      `0`      |  `1`   |    `1`     |      `0`       |
 
 The idea is to always read the value of a **BitArray** data key as binary digits, while its content is always written as a `bytes1` (in hex) in the ERC725Y contract storage.
 
@@ -640,7 +642,7 @@ Known hash functions:
 
 - `0x8019f9b1`: keccak256('keccak256(bytes)')
 
-*example:*
+_example:_
 
 The following shows an example of how to encode an AssetURL:
 
@@ -687,7 +689,7 @@ Known hash functions:
 
 - `0x6f357c6a`: keccak256('keccak256(utf8)')
 
-*example:*
+_example:_
 
 The following shows an example of how to encode a JSON object:
 
@@ -752,7 +754,6 @@ if(hashFunction === '0x6f357c6a') {
 }
 ```
 
-
 ## Rationale
 
 The structure of the data key value layout as JSON allows interfaces to auto decode these data key values as they will know how to decode them.
@@ -765,27 +766,27 @@ Using such schema allows interfaces to auto decode and interpret the values retr
 
 ```json
 [
-    {
-        "name": "SupportedStandards:LSP3UniversalProfile",
-        "key": "0xeafec4d89fa9619884b60000abe425d64acd861a49b8ddf5c0b6962110481f38",
-        "keyType": "Mapping",
-        "valueType": "bytes4",
-        "valueContent": "0xabe425d6"
-    },
-    {
-        "name": "LSP3Profile",
-        "key": "0x5ef83ad9559033e6e941db7d7c495acdce616347d28e90c7ce47cbfcfcad3bc5",
-        "keyType": "Singleton",
-        "valueType": "bytes",
-        "valueContent": "JSONURL"
-    },
-    {
-        "name": "LSP12IssuedAssets[]",
-        "key": "0x7c8c3416d6cda87cd42c71ea1843df28ac4850354f988d55ee2eaa47b6dc05cd",
-        "keyType": "Array",
-        "valueType": "address",
-        "valueContent": "Address"
-    }
+  {
+    "name": "SupportedStandards:LSP3Profile",
+    "key": "0xeafec4d89fa9619884b600005ef83ad9559033e6e941db7d7c495acdce616347",
+    "keyType": "Mapping",
+    "valueType": "bytes4",
+    "valueContent": "0xabe425d6"
+  },
+  {
+    "name": "LSP3Profile",
+    "key": "0x5ef83ad9559033e6e941db7d7c495acdce616347d28e90c7ce47cbfcfcad3bc5",
+    "keyType": "Singleton",
+    "valueType": "bytes",
+    "valueContent": "JSONURL"
+  },
+  {
+    "name": "LSP12IssuedAssets[]",
+    "key": "0x7c8c3416d6cda87cd42c71ea1843df28ac4850354f988d55ee2eaa47b6dc05cd",
+    "keyType": "Array",
+    "valueType": "address",
+    "valueContent": "Address"
+  }
 ]
 ```
 

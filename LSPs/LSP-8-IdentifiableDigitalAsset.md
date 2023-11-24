@@ -88,7 +88,7 @@ When metadata JSON is created for a tokenId, the URI COULD be stored in the stor
 The value stored under this data key is a tuple `(bytes4,string)` that contains the following elements:
 
 - `bytes4` = the 4 bytes identifier of the hash function used to generate the URI:
-  - if the tokenId is a hash (`LSP8TokenIdType` is `3`): _see details below_.
+  - if the tokenId is a hash (`LSP8TokenIdType` is `4`): _see details below_.
   - if the tokenId is any other LSP8TokenIdType: MUST be `0x00000000`.
 - `string` = the URI where the metadata for the `tokenId` can be retrieved.
 
@@ -129,20 +129,20 @@ As `{LSP8TokenMetadataBaseURI}{tokenId}`.
 
 ⚠️ TokenIds MUST be in lowercase, even for the tokenId type `address` (= address not checksumed).
 
-- LSP8TokenIdType `2` (= `uint256`)<br>
+- LSP8TokenIdType `0` (= `uint256`)<br>
   e.g. `http://mybase.uri/1234`
-- LSP8TokenIdType `1` (= `address`)<br>
-  e.g. `http://mybase.uri/0x43fb7ab43a3a32f1e2d5326b651bbae713b02429`
-- LSP8TokenIdType `3` or `4` (= `bytes32`)<br>
+- LSP8TokenIdType `1` (= `string`)<br>
+  e.g. `http://mybase.uri/name-of-the-nft`
+- LSP8TokenIdType `2` or `3` (= `bytes32`)<br>
   e.g. `http://mybase.uri/e5fe3851d597a3aa8bbdf8d8289eb9789ca2c34da7a7c3d0a7c442a87b81d5c2`
-- LSP8TokenIdType `5`
-  e.g. `http://mybase.uri/my_string`
+- LSP8TokenIdType `4` (= `address`)<br>
+  e.g. `http://mybase.uri/0x43fb7ab43a3a32f1e2d5326b651bbae713b02429`
 
 Some Base URIs could be alterable, for example in the case of NFTs that need their metadata to change overtime.
 
 In this case, the first `bytes4` in the tuple (for the `valueType`/`valueContent`) MUST be set to `0x00000000` (4 x zero bytes), which describes that the URI can be changed over the lifetime of the NFTs.
 
-If the tokenId type is a hash (LSP8TokenIdType `3`), the first `bytes4` in the tuple represents the hash function.
+If the tokenId type is a hash (LSP8TokenIdType `4`), the first `bytes4` in the tuple represents the hash function.
 
 _Example:_
 
