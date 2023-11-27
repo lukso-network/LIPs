@@ -694,7 +694,7 @@ const verificationData = web3.utils.keccak256(json)
 // no source is defined
 
 // get the verification data length and padd it as 2 bytes
-const verificationDatalength = web3.utils.padLeft(web3.utils.numberToHex((verificationData.substring(2).length) / 2), 4);
+const verificationDataLength = web3.utils.padLeft(web3.utils.numberToHex((verificationData.substring(2).length) / 2), 4);
 > 0x0020
 
 // store the JSON anywhere and encode the URL
