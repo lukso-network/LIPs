@@ -667,7 +667,7 @@ The URL is the link to the content being verified.
 
 The creation of a VerifiedURL involves the concatenation of various elements:
 
-1. **verification method**: First 4 bytes of the `keccak256('method')`.
+1. **verification method**: First 4 bytes of the hash of the selected method (e.g. `keccak256('method')`).
 2. **verification data and source length indicator**: 2 bytes indicating the length of the data and the source fields.
 3. **verification data and source**: These fields are concatenated following the length indicator. Their content varies based on the verification method.
 4. **URL**: The actual URL of the content is appended.
