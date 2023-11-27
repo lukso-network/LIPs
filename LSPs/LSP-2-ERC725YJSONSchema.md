@@ -32,7 +32,7 @@ requires: ERC725Y
   - [Tuples of `valueType`](#tuples-of-valuetype)
 - [ValueContent](#valuecontent)
   - [BitArray](#bitarray)
-  - [VERIFIEDURL](#verifiedurl)
+  - [VerifiableURI](#verifiableuri)
   - [AssetURL](#asseturl)
   - [JSONURL](#jsonurl)
 - [Rationale](#rationale)
@@ -635,47 +635,39 @@ Setting multiple permissions like `TRANSFER VALUE + CALL + SET DATA` will result
 
 The idea is to always read the value of a **BitArray** data key as binary digits, while its content is always written as a `bytes1` (in hex) in the ERC725Y contract storage.
 
-### VerifiedURL
+### VerifiableURI
 
-**VerifiedURL** is a concept aimed at ensuring the authenticity and integrity of content stored. This system contains two primary components:
+**VerifiedURI** allow for linked URIs to contain additional verification data to ensure the authenticity and integrity of content linked.
+A verifiable URI consist of bytes sliced in four parts:
 
-#### 1. **The Verification Object**
-
-```js
-verification: {
-   method:
-   data:
-   source:
-}
 ```
 
-The verification object consisting of three fields:
+0x0000           00000000       0000          0000...0000     0000...
 
-- **method**: This field specifies the method of verification. Verification can vary between hash reference, signature reference, etc. Some methods that can be used, for example, include `'keccak256(utf8)'`, where the verification relies on hashing the UTF-8 encoded content, or `'ecdsa'`, indicating that the verification uses the ECDSA signature scheme.
+^                ^              ^             ^               ^
+VerifiableURI    Verification   Verification  Verification    Encoded URI
+identifier       method         data length   data                     
 
-- **data**: The data varies based on the verification method. For example, for `'keccak256(utf8)'`, the data would be the hash of the content, while for `'ecdsa'`, it would be the address that signed the data.
+```
 
-- **source**: The source varies based on the verification method. It remains undefined for methods like `'keccak256(utf8)'`, where the hash is generated and stored internally and doesn't require an external source. In contrast, for `'ecdsa'`, the source could be the URL of the signature.
+- **VerifiableURI identifier**: MUST be bytes2(0): `0000`
 
-#### 2. **The URL**
+- **Verification method**: This field specifies the method of verification. The method determined how the verification data is interpreted and is the first 4 bytes of the hash of the method name: `bytes4(keccak256('methodName'))`. **If the verification method is `00000000` then the URI is NOT VERIFIABLE. An example of a non verifiable URI could look as follows:
+`0x0000000000000000fffffffffffff...` (where `fffff...` is the encoded link to the file/content)
 
-The URL is the link to the content being verified.
 
-<hr>
+- **Verification data**: The data varies based on the verification method. The following is a list of verification methods. Additional methods can be added:
+  - `"keccak256(utf8)"` (`0x6f357c6a`): Means the data SHOULD be the bytes32 hash of the content of the linked text/JSON file of the "Encoded URI"
+  - `"keccak256(bytes)"` (`0x8019f9b1`): Means the data SHOULD be the bytes32 hash of the content of the linked file of the "Encoded URI"
+  - `"ecdsa" (`0xac75a10e`)`: Means the data consist of two parts: The first bytes20 are the ec-recover address, and the rest of the data bytes are the verification "source" containing a encoded string of a URI to a signature. The linked file of the "Encoded URI" then nneds to be verified using the signature from the "source" URI and the linkedin file, which MUST recover to the address from the "verification data".
+  - Other verification methods can be added over time...
 
-**Example: Constructing a VerifiedURL**
+- **Encoded URI**: The actual string encoded URI to file or content to be verified.
 
-The creation of a VerifiedURL involves the concatenation of various elements:
-
-1. **verification method**: First 4 bytes of the hash of the selected method (e.g. `keccak256('method')`).
-2. **verification data and source length indicator**: 2 bytes indicating the combined bytes count of the data and the source fields.
-3. **verification data and source**: These fields are concatenated following the length indicator. Their content varies based on the verification method.
-4. **URL**: The actual URL of the content is appended.
-
-The following shows an example of how to encode a VerifiedURL that will be verified based on the `keccak256('utf')` verification method.
-In such scenario, the verification data is the keccak256 of the utf8 of the content, no source will exist, and the URL will be pointing to the content.
+The following shows an example of how to encode a VerifiableURL that will be verified based on the `keccak256('utf8')` verification method:
 
 ```js
+// My custom JSON file
 const json = JSON.stringify({
     myProperty: 'is a string',
     anotherProperty: {
@@ -683,17 +675,17 @@ const json = JSON.stringify({
     }
 })
 
-// get the bytes4 representation of the verification method
+const verfiableUriIdentifier = '0x0000'
+
+// Get the bytes4 representation of the verification method
 const verificationMethod = web3.utils.keccak256('keccak256(utf8)').substr(0, 10)
 > '0x6f357c6a'
 
-// get the verification data
+// Get the hash of the JSON file (verification data)
 const verificationData = web3.utils.keccak256(json)
 > '0x820464ddfac1bec070cc14a8daf04129871d458f2ca94368aae8391311af6361'
 
-// no source is defined
-
-// get the verification data length and padd it as 2 bytes
+// Get the verification data length and padd it as 2 bytes
 const verificationDataLength = web3.utils.padLeft(web3.utils.numberToHex((verificationData.substring(2).length) / 2), 4);
 > 0x0020
 
@@ -703,20 +695,22 @@ const url = web3.utils.utf8ToHex('ifps://QmYr1VJLwerg6pEoscdhVGugo39pa6rycEZLjtR
 
 
 // final result (to be stored on chain)
-const VerifiedURL = verificationMethod  +  verificationDatalength.substring(2) +  verificationData.substring(2) + url.substring(2)
-                    ^                      ^                                      ^                   ^
-                    0x6f357c6a          +  0020                                +  820464ddfac1be... + 696670733a2f2...
+const VerifiedURL =  verfiableUriIdentifier + verificationMethod  +  verificationDatalength.substring(2) +  verificationData.substring(2) + url.substring(2)
+                     ^                        ^                      ^                                      ^                               ^
+                     0000                     0x6f357c6a             0020                                   820464ddfac1be...               696670733a2f2...
 
 // structure of the VerifiedURL
-0x6f357c6a + 0020 + 820464ddfac1bec070cc14a8daf04129871d458f2ca94368aae8391311af6361 + 696670733a2f2f516d597231564a4c776572673670456f73636468564775676f3339706136727963455a4c6a7452504466573834554178
-^                ^                         ^                                             ^
-keccak256(utf8)  verificationDatalength    verificationData                              encoded URL
+0x0000 6f357c6a + 0020 + 820464ddfac1bec070cc14a8daf04129871d458f2ca94368aae8391311af6361 + 696670733a2f2f516d597231564a4c776572673670456f73636468564775676f3339706136727963455a4c6a7452504466573834554178
+  ^    ^                ^                         ^                                         ^
+  0000 keccak256(utf8)  verificationDatalength    verificationData                          encoded URL
 
 // example value
-0x6f357c6a0020820464ddfac1bec070cc14a8daf04129871d458f2ca94368aae8391311af6361696670733a2f2f516d597231564a4c776572673670456f73636468564775676f3339706136727963455a4c6a7452504466573834554178
+0x00006f357c6a0020820464ddfac1bec070cc14a8daf04129871d458f2ca94368aae8391311af6361696670733a2f2f516d597231564a4c776572673670456f73636468564775676f3339706136727963455a4c6a7452504466573834554178
 ```
 
-### AssetURL (DEPRECATED)
+### AssetURL
+
+**DEPRECATED** Please use [VerifiableURI](#verifiableuri)
 
 The content is bytes containing the following format:
 `bytes4(keccack256('hashFunction'))` + `bytes32(keccack256(assetBytes))` + `utf8ToHex('AssetURL')`
@@ -763,7 +757,9 @@ keccak256(utf8)    hash                                                         
 0x8019f9b1d47cf10786205bb08ce508e91c424d413d0f6c48e24dbfde2920d16a9561a723697066733a2f2f516d57346e554e7933767476723344785a48754c66534c6e687a4b4d6532576d67735573454750504668385a7470
 ```
 
-### JSONURL (DEPRECATED)
+### JSONURL
+
+**DEPRECATED** Please use [VerifiableURI](#verifiableuri)
 
 The content is bytes containing the following format:
 `bytes4(keccak256('hashFunction'))` + `bytes32(keccak256(JSON.stringify(JSON)))` + `utf8ToHex('JSONURL')`
