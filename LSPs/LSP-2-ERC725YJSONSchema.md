@@ -651,7 +651,7 @@ verification: {
 
 The verification object consisting of three fields:
 
-- **method**: This field specifies the method of verification. Verification can vary being hash reference, signature reference, etc .. Some methods that can be used for example include `'keccak256(utf8)'`, where the verification relies on hashing the UTF-8 encoded content, or `'ecdsa'`, indicating that the verification uses the ECDSA signature scheme.
+- **method**: This field specifies the method of verification. Verification can vary between hash reference, signature reference, etc. Some methods that can be used, for example, include `'keccak256(utf8)'`, where the verification relies on hashing the UTF-8 encoded content, or `'ecdsa'`, indicating that the verification uses the ECDSA signature scheme.
 
 - **data**: The data varies based on the verification method. For example, for `'keccak256(utf8)'`, the data would be the hash of the content, while for `'ecdsa'`, it would be the address that signed the data.
 
