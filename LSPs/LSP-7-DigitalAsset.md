@@ -3,7 +3,7 @@ lip: 7
 title: Digital Asset
 author: Fabian Vogelsteller <fabian@lukso.network>, Claudio Weck <claudio@fanzone.media>, Matthew Stevens <@mattgstevens>, Ankit Kumar <@ankitkumar9018>
 discussions-to: https://discord.gg/E2rJPP4 (LUKSO), https://discord.gg/PQvJQtCV (FANZONE)
-status: Draft
+status: Last Call
 type: LSP
 created: 2021-09-02
 requires: ERC165, ERC173, ERC725Y, LSP1, LSP2, LSP4, LSP17
@@ -21,25 +21,41 @@ A standard interface for digital assets, for either fungible or non-fungible tok
 
 <!--A short (~200 word) description of the technical issue being addressed.-->
 
-This standard defines an interface for tokens where minting and transfering is specified with an amount of tokens. It is based on [ERC20][ERC20] with some ideas from [ERC777][ERC777].
+This standard defines a digital asset standard that can represent either fungible tokens or non-fungible tokens (NFTs).
+
+Key functionalities of this asset standard include:
+
+- **Dynamic Information Attachment**: Leverages [ERC725Y] to add generic information to the asset even post-deployment according to the LSP4-DigitalAssetMetadata standard.
+
+- **Secure Transfers**: By checking whether the recipient is capable of handling the asset before the actual transfer, it avoids loss and transfer of tokens to uncontrolled addresses.
+
+- **Transfer Interaction**: Notifies the operator, sender, and the recipient about the transfer, allowing users to be informed about the incoming asset and decide how to react accordingly (e.g., denying the token, forwarding it, etc.).
+
+- **Future-Proof Functionalities**: Through [LSP17-ContractExtension], allows the asset to be extended and support new standardized functions and interface IDs over time.
+
+- **Asset Flexibility and Discoverability**: Offers several flexible features, such as batch transfers and the ability to add several operators, as well as the ability to discover them.
 
 ## Motivation
 
 <!--The motivation is critical for LIPs that want to change the Lukso protocol. It should clearly explain why the existing protocol specification is inadequate to address the problem that the LIP solves. LIP submissions without sufficient motivation may be rejected outright.-->
 
-This standard aims to support many token use cases, both fungible and non-fungible, to be used as the base implementation that is defined with other LSP standards in mind.
+The motivation for developing this new digital asset standard can be organized into several key points, each showing a specific limitation of current token standards:
 
-A commonality with [LSP8 IdentifiableDigitalAsset][LSP8] is desired so that the two token implementations use similar naming for functions, events, and using hooks to notify token senders and receivers using [LSP1 UniversalReceiver][LSP1].
+- **Limited Asset Metadata**: Current token standards offer limited metadata attachment capabilities, typically confined to basic elements like `name`, `symbol`, and `tokenURI`. This limitation is particularly restrictive for assets that require verifiable, on-chain metadata – such as details about creators, the community behind the token, or dynamic attributes that allow an NFT to evolve.
+
+- **No Interaction and Notification**: Traditional token standards lack in terms of interaction, particularly in notifying recipients about transfers. As a result, users cannot be unaware of incoming tokens and lose the opportunity to respond, for example, react to transfers, whether to deny, accept, or forward the tokens.
+
+- **Limited Functionalities**: Many tokens are confined to the functionalities they possess at deployment, making them rigid and unable to adapt to new requirements or standards.
+
+- **Risk of asset loss**: A common issue with current assets is the risk of loss due to transfers to incorrect or uncontrolled addresses as these standards does not check whether the recipient is able to handle the asset or not.
+
+- **Limited Features**: The limitation of having only one operator and the absence of batch transfer capabilities or even the discoveribility of tokens a user own restricts and provide bad user experience. Users need to rely on centralized indexers to know which tokens they own, need to do several transactions to do a batch of transfers, and cannot have more than one operator.
 
 ## Specification
 
-[ERC165] interface id: `0xdaa746b7`
+[ERC165] interface id: `0xb3c4928f`
 
 The LSP7 interface ID is calculated as the XOR of the LSP7 interface (see [interface cheat-sheet below](#interface-cheat-sheet)) and the [LSP17 Extendable interface ID](./LSP-17-ContractExtension.md#erc165-interface-id).
-
-### ERC725Y Data Keys
-
-This standard also expects data keys from [LSP4 DigitalAsset-Metadata][LSP4#erc725ykeys].
 
 ### Methods
 
@@ -90,7 +106,7 @@ Sets `amount` as the amount of tokens `operator` address has access to from call
 To increase or decrease the authorized amount of an operator, it's advised to call `revokeOperator(..)` function first, and then call `authorizeOperator(..)` with the new amount to authorize, to avoid front-running through an allowance double-spend exploit.
 Check more information [in this document](https://docs.google.com/document/d/1YLPtQxZu1UAvO9cZ1O2RPXBbT0mooh4DYKjA_jp-RLM/).
 
-MUST emit an [AuthorizedOperator event](#authorizedoperator).
+MUST emit an [OperatorAuthorizationChanged event](#OperatorAuthorizationChanged).
 
 _Parameters:_
 
@@ -120,7 +136,7 @@ function revokeOperator(address operator, bool notify, bytes memory operatorNoti
 
 Removes `operator` address as an operator of callers tokens.
 
-MUST emit a [RevokedOperator event](#revokedoperator).
+MUST emit a [OperatorRevoked event](#OperatorRevoked).
 
 _Parameters:_
 
@@ -141,7 +157,6 @@ _Requirements:_
   - `data`: The data sent SHOULD be abi encoded and contain the `tokenOwner` (address), `amount` (uint256) (0 in case of revoke), and the `operatorNotificationData` (bytes) respectively.
 
 <br>
-
 
 #### increaseAllowance
 
@@ -231,6 +246,7 @@ function transfer(address from, address to, uint256 amount, bool force, bytes me
 Transfers `amount` of tokens from `from` to `to`. The `force` parameter will be used when notifying the token sender and receiver and revert.
 
 MUST emit a [Transfer event](#transfer) when transfer was successful.
+MUST emit a [OperatorAuthorizationChanged](#operatorauthorizationchanged) or [OperatorRevoked](#operatorrevoked) when the transfer is done by an operator and his allowance was changed.
 
 _Parameters:_
 
@@ -272,6 +288,7 @@ function transferBatch(address[] memory from, address[] memory to, uint256[] mem
 Transfers many tokens based on the list `from`, `to`, `amount`. If any transfer fails, the call will revert.
 
 MUST emit a [Transfer event](#transfer) for each transfered token.
+MUST emit a [OperatorAuthorizationChanged](#operatorauthorizationchanged) or [OperatorRevoked](#operatorrevoked) when the transfer is done by an operator and his allowance was changed for each transfered token.
 
 _Parameters:_
 
@@ -289,6 +306,31 @@ _Requirements:_
 - each `amount` tokens must be owned by `from`.
 - If the caller is not `from`, it must be an operator for `from` with access to at least `amount` tokens.
 
+#### batchCalls
+
+```solidity
+function batchCalls(bytes[] calldata data) external returns (bytes[] memory results);
+```
+
+Enables the execution of a batch of encoded function calls on the current contract in a single transaction, provided as an array of bytes.
+
+MUST use the [DELEGATECALL] opcode to execute each call in the same context of the current contract.
+
+_Parameters:_
+
+- `data`: an array of encoded function calls to be executed on the current contract.
+
+The data field can be:
+
+- an array of ABI-encoded function calls such as an array of ABI-encoded `transfer`, `authorizeOperator`, `balanceOf` or any LSP8 functions.
+- an array of bytes which will resolve to the fallback function to be checked for an extension.
+
+_Requirements:_
+
+- MUST NOT be payable.
+
+_Returns:_ `results` , an array of bytes containing the return values of each executed function call.
+
 ### Events
 
 #### Transfer
@@ -299,21 +341,21 @@ event Transfer(address indexed operator, address indexed from, address indexed t
 
 MUST be emitted when `amount` tokens is transferred from `from` to `to`.
 
-#### AuthorizedOperator
+#### OperatorAuthorizationChanged
 
 ```solidity
-event AuthorizedOperator(address indexed operator, address indexed tokenOwner, uint256 amount, bytes operatorNotificationData);
+event OperatorAuthorizationChanged(address indexed operator, address indexed tokenOwner, uint256 indexed amount, bytes operatorNotificationData);
 ```
 
-MUST be emitted when `tokenOwner` enables `operator` for `amount` tokens.
+- MUST be emitted when the `operator` allowance of `tokenOwner` changes to `amount` tokens.
 
-#### RevokedOperator
+#### OperatorRevoked
 
 ```solidity
-event RevokedOperator(address indexed operator, address indexed tokenOwner, bool notify, bytes memory operatorNotificationData);
+event OperatorRevoked(address indexed operator, address indexed tokenOwner, bool indexed notified, bytes memory operatorNotificationData);
 ```
 
-MUST be emitted when `tokenOwner` disables `operator`.
+- MUST be emitted when the `operator` allowance of `tokenOwner` changes to 0 tokens.
 
 ## Rationale
 
@@ -376,9 +418,9 @@ interface ILSP7 is /* IERC165 */ {
 
     event Transfer(address indexed operator, address indexed from, address indexed to, uint256 amount, bool force, bytes data);
 
-    event AuthorizedOperator(address indexed operator, address indexed tokenOwner, uint256 indexed amount, bytes operatorNotificationData);
+    event OperatorAuthorizationChanged(address indexed operator, address indexed tokenOwner, uint256 indexed amount, bytes operatorNotificationData);
 
-    event RevokedOperator(address indexed operator, address indexed tokenOwner, bool notify, bytes operatorNotificationData);
+    event OperatorRevoked(address indexed operator, address indexed tokenOwner, bool indexed notified, bytes operatorNotificationData);
 
 
     function decimals() external view returns (uint8);
@@ -402,7 +444,9 @@ interface ILSP7 is /* IERC165 */ {
     function transfer(address from, address to, uint256 amount, bool force, bytes memory data) external;
 
     function transferBatch(address[] memory from, address[] memory to, uint256[] memory amount, bool force, bytes[] memory data) external;
-    
+
+    function batchCalls(bytes[] calldata data) external returns (bytes[] memory results);
+
 }
 
 ```
