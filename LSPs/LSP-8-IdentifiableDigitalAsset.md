@@ -15,7 +15,7 @@ requires: ERC165, ERC725Y, LSP1, LSP2, LSP4, LSP17
 
 <!--"If you can't explain it simply, you don't understand it well enough." Provide a simplified and layman-accessible explanation of the LIP.-->
 
-The LSP8 Identifiable Digital Asset Standard defines a standard interface for uniquely identifiable digital assets. It allows tokens to be uniquely traded and given with metadata using [ERC725Y][ERC725] and [LSP4](./LSP-4-DigitalAsset-Metadata.md#lsp4metadata).
+The LSP8 Identifiable Digital Asset Standard defines a standard interface for uniquely identifiable digital assets. It allows tokens to be uniquely traded and given with metadata using [ERC725Y][erc725] and [LSP4](./LSP-4-DigitalAsset-Metadata.md#lsp4metadata).
 
 ## Abstract
 
@@ -241,7 +241,7 @@ _Parameters:_
 - `to` the receiving address.
 - `from` and `to` cannot be the same address.
 - `tokenId` the token to transfer.
-- `force` when set to TRUE, `to` may be any address; when set to FALSE `to` must be a contract that supports [LSP1 UniversalReceiver][LSP1] and successfully processes a call to `universalReceiver(bytes32 typeId, bytes memory data)`.
+- `force` when set to TRUE, `to` may be any address; when set to FALSE `to` must be a contract that supports [LSP1 UniversalReceiver][lsp1] and successfully processes a call to `universalReceiver(bytes32 typeId, bytes memory data)`.
 - `data` additional data the caller wants included in the emitted event, and sent in the hooks to `from` and `to` addresses.
 
 _Requirements:_
@@ -283,7 +283,7 @@ _Parameters:_
 - `from` the list of sending addresses.
 - `to` the list of receiving addresses.
 - `tokenId` the list of tokens to transfer.
-- `force` when set to TRUE, `to` may be any address; when set to FALSE `to` must be a contract that supports [LSP1 UniversalReceiver][LSP1] and successfully processes a call to `universalReceiver(bytes32 typeId, bytes memory data)`.
+- `force` when set to TRUE, `to` may be any address; when set to FALSE `to` must be a contract that supports [LSP1 UniversalReceiver][lsp1] and successfully processes a call to `universalReceiver(bytes32 typeId, bytes memory data)`.
 - `data` the list of additional data the caller wants included in the emitted event, and sent in the hooks to `from` and `to` addresses.
 
 _Requirements:_
@@ -536,7 +536,7 @@ This JSON format includes an `"attributes"` field to describe unique properties 
 
 <!--The rationale fleshes out the specification by describing what motivated the design and why particular design decisions were made. It should describe alternate designs that were considered and related work, e.g. how the feature is supported in other languages. The rationale may also provide evidence of consensus within the community, and should discuss important objections or concerns raised during discussion.-->
 
-There should be a base token standard that allows tracking unique assets for the LSP ecosystem of contracts, which will allow common tooling and clients to be built. Existing tools and clients that expect [ERC721][ERC721] can be made to work with this standard by using "compatability" contract extensions that match the desired interface.
+There should be a base token standard that allows tracking unique assets for the LSP ecosystem of contracts, which will allow common tooling and clients to be built. Existing tools and clients that expect [ERC721][erc721] can be made to work with this standard by using "compatability" contract extensions that match the desired interface.
 
 ### Token Identifier
 
@@ -546,23 +546,23 @@ The choice of `bytes32 tokenId` allows a wide variety of applications including 
 
 ### Operators
 
-To clarify the ability of an address to access tokens from another address, `operator` was chosen as the name for functions, events and variables in all cases. This is originally from [ERC777][ERC777] standard and replaces the `approve` functionality from [ERC721][ERC721].
+To clarify the ability of an address to access tokens from another address, `operator` was chosen as the name for functions, events and variables in all cases. This is originally from [ERC777][erc777] standard and replaces the `approve` functionality from [ERC721][erc721].
 
 ### Token Transfers
 
-There is only one transfer function, which is aware of operators. This deviates from [ERC721][ERC721] and [ERC777][ERC777] which added functions specifically for the token owner to use, and for those with access to tokens. By having a single function to call this makes it simple to move tokens, and the caller will be exposed in the `Transfer` event as an indexed value.
+There is only one transfer function, which is aware of operators. This deviates from [ERC721][erc721] and [ERC777][erc777] which added functions specifically for the token owner to use, and for those with access to tokens. By having a single function to call this makes it simple to move tokens, and the caller will be exposed in the `Transfer` event as an indexed value.
 
 ### Usage of hooks
 
-When a token is changing owners (minting, transfering, burning) an attempt is made to notify the token sender and receiver using [LSP1 UniversalReceiver][LSP1] interface. The implementation uses `_notifyTokenSender` and `_notifyTokenReceiver` as the internal functions to process this.
+When a token is changing owners (minting, transfering, burning) an attempt is made to notify the token sender and receiver using [LSP1 UniversalReceiver][lsp1] interface. The implementation uses `_notifyTokenSender` and `_notifyTokenReceiver` as the internal functions to process this.
 
-The `force` parameter sent during `function transfer` SHOULD be used when notifying the token receiver, to determine if it must support [LSP1 UniversalReceiver][LSP1]. This is used to prevent accidental token transfers, which may results in lost tokens: non-contract addresses could be a copy paste issue, contracts not supporting [LSP1 UniversalReceiver][LSP1] might not be able to move tokens.
+The `force` parameter sent during `function transfer` SHOULD be used when notifying the token receiver, to determine if it must support [LSP1 UniversalReceiver][lsp1]. This is used to prevent accidental token transfers, which may results in lost tokens: non-contract addresses could be a copy paste issue, contracts not supporting [LSP1 UniversalReceiver][lsp1] might not be able to move tokens.
 
 ## Implementation
 
 <!--The implementations must be completed before any LIP is given status "Final", but it need not be completed before the LIP is accepted. While there is merit to the approach of reaching consensus on the specification and rationale before writing code, the principle of "rough consensus and running code" is still useful when it comes to resolving many discussions of API details.-->
 
-A implementation can be found in the [lukso-network/lsp-smart-contracts][LSP8.sol].
+A implementation can be found in the [lukso-network/lsp-smart-contracts][lsp8.sol].
 
 ERC725Y JSON Schema `LSP8IdentifiableDigitalAsset`:
 
@@ -672,15 +672,15 @@ interface ILSP8 is /* IERC165 */ {
 
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
 
-[ERC165]: https://eips.ethereum.org/EIPS/eip-165
-[ERC721]: https://github.com/ethereum/EIPs/blob/master/EIPS/eip-721.md
-[ERC725]: https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md
-[ERC725Y]: https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#erc725y
-[ERC777]: https://github.com/ethereum/EIPs/blob/master/EIPS/eip-777.md
-[LSP1]: ./LSP-1-UniversalReceiver.md
-[LSP2#jsonurl]: ./LSP-2-ERC725YJSONSchema.md#JSONURL
-[LSP2#mapping]: ./LSP-2-ERC725YJSONSchema.md#mapping
-[LSP4#erc725ykeys]: ./LSP-4-DigitalAsset-Metadata.md#erc725ykeys
-[LSP7]: ./LSP-7-DigitalAsset.md
-[LSP8]: ./LSP-8-IdentifiableDigitalAsset.md
-[LSP8.sol]: https://github.com/lukso-network/lsp-universalprofile-smart-contracts/blob/develop/contracts/LSP8IdentifiableDigitalAsset/LSP8IdentifiableDigitalAsset.sol
+[erc165]: https://eips.ethereum.org/EIPS/eip-165
+[erc721]: https://github.com/ethereum/EIPs/blob/master/EIPS/eip-721.md
+[erc725]: https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md
+[erc725y]: https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#erc725y
+[erc777]: https://github.com/ethereum/EIPs/blob/master/EIPS/eip-777.md
+[lsp1]: ./LSP-1-UniversalReceiver.md
+[lsp2#jsonurl]: ./LSP-2-ERC725YJSONSchema.md#JSONURL
+[lsp2#mapping]: ./LSP-2-ERC725YJSONSchema.md#mapping
+[lsp4#erc725ykeys]: ./LSP-4-DigitalAsset-Metadata.md#erc725ykeys
+[lsp7]: ./LSP-7-DigitalAsset.md
+[lsp8]: ./LSP-8-IdentifiableDigitalAsset.md
+[lsp8.sol]: https://github.com/lukso-network/lsp-universalprofile-smart-contracts/blob/develop/contracts/LSP8IdentifiableDigitalAsset/LSP8IdentifiableDigitalAsset.sol
