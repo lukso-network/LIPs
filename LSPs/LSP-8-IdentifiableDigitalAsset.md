@@ -79,7 +79,7 @@ This MUST NOT be changeable, and set only during initialization of the LSP8 toke
 
 A `tokenId` is always represented as a `bytes32` value. Depending on the tokenId types defined above, the padding of the `bytes32` value is different.
 
-| LSP8TokenIdType                     | Left padded | right padded | Padding rule to convert to `bytes32`                                                                                                                                                 |
+| LSP8TokenIdType                     | Left padded | Right padded | Padding rule to convert to `bytes32`                                                                                                                                                 |
 | :---------------------------------- | :---------: | :----------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `0` - `uint256` - Number            |     ✔️      |              | For tokenId number `5` -> `0x0000000000000000000000000000000000000000000000000000000000000005`                                                                                       |
 | `1` - `string` - String             |             |      ✔️      | For tokenId `my-nft` -> `0x6d792d6e66740000000000000000000000000000000000000000000000000000` (each character encoded as utf8 hex)                                                    |
