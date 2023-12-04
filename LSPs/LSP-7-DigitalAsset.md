@@ -3,7 +3,7 @@ lip: 7
 title: Digital Asset
 author: Fabian Vogelsteller <fabian@lukso.network>, Claudio Weck <claudio@fanzone.media>, Matthew Stevens <@mattgstevens>, Ankit Kumar <@ankitkumar9018>
 discussions-to: https://discord.gg/E2rJPP4 (LUKSO), https://discord.gg/PQvJQtCV (FANZONE)
-status: Last Call
+status: Review
 type: LSP
 created: 2021-09-02
 requires: ERC165, ERC173, ERC725Y, LSP1, LSP2, LSP4, LSP17

@@ -3,7 +3,7 @@ lip: 4
 title: Digital Asset Metadata
 author: Fabian Vogelsteller <fabian@lukso.network>
 discussions-to: https://discord.gg/E2rJPP4
-status: Last Call
+status: Draft
 type: LSP
 created: 2020-07-21
 requires: ERC725Y, LSP2
