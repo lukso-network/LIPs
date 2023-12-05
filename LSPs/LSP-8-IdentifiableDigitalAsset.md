@@ -444,8 +444,8 @@ For instance to set metdata for each specific tokenId, set the `LSP4Metadata` da
 
 ```json
 {
-  "name": "LSP8TokenIdSchema",
-  "key": "0x341bc44e55234544c70af9d37b2cb8cc7ba74685b58526221de2cc977f469924",
+  "name": "LSP8TokenIdFormat",
+  "key": "0xf675e9361af1c1664c1868cfa3eb97672d6b1a513aa5b81dec34c9ee330e818d",
   "keyType": "Singleton",
   "valueType": "uint256",
   "valueContent": "Number"
@@ -578,8 +578,8 @@ ERC725Y JSON Schema `LSP8IdentifiableDigitalAsset`:
 ```json
 [
   {
-    "name": "LSP8TokenIdSchema",
-    "key": "0x341bc44e55234544c70af9d37b2cb8cc7ba74685b58526221de2cc977f469924",
+    "name": "LSP8TokenIdFormat",
+    "key": "0xf675e9361af1c1664c1868cfa3eb97672d6b1a513aa5b81dec34c9ee330e818d",
     "keyType": "Singleton",
     "valueType": "uint256",
     "valueContent": "Number"
