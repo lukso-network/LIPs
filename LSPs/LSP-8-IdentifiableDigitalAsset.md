@@ -454,13 +454,13 @@ For instance to set metdata for each specific tokenId, set the `LSP4Metadata` da
 
 The **LSP8-IdentifiableDigitalAsset** standard, defines tokenIds as `bytes32`, this data key describes the schema of the `tokenId` and how to parse it and can take one of the following values described in the table below.
 
-| Value |  Schema   | Description                                                                                                             |
-| :---: | :-------: | :---------------------------------------------------------------------------------------------------------------------- |
-|  `0`  | `uint256` | each NFT is parsed as a **unique number**.                                                                              |
-|  `1`  | `string`  | each NFT is parsed as a **unique name** (as a short **utf8 encoded string**, no more than 32 characters long)           |
-|  `2`  | `address` | each NFT is parsed as its **own smart contract** that can hold its own logic and metadata (_e.g [ERC725Y] compatible_). |
-|  `3`  | `bytes32` | each NFT is parsed as a 32 bytes long **unique identifier**.                                                            |
-|  `4`  | `bytes32` | each NFT is parsed as a 32 bytes **hash digest**.                                                                       |
+| Value | Type / Format | Representation | Description                                                                                                                    |
+| :---: | :-----------: | :------------: | :----------------------------------------------------------------------------------------------------------------------------- |
+|  `0`  |   `uint256`   |     Number     | each NFT is parsed as a **unique number**.                                                                                     |
+|  `1`  |   `string`    |     String     | each NFT is parsed as a **unique name** (as a short **utf8 encoded string**, no more than 32 characters long)                  |
+|  `2`  |   `address`   | Smart Contract | each NFT is parsed as its **own smart contract** that can hold its own logic and metadata (_e.g [ERC725Y] compatible_).        |
+|  `3`  |   `bytes32`   |  Unique Bytes  | each NFT is parsed as a 32 bytes long **unique identifier**.                                                                   |
+|  `4`  |   `bytes32`   |      Hash      | each NFT is parsed as a 32 bytes **hash digest**. This can be used as the hash of a very long string representing the tokenId. |
 
 Since tokenIds can have their own custom metadata, it is also possible to have **Mixed types**, where there is a default schema for the collection, and each tokenId can have its own schema, meaning the values can be extended to:
 
@@ -473,6 +473,22 @@ Since tokenIds can have their own custom metadata, it is also possible to have *
 | `104` | `Mixed` with default as `bytes32` | Default NFT is parsed as a 32 bytes **hash digest**with querying the `LSP8TokenIdSchema` for each `tokenId`.                                                                          |
 
 To set a specific tokenId type for a specific tokenId, set the `LSP8TokenIdSchema` data key for this specific tokenId using the [`setDataForTokenId(..)`](#setdatafortokenid) function.
+
+A `tokenId` is always represented as a `bytes32` value. Depending on the tokenId types defined above, the padding of the `bytes32` value is different.
+
+| LSP8TokenIdType                     | Left padded | Right padded | Padding rule to convert to `bytes32`                                                                                                                                                 |
+| :---------------------------------- | :---------: | :----------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `0` - `uint256` - Number            |     ✔️      |              | For tokenId number `5` -> `0x0000000000000000000000000000000000000000000000000000000000000005`                                                                                       |
+| `1` - `string` - String             |             |      ✔️      | For tokenId `my-nft` -> `0x6d792d6e66740000000000000000000000000000000000000000000000000000` (each character encoded as utf8 hex)                                                    |
+| `2` - `bytes32` - Unique Identifier |             |      ✔️      | For any bytes less than 32 bytes like tokenId `0xaabbccddee` -> `0xaabbccddee000000000000000000000000000000000000000000000000000000`                                                 |
+| `3` - `bytes32` - Hash Digest       |             |              | No padding applies, since the hash digest is always 32 bytes. For instance for tokenId `keccak256('My NFT')` -> `0x262a8c3566f2abe9247c206cf8d622e0a44ac99a7d54c23e212de32181cf185f` |
+| `4` - `address` - Smart Contract    |     ✔️      |              | For tokenId metadata contract at address `0x8ae2dD3E422530b5c2FC1061e6b5f43f5677033f` -> `0x0000000000000000000000008ae2dD3E422530b5c2FC1061e6b5f43f5677033f`                        |
+
+This value must be padded according to the padding rules specified in the table above to generate the `bytes32 tokenId` that will be passed as parameter to the functions below:
+
+- when being transferred via [`transfer(address,address,bytes32,bool,bytes)`](#transfer)) or [`transferBatch(address[],address[],bytes32[],bool,bytes[])`](#transferbatch).
+- when querying the owner for the tokenId via [`tokenOwnerOf(bytes32)`](#tokenownerof).
+- when performing operators related operations via [`authorizeOperator(address,bytes32,bytes)`](#authorizeoperator), [`revokeOperator(address,bytes32,bool,bytes)`](#revokeoperator), [`isOperatorFor(address,bytes32)`](#isoperatorfor), [`getOperatorsOf(bytes32)`](#getoperatorsof).
 
 _Requirements:_
 
