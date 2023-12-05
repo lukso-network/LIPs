@@ -295,10 +295,10 @@ _Requirements:_
 - each `tokenId` token must be owned by `from`.
 - If the caller is not `from`, it must be an operator of each `tokenId`.
 
-#### getTokenIdData
+#### getDataForTokenId
 
 ```solidity
-function getTokenIdData(bytes32 tokenId, bytes32 dataKey) external view returns (bytes memory dataValue)
+function getDataForTokenId(bytes32 tokenId, bytes32 dataKey) external view returns (bytes memory dataValue)
 ```
 
 Gets the data set for the given data key for a specific tokenId.
@@ -310,10 +310,10 @@ _Parameters:_
 
 _Returns:_ `bytes` , The data for the requested data key.
 
-#### getTokenIdDataBatch
+#### getDataBatchForTokenIds
 
 ```solidity
-function getTokenIdDataBatch(bytes32[] memory tokenIds, bytes32[] memory dataKeys) external view returns(bytes[] memory dataValues)
+function getDataBatchForTokenIds(bytes32[] memory tokenIds, bytes32[] memory dataKeys) external view returns(bytes[] memory dataValues)
 ```
 
 Gets array of data at multiple given data keys for given tokenIds.
@@ -325,10 +325,10 @@ _Parameters:_
 
 _Returns:_ `bytes[]` , array of data values for the requested data keys.
 
-#### setTokenIdData
+#### setDataForTokenId
 
 ```solidity
-function setTokenIdData(bytes32 tokenId, bytes32 dataKey, bytes memory dataValue) external;
+function setDataForTokenId(bytes32 tokenId, bytes32 dataKey, bytes memory dataValue) external;
 ```
 
 Sets data as bytes in the storage for a single data key for a tokenId.
@@ -345,10 +345,10 @@ _Requirements:_
 
 **Triggers Event:** [TokenIdDataChanged](#tokeniddatachanged)
 
-#### setTokenIdDataBatch
+#### setDataBatchForTokenIds
 
 ```solidity
-function setTokenIdDataBatch(bytes32[] memory tokenIds, bytes32[] memory dataKeys, bytes[] memory dataValues) external
+function setDataBatchForTokenIds(bytes32[] memory tokenIds, bytes32[] memory dataKeys, bytes[] memory dataValues) external
 ```
 
 Sets array of data at multiple data keys for multiple tokenIds.
@@ -427,9 +427,16 @@ MUST be emitted when `tokenOwner` disables `operator` for `tokenId`.
 
 ### Metadata
 
-The **LSP8-IdentifiableDigitalAsset** expect the usage of [LSP4-DigitalAsset-Metadata](./LSP-4-DigitalAsset-Metadata.md) to store the metadata of the asset, as well as defining standard specific data keys to store LSP8 specific metadata. These data key can be either stored for the whole contract using `setData(..)` or for a single tokenId using `setTokenIdData(..)`.
+The **LSP8-IdentifiableDigitalAsset** expect the usage of [LSP4-DigitalAsset-Metadata](./LSP-4-DigitalAsset-Metadata.md) to store the metadata of the asset, as well as defining standard data keys to store LSP8 specific metadata.
 
-To set metdata for each specific tokenId, set the `LSP4Metadata` key for each tokenId using `setTokenIdData(..)` function.
+Describe in LSP8 standard that the data keys LSP8TokenIdFormat and LSP4Metadata can be set per tokenIds using setDataForTokenId(...)
+
+Data keys such as [`LSP8TokenIdFormat`](#lsp8tokenidformat) or [`LSP4Metadata`](./LSP-4-DigitalAsset-Metadata.md#lsp4metadata) can be stored:
+
+- either for the whole contract using `setData(..)`
+- per NFT / tokenId using [`setDataForTokenId(..)`](#setdatafortokenid).
+
+For instance to set metdata for each specific tokenId, set the `LSP4Metadata` data key for each tokenId using `setDataForTokenId(..)` function.
 
 #### ERC725Y Data Keys
 
@@ -464,6 +471,8 @@ Since tokenIds can have their own custom metadata, it is also possible to have *
 | `102` | `Mixed` with default as `address` | Default NFT is parsed as its **own smart contract** that can hold its own logic and metadata (_e.g [ERC725Y] compatible_) with querying the `LSP8TokenIdSchema` for each `tokenId`. . |
 | `103` | `Mixed` with default as `bytes32` | Default NFT is parsed as a 32 bytes long **unique identifier** with querying the `LSP8TokenIdSchema` for each `tokenId`.                                                              |
 | `104` | `Mixed` with default as `bytes32` | Default NFT is parsed as a 32 bytes **hash digest**with querying the `LSP8TokenIdSchema` for each `tokenId`.                                                                          |
+
+To set a specific tokenId type for a specific tokenId, set the `LSP8TokenIdSchema` data key for this specific tokenId using the [`setDataForTokenId(..)`](#setdatafortokenid) function.
 
 _Requirements:_
 
@@ -634,13 +643,13 @@ interface ILSP8 is /* IERC165 */ {
     event TokenIdDataChanged(bytes32 indexed tokenId, bytes32 indexed dataKey, bytes dataValue);
 
 
-    function getTokenIdData(bytes32 tokenId, bytes32 dataKey) external view returns (bytes memory dataValue);
+    function getDataForTokenId(bytes32 tokenId, bytes32 dataKey) external view returns (bytes memory dataValue);
 
-    function setTokenIdData(bytes32 tokenId, bytes32 dataKey, bytes memory dataValue) external; // onlyOwner
+    function setDataForTokenId(bytes32 tokenId, bytes32 dataKey, bytes memory dataValue) external; // onlyOwner
 
-    function getTokenIdDataBatch(bytes32[] memory tokenIds, bytes32[] memory dataKeys) external view returns (bytes[] memory dataValues);
+    function getDataBatchForTokenIds(bytes32[] memory tokenIds, bytes32[] memory dataKeys) external view returns (bytes[] memory dataValues);
 
-    function setTokenIdDataBatch(bytes32[] memory tokenIds, bytes32[] memory dataKeys, bytes[] memory dataValues) external; // onlyOwner
+    function setDataBatchForTokenIds(bytes32[] memory tokenIds, bytes32[] memory dataKeys, bytes[] memory dataValues) external; // onlyOwner
 
 
     function totalSupply() external view returns (uint256);
