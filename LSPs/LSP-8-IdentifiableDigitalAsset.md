@@ -57,7 +57,7 @@ The motivation for developing this new digital asset standard can be organized i
 
 ## Specification
 
-[ERC165] interface id: `0xecad9f75`
+[ERC165] interface id: `0x3a271706`
 
 The LSP8 interface ID is calculated as the XOR of the LSP8 interface (see [interface cheat-sheet below](#interface-cheat-sheet)) and the [LSP17 Extendable interface ID](./LSP-17-ContractExtension.md#erc165-interface-id).
 
