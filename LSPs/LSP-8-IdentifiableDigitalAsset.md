@@ -57,7 +57,7 @@ The motivation for developing this new digital asset standard can be organized i
 
 ## Specification
 
-[ERC165] interface id: `0xecad9f75`
+[ERC165] interface id: `0x3a271706`
 
 The LSP8 interface ID is calculated as the XOR of the LSP8 interface (see [interface cheat-sheet below](#interface-cheat-sheet)) and the [LSP17 Extendable interface ID](./LSP-17-ContractExtension.md#erc165-interface-id).
 
@@ -295,10 +295,10 @@ _Requirements:_
 - each `tokenId` token must be owned by `from`.
 - If the caller is not `from`, it must be an operator of each `tokenId`.
 
-#### getTokenIdData
+#### getDataForTokenId
 
 ```solidity
-function getTokenIdData(bytes32 tokenId, bytes32 dataKey) external view returns (bytes memory dataValue)
+function getDataForTokenId(bytes32 tokenId, bytes32 dataKey) external view returns (bytes memory dataValue)
 ```
 
 Gets the data set for the given data key for a specific tokenId.
@@ -310,10 +310,10 @@ _Parameters:_
 
 _Returns:_ `bytes` , The data for the requested data key.
 
-#### getTokenIdDataBatch
+#### getDataBatchForTokenIds
 
 ```solidity
-function getTokenIdDataBatch(bytes32[] memory tokenIds, bytes32[] memory dataKeys) external view returns(bytes[] memory dataValues)
+function getDataBatchForTokenIds(bytes32[] memory tokenIds, bytes32[] memory dataKeys) external view returns(bytes[] memory dataValues)
 ```
 
 Gets array of data at multiple given data keys for given tokenIds.
@@ -325,10 +325,10 @@ _Parameters:_
 
 _Returns:_ `bytes[]` , array of data values for the requested data keys.
 
-#### setTokenIdData
+#### setDataForTokenId
 
 ```solidity
-function setTokenIdData(bytes32 tokenId, bytes32 dataKey, bytes memory dataValue) external;
+function setDataForTokenId(bytes32 tokenId, bytes32 dataKey, bytes memory dataValue) external;
 ```
 
 Sets data as bytes in the storage for a single data key for a tokenId.
@@ -345,10 +345,10 @@ _Requirements:_
 
 **Triggers Event:** [TokenIdDataChanged](#tokeniddatachanged)
 
-#### setTokenIdDataBatch
+#### setDataBatchForTokenIds
 
 ```solidity
-function setTokenIdDataBatch(bytes32[] memory tokenIds, bytes32[] memory dataKeys, bytes[] memory dataValues) external
+function setDataBatchForTokenIds(bytes32[] memory tokenIds, bytes32[] memory dataKeys, bytes[] memory dataValues) external
 ```
 
 Sets array of data at multiple data keys for multiple tokenIds.
@@ -427,43 +427,66 @@ MUST be emitted when `tokenOwner` disables `operator` for `tokenId`.
 
 ### Metadata
 
-The **LSP8-IdentifiableDigitalAsset** expect the usage of [LSP4-DigitalAsset-Metadata](./LSP-4-DigitalAsset-Metadata.md) to store the metadata of the asset, as well as defining standard specific data keys to store LSP8 specific metadata. These data key can be either stored for the whole contract using `setData(..)` or for a single tokenId using `setTokenIdData(..)`.
+The **LSP8-IdentifiableDigitalAsset** expect the usage of [LSP4-DigitalAsset-Metadata](./LSP-4-DigitalAsset-Metadata.md) to store the metadata of the asset, as well as defining standard data keys to store LSP8 specific metadata.
 
-To set metdata for each specific tokenId, set the `LSP4Metadata` key for each tokenId using `setTokenIdData(..)` function.
+Data keys such as [`LSP8TokenIdFormat`](#lsp8tokenidformat) or [`LSP4Metadata`](./LSP-4-DigitalAsset-Metadata.md#lsp4metadata) can be stored:
+
+- either for the whole contract using `setData(..)`
+- per NFT / tokenId using [`setDataForTokenId(..)`](#setdatafortokenid).
+
+For instance to set metdata for each specific tokenId, set the `LSP4Metadata` data key for each tokenId using `setDataForTokenId(..)` function.
 
 #### ERC725Y Data Keys
 
-#### LSP8TokenIdSchema
+#### LSP8TokenIdFormat
 
 ```json
 {
-  "name": "LSP8TokenIdSchema",
-  "key": "0x341bc44e55234544c70af9d37b2cb8cc7ba74685b58526221de2cc977f469924",
+  "name": "LSP8TokenIdFormat",
+  "key": "0xf675e9361af1c1664c1868cfa3eb97672d6b1a513aa5b81dec34c9ee330e818d",
   "keyType": "Singleton",
   "valueType": "uint256",
   "valueContent": "Number"
 }
 ```
 
-The **LSP8-IdentifiableDigitalAsset** standard, defines tokenIds as `bytes32`, this data key describes the schema of the `tokenId` and how to parse it and can take one of the following values described in the table below.
+The **LSP8-IdentifiableDigitalAsset** standard, defines each `tokenId` as `bytes32`, this data key describes the schema of the `tokenId` and how to parse it and can take one of the following values described in the table below.
 
-| Value |  Schema   | Description                                                                                                             |
-| :---: | :-------: | :---------------------------------------------------------------------------------------------------------------------- |
-|  `0`  | `uint256` | each NFT is parsed as a **unique number**.                                                                              |
-|  `1`  | `string`  | each NFT is parsed as a **unique name** (as a short **utf8 encoded string**, no more than 32 characters long)           |
-|  `2`  | `address` | each NFT is parsed as its **own smart contract** that can hold its own logic and metadata (_e.g [ERC725Y] compatible_). |
-|  `3`  | `bytes32` | each NFT is parsed as a 32 bytes long **unique identifier**.                                                            |
-|  `4`  | `bytes32` | each NFT is parsed as a 32 bytes **hash digest**.                                                                       |
+| Value | Type / Format | Representation | Description                                                                                                                    |
+| :---: | :-----------: | :------------: | :----------------------------------------------------------------------------------------------------------------------------- |
+|  `0`  |   `uint256`   |     Number     | each NFT is parsed as a **unique number**.                                                                                     |
+|  `1`  |   `string`    |     String     | each NFT is parsed as a **unique name** (as a short **utf8 encoded string**, no more than 32 characters long)                  |
+|  `2`  |   `address`   | Smart Contract | each NFT is parsed as its **own smart contract** that can hold its own logic and metadata (_e.g [ERC725Y] compatible_).        |
+|  `3`  |   `bytes32`   |  Unique Bytes  | each NFT is parsed as a 32 bytes long **unique identifier**.                                                                   |
+|  `4`  |   `bytes32`   |      Hash      | each NFT is parsed as a 32 bytes **hash digest**. This can be used as the hash of a very long string representing the tokenId. |
 
 Since tokenIds can have their own custom metadata, it is also possible to have **Mixed types**, where there is a default schema for the collection, and each tokenId can have its own schema, meaning the values can be extended to:
 
 | Value |              Schema               | Description                                                                                                                                                                           |
 | :---: | :-------------------------------: | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `100` | `Mixed` with default as `uint256` | Default NFT is parsed as a **unique number** with querying the `LSP8TokenIdSchema` for each `tokenId`.                                                                                |
-| `101` | `Mixed` with default as `string`  | Default NFT is parsed as a **unique name** (as a short **utf8 encoded string**, no more than 32 characters long) with querying the `LSP8TokenIdSchema` for each `tokenId`.            |
-| `102` | `Mixed` with default as `address` | Default NFT is parsed as its **own smart contract** that can hold its own logic and metadata (_e.g [ERC725Y] compatible_) with querying the `LSP8TokenIdSchema` for each `tokenId`. . |
-| `103` | `Mixed` with default as `bytes32` | Default NFT is parsed as a 32 bytes long **unique identifier** with querying the `LSP8TokenIdSchema` for each `tokenId`.                                                              |
-| `104` | `Mixed` with default as `bytes32` | Default NFT is parsed as a 32 bytes **hash digest**with querying the `LSP8TokenIdSchema` for each `tokenId`.                                                                          |
+| `100` | `Mixed` with default as `uint256` | Default NFT is parsed as a **unique number** with querying the `LSP8TokenIdFormat` for each `tokenId`.                                                                                |
+| `101` | `Mixed` with default as `string`  | Default NFT is parsed as a **unique name** (as a short **utf8 encoded string**, no more than 32 characters long) with querying the `LSP8TokenIdFormat` for each `tokenId`.            |
+| `102` | `Mixed` with default as `address` | Default NFT is parsed as its **own smart contract** that can hold its own logic and metadata (_e.g [ERC725Y] compatible_) with querying the `LSP8TokenIdFormat` for each `tokenId`. . |
+| `103` | `Mixed` with default as `bytes32` | Default NFT is parsed as a 32 bytes long **unique identifier** with querying the `LSP8TokenIdFormat` for each `tokenId`.                                                              |
+| `104` | `Mixed` with default as `bytes32` | Default NFT is parsed as a 32 bytes **hash digest**with querying the `LSP8TokenIdFormat` for each `tokenId`.                                                                          |
+
+To set a specific tokenId type for a specific tokenId, set the `LSP8TokenIdFormat` data key for this specific tokenId using the [`setDataForTokenId(..)`](#setdatafortokenid) function.
+
+A `tokenId` is always represented as a `bytes32` value. Depending on the tokenId types defined above, the padding of the `bytes32` value is different.
+
+| LSP8TokenIdFormat                   | Left padded | Right padded | Padding rule to convert to `bytes32`                                                                                                                                                 |
+| :---------------------------------- | :---------: | :----------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `0` - `uint256` - Number            |     ✔️      |              | For tokenId number `5` -> `0x0000000000000000000000000000000000000000000000000000000000000005`                                                                                       |
+| `1` - `string` - String             |             |      ✔️      | For tokenId `my-nft` -> `0x6d792d6e66740000000000000000000000000000000000000000000000000000` (each character encoded as utf8 hex)                                                    |
+| `2` - `bytes32` - Unique Identifier |             |      ✔️      | For any bytes less than 32 bytes like tokenId `0xaabbccddee` -> `0xaabbccddee000000000000000000000000000000000000000000000000000000`                                                 |
+| `3` - `bytes32` - Hash Digest       |             |              | No padding applies, since the hash digest is always 32 bytes. For instance for tokenId `keccak256('My NFT')` -> `0x262a8c3566f2abe9247c206cf8d622e0a44ac99a7d54c23e212de32181cf185f` |
+| `4` - `address` - Smart Contract    |     ✔️      |              | For tokenId metadata contract at address `0x8ae2dD3E422530b5c2FC1061e6b5f43f5677033f` -> `0x0000000000000000000000008ae2dD3E422530b5c2FC1061e6b5f43f5677033f`                        |
+
+This value must be padded according to the padding rules specified in the table above to generate the `bytes32 tokenId` that will be passed as parameter to the functions below:
+
+- when being transferred via [`transfer(address,address,bytes32,bool,bytes)`](#transfer)) or [`transferBatch(address[],address[],bytes32[],bool,bytes[])`](#transferbatch).
+- when querying the owner for the tokenId via [`tokenOwnerOf(bytes32)`](#tokenownerof).
+- when performing operators related operations via [`authorizeOperator(address,bytes32,bytes)`](#authorizeoperator), [`revokeOperator(address,bytes32,bool,bytes)`](#revokeoperator), [`isOperatorFor(address,bytes32)`](#isoperatorfor), [`getOperatorsOf(bytes32)`](#getoperatorsof).
 
 _Requirements:_
 
@@ -488,20 +511,20 @@ As `{LSP8TokenMetadataBaseURI}{tokenId}`.
 
 ⚠️ TokenIds MUST be in lowercase, even for the tokenId type `address` (= address not checksumed).
 
-- LSP8TokenIdSchema `0` (= `uint256`)<br>
+- LSP8TokenIdFormat `0` (= `uint256`)<br>
   e.g. `http://mybase.uri/1234`
-- LSP8TokenIdSchema `1` (= `string`)<br>
+- LSP8TokenIdFormat `1` (= `string`)<br>
   e.g. `http://mybase.uri/name-of-the-nft`
-- LSP8TokenIdSchema `2` (= `address`)<br>
+- LSP8TokenIdFormat `2` (= `address`)<br>
   e.g. `http://mybase.uri/0x43fb7ab43a3a32f1e2d5326b651bbae713b02429`
-- LSP8TokenIdSchema `3` or `4` (= `bytes32`)<br>
+- LSP8TokenIdFormat `3` or `4` (= `bytes32`)<br>
   e.g. `http://mybase.uri/e5fe3851d597a3aa8bbdf8d8289eb9789ca2c34da7a7c3d0a7c442a87b81d5c2`
 
 Some Base URIs could be alterable, for example in the case of NFTs that need their metadata to change overtime.
 
 ### ERC725Y Data Keys of external contract for tokenID schema 2 (`address`)
 
-When the LSP8 contract uses the [tokenId schema `4`](#lsp8tokenidschema) (= `address`), each tokenId minted is an ERC725Y smart contract that can have its own metadata.
+When the LSP8 contract uses the [tokenId schema `4`](#lsp8tokenidformat) (= `address`), each tokenId minted is an ERC725Y smart contract that can have its own metadata.
 We refer to this contract as the **tokenId metadata contract**.
 
 In this case, each tokenId present in the LSP8 contract references an other ERC725Y contract.
@@ -569,8 +592,8 @@ ERC725Y JSON Schema `LSP8IdentifiableDigitalAsset`:
 ```json
 [
   {
-    "name": "LSP8TokenIdSchema",
-    "key": "0x341bc44e55234544c70af9d37b2cb8cc7ba74685b58526221de2cc977f469924",
+    "name": "LSP8TokenIdFormat",
+    "key": "0xf675e9361af1c1664c1868cfa3eb97672d6b1a513aa5b81dec34c9ee330e818d",
     "keyType": "Singleton",
     "valueType": "uint256",
     "valueContent": "Number"
@@ -579,8 +602,8 @@ ERC725Y JSON Schema `LSP8IdentifiableDigitalAsset`:
     "name": "LSP8TokenMetadataBaseURI",
     "key": "0x1a7628600c3bac7101f53697f48df381ddc36b9015e7d7c9c5633d1252aa2843",
     "keyType": "Singleton",
-    "valueType": "(bytes4,string)",
-    "valueContent": "(Bytes4,URI)"
+    "valueType": "bytes",
+    "valueContent": "VerifiableURI"
   },
   {
     "name": "LSP8ReferenceContract",
@@ -634,13 +657,13 @@ interface ILSP8 is /* IERC165 */ {
     event TokenIdDataChanged(bytes32 indexed tokenId, bytes32 indexed dataKey, bytes dataValue);
 
 
-    function getTokenIdData(bytes32 tokenId, bytes32 dataKey) external view returns (bytes memory dataValue);
+    function getDataForTokenId(bytes32 tokenId, bytes32 dataKey) external view returns (bytes memory dataValue);
 
-    function setTokenIdData(bytes32 tokenId, bytes32 dataKey, bytes memory dataValue) external; // onlyOwner
+    function setDataForTokenId(bytes32 tokenId, bytes32 dataKey, bytes memory dataValue) external; // onlyOwner
 
-    function getTokenIdDataBatch(bytes32[] memory tokenIds, bytes32[] memory dataKeys) external view returns (bytes[] memory dataValues);
+    function getDataBatchForTokenIds(bytes32[] memory tokenIds, bytes32[] memory dataKeys) external view returns (bytes[] memory dataValues);
 
-    function setTokenIdDataBatch(bytes32[] memory tokenIds, bytes32[] memory dataKeys, bytes[] memory dataValues) external; // onlyOwner
+    function setDataBatchForTokenIds(bytes32[] memory tokenIds, bytes32[] memory dataKeys, bytes[] memory dataValues) external; // onlyOwner
 
 
     function totalSupply() external view returns (uint256);
