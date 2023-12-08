@@ -602,8 +602,8 @@ ERC725Y JSON Schema `LSP8IdentifiableDigitalAsset`:
     "name": "LSP8TokenMetadataBaseURI",
     "key": "0x1a7628600c3bac7101f53697f48df381ddc36b9015e7d7c9c5633d1252aa2843",
     "keyType": "Singleton",
-    "valueType": "(bytes4,string)",
-    "valueContent": "(Bytes4,URI)"
+    "valueType": "bytes",
+    "valueContent": "VerifiableURI"
   },
   {
     "name": "LSP8ReferenceContract",
