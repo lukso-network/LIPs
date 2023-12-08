@@ -429,8 +429,6 @@ MUST be emitted when `tokenOwner` disables `operator` for `tokenId`.
 
 The **LSP8-IdentifiableDigitalAsset** expect the usage of [LSP4-DigitalAsset-Metadata](./LSP-4-DigitalAsset-Metadata.md) to store the metadata of the asset, as well as defining standard data keys to store LSP8 specific metadata.
 
-Describe in LSP8 standard that the data keys LSP8TokenIdFormat and LSP4Metadata can be set per tokenIds using setDataForTokenId(...)
-
 Data keys such as [`LSP8TokenIdFormat`](#lsp8tokenidformat) or [`LSP4Metadata`](./LSP-4-DigitalAsset-Metadata.md#lsp4metadata) can be stored:
 
 - either for the whole contract using `setData(..)`
@@ -440,7 +438,7 @@ For instance to set metdata for each specific tokenId, set the `LSP4Metadata` da
 
 #### ERC725Y Data Keys
 
-#### LSP8TokenIdSchema
+#### LSP8TokenIdFormat
 
 ```json
 {
@@ -466,17 +464,17 @@ Since tokenIds can have their own custom metadata, it is also possible to have *
 
 | Value |              Schema               | Description                                                                                                                                                                           |
 | :---: | :-------------------------------: | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `100` | `Mixed` with default as `uint256` | Default NFT is parsed as a **unique number** with querying the `LSP8TokenIdSchema` for each `tokenId`.                                                                                |
-| `101` | `Mixed` with default as `string`  | Default NFT is parsed as a **unique name** (as a short **utf8 encoded string**, no more than 32 characters long) with querying the `LSP8TokenIdSchema` for each `tokenId`.            |
-| `102` | `Mixed` with default as `address` | Default NFT is parsed as its **own smart contract** that can hold its own logic and metadata (_e.g [ERC725Y] compatible_) with querying the `LSP8TokenIdSchema` for each `tokenId`. . |
-| `103` | `Mixed` with default as `bytes32` | Default NFT is parsed as a 32 bytes long **unique identifier** with querying the `LSP8TokenIdSchema` for each `tokenId`.                                                              |
-| `104` | `Mixed` with default as `bytes32` | Default NFT is parsed as a 32 bytes **hash digest**with querying the `LSP8TokenIdSchema` for each `tokenId`.                                                                          |
+| `100` | `Mixed` with default as `uint256` | Default NFT is parsed as a **unique number** with querying the `LSP8TokenIdFormat` for each `tokenId`.                                                                                |
+| `101` | `Mixed` with default as `string`  | Default NFT is parsed as a **unique name** (as a short **utf8 encoded string**, no more than 32 characters long) with querying the `LSP8TokenIdFormat` for each `tokenId`.            |
+| `102` | `Mixed` with default as `address` | Default NFT is parsed as its **own smart contract** that can hold its own logic and metadata (_e.g [ERC725Y] compatible_) with querying the `LSP8TokenIdFormat` for each `tokenId`. . |
+| `103` | `Mixed` with default as `bytes32` | Default NFT is parsed as a 32 bytes long **unique identifier** with querying the `LSP8TokenIdFormat` for each `tokenId`.                                                              |
+| `104` | `Mixed` with default as `bytes32` | Default NFT is parsed as a 32 bytes **hash digest**with querying the `LSP8TokenIdFormat` for each `tokenId`.                                                                          |
 
-To set a specific tokenId type for a specific tokenId, set the `LSP8TokenIdSchema` data key for this specific tokenId using the [`setDataForTokenId(..)`](#setdatafortokenid) function.
+To set a specific tokenId type for a specific tokenId, set the `LSP8TokenIdFormat` data key for this specific tokenId using the [`setDataForTokenId(..)`](#setdatafortokenid) function.
 
 A `tokenId` is always represented as a `bytes32` value. Depending on the tokenId types defined above, the padding of the `bytes32` value is different.
 
-| LSP8TokenIdType                     | Left padded | Right padded | Padding rule to convert to `bytes32`                                                                                                                                                 |
+| LSP8TokenIdFormat                   | Left padded | Right padded | Padding rule to convert to `bytes32`                                                                                                                                                 |
 | :---------------------------------- | :---------: | :----------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `0` - `uint256` - Number            |     ✔️      |              | For tokenId number `5` -> `0x0000000000000000000000000000000000000000000000000000000000000005`                                                                                       |
 | `1` - `string` - String             |             |      ✔️      | For tokenId `my-nft` -> `0x6d792d6e66740000000000000000000000000000000000000000000000000000` (each character encoded as utf8 hex)                                                    |
@@ -513,20 +511,20 @@ As `{LSP8TokenMetadataBaseURI}{tokenId}`.
 
 ⚠️ TokenIds MUST be in lowercase, even for the tokenId type `address` (= address not checksumed).
 
-- LSP8TokenIdSchema `0` (= `uint256`)<br>
+- LSP8TokenIdFormat `0` (= `uint256`)<br>
   e.g. `http://mybase.uri/1234`
-- LSP8TokenIdSchema `1` (= `string`)<br>
+- LSP8TokenIdFormat `1` (= `string`)<br>
   e.g. `http://mybase.uri/name-of-the-nft`
-- LSP8TokenIdSchema `2` (= `address`)<br>
+- LSP8TokenIdFormat `2` (= `address`)<br>
   e.g. `http://mybase.uri/0x43fb7ab43a3a32f1e2d5326b651bbae713b02429`
-- LSP8TokenIdSchema `3` or `4` (= `bytes32`)<br>
+- LSP8TokenIdFormat `3` or `4` (= `bytes32`)<br>
   e.g. `http://mybase.uri/e5fe3851d597a3aa8bbdf8d8289eb9789ca2c34da7a7c3d0a7c442a87b81d5c2`
 
 Some Base URIs could be alterable, for example in the case of NFTs that need their metadata to change overtime.
 
 ### ERC725Y Data Keys of external contract for tokenID schema 2 (`address`)
 
-When the LSP8 contract uses the [tokenId schema `4`](#lsp8tokenidschema) (= `address`), each tokenId minted is an ERC725Y smart contract that can have its own metadata.
+When the LSP8 contract uses the [tokenId schema `4`](#lsp8tokenidformat) (= `address`), each tokenId minted is an ERC725Y smart contract that can have its own metadata.
 We refer to this contract as the **tokenId metadata contract**.
 
 In this case, each tokenId present in the LSP8 contract references an other ERC725Y contract.
