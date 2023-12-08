@@ -450,7 +450,7 @@ For instance to set metdata for each specific tokenId, set the `LSP4Metadata` da
 }
 ```
 
-The **LSP8-IdentifiableDigitalAsset** standard, defines tokenIds as `bytes32`, this data key describes the schema of the `tokenId` and how to parse it and can take one of the following values described in the table below.
+The **LSP8-IdentifiableDigitalAsset** standard, defines each `tokenId` as `bytes32`, this data key describes the schema of the `tokenId` and how to parse it and can take one of the following values described in the table below.
 
 | Value | Type / Format | Representation | Description                                                                                                                    |
 | :---: | :-----------: | :------------: | :----------------------------------------------------------------------------------------------------------------------------- |
