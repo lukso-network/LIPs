@@ -80,7 +80,7 @@ To make ERC725Y data keys readable, we describe a data key-value pair as a JSON 
 }
 ```
 
-The table below describes each entries with their available options.
+The table below describes each entry with its available options.
 
 | Title                           | Description                                                                                                                                                                                                                                                                                                                                                                                       |
 | :------------------------------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -88,11 +88,11 @@ The table below describes each entries with their available options.
 | [`key`](#key)                   | the **unique identifier** of the data key                                                                                                                                                                                                                                                                                                                                                         |
 | [`keyType`](#keytype)           | _How_ the data key must be treated <hr> [`Singleton`](#singleton) <br> [`Array`](#array) <br> [`Mapping`](#mapping) <br> [`MappingWithGrouping`](#mappingwithgrouping)                                                                                                                                                                                                                            |
 | [`valueType`](#valuetype)       | _How_ a value MUST be decoded <hr> `bool` <br> `string` <br> `address` <br> `uintN` <br> `intN` <br> `bytesN` <br> `bytes` <br> `uintN[]` <br> `intN[]` <br> `string[]` <br> `address[]` <br> `bytes[]` <br> [`bytes[CompactBytesArray]`](#bytescompactbytesarray) <br> [`bytesN[CompactBytesArray]`](#bytesncompactbytesarray) <br> Tuple: [`(valueType1,valueType2,...)`](#tuples-of-valuetype) |
-| [`valueContent`](#valuecontent) | _How_ a value SHOULD be interpreted <hr> `Boolean` <br> `String` <br> `Address` <br> `Number` <br> `BytesN` <br> `Bytes` <br> `Keccak256` <br> [`BitArray`](#bitarray) <br> `URL` <br> [`VerifiedURL`](#verifiedurl) <br> [`AssetURL`](#AssetURL) <br> [`JSONURL`](#JSONURL) <br> `Markdown` <br> `Literal` (_e.g.:_ `0x1345ABCD...`)                                                             |
+| [`valueContent`](#valuecontent) | _How_ a value SHOULD be interpreted <hr> `Boolean` <br> `String` <br> `Address` <br> `Number` <br> `BytesN` <br> `Bytes` <br> `Keccak256` <br> [`BitArray`](#bitarray) <br> `URL` <br> [`VerifiableURI`](#verifiableurl) <br> [`AssetURL`](#AssetURL) <br> [`JSONURL`](#JSONURL) <br> `Markdown` <br> `Literal` (_e.g.:_ `0x1345ABCD...`)                                                             |
 
 ### Data Key Name
 
-The `name` is the human-readable format of an ERC725Y data key. It's the basis which is used to generate the `32 bytes` key hash. Names can be arbitrarily chosen, but SHOULD highlight the meaning of content behind the data value.
+The `name` is the human-readable format of an ERC725Y data key. It's the basis which is used to generate the `32 bytes` key hash. Names can be arbitrarily chosen but SHOULD highlight the meaning of the content behind the data value.
 
 In scenarios where an ERC725Y data key is part of an LSP Standard, the data key `name` SHOULD be comprised of the following: `LSP{N}{KeyName}`, where
 
@@ -104,7 +104,7 @@ _e.g.:_ `MyCustomKeyName` or `LSP4TokenName`
 
 ### Data Key Hash
 
-The `key` is a `bytes32` value that acts as the **unique identifier** for the data key, and is what is used to retrive the data value from a ERC725Y smart contract via `ERC725Y.getData(bytes32 dataKey)` or `ERC725Y.getData(bytes32[] dataKeys)`.
+The `key` is a `bytes32` value that acts as the **unique identifier** for the data key, and is what is used to retrieve the data value from an ERC725Y smart contract via `ERC725Y.getData(bytes32 dataKey)` or `ERC725Y.getData(bytes32[] dataKeys)`.
 
 Usually `keccak256` hashing algorithm is used to generate the `bytes32` data key. However, _how_ the data key is constructed varies, depending on the `keyType`.
 
@@ -116,14 +116,14 @@ The `keyType` determines the format of the data key(s).
 | --------------------------------------------- | --------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | [`Singleton`](#singleton)                     | A simple data key                                                                             | `bytes32(keccak256("MyKeyName"))`<br> --- <br> `MyKeyName` --> `0x35e6950bc8d21a1699e58328a3c4066df5803bb0b570d0150cb3819288e764b2`                                                                                                                                                      |
 | [`Array`](#array)                             | An array spanning multiple ERC725Y data keys                                                  | `bytes32(keccak256("MyKeyName[]"))` <br> --- <br> `MyKeyName[]` --> `0x24f6297f3abd5a8b82f1a48cee167cdecef40aa98fbf14534ea3539f66ca834c`                                                                                                                                                 |
-| [`Mapping`](#mapping)                         | A data key that consist of 2 sections, where the last section can also be a dynamic value     | `bytes10(keccak256("MyKeyName"))` +<br>`bytes2(0)` +<br>`bytes20(keccak256("MyMapName") or <mixed type>)` <br> --- <br> `MyKeyName:MyMapName` --> `0x35e6950bc8d21a1699e5000075060e3cd7d40450e94d415fb5992ced9ad8f058`                                                                   |
-| [`MappingWithGrouping`](#mappingwithgrouping) | A data key that consist of 3 sections, where the last two sections can also be dynamic values | `bytes6(keccak256("MyKeyName"))` +<br>`bytes4(keccak256("MyMapName") or <mixed type>)` +<br>`bytes2(0)` +<br>`bytes20(keccak256("MySubMapName") or <mixed type>)` <br> --- <br> `MyKeyName:MyMapName:<address>` --> `0x35e6950bc8d275060e3c0000cafecafecafecafecafecafecafecafecafecafe` |
+| [`Mapping`](#mapping)                         | A data key that consists of 2 sections, where the last section can also be a dynamic value     | `bytes10(keccak256("MyKeyName"))` +<br>`bytes2(0)` +<br>`bytes20(keccak256("MyMapName") or <mixed type>)` <br> --- <br> `MyKeyName:MyMapName` --> `0x35e6950bc8d21a1699e5000075060e3cd7d40450e94d415fb5992ced9ad8f058`                                                                   |
+| [`MappingWithGrouping`](#mappingwithgrouping) | A data key that consists of 3 sections, where the last two sections can also be dynamic values | `bytes6(keccak256("MyKeyName"))` +<br>`bytes4(keccak256("MyMapName") or <mixed type>)` +<br>`bytes2(0)` +<br>`bytes20(keccak256("MySubMapName") or <mixed type>)` <br> --- <br> `MyKeyName:MyMapName:<address>` --> `0x35e6950bc8d275060e3c0000cafecafecafecafecafecafecafecafecafecafe` |
 
 ### Value Type
 
-Describes the underlying data type(s) of a value stored under a specific ERC725Y data key. It refers to the type for the smart contract language like [Solidity](https://docs.soliditylang.org).
+Describes the underlying data type(s) of a value stored under a specific ERC725Y data key. It refers to the type of smart contract language like [Solidity](https://docs.soliditylang.org).
 
-The `valueType` is relevant for interfaces to know how a value MUST be encoded/decoded. This include:
+The `valueType` is relevant for interfaces to know how a value MUST be encoded/decoded. This includes:
 
 - how to decode a value fetched via `ERC725Y.getData(...)`
 - how to encode a value that needs to be set via `ERC725Y.setData(...)`.
@@ -149,9 +149,9 @@ The `valueType` can also be useful for typecasting. It enables contracts or inte
 
 ### Value Content
 
-The `valueContent` of a LSP2 Schema describes how to interpret the content of the returned _decoded_ value.
+The `valueContent` of an LSP2 Schema describes how to interpret the content of the returned _decoded_ value.
 
-Knowing how to interpret the data retrieved under a data key is is the first step in understanding how to handle it. Interfaces can use the `valueContent` to adapt their behaviour or know how to display data fetched from an ERC725Y smart contract.
+Knowing how to interpret the data retrieved under a data key is the first step in understanding how to handle it. Interfaces can use the `valueContent` to adapt their behaviour or know how to display data fetched from an ERC725Y smart contract.
 
 As an example, a string could be interpreted in multiple ways, such as:
 
@@ -184,22 +184,22 @@ An interface could decode both values retrieved under these data keys as `string
 
 Valid `valueContent` are:
 
-| `valueContent`                | Description                                                                                                                        |
-| ----------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
-| `Boolean`                     | a boolean value (`true` or `false`)                                                                                                |
-| `String`                      | an UTF8 encoded string                                                                                                             |
-| `Address`                     | an address                                                                                                                         |
-| `Number`                      | a Number (positive or negative, depending on the `keyType`)                                                                        |
-| `BytesN`                      | a bytes value of **fixed-size** `N`, from `bytes1` up to `bytes32`                                                                 |
-| `Bytes`                       | a bytes value of **dynamic-size**                                                                                                  |
-| `Keccak256`                   | a 32 bytes long hash digest, obtained from the keccak256 hashing algorithm                                                         |
-| `BitArray`                    | an array of single `1` or `0` bits                                                                                                 |
-| `URL`                         | an URL encoded as an UTF8 string                                                                                                   |
-| [`VerifiedURL`](#verifiedurl) | The content contains respectively the verification method, the length of the verification data, the verification data, and the url |
-| [`AssetURL`](#asseturl)       | The content contains the hash function, hash and link to the asset file                                                            |
-| [`JSONURL`](#jsonurl)         | hash function, hash and link to the JSON file                                                                                      |
-| `Markdown`                    | a structured Markdown mostly encoded as UTF8 string                                                                                |
-| `0x1345ABCD...`               | a **literal** value, when the returned value is expected to equal some specific bytes                                              |
+| `valueContent`                    | Description                                                                                                                        |
+| --------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| `Boolean`                         | a boolean value (`true` or `false`)                                                                                                |
+| `String`                          | an UTF8 encoded string                                                                                                             |
+| `Address`                         | an address                                                                                                                         |
+| `Number`                          | a Number (positive or negative, depending on the `keyType`)                                                                        |
+| `BytesN`                          | a bytes value of **fixed-size** `N`, from `bytes1` up to `bytes32`                                                                 |
+| `Bytes`                           | a bytes value of **dynamic-size**                                                                                                  |
+| `Keccak256`                       | a 32 bytes long hash digest, obtained from the keccak256 hashing algorithm                                                         |
+| `BitArray`                        | an array of single `1` or `0` bits                                                                                                 |
+| `URL`                             | an URL encoded as an UTF8 string                                                                                                   |
+| [`VerifiableURI`](#verifiableuri) | The content contains respectively the verification method, the length of the verification data, the verification data, and the uri |
+| [`AssetURL`](#asseturl)           | The content contains the hash function, hash and link to the asset file                                                            |
+| [`JSONURL`](#jsonurl)             | hash function, hash and link to the JSON file                                                                                      |
+| `Markdown`                        | a structured Markdown mostly encoded as UTF8 string                                                                                |
+| `0x1345ABCD...`                   | a **literal** value, when the returned value is expected to equal some specific bytes                                              |
 
 The `valueContent` field can also define a tuple of value contents (for instance, when the `valueType` is a tuple of types, as described above). In this case, each value content MUST be defined between parentheses. For instance: `(Bytes4,Number)`.
 
@@ -329,7 +329,7 @@ A **Mapping** data key is constructed using:
 #### Left padded types
 
 - `bool` will be left padded and left-cut
-- `uint<M>` will be left padded and **left-cut if `M` is larger than `160` bits** (= the 20 right most bytes are kept).
+- `uint<M>` will be left padded and **left-cut if `M` is larger than `160` bits** (= the 20 right-most bytes are kept).
 
 #### Right padded types
 
@@ -467,7 +467,7 @@ The representation of these dynamic elements in a compacted bytes array would be
 
 Like a `bytes[CompactBytesArray]` a `bytesN[CompactBytesArray]` represents an array of `bytesN` values _encoded in a compact way_. The difference is that all the elements contained in the array have the same length `N`.
 
-In a compact bytes array of `bytesN`, each element is prefixed with 1 byte that specify the length `N`.
+In a compact bytes array of `bytesN`, each element is prefixed with 1 byte that specifies the length `N`.
 
 For instance, in a `bytes8[CompactBytesArray]` an entry like `0x1122334455667788` is encoded as `0x00081122334455667788`, where:
 
@@ -503,18 +503,18 @@ Where each byte `0x0008` in the final encoded value represents the length `N` of
 
 The `valueType` can also be a **tuple of types**. In this case, the value stored under the ERC725Y data key is a mixture of multiple values concatenated together (the values are just _"glued together"_).
 
-Tuples of valueTypes offer a convenient way to store more than one information under a single ERC725Y data key. In the example below, the value below can be represented as a tuple to store the address of a smart contract (`0xcafecafecafecafecafecafecafecafecafecafe`) + its interfaceID (`0xbeefbeef`), all under one single data key.
+Tuples of valueTypes offer a convenient way to store more than one piece of information under a single ERC725Y data key. In the example below, the value below can be represented as a tuple to store the address of a smart contract (`0xcafecafecafecafecafecafecafecafecafecafe`) + its interfaceID (`0xbeefbeef`), all under one single data key.
 
 ```
 (address,bytes4)
 0xcafecafecafecafecafecafecafecafecafecafebeefbeef
 ```
 
-The main purpose why tuples of valueTypes exist in LSP2 is because it offers a way to store more than one information under a data key. For instance (address,bytes4) is a useful tuple to
+The main purpose why tuples of valueTypes exist in LSP2 is because it offers a way to store more than one piece of information under a data key. For instance (address,bytes4) is a useful tuple to ????
 
 LSP2 tuples are different than Solidity tuples. **In Solidity, values defined in the tuple are padded. In the case of LSP2 they are not.**
 
-In the case of tuple of `valueType`s, the types MUST be defined between parentheses, comma separated without parentheses.
+In the case of a tuple of `valueType`s, the types MUST be defined between parentheses, comma separated without parentheses.
 
 ```
 (valueType1,valueType2,valueType3,...)
@@ -660,8 +660,8 @@ The idea is to always read the value of a **BitArray** data key as binary digits
 
 ### VerifiableURI
 
-**VerifiedURI** allow for linked URIs to contain additional verification data to ensure the authenticity and integrity of content linked.
-A verifiable URI consist of bytes sliced in four parts:
+**VerifiableURI** allows for linked URIs to contain additional verification data to ensure the authenticity and integrity of content linked.
+A verifiable URI consists of bytes sliced into four parts:
 
 ```
 
@@ -675,19 +675,19 @@ identifier       method         data length   data
 
 - **VerifiableURI identifier**: MUST be bytes2(0): `0000`
 
-- **Verification method**: This field specifies the method of verification. The method determined how the verification data is interpreted and is the first 4 bytes of the hash of the method name: `bytes4(keccak256('methodName'))`. **If the verification method is `00000000` then the URI is NOT VERIFIABLE. An example of a non verifiable URI could look as follows:
+- **Verification method**: This field specifies the method of verification. The method determines how the verification data is interpreted and is the first 4 bytes of the hash of the method name: `bytes4(keccak256('methodName'))`. **If the verification method is `00000000` then the URI is NOT VERIFIABLE. An example of a non-verifiable URI could look as follows:
 `0x0000000000000000fffffffffffff...` (where `fffff...` is the encoded link to the file/content)
 
 
 - **Verification data**: The data varies based on the verification method. The following is a list of verification methods. Additional methods can be added:
   - `"keccak256(utf8)"` (`0x6f357c6a`): Means the data SHOULD be the bytes32 hash of the content of the linked text/JSON file of the "Encoded URI"
   - `"keccak256(bytes)"` (`0x8019f9b1`): Means the data SHOULD be the bytes32 hash of the content of the linked file of the "Encoded URI"
-  - `"ecdsa" (`0xac75a10e`)`: Means the data consist of two parts: The first bytes20 are the ec-recover address, and the rest of the data bytes are the verification "source" containing a encoded string of a URI to a signature. The linked file of the "Encoded URI" then nneds to be verified using the signature from the "source" URI and the linkedin file, which MUST recover to the address from the "verification data".
+  - `"ecdsa" (`0xac75a10e`)`: Means the data consists of two parts: The first bytes20 are the ec-recover address, and the rest of the data bytes are the verification "source" containing an encoded string of a URI to a signature. The linked file of the "Encoded URI" then needs to be verified using the signature from the "source" URI and the linked file, which MUST recover to the address from the "verification data".
   - Other verification methods can be added over time...
 
 - **Encoded URI**: The actual string encoded URI to file or content to be verified.
 
-The following shows an example of how to encode a VerifiableURL that will be verified based on the `keccak256('utf8')` verification method:
+The following shows an example of how to encode a VerifiableURI that will be verified based on the `keccak256('utf8')` verification method:
 
 ```js
 // My custom JSON file
@@ -718,11 +718,11 @@ const url = web3.utils.utf8ToHex('ifps://QmYr1VJLwerg6pEoscdhVGugo39pa6rycEZLjtR
 
 
 // final result (to be stored on chain)
-const VerifiedURL =  verfiableUriIdentifier + verificationMethod  +  verificationDatalength.substring(2) +  verificationData.substring(2) + url.substring(2)
+const VerfiableURI =  verfiableUriIdentifier + verificationMethod  +  verificationDatalength.substring(2) +  verificationData.substring(2) + url.substring(2)
                      ^                        ^                      ^                                      ^                               ^
                      0000                     0x6f357c6a             0020                                   820464ddfac1be...               696670733a2f2...
 
-// structure of the VerifiedURL
+// structure of the VerifiableURI
 0x0000 6f357c6a + 0020 + 820464ddfac1bec070cc14a8daf04129871d458f2ca94368aae8391311af6361 + 696670733a2f2f516d597231564a4c776572673670456f73636468564775676f3339706136727963455a4c6a7452504466573834554178
   ^    ^                ^                         ^                                         ^
   0000 keccak256(utf8)  verificationDatalength    verificationData                          encoded URL
