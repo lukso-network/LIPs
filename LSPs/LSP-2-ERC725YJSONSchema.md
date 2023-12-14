@@ -88,7 +88,7 @@ The table below describes each entry with its available options.
 | [`key`](#key)                   | the **unique identifier** of the data key                                                                                                                                                                                                                                                                                                                                                         |
 | [`keyType`](#keytype)           | _How_ the data key must be treated <hr> [`Singleton`](#singleton) <br> [`Array`](#array) <br> [`Mapping`](#mapping) <br> [`MappingWithGrouping`](#mappingwithgrouping)                                                                                                                                                                                                                            |
 | [`valueType`](#valuetype)       | _How_ a value MUST be decoded <hr> `bool` <br> `string` <br> `address` <br> `uintN` <br> `intN` <br> `bytesN` <br> `bytes` <br> `uintN[]` <br> `intN[]` <br> `string[]` <br> `address[]` <br> `bytes[]` <br> [`bytes[CompactBytesArray]`](#bytescompactbytesarray) <br> [`bytesN[CompactBytesArray]`](#bytesncompactbytesarray) <br> Tuple: [`(valueType1,valueType2,...)`](#tuples-of-valuetype) |
-| [`valueContent`](#valuecontent) | _How_ a value SHOULD be interpreted <hr> `Boolean` <br> `String` <br> `Address` <br> `Number` <br> `BytesN` <br> `Bytes` <br> `Keccak256` <br> [`BitArray`](#bitarray) <br> `URL` <br> [`VerifiableURI`](#verifiableuri) <br> [`AssetURL`](#AssetURL) <br> [`JSONURL`](#JSONURL) <br> `Markdown` <br> `Literal` (_e.g.:_ `0x1345ABCD...`)                                                             |
+| [`valueContent`](#valuecontent) | _How_ a value SHOULD be interpreted <hr> `Boolean` <br> `String` <br> `Address` <br> `Number` <br> `BytesN` <br> `Bytes` <br> `Keccak256` <br> [`BitArray`](#bitarray) <br> `URL` <br> [`VerifiableURI`](#verifiableuri) <br> [`AssetURL`](#AssetURL) (deprecated) <br> [`JSONURL`](#JSONURL) (deprecated) <br> `Markdown` <br> `Literal` (_e.g.:_ `0x1345ABCD...`)                               |
 
 ### Data Key Name
 
@@ -112,10 +112,10 @@ Usually `keccak256` hashing algorithm is used to generate the `bytes32` data key
 
 The `keyType` determines the format of the data key(s).
 
-| `keyType`                                     | Description                                                                                   | Example                                                                                                                                                                                                                                                                                  |
-| --------------------------------------------- | --------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [`Singleton`](#singleton)                     | A simple data key                                                                             | `bytes32(keccak256("MyKeyName"))`<br> --- <br> `MyKeyName` --> `0x35e6950bc8d21a1699e58328a3c4066df5803bb0b570d0150cb3819288e764b2`                                                                                                                                                      |
-| [`Array`](#array)                             | An array spanning multiple ERC725Y data keys                                                  | `bytes32(keccak256("MyKeyName[]"))` <br> --- <br> `MyKeyName[]` --> `0x24f6297f3abd5a8b82f1a48cee167cdecef40aa98fbf14534ea3539f66ca834c`                                                                                                                                                 |
+| `keyType`                                     | Description                                                                                    | Example                                                                                                                                                                                                                                                                                  |
+| --------------------------------------------- | ---------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [`Singleton`](#singleton)                     | A simple data key                                                                              | `bytes32(keccak256("MyKeyName"))`<br> --- <br> `MyKeyName` --> `0x35e6950bc8d21a1699e58328a3c4066df5803bb0b570d0150cb3819288e764b2`                                                                                                                                                      |
+| [`Array`](#array)                             | An array spanning multiple ERC725Y data keys                                                   | `bytes32(keccak256("MyKeyName[]"))` <br> --- <br> `MyKeyName[]` --> `0x24f6297f3abd5a8b82f1a48cee167cdecef40aa98fbf14534ea3539f66ca834c`                                                                                                                                                 |
 | [`Mapping`](#mapping)                         | A data key that consists of 2 sections, where the last section can also be a dynamic value     | `bytes10(keccak256("MyKeyName"))` +<br>`bytes2(0)` +<br>`bytes20(keccak256("MyMapName") or <mixed type>)` <br> --- <br> `MyKeyName:MyMapName` --> `0x35e6950bc8d21a1699e5000075060e3cd7d40450e94d415fb5992ced9ad8f058`                                                                   |
 | [`MappingWithGrouping`](#mappingwithgrouping) | A data key that consists of 3 sections, where the last two sections can also be dynamic values | `bytes6(keccak256("MyKeyName"))` +<br>`bytes4(keccak256("MyMapName") or <mixed type>)` +<br>`bytes2(0)` +<br>`bytes20(keccak256("MySubMapName") or <mixed type>)` <br> --- <br> `MyKeyName:MyMapName:<address>` --> `0x35e6950bc8d275060e3c0000cafecafecafecafecafecafecafecafecafecafe` |
 
@@ -669,17 +669,17 @@ A verifiable URI consists of bytes sliced into four parts:
 
 ^                ^              ^             ^               ^
 VerifiableURI    Verification   Verification  Verification    Encoded URI
-identifier       method         data length   data                     
+identifier       method         data length   data
 
 ```
 
 - **VerifiableURI identifier**: MUST be bytes2(0): `0000`
 
-- **Verification method**: This field specifies the method of verification. The method determines how the verification data is interpreted and is the first 4 bytes of the hash of the method name: `bytes4(keccak256('methodName'))`. **If the verification method is `00000000` then the URI is NOT VERIFIABLE. An example of a non-verifiable URI could look as follows:
-`0x0000000000000000fffffffffffff...` (where `fffff...` is the encoded link to the file/content)
-
+- **Verification method**: This field specifies the method of verification. The method determines how the verification data is interpreted and is the first 4 bytes of the hash of the method name: `bytes4(keccak256('methodName'))`. \*\*If the verification method is `00000000` then the URI is NOT VERIFIABLE. An example of a non-verifiable URI could look as follows:
+  `0x0000000000000000fffffffffffff...` (where `fffff...` is the encoded link to the file/content)
 
 - **Verification data**: The data varies based on the verification method. The following is a list of verification methods. Additional methods can be added:
+
   - `"keccak256(utf8)"` (`0x6f357c6a`): Means the data SHOULD be the bytes32 hash of the content of the linked text/JSON file of the "Encoded URI"
   - `"keccak256(bytes)"` (`0x8019f9b1`): Means the data SHOULD be the bytes32 hash of the content of the linked file of the "Encoded URI"
   - `"ecdsa" (`0xac75a10e`)`: Means the data consists of two parts: The first bytes20 are the ec-recover address, and the rest of the data bytes are the verification "source" containing an encoded string of a URI to a signature. The linked file of the "Encoded URI" then needs to be verified using the signature from the "source" URI and the linked file, which MUST recover to the address from the "verification data".
