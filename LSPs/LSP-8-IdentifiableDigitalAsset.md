@@ -585,7 +585,7 @@ The `force` parameter sent during `function transfer` SHOULD be used when notify
 
 <!--The implementations must be completed before any LIP is given status "Final", but it need not be completed before the LIP is accepted. While there is merit to the approach of reaching consensus on the specification and rationale before writing code, the principle of "rough consensus and running code" is still useful when it comes to resolving many discussions of API details.-->
 
-A implementation can be found in the [lukso-network/lsp-smart-contracts][lsp8.sol].
+An implementation can be found in the [lukso-network/lsp-smart-contracts][lsp8.sol].
 
 ERC725Y JSON Schema `LSP8IdentifiableDigitalAsset`:
 
@@ -701,9 +701,5 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 [erc725y]: https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#erc725y
 [erc777]: https://github.com/ethereum/EIPs/blob/master/EIPS/eip-777.md
 [lsp1]: ./LSP-1-UniversalReceiver.md
-[lsp2#jsonurl]: ./LSP-2-ERC725YJSONSchema.md#JSONURL
-[lsp2#mapping]: ./LSP-2-ERC725YJSONSchema.md#mapping
-[lsp4#erc725ykeys]: ./LSP-4-DigitalAsset-Metadata.md#erc725ykeys
 [lsp7]: ./LSP-7-DigitalAsset.md
-[lsp8]: ./LSP-8-IdentifiableDigitalAsset.md
 [lsp8.sol]: https://github.com/lukso-network/lsp-universalprofile-smart-contracts/blob/develop/contracts/LSP8IdentifiableDigitalAsset/LSP8IdentifiableDigitalAsset.sol
