@@ -51,11 +51,11 @@ A JSON file that describes the profile information, including profile image, bac
   "key": "0x5ef83ad9559033e6e941db7d7c495acdce616347d28e90c7ce47cbfcfcad3bc5",
   "keyType": "Singleton",
   "valueType": "bytes",
-  "valueContent": "JSONURL"
+  "valueContent": "VerifiableURI"
 }
 ```
 
-For construction of the JSONURL value see: [ERC725Y JSON Schema](./LSP-2-ERC725YJSONSchema.md#JSONURL)
+For construction of the VerifiableURI value see: [ERC725Y VerifiableURI Schema](./LSP-2-ERC725YJSONSchema.md#VerifiableURI)
 
 The linked JSON file SHOULD have the following format:
 
@@ -219,10 +219,10 @@ or a verifiable public appearance. This metadata does not need to belong to a re
 
 ## Implementation
 
-A implementation can be found in the [lukso-network/universalprofile-smart-contracts](https://github.com/lukso-network/lsp-universalprofile-smart-contracts/blob/main/contracts/UniversalProfile.sol);
+An implementation can be found in the [lukso-network/universalprofile-smart-contracts](https://github.com/lukso-network/lsp-universalprofile-smart-contracts/blob/main/contracts/UniversalProfile.sol);
 The below defines the JSON interface of the `LSP3Profile`.
 
-ERC725Y JSON Schema `LSP3Profile`:
+ERC725Y VerifiableURI Schema `LSP3Profile`:
 
 ```json
 [
@@ -238,7 +238,7 @@ ERC725Y JSON Schema `LSP3Profile`:
     "key": "0x5ef83ad9559033e6e941db7d7c495acdce616347d28e90c7ce47cbfcfcad3bc5",
     "keyType": "Singleton",
     "valueType": "bytes",
-    "valueContent": "JSONURL"
+    "valueContent": "VerifiableURI"
   },
   // from LSP12 IssuedAssets
   {
