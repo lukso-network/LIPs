@@ -133,7 +133,7 @@ The `valueType` can also be useful for typecasting. It enables contracts or inte
 | `valueType`                                                  | Description                                                        |
 | ------------------------------------------------------------ | ------------------------------------------------------------------ |
 | `bool`                                                       | a value as either **true** or **false**                            |
-| `string`                                                     | an UTF8 encoded string                                             |
+| `string`                                                     | a UTF8 encoded string                                             |
 | `address`                                                    | a 20 bytes long address                                            |
 | `uintN`                                                      | an **unsigned** integer (= only positive number) of size `N`       |
 | `bytesN`                                                     | a bytes value of **fixed-size** `N`, from `bytes1` up to `bytes32` |
@@ -156,7 +156,7 @@ Knowing how to interpret the data retrieved under a data key is the first step i
 As an example, a string could be interpreted in multiple ways, such as:
 
 - a single word, or a sequence of words (_e.g.: "My Custom Token Name"_)
-- an URL (_e.g.: "ipfs://QmW4nUNy3vtvr3DxZHuLfSLnhzKMe2WmgsUsEGPPFh8Ztp"_)
+- a URL (_e.g.: "ipfs://QmW4nUNy3vtvr3DxZHuLfSLnhzKMe2WmgsUsEGPPFh8Ztp"_)
 
 Using the following two LSP2 schemas as examples:
 
@@ -187,14 +187,14 @@ Valid `valueContent` are:
 | `valueContent`                    | Description                                                                                                                        |
 | --------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
 | `Boolean`                         | a boolean value (`true` or `false`)                                                                                                |
-| `String`                          | an UTF8 encoded string                                                                                                             |
+| `String`                          | a UTF8 encoded string                                                                                                             |
 | `Address`                         | an address                                                                                                                         |
 | `Number`                          | a Number (positive or negative, depending on the `keyType`)                                                                        |
 | `BytesN`                          | a bytes value of **fixed-size** `N`, from `bytes1` up to `bytes32`                                                                 |
 | `Bytes`                           | a bytes value of **dynamic-size**                                                                                                  |
 | `Keccak256`                       | a 32 bytes long hash digest, obtained from the keccak256 hashing algorithm                                                         |
 | `BitArray`                        | an array of single `1` or `0` bits                                                                                                 |
-| `URL`                             | an URL encoded as an UTF8 string                                                                                                   |
+| `URL`                             | a URL encoded as a UTF8 string                                                                                                   |
 | [`VerifiableURI`](#verifiableuri) | The content contains respectively the verification method, the length of the verification data, the verification data, and the uri |
 | [`AssetURL`](#asseturl)           | The content contains the hash function, hash and link to the asset file                                                            |
 | [`JSONURL`](#jsonurl)             | hash function, hash and link to the JSON file                                                                                      |
@@ -673,16 +673,16 @@ identifier       method         data length   data
 
 ```
 
-- **VerifiableURI identifier**: MUST be bytes2(0): `0000`
+- **VerifiableURI identifier**: MUST be `bytes2(0)`: `0000`
 
-- **Verification method**: This field specifies the method of verification. The method determines how the verification data is interpreted and is the first 4 bytes of the hash of the method name: `bytes4(keccak256('methodName'))`. \*\*If the verification method is `00000000` then the URI is NOT VERIFIABLE. An example of a non-verifiable URI could look as follows:
+- **Verification method**: This field specifies the method of verification that determines how the verification data is interpreted. The verification method is the first 4 bytes of the hash of the method name: `bytes4(keccak256('methodName'))`. \*\*If the verification method is `00000000` then the URI is NOT VERIFIABLE. An example of a non-verifiable URI could look as follows:
   `0x0000000000000000fffffffffffff...` (where `fffff...` is the encoded link to the file/content)
 
 - **Verification data**: The data varies based on the verification method. The following is a list of verification methods. Additional methods can be added:
 
-  - `"keccak256(utf8)"` (`0x6f357c6a`): Means the data SHOULD be the bytes32 hash of the content of the linked text/JSON file of the "Encoded URI"
-  - `"keccak256(bytes)"` (`0x8019f9b1`): Means the data SHOULD be the bytes32 hash of the content of the linked file of the "Encoded URI"
-  - `"ecdsa" (`0xac75a10e`)`: Means the data consists of two parts: The first bytes20 are the ec-recover address, and the rest of the data bytes are the verification "source" containing an encoded string of a URI to a signature. The linked file of the "Encoded URI" then needs to be verified using the signature from the "source" URI and the linked file, which MUST recover to the address from the "verification data".
+  - `"keccak256(utf8)"` (`0x6f357c6a`): Means the data SHOULD be `bytes32` hash of the content of the linked UTF-8 based file of the "Encoded URI"
+  - `"keccak256(bytes)"` (`0x8019f9b1`): Means the data SHOULD be `bytes32` hash of the content of the linked file of the "Encoded URI"
+  - `"ecdsa"` (`0xac75a10e`): Means the data consists of two parts: The first `bytes20` are the ec-recover address, and the rest of the data bytes are the verification "source" containing an encoded string of a URI to a signature. The linked file of the "Encoded URI" then needs to be verified using the signature from the "source" URI and the linked file, which MUST recover to the address from the "verification data".
   - Other verification methods can be added over time...
 
 - **Encoded URI**: The actual string encoded URI to file or content to be verified.
