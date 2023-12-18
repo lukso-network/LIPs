@@ -434,7 +434,7 @@ Data keys such as [`LSP8TokenIdFormat`](#lsp8tokenidformat) or [`LSP4Metadata`](
 - either for the whole contract using `setData(..)`
 - per NFT / tokenId using [`setDataForTokenId(..)`](#setdatafortokenid).
 
-For instance to set metdata for each specific tokenId, set the `LSP4Metadata` data key for each tokenId using `setDataForTokenId(..)` function.
+For instance, to set metadata for each specific tokenId, set the `LSP4Metadata` data key for each tokenId using `setDataForTokenId(..)` function.
 
 #### ERC725Y Data Keys
 
@@ -450,7 +450,7 @@ For instance to set metdata for each specific tokenId, set the `LSP4Metadata` da
 }
 ```
 
-The **LSP8-IdentifiableDigitalAsset** standard, defines each `tokenId` as `bytes32`, this data key describes the schema of the `tokenId` and how to parse it and can take one of the following values described in the table below.
+The **LSP8-IdentifiableDigitalAsset** standard, defines each `tokenId` as `bytes32`, this data key describes the format of the `tokenId` and how to parse it and can take one of the following values described in the table below.
 
 | Value |  Format   | Representation | Description                                                                                                                    |
 | :---: | :-------: | :------------: | :----------------------------------------------------------------------------------------------------------------------------- |
@@ -520,14 +520,14 @@ As `{LSP8TokenMetadataBaseURI}{tokenId}`.
 - LSP8TokenIdFormat `3` or `4` (= `bytes32`)<br>
   e.g. `http://mybase.uri/e5fe3851d597a3aa8bbdf8d8289eb9789ca2c34da7a7c3d0a7c442a87b81d5c2`
 
-Some Base URIs could be alterable, for example in the case of NFTs that need their metadata to change overtime.
+Some Base URIs could be alterable, for example in the case of NFTs that need their metadata to change over time.
 
-### ERC725Y Data Keys of external contract for tokenID schema 2 (`address`)
+### ERC725Y Data Keys of external contract for tokenID format 2 (`address`)
 
-When the LSP8 contract uses the [tokenId schema `4`](#lsp8tokenidformat) (= `address`), each tokenId minted is an ERC725Y smart contract that can have its own metadata.
+When the LSP8 contract uses the [tokenId format `2`](#lsp8tokenidformat) (= `address`), each tokenId minted is an ERC725Y smart contract that can have its own metadata.
 We refer to this contract as the **tokenId metadata contract**.
 
-In this case, each tokenId present in the LSP8 contract references an other ERC725Y contract.
+In this case, each tokenId present in the LSP8 contract references another ERC725Y contract.
 
 The **tokenId metadata contract** SHOULD contain the following ERC725Y data key in its storage.
 
