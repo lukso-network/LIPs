@@ -133,13 +133,13 @@ The `valueType` can also be useful for typecasting. It enables contracts or inte
 | `valueType`                                                  | Description                                                        |
 | ------------------------------------------------------------ | ------------------------------------------------------------------ |
 | `bool`                                                       | a value as either **true** or **false**                            |
-| `string`                                                     | a UTF8 encoded string                                             |
+| `string`                                                     | a UTF-8 encoded string                                             |
 | `address`                                                    | a 20 bytes long address                                            |
 | `uintN`                                                      | an **unsigned** integer (= only positive number) of size `N`       |
 | `bytesN`                                                     | a bytes value of **fixed-size** `N`, from `bytes1` up to `bytes32` |
 | `bytes`                                                      | a bytes value of **dynamic-size**                                  |
 | `uintN[]`                                                    | an array of **signed** integers                                    |
-| `string[]`                                                   | an array of UTF8 encoded strings                                   |
+| `string[]`                                                   | an array of UTF-8 encoded strings                                   |
 | `address[]`                                                  | an array of addresses                                              |
 | `bytes[]`                                                    | an array of dynamic size bytes                                     |
 | `bytesN[]`                                                   | an array of fixed size bytes                                       |
@@ -187,18 +187,18 @@ Valid `valueContent` are:
 | `valueContent`                    | Description                                                                                                                        |
 | --------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
 | `Boolean`                         | a boolean value (`true` or `false`)                                                                                                |
-| `String`                          | a UTF8 encoded string                                                                                                             |
+| `String`                          | a UTF-8 encoded string                                                                                                             |
 | `Address`                         | an address                                                                                                                         |
 | `Number`                          | a Number (positive or negative, depending on the `keyType`)                                                                        |
 | `BytesN`                          | a bytes value of **fixed-size** `N`, from `bytes1` up to `bytes32`                                                                 |
 | `Bytes`                           | a bytes value of **dynamic-size**                                                                                                  |
 | `Keccak256`                       | a 32 bytes long hash digest, obtained from the keccak256 hashing algorithm                                                         |
 | `BitArray`                        | an array of single `1` or `0` bits                                                                                                 |
-| `URL`                             | a URL encoded as a UTF8 string                                                                                                   |
+| `URL`                             | a URL encoded as a UTF-8 string                                                                                                   |
 | [`VerifiableURI`](#verifiableuri) | The content contains respectively the verification method, the length of the verification data, the verification data, and the uri |
 | [`AssetURL`](#asseturl)           | The content contains the hash function, hash and link to the asset file                                                            |
 | [`JSONURL`](#jsonurl)             | hash function, hash and link to the JSON file                                                                                      |
-| `Markdown`                        | a structured Markdown mostly encoded as UTF8 string                                                                                |
+| `Markdown`                        | a structured Markdown mostly encoded as UTF-8 string                                                                                |
 | `0x1345ABCD...`                   | a **literal** value, when the returned value is expected to equal some specific bytes                                              |
 
 The `valueContent` field can also define a tuple of value contents (for instance, when the `valueType` is a tuple of types, as described above). In this case, each value content MUST be defined between parentheses. For instance: `(Bytes4,Number)`.
