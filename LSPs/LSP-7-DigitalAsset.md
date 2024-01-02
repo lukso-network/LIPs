@@ -282,7 +282,7 @@ _Requirements:_
 #### transferBatch
 
 ```solidity
-function transferBatch(address[] memory from, address[] memory to, uint256[] memory amount, bool force, bytes[] memory data) external;
+function transferBatch(address[] memory from, address[] memory to, uint256[] memory amount, bool[] memory force, bytes[] memory data) external;
 ```
 
 Transfers many tokens based on the list `from`, `to`, `amount`. If any transfer fails, the call will revert.
