@@ -472,6 +472,14 @@ Since tokenIds can have their own custom metadata, it is also possible to have *
 
 To set a specific tokenId format for a specific tokenId, set the `LSP8TokenIdFormat` data key for this specific tokenId using the [`setDataForTokenId(..)`](#setdatafortokenid) function.
 
+To query a specific tokenId format for a specific tokenId, get the `LSP8TokenIdFormat` data key for this specific tokenId using the [`getDataForTokenId(..)`](#getdatafortokenid) function.
+
+In this case, the value of the `LSP8TokenIdFormat` for a specific tokenId should range from 100-104, signaling that the default format for the LSP8 collection is mixed, and modified for the tokenId being queried.
+
+> If the value for the `LSP8TokenIdFormat` for a specific tokenId is 0, it means the value is non-set (default value), and should not be treated as LSP8TokenIdFormat = 0 (parsing as a number).
+
+**Example**:
+
 A `tokenId` is always represented as a `bytes32` value. Depending on the tokenId formats defined above, the padding of the `bytes32` value is different.
 
 | LSP8TokenIdFormat                | Left padded | Right padded | Padding rule to convert to `bytes32`                                                                                                                                                 |
