@@ -256,14 +256,14 @@ _Requirements:_
 - If the token sender is a contract that supports LSP1 interface, it SHOULD call the token sender's [`universalReceiver(...)`] function with the parameters below:
 
   - `typeId`: `keccak256('LSP8Tokens_SenderNotification')` = `0xb23eae7e6d1564b295b4c3e3be402d9a2f0776c57bdf365903496f6fa481ab00`
-  - `data`: The data sent SHOULD be ABI encoded and contain the `sender` (address), `receiver` (address), `tokenId` (bytes32) and the `data` (bytes) respectively.
+  - `data`: The data sent SHOULD be ABI encoded and contain the `caller` (address), `sender` (address), `receiver` (address), `tokenId` (bytes32) and the `data` (bytes) respectively.
 
 <br>
 
 - If the token recipient is a contract that supports LSP1 interface, it SHOULD call the token recipient's [`universalReceiver(...)`] function with the parameters below:
 
   - `typeId`: `keccak256('LSP8Tokens_RecipientNotification')` = `0x0b084a55ebf70fd3c06fd755269dac2212c4d3f0f4d09079780bfa50c1b2984d`
-  - `data`: The data sent SHOULD be ABI encoded and contain the `sender` (address), `receiver` (address), `tokenId` (bytes32) and the `data` (bytes) respectively.
+  - `data`: The data sent SHOULD be ABI encoded and contain the `caller` (address), `sender` (address), `receiver` (address), `tokenId` (bytes32) and the `data` (bytes) respectively.
 
 **Note:** LSP1 Hooks MUST be implemented in any type of token transfer (mint, transfer, burn, transferBatch).
 
