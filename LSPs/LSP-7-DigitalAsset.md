@@ -116,7 +116,7 @@ _Parameters:_
 
 _Requirements:_
 
-- `operator` cannot be calling address.
+- `operator` cannot be the caller's address.
 - `operator` cannot be the zero address.
 
 **LSP1 Hooks:**
@@ -146,7 +146,7 @@ _Parameters:_
 
 _Requirements:_
 
-- `operator` cannot be calling address.
+- `operator` cannot be the caller's address.
 - `operator` cannot be the zero address.
 
 **LSP1 Hooks:**
@@ -205,7 +205,7 @@ _Requirements:_
 
 - `subtractedAmount` must be less than the `operator`'s current allowance.
 - `operator` cannot be the zero address.
-- `operator` cannot be the calling address.
+- `operator` cannot be the the caller's address.
 
 **LSP1 Hooks:**
 
