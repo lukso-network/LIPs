@@ -172,7 +172,7 @@ _Parameters:_
 _Requirements:_
 
 - `tokenId` must exist.
-- `operator` must be authorized.
+- `operator` must be authorized for `tokenId`.
 - caller must be current `tokenOwner` of `tokenId`.
 - `operator` cannot be calling address.
 - `operator` cannot be the zero address.
