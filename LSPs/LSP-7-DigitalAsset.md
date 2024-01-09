@@ -116,7 +116,7 @@ _Parameters:_
 
 _Requirements:_
 
-- `operator` cannot be calling address.
+- `operator` cannot be the caller's address.
 - `operator` cannot be the zero address.
 
 **LSP1 Hooks:**
@@ -146,7 +146,7 @@ _Parameters:_
 
 _Requirements:_
 
-- `operator` cannot be calling address.
+- `operator` cannot be the caller's address.
 - `operator` cannot be the zero address.
 
 **LSP1 Hooks:**
@@ -175,6 +175,8 @@ _Parameters:_
 _Requirements:_
 
 - `operator`'s original allowance cannot be zero.
+- `operator` cannot be the zero address.
+- `operator` cannot be the caller's address.
 
 **LSP1 Hooks:**
 
@@ -199,6 +201,12 @@ _Parameters:_
 - `subtractedAmount` the amount to substract to the existing allowance of tokens operator has access to.
 - `operatorNotificationData` the data to send when notifying the operator via LSP1.
 
+_Requirements:_
+
+- `subtractedAmount` must be less than the `operator`'s current allowance.
+- `operator` cannot be the zero address.
+- `operator` cannot be the the caller's address.
+
 **LSP1 Hooks:**
 
 - If the operator is a contract that supports LSP1 interface, it SHOULD call operator's [`universalReceiver(...)`] function with the parameters below:
@@ -220,6 +228,7 @@ Operators can send and burn tokens on behalf of their owners. The tokenOwner is 
 _Parameters:_
 
 - `operator` the address to query operator status for.
+- `tokenOwner` the address whose operator's allowance is being queried for.
 
 **Returns:** `uint256`, the amount of tokens `operator` has access to from `tokenOwner`.
 
@@ -260,6 +269,7 @@ _Requirements:_
 
 - `from` cannot be the zero address.
 - `to` cannot be the zero address.
+- `from` and `to` cannot be the same address.
 - `amount` tokens must be owned by `from`.
 - If the caller is not `from`, it must be an operator for `from` with access to at least `amount` tokens.
 
@@ -300,7 +310,7 @@ _Parameters:_
 
 _Requirements:_
 
-- `from`, `to`, `amount` lists are the same length.
+- `from`, `to`, `amount`, `force`, and `data` lists are the same length.
 - no values in `from` can be the zero address.
 - no values in `to` can be the zero address.
 - each `amount` tokens must be owned by `from`.
@@ -309,7 +319,7 @@ _Requirements:_
 #### batchCalls
 
 ```solidity
-function batchCalls(bytes[] calldata data) external returns (bytes[] memory results);
+function batchCalls(bytes[] memory data) external returns (bytes[] memory results);
 ```
 
 Enables the execution of a batch of encoded function calls on the current contract in a single transaction, provided as an array of bytes.
@@ -443,9 +453,9 @@ interface ILSP7 is /* IERC165 */ {
 
     function transfer(address from, address to, uint256 amount, bool force, bytes memory data) external;
 
-    function transferBatch(address[] memory from, address[] memory to, uint256[] memory amount, bool force, bytes[] memory data) external;
+    function transferBatch(address[] memory from, address[] memory to, uint256[] memory amount, bool[] memory force, bytes[] memory data) external;
 
-    function batchCalls(bytes[] calldata data) external returns (bytes[] memory results);
+    function batchCalls(bytes[] memory data) external returns (bytes[] memory results);
 
 }
 
