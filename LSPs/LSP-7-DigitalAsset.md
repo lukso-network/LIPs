@@ -176,7 +176,7 @@ _Requirements:_
 
 - `operator`'s original allowance cannot be zero.
 - `operator` cannot be the zero address.
-- `operator` cannot be the calling address.
+- `operator` cannot be the caller's address.
 
 **LSP1 Hooks:**
 
@@ -228,7 +228,7 @@ Operators can send and burn tokens on behalf of their owners. The tokenOwner is 
 _Parameters:_
 
 - `operator` the address to query operator status for.
-- `tokenOwner` the address whose token allowance is being queried.
+- `tokenOwner` the address whose operator's allowance is being queried for.
 
 **Returns:** `uint256`, the amount of tokens `operator` has access to from `tokenOwner`.
 
