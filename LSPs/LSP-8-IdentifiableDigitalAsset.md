@@ -137,7 +137,8 @@ _Parameters:_
 
 _Requirements:_
 
-- `tokenId` must exist
+- `tokenId` must exist.
+- `operator` cannot be already authorized for the same tokenId.
 - caller must be current `tokenOwner` of `tokenId`.
 - `operator` cannot be calling address.
 - `operator` cannot be the zero address.
@@ -165,11 +166,13 @@ _Parameters:_
 
 - `operator` the address to revoke as an operator.
 - `tokenId` the token to disable operator status to.
+- `notify` the boolean indicating whether to notify the operator via LSP1 or not.
 - `operatorNotificationData` the data to send when notifying the operator via LSP1.
 
 _Requirements:_
 
-- `tokenId` must exist
+- `tokenId` must exist.
+- `operator` must be authorized for `tokenId`.
 - caller must be current `tokenOwner` of `tokenId`.
 - `operator` cannot be calling address.
 - `operator` cannot be the zero address.
@@ -200,7 +203,6 @@ _Parameters:_
 _Requirements:_
 
 - `tokenId` must exist
-- caller must be current `tokenOwner` of `tokenId`.
 
 **Returns:** `bool`, TRUE if `operator` address is an operator of `tokenId`, FALSE otherwise.
 
@@ -219,8 +221,6 @@ _Parameters:_
 _Requirements:_
 
 - `tokenId` must exist
-- caller must be current `tokenOwner` of `tokenId`.
-- `operator` cannot be calling address.
 
 **Returns:** `address[]` the list of operators.
 
@@ -239,7 +239,6 @@ _Parameters:_
 
 - `from` the sending address.
 - `to` the receiving address.
-- `from` and `to` cannot be the same address.
 - `tokenId` the token to transfer.
 - `force` when set to TRUE, `to` may be any address; when set to FALSE `to` must be a contract that supports [LSP1 UniversalReceiver][lsp1] and successfully processes a call to `universalReceiver(bytes32 typeId, bytes memory data)`.
 - `data` additional data the caller wants included in the emitted event, and sent in the hooks to `from` and `to` addresses.
@@ -248,6 +247,7 @@ _Requirements:_
 
 - `from` cannot be the zero address.
 - `to` cannot be the zero address.
+- `from` and `to` cannot be the same address.
 - `tokenId` token must be owned by `from`.
 - If the caller is not `from`, it must be an operator of `tokenId`.
 
@@ -288,7 +288,7 @@ _Parameters:_
 
 _Requirements:_
 
-- `from`, `to`, `tokenId` lists are the same length.
+- `from`, `to`, `tokenId`, `force`, and `data` lists are the same length.
 - no values in `from` can be the zero address.
 - no values in `to` can be the zero address.
 - `from` and `to` cannot be the same address at the same.
@@ -369,7 +369,7 @@ _Requirements:_
 #### batchCalls
 
 ```solidity
-function batchCalls(bytes[] calldata data) external returns (bytes[] memory results);
+function batchCalls(bytes[] memory data) external returns (bytes[] memory results);
 ```
 
 Enables the execution of a batch of encoded function calls on the current contract in a single transaction, provided as an array of bytes.
@@ -627,9 +627,9 @@ interface ILSP8 is /* IERC165 */ {
 
     function owner() external view returns (address);
 
-    function transferOwnership(address newOwner) external override; // onlyOwner
+    function transferOwnership(address newOwner) external; // onlyOwner
 
-    function renounceOwnership() external virtual; // onlyOwner
+    function renounceOwnership() external; // onlyOwner
 
 
     // ERC725Y
@@ -684,9 +684,9 @@ interface ILSP8 is /* IERC165 */ {
 
     function transfer(address from, address to, bytes32 tokenId, bool force, bytes memory data) external;
 
-    function transferBatch(address[] memory from, address[] memory to, bytes32[] memory tokenId, bool force, bytes[] memory data) external;
+    function transferBatch(address[] memory from, address[] memory to, bytes32[] memory tokenId, bool[] memory force, bytes[] memory data) external;
 
-    function batchCalls(bytes[] calldata data) external returns (bytes[] memory results);
+    function batchCalls(bytes[] memory data) external returns (bytes[] memory results);
 }
 
 ```
