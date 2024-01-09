@@ -460,7 +460,7 @@ The **LSP8-IdentifiableDigitalAsset** standard, defines each `tokenId` as `bytes
 |  `3`  | `bytes32` |  Unique Bytes  | each NFT is parsed as a 32 bytes long **unique identifier**.                                                                   |
 |  `4`  | `bytes32` |  Hash Digest   | each NFT is parsed as a 32 bytes **hash digest**. This can be used as the hash of a very long string representing the tokenId. |
 
-Since tokenIds can have their own custom metadata, it is also possible to have **Mixed formats**, where there is a default format for the collection, and each tokenId can have its own format, meaning the values can be extended to:
+The standard allows for Mixed formats. In a mixed format scenario, while there's a default format for the collection, individual tokenIds can have unique formats. This concept is represented with special values ranging from 100 to 104.
 
 | Value |                     Format                     | Description                                                                                                                                                                           |
 | :---: | :--------------------------------------------: | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -470,17 +470,28 @@ Since tokenIds can have their own custom metadata, it is also possible to have *
 | `103` | `Mixed` with default as `bytes32` unique bytes | Default NFT is parsed as a 32 bytes long **unique identifier** with querying the `LSP8TokenIdFormat` for each `tokenId`.                                                              |
 | `104` | `Mixed` with default as `bytes32` hash digest  | Default NFT is parsed as a 32 bytes **hash digest**with querying the `LSP8TokenIdFormat` for each `tokenId`.                                                                          |
 
-To set a specific tokenId format for a specific tokenId, set the `LSP8TokenIdFormat` data key for this specific tokenId using the [`setDataForTokenId(..)`](#setdatafortokenid) function.
+**Setting and Querying Token ID Formats:**
+
+- Setting a tokenId format: Use `setDataForTokenId(..)` to set the `LSP8TokenIdFormat` for a specific tokenId.
+- Querying a tokenId format: Use `getDataForTokenId(..)` to retrieve the `LSP8TokenIdFormat` for a specific tokenId.
+
+**Example Scenario:**
+
+Given a collection where the `LSP8TokenIdFormat` is set to `101`, indicating that tokenIds are primarily formatted as **strings**. However, for a specific tokenId that needs to be represented as a number, its `LSP8TokenIdFormat` would be set to 100 using `setDataForTokenId(..)`.
+
+This change signifies that while the default format for the collection is string (`101`), this particular tokenId deviates from the norm and is formatted as a number (`100`), exemplifying the mixed format approach.
+
+> If the value for the `LSP8TokenIdFormat` for a specific tokenId is 0, it means the value is non-set (default value), and should not be treated as LSP8TokenIdFormat = 0 (parsing as a number).
 
 A `tokenId` is always represented as a `bytes32` value. Depending on the tokenId formats defined above, the padding of the `bytes32` value is different.
 
-| LSP8TokenIdFormat                | Left padded | Right padded | Padding rule to convert to `bytes32`                                                                                                                                                 |
-| :------------------------------- | :---------: | :----------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `0` - `uint256` - Number         |     ✔️      |              | For tokenId number `5` -> `0x0000000000000000000000000000000000000000000000000000000000000005`                                                                                       |
-| `1` - `string` - String          |             |      ✔️      | For tokenId `my-nft` -> `0x6d792d6e66740000000000000000000000000000000000000000000000000000` (each character encoded as UTF-8 hex)                                                   |
-| `2` - `address` - Smart Contract |     ✔️      |              | For tokenId metadata contract at address `0x8ae2dD3E422530b5c2FC1061e6b5f43f5677033f` -> `0x0000000000000000000000008ae2dD3E422530b5c2FC1061e6b5f43f5677033f`                        |
-| `3` - `bytes32` - Unique Bytes   |             |      ✔️      | For any bytes less than 32 bytes like tokenId `0xaabbccddee` -> `0xaabbccddee000000000000000000000000000000000000000000000000000000`                                                 |
-| `4` - `bytes32` - Hash Digest    |             |              | No padding applies, since the hash digest is always 32 bytes. For instance for tokenId `keccak256('My NFT')` -> `0x262a8c3566f2abe9247c206cf8d622e0a44ac99a7d54c23e212de32181cf185f` |
+| LSP8TokenIdFormat                         | Left padded | Right padded | Padding rule to convert to `bytes32`                                                                                                                                                 |
+| :---------------------------------------- | :---------: | :----------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `0` or `100` - `uint256` - Number         |     ✔️      |              | For tokenId number `5` -> `0x0000000000000000000000000000000000000000000000000000000000000005`                                                                                       |
+| `1` or `101` - `string` - String          |             |      ✔️      | For tokenId `my-nft` -> `0x6d792d6e66740000000000000000000000000000000000000000000000000000` (each character encoded as UTF-8 hex)                                                   |
+| `2` or `102` - `address` - Smart Contract |     ✔️      |              | For tokenId metadata contract at address `0x8ae2dD3E422530b5c2FC1061e6b5f43f5677033f` -> `0x0000000000000000000000008ae2dD3E422530b5c2FC1061e6b5f43f5677033f`                        |
+| `3` or `103` - `bytes32` - Unique Bytes   |             |      ✔️      | For any bytes less than 32 bytes like tokenId `0xaabbccddee` -> `0xaabbccddee000000000000000000000000000000000000000000000000000000`                                                 |
+| `4` or `104` - `bytes32` - Hash Digest    |             |              | No padding applies, since the hash digest is always 32 bytes. For instance for tokenId `keccak256('My NFT')` -> `0x262a8c3566f2abe9247c206cf8d622e0a44ac99a7d54c23e212de32181cf185f` |
 
 This value must be padded according to the padding rules specified in the table above to generate the `bytes32 tokenId` that will be passed as parameter to the functions below:
 
