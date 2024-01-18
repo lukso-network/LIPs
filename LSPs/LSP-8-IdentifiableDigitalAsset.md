@@ -520,7 +520,11 @@ This data key defines the base URI for the metadata of each `tokenId`s present i
 The complete URI that points to the metadata of a specific tokenId MUST be formed by concatenating this base URI with the `tokenId`.
 As `{LSP8TokenMetadataBaseURI}{tokenId}`.
 
-⚠️ TokenIds MUST be in lowercase, even for the tokenId format `address` (= address not checksumed).
+⚠️ For the tokenId format `address` (`2`), the `tokenId` part SHOULD be in lower case to make it unique and avoid interfaces to have to know multiple versions of the URI with different casings (_e.g: `http://mybase.uri/0x43fb7ab43a3a32f1e2d5326b651bbae713b02429`, or `http://mybase.uri/0x43FB7AB43A3A32F1E2D5326B651BBAE713B02429`, or `http://mybase.uri/0x43fB7aB43A3a32F1E2d5326b651BBAe713B02429`_).
+
+⚠️ Similarly for the `bytes32` version of tokenId format (`3` and `4`), the tokenId part MUST be lowercase.
+
+⚠️ However, for the `string` version of the tokenId (`2`), the tokenId part MUST be in the same casing as defined by the string that represents the tokenId. Otherwise, changing the casing is equivalent to using a different tokenId.
 
 - LSP8TokenIdFormat `0` (= `uint256`)<br>
   e.g. `http://mybase.uri/1234`
