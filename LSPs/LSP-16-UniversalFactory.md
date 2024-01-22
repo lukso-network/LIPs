@@ -3,7 +3,7 @@ lip: 16
 title: Universal Factory
 author: Yamen Merhi <@YamenMerhi>
 discussions-to: https://discord.gg/E2rJPP4
-status: Draft
+status: Review
 type: LSP
 created: 2022-11-19
 requires: EIP104, EIP155, EIP1167
