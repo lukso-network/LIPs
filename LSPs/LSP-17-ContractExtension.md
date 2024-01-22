@@ -3,7 +3,7 @@ lip: 17
 title: Contract Extension
 author: Yamen Merhi <@YamenMerhi>
 discussions-to: https://discord.gg/E2rJPP4
-status: Last Call
+status: Review
 type: LSP
 created: 2021-11-19
 requires: ERC165
