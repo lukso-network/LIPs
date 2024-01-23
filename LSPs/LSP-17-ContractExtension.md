@@ -15,7 +15,7 @@ This standard describes a mechanism for adding additional functionality to a con
 
 ## Abstract
 
-This proposal introduces two contract types:
+This proposal introduces two types of contracts:
 
 - **Extendable Contract:** A contract whose functionalities are extended.
 - **Extension Contract:** A contract containing the additional functionalities that could be added to an extendable contract.
@@ -48,7 +48,7 @@ The standard offers flexibility in how extensions are mapped and stored. It does
 
 **Example of a Simple Mapping Approach**
 
-A straightforward way to implement this mapping is through a simple mapping data type, and a simple function to set the address of the extension to the function selector. For instance:
+A straightforward way to implement this mapping is through a simple mapping data type, and a simple function to set the address of an extension contract for a non-native function selector. For instance in Solidity:
 
 ```solidity
 mapping (bytes4 => address) extensionStorage;
@@ -60,7 +60,7 @@ function setExtension(bytes4 functionSelector, address extension) {
 
 **Storing Extensions in ERC725Y Storage**
 
-Contracts that conform to the ERC725Y standard COULD use an alternative approach to store extension information in the ERC725Y storage. The ERC725Y storage is a mapping from bytes32 to bytes, and the extension information can be structured as follows:
+Contracts that conform to the ERC725Y standard COULD use an alternative approach to store extension information in the ERC725Y storage. The ERC725Y storage is a mapping from `bytes32` to `bytes`, and the extension information can be structured as follows:
 
 ```json
 {
@@ -72,20 +72,20 @@ Contracts that conform to the ERC725Y standard COULD use an alternative approach
 }
 ```
 
-In this structure, <bytes4> represents the function selector of the contract. For a specific function selector, such as 0xaabbccdd, the data key would be constructed as follows:
+In this structure, <bytes4> represents the selector of the function to add to the contract. For a specific function selector, such as 0xaabbccdd, the data key would be constructed as follows:
 
 ```js
 0xcee78b4094da860110960000aabbccdd00000000000000000000000000000000;
 ```
 
-To add an extension, users can call `setData(bytes32 dataKey, bytes dataValue)` with the data key representing the function selector and the data value being the address of the extension.
+To add an extension, users can call `setData(bytes32 dataKey, bytes dataValue)` with the data key representing the function selector and the data value being the address of the extension contract.
 
 ```js
 dataKey: 0xcee78b4094da860110960000aabbccdd00000000000000000000000000000000
-dataValue: [address of the extension]
+dataValue: [address of the extension contract]
 ```
 
-This approach leverages the ERC725Y standard's key-value storage mechanism to maintain a mapping of function selectors to extension addresses, providing a standardized and interoperable method for managing extensions in contracts that support ERC725Y.
+This approach leverages the ERC725Y standard's data key-value store to maintain a mapping of function selectors to extension addresses, providing a standardized and interoperable way to manage extensions in contracts that support ERC725Y.
 
 #### Calling Extensions
 
@@ -96,7 +96,7 @@ The calldata MUST be appended with 52 extra bytes as follows:
 - The `msg.sender` calling the extendable contract without any pad, MUST be 20 bytes.
 - The `msg.value` received to the extendable contract, MUST be uint256.
 
-In case where the function selector does not correspond to a mapped extension within the extendable contract, the call SHOULD revert following the typical response observed when an a non existing function is called on a contract.
+In the case where the function selector does not correspond to a mapped extension within the extendable contract, the call SHOULD revert following the typical response observed when a non-existing function is called on a contract.
 
 #### Sending Value to the Extensions
 
@@ -122,9 +122,9 @@ In this data structure:
 0xcee78b4094da860110960000aabbccdd00000000000000000000000000000000;
 ```
 
-The boolean at the end of the data structure is utilized to indicate whether the value received by the extendable contract should be forwarded to the extension or remain within the extendable contract.
+The boolean at the end of the data structure is used to indicate whether the value received by the extendable contract should be forwarded to the extension or remain within the extendable contract.
 
-For example, if this boolean is set to true (represented as a `0x01` hex byte), it indicates that the value received should be forwarded to the extension:
+For example, if this boolean is set to `true` (represented as a `0x01` hex byte), it indicates that the value received should be forwarded to the extension:
 
 ```js
         address of the extension
@@ -138,9 +138,9 @@ For example, if this boolean is set to true (represented as a `0x01` hex byte), 
 
 #### Supporting InterfaceIds
 
-In extendable contracts that implement the ERC165 standard, the `supportsInterface` function should be designed to additionally check for extended interfaceIds. This means that beyond the contract's native supported interfaceId, the function should also check support of extended interfaceIds.
+In extendable contracts that implement the ERC165 standard, the `supportsInterface` function should be designed to additionally check for extended ERC165 interface Ids. This means that beyond the contract's natively supported interface Id, the function should also check the support of extended interface ids.
 
-The `supportsInterface` function should call the `supportsInterface` function on the extension mapped to its function selector and return true or false based on the result.
+The `supportsInterface` function should call the `supportsInterface` function on the extension mapped to its function selector (`0x01ffc9a7`) and return `true` or `false` based on the result.
 
 ## LSP17Extension Specification
 
