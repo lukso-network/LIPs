@@ -524,7 +524,7 @@ As `{LSP8TokenMetadataBaseURI}{tokenId}`. The protocol can be http, https, ipfs 
 
 ⚠️ Similarly for the `bytes32` version of tokenId format (`3` and `4`), the tokenId part MUST be lowercase.
 
-⚠️ However, for the `string` version of the tokenId (`2`), the tokenId part MUST be in the same casing as defined by the string that represents the tokenId. Otherwise, changing the casing is equivalent to using a different tokenId. The tokenId is not limited in casing but needs to contain valid UTF-8 and needs to be encoded using url-encoding i.e. encodeURI(). For example: A tokenId containing `something/Veryሴ⍅ Cool` should be encoded as `something/Very%E1%88%B4%E2%8D%85%20Cool` as in the following example.
+⚠️ However, for the `string` version of the tokenId (`2`), the tokenId part MUST be in the same casing as defined by the string that represents the tokenId. Otherwise, changing the casing is equivalent to using a different tokenId. The tokenId is not limited in casing but **needs to contain valid UTF-8** and needs to be encoded using url-encoding i.e. encodeURI(). For example: A tokenId containing `something/Veryሴ⍅ Cool` should be encoded as `something/Very%E1%88%B4%E2%8D%85%20Cool` as in the following example.
 
 ```js
 > baseURL + encodeURI("something/Very\u1234\u2345 Cool")
