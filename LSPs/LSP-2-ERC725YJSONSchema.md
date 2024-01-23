@@ -718,7 +718,7 @@ const url = web3.utils.utf8ToHex('ifps://QmYr1VJLwerg6pEoscdhVGugo39pa6rycEZLjtR
 
 
 // final result (to be stored on chain)
-const VerfiableURI =  verfiableUriIdentifier + verificationMethod  +  verificationDatalength.substring(2) +  verificationData.substring(2) + url.substring(2)
+const VerfiableURI =  verfiableUriIdentifier + verificationMethod.substring(2)  +  verificationDatalength.substring(2) +  verificationData.substring(2) + url.substring(2)
                      ^                        ^                      ^                                      ^                               ^
                      0000                     0x6f357c6a             0020                                   820464ddfac1be...               696670733a2f2...
 
