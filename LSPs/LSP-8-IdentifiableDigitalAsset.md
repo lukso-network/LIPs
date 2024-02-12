@@ -518,22 +518,27 @@ _Requirements:_
 This data key defines the base URI for the metadata of each `tokenId`s present in the LSP8 contract.
 
 The complete URI that points to the metadata of a specific tokenId MUST be formed by concatenating this base URI with the `tokenId`.
-As `{LSP8TokenMetadataBaseURI}{tokenId}`.
+As `{LSP8TokenMetadataBaseURI}{tokenId}`. The protocol can be http, https, ipfs and so on similar to other VerifiableURI values.
 
 ⚠️ For the tokenId format `address` (`2`), the `tokenId` part SHOULD be in lower case to make it unique and avoid interfaces to have to know multiple versions of the URI with different casings (_e.g: `http://mybase.uri/0x43fb7ab43a3a32f1e2d5326b651bbae713b02429`, or `http://mybase.uri/0x43FB7AB43A3A32F1E2D5326B651BBAE713B02429`, or `http://mybase.uri/0x43fB7aB43A3a32F1E2d5326b651BBAe713B02429`_).
 
 ⚠️ Similarly for the `bytes32` version of tokenId format (`3` and `4`), the tokenId part MUST be lowercase.
 
-⚠️ However, for the `string` version of the tokenId (`2`), the tokenId part MUST be in the same casing as defined by the string that represents the tokenId. Otherwise, changing the casing is equivalent to using a different tokenId.
+⚠️ However, for the `string` version of the tokenId (`2`), the tokenId part MUST be in the same casing as defined by the string that represents the tokenId. Otherwise, changing the casing is equivalent to using a different tokenId. The tokenId is not limited in casing but **needs to contain valid UTF-8** and needs to be encoded using url-encoding i.e. encodeURI(). For example: A tokenId containing `something/Veryሴ⍅ Cool` should be encoded as `something/Very%E1%88%B4%E2%8D%85%20Cool` as in the following example.
+
+```js
+> baseURL + encodeURI("something/Very\u1234\u2345 Cool")
+'https://mybase.uri/something/Very%E1%88%B4%E2%8D%85%20Cool'
+```
 
 - LSP8TokenIdFormat `0` (= `uint256`)<br>
-  e.g. `http://mybase.uri/1234`
+  e.g. `https://mybase.uri/1234`
 - LSP8TokenIdFormat `1` (= `string`)<br>
-  e.g. `http://mybase.uri/name-of-the-nft`
+  e.g. `https://mybase.uri/name-of-the-nft`
 - LSP8TokenIdFormat `2` (= `address`)<br>
-  e.g. `http://mybase.uri/0x43fb7ab43a3a32f1e2d5326b651bbae713b02429`
+  e.g. `https://mybase.uri/0x43fb7ab43a3a32f1e2d5326b651bbae713b02429`
 - LSP8TokenIdFormat `3` or `4` (= `bytes32`)<br>
-  e.g. `http://mybase.uri/e5fe3851d597a3aa8bbdf8d8289eb9789ca2c34da7a7c3d0a7c442a87b81d5c2`
+  e.g. `https://mybase.uri/e5fe3851d597a3aa8bbdf8d8289eb9789ca2c34da7a7c3d0a7c442a87b81d5c2`
 
 Some Base URIs could be alterable, for example in the case of NFTs that need their metadata to change over time.
 
