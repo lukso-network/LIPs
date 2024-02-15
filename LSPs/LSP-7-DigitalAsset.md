@@ -275,14 +275,14 @@ _Requirements:_
 
 **LSP1 Hooks:**
 
-- If the token sender is a contract that supports LSP1 interface, it SHOULD call the token sender's [`universalReceiver(...)`] function with the parameters below:
+- If the token **sender** is a contract that supports LSP1 interface, it SHOULD call the token sender's [`universalReceiver(...)`] function with the parameters below:
 
   - `typeId`: keccak256('LSP7Tokens_SenderNotification') > `0x429ac7a06903dbc9c13dfcb3c9d11df8194581fa047c96d7a4171fc7402958ea`
   - `data`: The data sent SHOULD be ABI encoded and contain the `caller` (address), `sender` (address), `receiver` (address), `amount` (uint256) and the `data` (bytes) respectively.
 
 <br>
 
-- If the token recipient is a contract that supports LSP1 interface, it SHOULD call the token recipient's [`universalReceiver(...)`] function with the parameters below:
+- If the token **recipient** is a contract that supports LSP1 interface, it SHOULD call the token recipient's [`universalReceiver(...)`] function with the parameters below:
 
   - `typeId`: keccak256('LSP7Tokens_RecipientNotification') >`0x20804611b3e2ea21c480dc465142210acf4a2485947541770ec1fb87dee4a55c`
   - `data`: The data sent SHOULD be ABI encoded and contain the `caller` (address), `sender` (address), `receiver` (address), `amount` (uint256) and the `data` (bytes) respectively.
