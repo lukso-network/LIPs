@@ -177,7 +177,7 @@ The linked JSON file SHOULD have the following format:
                 },
                 { // example of a NFT/smart contract based image
                     "address": Address, // the address of an LSP7 or LSP8
-                    "tokenId": 32bytes  // (optional) if token contract is an LSP7
+                    "tokenId": 32bytes  // (optional) if token contract is an LSP8
                 }
                 ...
             ],
