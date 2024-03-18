@@ -183,10 +183,10 @@ The linked JSON file SHOULD have the following format:
             ],
             [...]
         ],
-        "assets": [ // SHOULD be used for any assets of the token (e.g. 3d assets, high res pictures or music, etc)
+        "assets": [ // SHOULD be used for any assets of the token (e.g. 3d assets, high res pictures, videos, music, LSP7/8 smart contract)
             {
                 "url": 'string',
-                "fileType": 'string',
+                "fileType": 'string', // file extension or mime type
                 "verification": {
                     "method": 'keccak256(bytes)',
                     "data": 'string', // bytes32 hash of the asset
