@@ -31,14 +31,14 @@ The LSP20 Call Verification standard involves two key types of contracts, each w
 
 - **Contract Delegating Verification**: This contract receives the initial function call. It does not implement a specific interface pattern, but rather incorporates logic to delegate verification to a verifier contract. To highlight that this contract implement this type of logic, it MUST support `0x1a0eb6a5` interfaceId, calculated as the first 4 bytes of the keccak256 hash of the string `"LSP20CallVerification"`.
 
-- **Verifier Contract**: Following the **LSP20-CallVerifier** interface, this contract is dedicated to handling the verification process after being called by the contract delegating verification. It should support the **LSP20-CallVerifier** interfaceId: `0x0d6ecac7`, calculated as the XOR of specific functions detailed below.
+- **Verfying Contract**: Following the **LSP20-CallVerifier** interface, this contract is dedicated to handling the verification process after being called by the contract delegating verification. It should support the **LSP20-CallVerifier** interfaceId: `0x0d6ecac7`, calculated as the XOR of specific functions detailed below.
 
 ```mermaid
 sequenceDiagram
     participant I as Initiator<br/>(Any Address)
-    participant R as Requestor
-    participant V as Verifier
-    participant T as Target
+    participant R as Verification Requestor
+    participant V as Verifying Contract
+    participant T as Call Target
 
     I->>R: Function call
     R->>V: lsp20VerifyCall
