@@ -51,7 +51,7 @@ sequenceDiagram
         R->>V: lsp20VerifyCallResult
         V-->>V: Runs <br>Post-verification
         V->>R: returnedStatus
-        R->>R: returnedStatus <br> If success allow the call <br> If fail revert the call
+        R-->>R: returnedStatus <br> If success allow the call <br> If fail revert the call
     R->>I: Function result
 ```
 
