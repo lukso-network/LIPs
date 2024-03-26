@@ -53,7 +53,7 @@ The motivation for developing this new digital asset standard can be organized i
 
 ## Specification
 
-[ERC165] interface id: `0xb3c4928f`
+[ERC165] interface id: `0xc52d6008`
 
 The LSP7 interface ID is calculated as the XOR of the LSP7 interface (see [interface cheat-sheet below](#interface-cheat-sheet)) and the [LSP17 Extendable interface ID](./LSP-17-ContractExtension.md#erc165-interface-id).
 
@@ -131,7 +131,7 @@ _Requirements:_
 #### revokeOperator
 
 ```solidity
-function revokeOperator(address operator, bool notify, bytes memory operatorNotificationData) external;
+function revokeOperator(address operator, address tokenOwner, bool notify, bytes memory operatorNotificationData) external;
 ```
 
 Removes `operator` address as an operator of callers tokens.
@@ -141,12 +141,12 @@ MUST emit a [OperatorRevoked event](#OperatorRevoked).
 _Parameters:_
 
 - `operator` the address to revoke as an operator.
+- `tokenOwner` the address of the token owner to be revoked from as an operator.
 - `notify` the boolean indicating whether to notify the operator via LSP1 or not.
 - `operatorNotificationData` the data to send when notifying the operator via LSP1.
 
 _Requirements:_
 
-- `operator` cannot be the caller's address.
 - `operator` cannot be the zero address.
 
 **LSP1 Hooks:**
@@ -190,7 +190,7 @@ _Requirements:_
 #### decreaseAllowance
 
 ```solidity
-function decreaseAllowance(address operator, uint256 subtractedAmount, bytes memory operatorNotificationData) external;
+function decreaseAllowance(address operator, address tokenOwner, uint256 subtractedAmount, bytes memory operatorNotificationData) external;
 ```
 
 Decrease the allowance of `operator` by `subtractedAmount`. This is an alternative approach to {authorizeOperator} that can be used as a mitigation for the double spending allowance problem. Notify the operator based on the LSP1-UniversalReceiver standard.
@@ -198,6 +198,7 @@ Decrease the allowance of `operator` by `subtractedAmount`. This is an alternati
 _Parameters:_
 
 - `operator` the address to decrease allowance as an operator.
+- `tokenOwner` the address of the token owner to decrease allowance from as an operator.
 - `subtractedAmount` the amount to substract to the existing allowance of tokens operator has access to.
 - `operatorNotificationData` the data to send when notifying the operator via LSP1.
 
@@ -205,7 +206,6 @@ _Requirements:_
 
 - `subtractedAmount` must be less than the `operator`'s current allowance.
 - `operator` cannot be the zero address.
-- `operator` cannot be the the caller's address.
 
 **LSP1 Hooks:**
 
@@ -269,7 +269,6 @@ _Requirements:_
 
 - `from` cannot be the zero address.
 - `to` cannot be the zero address.
-- `from` and `to` cannot be the same address.
 - `amount` tokens must be owned by `from`.
 - If the caller is not `from`, it must be an operator for `from` with access to at least `amount` tokens.
 
@@ -441,11 +440,11 @@ interface ILSP7 is /* IERC165 */ {
 
     function authorizeOperator(address operator, uint256 amount, bytes memory operatorNotificationData) external;
 
-    function revokeOperator(address to, bool notify, bytes memory operatorNotificationData) external;
+    function revokeOperator(address operator, address tokenOwner, bool notify, bytes memory operatorNotificationData) external;
 
     function increaseAllowance(address operator, uint256 addedAmount, bytes memory operatorNotificationData) external;
 
-    function decreaseAllowance(address operator, uint256 subtractedAmount, bytes memory operatorNotificationData) external;
+    function decreaseAllowance(address operator, address tokenOwner, uint256 subtractedAmount, bytes memory operatorNotificationData) external;
 
     function authorizedAmountFor(address operator, address tokenOwner) external view returns (uint256);
 

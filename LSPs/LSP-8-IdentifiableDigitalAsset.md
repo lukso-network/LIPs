@@ -173,8 +173,7 @@ _Requirements:_
 
 - `tokenId` must exist.
 - `operator` must be authorized for `tokenId`.
-- caller must be current `tokenOwner` of `tokenId`.
-- `operator` cannot be calling address.
+- caller must be current `tokenOwner` or the `operator` of `tokenId`.
 - `operator` cannot be the zero address.
 
 **LSP1 Hooks:**
@@ -247,7 +246,6 @@ _Requirements:_
 
 - `from` cannot be the zero address.
 - `to` cannot be the zero address.
-- `from` and `to` cannot be the same address.
 - `tokenId` token must be owned by `from`.
 - If the caller is not `from`, it must be an operator of `tokenId`.
 
@@ -291,7 +289,6 @@ _Requirements:_
 - `from`, `to`, `tokenId`, `force`, and `data` lists are the same length.
 - no values in `from` can be the zero address.
 - no values in `to` can be the zero address.
-- `from` and `to` cannot be the same address at the same.
 - each `tokenId` token must be owned by `from`.
 - If the caller is not `from`, it must be an operator of each `tokenId`.
 
