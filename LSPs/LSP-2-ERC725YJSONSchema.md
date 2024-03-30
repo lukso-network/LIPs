@@ -718,14 +718,14 @@ const url = web3.utils.utf8ToHex('ifps://QmYr1VJLwerg6pEoscdhVGugo39pa6rycEZLjtR
 
 
 // final result (to be stored on chain)
-const VerfiableURI =  verfiableUriIdentifier + verificationMethod.substring(2)  +  verificationDatalength.substring(2) +  verificationData.substring(2) + url.substring(2)
-                     ^                        ^                                    ^                                      ^                               ^
-                     0000                     6f357c6a                             0020                                   820464ddfac1be...               696670733a2f2...
+const VerfiableURI =  verfiableUriIdentifier + verificationMethod.substring(2) + verificationDatalength.substring(2) + verificationData.substring(2) + url.substring(2)
+                      ^                        ^                                 ^                                     ^                               ^
+                      0000                     6f357c6a                          0020                                  820464ddfac1be...               696670733a2f2...
 
 // structure of the VerifiableURI
-0x0000 6f357c6a + 0020 + 820464ddfac1bec070cc14a8daf04129871d458f2ca94368aae8391311af6361 + 696670733a2f2f516d597231564a4c776572673670456f73636468564775676f3339706136727963455a4c6a7452504466573834554178
-  ^    ^                ^                         ^                                         ^
-  0000 keccak256(utf8)  verificationDatalength    verificationData                          encoded URL
+0x0000 + 6f357c6a +       0020 +                    820464ddfac1bec070cc14a8daf04129871d458f2ca94368aae8391311af6361 + 696670733a2f2f516d597231564a4c776572673670456f73636468564775676f3339706136727963455a4c6a7452504466573834554178
+  ^      ^                ^                         ^                                                                  ^
+  0000   keccak256(utf8)  verificationDatalength    verificationData                                                   encoded URL
 
 // example value
 0x00006f357c6a0020820464ddfac1bec070cc14a8daf04129871d458f2ca94368aae8391311af6361696670733a2f2f516d597231564a4c776572673670456f73636468564775676f3339706136727963455a4c6a7452504466573834554178
