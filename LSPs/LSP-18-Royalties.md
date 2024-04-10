@@ -52,7 +52,7 @@ The data value MUST be a [LSP2 BytesCompactArray](./LSP-2-ERC725YJSONSchema.md#b
 }
 ```
 
-A compact byte array allows optinally to store additional fields if needed. Required fields are: `interfaceId` and `recipient`. The `points` field is optional and if not provided it is assumed to be `0` points.
+A compact byte array allows optionally to store additional fields if needed. Required fields are: `interfaceId` and `recipient`. The `points` field is optional and if not provided it is assumed to be `0` points.
 
 #### LSP18RoyaltiesEnforcePayment
 
