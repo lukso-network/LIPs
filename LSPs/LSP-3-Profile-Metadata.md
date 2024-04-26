@@ -92,7 +92,7 @@ The linked JSON file SHOULD have the following format:
             },
             { // example of a NFT/smart contract based avatar
                 "address": Address, // the address of an LSP7 or LSP8
-                "tokenId": 32bytes  // (optional) if token contract is an LSP7
+                "tokenId": 32bytes  // (optional) if token contract is an LSP8
             }
         ]
         // below each image type SHOULD have different size of the same image, so that interfaces can choose which one to load for better loading performance
