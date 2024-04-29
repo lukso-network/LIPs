@@ -15,6 +15,8 @@ This standard defines a universal factory smart contract, that will allow to dep
 
 ## Abstract
 
+LSP16 introduces a universal factory for deploying smart contracts using the CREATE2 opcode, ensuring consistent contract addresses across multiple blockchains. This standard allows for the deployment of various contract types, including initializable contracts, with initialization data included in the deployment process to prevent address squatting. By leveraging the Nick Factory for deployment, LSP16 enables a decentralized way to replicate contract addresses on any chain, facilitating multi-chain identity and asset management. This approach offers significant advantages, such as ensuring that assets sent across chains reach their intended contract by maintaining consistent contract addresses. LSP16 is a cornerstone for building interoperable and scalable blockchain applications, offering developers a reliable tool for multi-chain deployment and management.
+
 This standard defines several functions to be used to deploy different types of contracts using [CREATE2] such as normal and initializable contracts. These functions take into consideration the need to initialize in the same transaction for initializable contracts. The initialize data is included in the salt to avoid squatting addresses on different chains.
 
 The same bytecode and salt will produce the same contract address on different chains, if and only if, the UniversalFactory contract was deployed on the same address on each chain, using [Nick Factory] in our case.

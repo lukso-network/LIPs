@@ -14,6 +14,8 @@ A Transaction Relay Service API for consistency across all Transaction Relay Ser
 
 ## Abstract
 
+LSP15 standardizes the interface for Transaction Relay Services (TRS), facilitating the seamless execution of transactions on behalf of users, and covering their gas costs. This initiative ensures consistency across TRS providers, making applications universally compatible, irrespective of the relay service chosen. This standard is pivotal for fostering an open marketplace where users can select a TRS that best suits their needs, enhancing user experience and accessibility within the LUKSO ecosystem. By specifying a clear API for transaction execution and quota management, LSP15 simplifies the integration process for developers, encouraging broader adoption of TRS. This standard embodies the vision of a more inclusive blockchain environment, where technical barriers are minimized, allowing for greater participation and innovation.
+
 The [LSP-6-KeyManager](./LSP-6-KeyManager.md) proposes an [`executeRelayCall()`](./LSP-6-KeyManager.md#executerelaycall) function. It allows anybody to execute `_calldata` payload on a set ERC725 X or Y smart contract, given they have a signed message from a valid executor. This opens the way to Transaction Relay Services which send transactions on behalf of a user to cover their gas costs.
 
 This document describes the API for a Transaction Relay Service.

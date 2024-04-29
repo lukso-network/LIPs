@@ -11,9 +11,15 @@ requires: ERC165
 
 ## Simple Summary
 
-This standard describes a mechanism for adding additional functionality to a contract after it has been deployed, through the use of extensions.
+This standard describes a mechanism for adding additional functionality to a contract after it has been deployed, through the use of extensions. This provides a flexible way to enhance and evolve smart contracts over time.
 
 ## Abstract
+
+LSP 17 revolutionizes smart contract flexibility and upgradeability on the LUKSO blockchain. At its core, LSP 17 introduces a dynamic mechanism for enhancing existing contracts post-deployment, utilizing two key components: Extendable Contracts and Extension Contracts. Extendable Contracts serve as the base, open to new functionalities, while Extension Contracts hold the additional features ready to be integrated.
+
+The capability of LSP 17 lies in its forwarding strategy. Should an Extendable Contract receive a call for an undefined function, it smartly reroutes this to the appropriate Extension Contract. This routing is made possible through a specialized fallback function, ensuring that Extension Contracts can access the original call details, including the initiator and the transaction value, seamlessly appended to the calldata.
+
+This standard not only boosts a contract's capability over time but also emphasizes modularity and reusability. By avoiding the redundant deployment of similar logic across multiple contracts, LSP 17 aims to reduce network congestion and optimize gas costs. It's a testament to LUKSO's commitment to sustainable and scalable blockchain development, ensuring that smart contracts can evolve alongside the ever-changing landscape of blockchain technology and user needs.
 
 This proposal introduces two types of contracts:
 

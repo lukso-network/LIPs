@@ -11,9 +11,13 @@ requires:
 
 ## Simple Summary
 
-This standard introduces a mechanism for delegating the verification of a function call to another contract.
+This standard introduces a mechanism for delegating the verification of a function call to another contract. It enhances usability when interacting with smart contracts.
 
 ## Abstract
+
+LSP 20, known as Call Verification, introduces a smart way to delegate the verification of function calls to a separate contract. This setup allows a primary contract to consult a verifier contract before and after executing a call, ensuring that specific conditions or requirements are met. It's like having a security checkpoint for your contract's functions, where the verifier acts as the gatekeeper, deciding which calls are allowed based on predefined rules.
+
+This approach is particularly useful for managing complex or evolving requirements for function calls without needing to update the main contract (through upgradability for instance). It's akin to having a dynamic rulebook that can be changed or updated easily without touching the core logic of your application. For developers, it offers a flexible and modular way to build and maintain smart contracts, providing a scalable solution for managing access and permissions within decentralized applications.
 
 The Call Verification standard introduces a way for a smart contract to delegate the conditions or requirements needed to call a specific function to another smart contract.
 
