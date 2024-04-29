@@ -25,10 +25,13 @@ requires: ERC725Y
   - [Singleton](#singleton)
   - [Array](#array)
   - [Mapping](#mapping)
+    - [Left padded types](#left-padded-types)
+    - [Right padded types](#right-padded-types)
+    - [Unpadded types](#unpadded-types)
   - [MappingWithGrouping](#mappingwithgrouping)
 - [ValueType](#valuetype)
-  - [bytes[CompactBytesArray]](#bytescompactbytesarray)
-  - [bytesN[CompactBytesArray]](#bytesncompactbytesarray)
+  - [bytes\[CompactBytesArray\]](#bytescompactbytesarray)
+  - [bytesN\[CompactBytesArray\]](#bytesncompactbytesarray)
   - [Tuples of `valueType`](#tuples-of-valuetype)
 - [ValueContent](#valuecontent)
   - [BitArray](#bitarray)
@@ -41,9 +44,13 @@ requires: ERC725Y
 
 ## Simple Summary
 
-This schema defines how a single [ERC725Y](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) data key-value pair can be described. It can be used as an abstract structure over the storage of an ERC725Y smart contract.
+The LSP2 standard introduces a JSON schema for ERC725Y data keys. This schema defines how a single [ERC725Y](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) data key-value pair can be described. It can be used as an abstract structure over the storage of an ERC725Y smart contract.
 
 ## Abstract
+
+The LUKSO Standard Proposal 2, or LSP2, introduces a new way to structure, store and represent data stored in smart contracts through the ERC725Y JSON Schema. This innovative approach allows for the storage of structured data directly on-chain, utilizing the flexibility and accessibility of JSON formatting for ERC725Y data keys. Imagine being able to store your blockchain identity's profile information, preferences, or even configuration settings in a standardized, easily retrievable format. That's what LSP2 enables.
+
+By adopting the ERC725Y JSON Schema, developers can define clear, consistent data structures for their applications, enhancing interoperability and ease of integration across the LUKSO ecosystem. This structured approach not only simplifies data management but also paves the way for more complex and user-friendly decentralized applications. With LSP2, the potential for creating rich, interactive, and personalized user experiences on the blockchain becomes a reality, opening up a world of possibilities for developers and users alike.
 
 ERC725Y enables storing any data in a smart contract as `bytes32 => bytes` data key-value pairs.
 
@@ -139,7 +146,7 @@ The `valueType` can also be useful for typecasting. It enables contracts or inte
 | `bytesN`                                                     | a bytes value of **fixed-size** `N`, from `bytes1` up to `bytes32` |
 | `bytes`                                                      | a bytes value of **dynamic-size**                                  |
 | `uintN[]`                                                    | an array of **signed** integers                                    |
-| `string[]`                                                   | an array of UTF-8 encoded strings                                   |
+| `string[]`                                                   | an array of UTF-8 encoded strings                                  |
 | `address[]`                                                  | an array of addresses                                              |
 | `bytes[]`                                                    | an array of dynamic size bytes                                     |
 | `bytesN[]`                                                   | an array of fixed size bytes                                       |
@@ -194,11 +201,11 @@ Valid `valueContent` are:
 | `Bytes`                           | a bytes value of **dynamic-size**                                                                                                  |
 | `Keccak256`                       | a 32 bytes long hash digest, obtained from the keccak256 hashing algorithm                                                         |
 | `BitArray`                        | an array of single `1` or `0` bits                                                                                                 |
-| `URL`                             | a URL encoded as a UTF-8 string                                                                                                   |
+| `URL`                             | a URL encoded as a UTF-8 string                                                                                                    |
 | [`VerifiableURI`](#verifiableuri) | The content contains respectively the verification method, the length of the verification data, the verification data, and the uri |
 | [`AssetURL`](#asseturl)           | The content contains the hash function, hash and link to the asset file                                                            |
 | [`JSONURL`](#jsonurl)             | hash function, hash and link to the JSON file                                                                                      |
-| `Markdown`                        | a structured Markdown mostly encoded as UTF-8 string                                                                                |
+| `Markdown`                        | a structured Markdown mostly encoded as UTF-8 string                                                                               |
 | `0x1345ABCD...`                   | a **literal** value, when the returned value is expected to equal some specific bytes                                              |
 
 The `valueContent` field can also define a tuple of value contents (for instance, when the `valueType` is a tuple of types, as described above). In this case, each value content MUST be defined between parentheses. For instance: `(Bytes4,Number)`.

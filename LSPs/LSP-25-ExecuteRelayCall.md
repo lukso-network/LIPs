@@ -21,10 +21,11 @@ requires: ERC165
     - [executeRelayCallBatch](#executerelaycallbatch)
   - [Signature Format](#signature-format)
   - [Multi-Channel Nonces](#multi-channel-nonces)
-    - [What are multi-channel nonces?](#what-are-multi-channel-nonces-)
+    - [What are multi-channel nonces?](#what-are-multi-channel-nonces)
     - [Problem of Sequential Nonces](#problem-of-sequential-nonces)
     - [Benefits of multi-channel nonces](#benefits-of-multi-channel-nonces)
-    - [How nonces are represented across channels?](#how-nonces-are-represented-across-channels-)
+    - [How nonces are represented across channels?](#how-nonces-are-represented-across-channels)
+  - [Rationale](#rationale)
 - [Implementation](#implementation)
 - [Interface Cheat Sheet](#interface-cheat-sheet)
 - [Copyright](#copyright)
@@ -34,6 +35,12 @@ requires: ERC165
 This standard describes an interface and a signature scheme that can be used to integrate meta-transactions (transactions where users do not pay for the gas) inside a smart contract.
 
 # Abstract
+
+LSP25 introduces a framework for implementing meta-transactions within smart contracts, enabling users to interact with contracts without needing to pay gas fees themselves. This standard is especially useful in various contexts, such as Universal Profiles, token transfers, NFTs, and voting systems, where delegates can execute transactions on behalf of users. By standardizing the interface for meta-transactions, LSP 25 facilitates gas-less transactions across applications like digital marketplaces or Universal Profiles, easing the onboarding process for new users who may not hold native tokens.
+
+The key features of LSP 25 include functions to get nonces for transaction signing and to execute single or batched relay calls with signatures. This allows transactions to be executed on behalf of users, with the gas fees covered by another party. A notable innovation introduced by LSP 25 is the concept of multi-channel nonces, which addresses the limitations of sequential nonces and allows for out-of-order execution of transactions. This flexibility benefits both users and relayers, providing a more efficient and user-friendly transaction experience.
+
+By adopting LSP 25, developers can simplify user interactions with their dApps, enhancing the user experience and potentially increasing adoption. The standard's design decisions, such as the exclusion of gas parameters in the signature format to minimize complexity, reflect a balance between usability and security considerations.
 
 Meta transactions in web3 are used in many different context. From interacting with Universal Profiles to transferring tokens and NFTs to voting systems, where delegates can submit transactions on behalf of other users and pay for the gas cost.
 

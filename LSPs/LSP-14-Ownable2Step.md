@@ -13,7 +13,7 @@ requires: ERC173, LSP1
 
 <!--"If you can't explain it simply, you don't understand it well enough." Provide a simplified and layman-accessible explanation of the LIP.-->
 
-This standard describes an extended version of [EIP173](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-173.md) that uses a 2-step process to transfer or renounce ownership of a contract, instead of instant execution.
+This standard describes an extended version of [EIP173](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-173.md) that uses a 2-step process to transfer or renounce ownership of a contract, instead of instant execution. It aims for a more secure management of contract ownership via a 2-step verification when transferring ownership of a contract.
 
 In addition, this standard defines hooks that call the [`universalReceiver(...)`] function of the current owner and new owner, if these addresses are contracts that implement LSP1. This aims to:
 
@@ -23,6 +23,8 @@ In addition, this standard defines hooks that call the [`universalReceiver(...)`
 ## Abstract
 
 <!--A short (~200 word) description of the technical issue being addressed.-->
+
+LSP14 - Ownable2Step simplifies ownership management in smart contracts through a two-step process, enhancing security and preventing accidental loss of control. Unlike instant ownership transfer, LSP14 ensures deliberate actions by requiring the new owner's acceptance, thereby minimizing risks associated with wrong addresses or lost keys. It also incorporates LSP1's universalReceiver function, enabling notifications during ownership changes, fostering transparency and communication between the previous and new owners. This standard is crucial for maintaining control over contracts, especially in scenarios where ownership carries significant power and access to sensitive functions. Through LSP14, LUKSO enhances the safety and reliability of contract ownership transitions, supporting a more secure and user-friendly blockchain ecosystem.
 
 Because owning the contract allows access to sensitive methods, transferring to the wrong address or renouncing ownership of the contract by accident in a single transaction can be highly dangerous. Having those two processes work in 2 steps substantially reduces the probability of transferring or renouncing ownership of the contract by accident.
 

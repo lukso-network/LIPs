@@ -1,7 +1,7 @@
 ---
 lip: 11
 title: Basic Social Recovery
-author: 
+author:
 discussions-to: https://discord.gg/E2rJPP4
 status: Draft
 type: LSP
@@ -11,9 +11,15 @@ requires: ERC165, ERC725, LSP2, LSP6
 
 ## Simple Summary
 
-This standard describes a **basic social recovery** contract that can recover access to [ERC725] contracts through a [LSP6-KeyManager](./LSP-6-KeyManager.md).
+This standard describes a **basic social recovery** contract that can recover access to [ERC725] contracts and removes the need for seed phrases or private keys backups.
 
 ## Abstract
+
+LSP 11 - Social Recovery for Universal Profiles introduces a mechanism to regain access to your Universal Profile (UP) if you lose your keys, a safeguard against one of the biggest fears in the crypto space: losing access to your digital assets and identity. This LSP designates a set of guardians—trusted individuals or institutions—that you choose. If you ever lose access, these guardians can collectively initiate a recovery process to grant access to a new address that you control.
+
+The process is secured by requiring a threshold of guardians to agree on the new address, ensuring no single guardian can unilaterally control the recovery. Additionally, the implementation of a secret word or phrase that only you know adds another layer of security. Once the guardians approve and the secret word matches, access is transferred, illustrating a robust yet flexible approach to account recovery.
+
+This standard is vital for maintaining control over your digital identity and assets on the LUKSO network, making Universal Profiles not just powerful tools for expressing digital identity but also secure and recoverable assets in the event of key loss. It represents a thoughtful balance between security and usability, allowing users to recover their valuable digital identities without compromising on decentralization or relying solely on traditional security measures like seed phrases.
 
 This standard provides a mechanism for recovering access to ERC725 contracts such as tokens, NFTs, and Universal Profiles by adding a new controller address through the Key Manager after a recovery process.
 
@@ -23,7 +29,7 @@ The social recovery contract should ensure a flexible and secure process where g
 
 Any Key could be lost or leaked due to a certain accident, so it is not advised to rely on a singular key to control ERC725 contracts through the Key Manager and a social recovery contract is needed in this case.
 
-In the case above, the user can reach out to his guardians and ask them to vote for a specific address. 
+In the case above, the user can reach out to his guardians and ask them to vote for a specific address.
 There are many possible options for whom to select as a guardian. The three most common options are:
 
 - EOAs controlled by the wallet holder themselves (via paper mnemonics or cold storage devices)
@@ -82,7 +88,6 @@ function getGuardiansThreshold() external view returns (uint256)
 
 Returns the minimum number of guardians selection required by an address to start a recovery process.
 
-
 #### getRecoverySecretHash
 
 ```solidity
@@ -90,7 +95,6 @@ function getRecoverySecretHash() external view returns (bytes32)
 ```
 
 Returns the recovery secret hash set by the owner.
-
 
 #### getGuardianChoice
 
@@ -191,7 +195,7 @@ _Requirements:_
 #### recoverOwnership
 
 ```solidity
-function recoverOwnership(address recoverer, string memory plainSecret, bytes32 newHash) external 
+function recoverOwnership(address recoverer, string memory plainSecret, bytes32 newHash) external
 ```
 
 Increment the recovery counter and recovers the ownership permissions in the linked target for the recoverer if he has reached the guardiansThreshold and given the right plainSecret that produce the `secretHash`. MUST fire the [RecoveryProcessSuccessful](#recoverprocesssuccessful) event and the [SecretHashChanged](#secrethashchanged) event.
@@ -264,11 +268,11 @@ In order to allow the social recovery contract to recover the linked target and 
 
 ```json
 {
-    "name": "AddressPermissions:Permissions:<address>",
-    "key": "0x4b80742de2bf82acb3630000<address>",
-    "keyType": "MappingWithGrouping",
-    "valueType": "bytes32",
-    "valueContent": "BitArray"
+  "name": "AddressPermissions:Permissions:<address>",
+  "key": "0x4b80742de2bf82acb3630000<address>",
+  "keyType": "MappingWithGrouping",
+  "valueType": "bytes32",
+  "valueContent": "BitArray"
 }
 ```
 
@@ -318,7 +322,7 @@ interface ILSP11  /* is ERC165 */ {
     function isGuardian(address _address) external view returns (bool);
 
     function getGuardiansThreshold() external view returns (uint256);
-    
+
     function getRecoverySecretHash() external view returns (bytes32);
 
     function getGuardianChoice(address guardian) external view returns (address);
@@ -334,12 +338,13 @@ interface ILSP11  /* is ERC165 */ {
     function selectNewController(address addressSelected) external;
 
     function recoverOwnership(address recoverer, string memory plainSecret, bytes32 newHash) external;
-    
+
 }
 ```
 
 ## Copyright
+
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
 
-[ERC165]: <https://eips.ethereum.org/EIPS/eip-165>
-[ERC725]: <https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md>
+[ERC165]: https://eips.ethereum.org/EIPS/eip-165
+[ERC725]: https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md

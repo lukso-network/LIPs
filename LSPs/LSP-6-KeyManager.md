@@ -11,9 +11,15 @@ requires: ERC165, ERC1271, LSP2, LSP20, LSP25
 
 ## Simple Summary
 
-This standard describes a `KeyManager` contract with a set of pre-defined permissions for addresses. A KeyManager contract can control an [ERC725Account] like account, or any other [ERC725](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) smart contract.
+This standard describes a `KeyManager` contract with a set of pre-defined permissions for addresses. A Key Manager contract can control an [ERC725Account] like account, or any other [ERC725](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) smart contract. It enables control via multiple permissioned addresses called _“controllers”_ and allows these multiple controllers to interact with the linked account.
 
 ## Abstract
+
+LSP 6 - Key Manager, acts as the brain behind Universal Profiles, enabling sophisticated access control and interactions. Imagine having a digital identity that can interact with other contracts, manage assets, or even delegate actions without exposing your main account. This is where the Key Manager shines, serving as a permissioned gateway.
+
+Here's how it works: You have a Universal Profile, essentially a smart contract account on the blockchain. This account can hold assets, manage permissions, and interact with other contracts. However, by itself, it's like a locked treasure chest. The Key Manager is the key to this chest, allowing specific actions to be performed by those you trust.
+
+For instance, you can set permissions for different addresses, allowing them to perform specific actions such as sending transactions, managing assets, or setting data within your Universal Profile. This flexibility means you can have secure, controlled interactions on the blockchain, paving the way for more complex and secure applications.
 
 This standard allows for controlling addresses to be restricted through multiple permissions, to act on and through this KeyManager on a controlled smart contract (for example an [ERC725Account]).
 
