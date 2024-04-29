@@ -11,7 +11,7 @@ requires: ERC165, ERC725, LSP2, LSP6
 
 ## Simple Summary
 
-This standard describes a **basic social recovery** contract that can recover access to [ERC725] contracts and removes the need for seed phrases or private keys.
+This standard describes a **basic social recovery** contract that can recover access to [ERC725] contracts and removes the need for seed phrases or private keys backups.
 
 ## Abstract
 
