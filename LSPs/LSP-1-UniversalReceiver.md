@@ -157,6 +157,8 @@ Additionally, some specific **UniversalReceiverDelegate** contracts COULD be map
 }
 ```
 
+In scenarios where both a default UniversalReceiverDelegate and a custom UniversalReceiverDelegate are present, it is recommended to prioritize the default one first. This ensures that more generic conditions are assessed first, providing a consistent and broad level of handling. Subsequently, the custom should be utilized to address specific conditions associated with the typeId.
+
 The `<bytes32\>` in the data key name corresponds to the `typeId` passed to the `universalReceiver(..)` function. For example, for the typeId `0xcafecafecafecafecafecafecafecafecafecafebeefbeefbeefbeefbeefbeef`, the data key above will be constructed as follow:
 
 ```
