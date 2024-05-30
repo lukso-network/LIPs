@@ -803,7 +803,7 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 [LSP10-ReceivedVaults]: ./LSP-10-ReceivedVaults.md
 [LSP6-KeyManager]: ./LSP-6-KeyManager.md
 [LSP14-Ownable2Step]: ./LSP-14-Ownable2Step.md
-[lukso-network/lsp-smart-contracts]: https://github.com/lukso-network/lsp-smart-contracts/tree/develop/packages/lsp20-contracts/contracts/LSP0ERC725AccountCore.sol
+[lukso-network/lsp-smart-contracts]: https://github.com/lukso-network/lsp-smart-contracts/tree/develop/packages/lsp0-contracts/contracts/LSP0ERC725AccountCore.sol
 [LSP17-ContractExtension]: ./LSP-17-ContractExtension.md
 [LSP20-CallVerification]: ./LSP-20-CallVerification.md
 [`lsp20VerifyCall(..)`]: ./LSP-20-CallVerification.md#lsp20verifycall
