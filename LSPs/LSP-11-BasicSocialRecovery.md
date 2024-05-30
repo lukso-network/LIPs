@@ -284,7 +284,7 @@ In this case, it is ensured that guardians can't act maliciously and would need 
 
 ## Implementation
 
-An implementation can be found in the [lukso-network/lsp-smart-contracts](https://github.com/lukso-network/lsp-smart-contracts/pull/114) repository.
+An implementation can be found in the [lukso-network/lsp-smart-contracts](https://github.com/lukso-network/lsp-smart-contracts/blob/develop/packages/lsp-smart-contracts/contracts/LSP11BasicSocialRecovery/LSP11BasicSocialRecoveryCore.sol) repository.
 
 ## Interface Cheat Sheet
 

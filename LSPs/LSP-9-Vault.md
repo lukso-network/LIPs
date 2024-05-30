@@ -495,7 +495,7 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 [LSP1]: <./LSP-1-UniversalReceiver.md>
 [LSP2-ERC725YJSONSchema]: <./LSP-2-ERC725YJSONSchema.md>
 [LSP14]: <./LSP-14-Ownable2Step.md>
-[lukso-network/lsp-smart-contracts]: <https://github.com/lukso-network/lsp-smart-contracts/blob/develop/contracts/LSP9Vault/LSP9VaultCore.sol>
+[lukso-network/lsp-smart-contracts]: <https://github.com/lukso-network/lsp-smart-contracts/blob/develop/packages/lsp9-contracts/contracts/LSP9VaultCore.sol>
 [LSP17]: <./LSP-17-ContractExtension.md>
 [LSP17-ContractExtension]: <./LSP-17-ContractExtension.md>
 [UniversalReceiver]: <./LSP-1-UniversalReceiver.md#events>

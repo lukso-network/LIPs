@@ -336,4 +336,4 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 [ERC223]: https://github.com/ethereum/EIPs/issues/223
 [ERC777]: https://eips.ethereum.org/EIPS/eip-777
 [specification for the abi-encoding of `bytes`]: https://docs.soliditylang.org/en/v0.8.19/abi-spec.html#formal-specification-of-the-encoding
-[lukso-network/lsp-smart-contracts]: https://github.com/lukso-network/lsp-smart-contracts/tree/develop/contracts/LSP1UniversalReceiver
+[lukso-network/lsp-smart-contracts]: https://github.com/lukso-network/lsp-smart-contracts/tree/develop/packages/lsp1-contracts/contracts

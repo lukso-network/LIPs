@@ -735,7 +735,7 @@ Furthermore, if a contract is not initializable, the provided salt is hashed to 
 
 ## Implementation
 
-An implementation can be found in the [lukso-network/lsp-smart-contracts](https://github.com/lukso-network/lsp-smart-contracts/blob/develop/contracts/LSP16UniversalFactory/LSP16UniversalFactory.sol) repository.
+An implementation can be found in the [lukso-network/lsp-smart-contracts](https://github.com/lukso-network/lsp-smart-contracts/blob/develop/packages/lsp16-contracts/contracts/LSP16UniversalFactory.sol) repository.
 
 ## Security Consideration
 
@@ -751,5 +751,5 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 [CREATE2]: https://eips.ethereum.org/EIPS/eip-1014
 [minimal proxy]: https://eips.ethereum.org/EIPS/eip-1167
 [ContractCreated]: ./LSP-16-UniversalFactory.md#contractcreated
-[LSP16 UniversalFactory smart contract]: https://github.com/lukso-network/lsp-smart-contracts/blob/develop/contracts/LSP16UniversalFactory/LSP16UniversalFactory.sol
+[LSP16 UniversalFactory smart contract]: https://github.com/lukso-network/lsp-smart-contracts/blob/develop/packages/lsp16-contracts/contracts/LSP16UniversalFactory.sol
 [Nick Factory]: https://github.com/Arachnid/deterministic-deployment-proxy
