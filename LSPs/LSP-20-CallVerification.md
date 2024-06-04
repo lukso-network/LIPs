@@ -156,4 +156,4 @@ interface ILSP20  /* is ERC165 */ {
 
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
 
-[lukso-network/lsp-smart-contracts]: https://github.com/lukso-network/lsp-smart-contracts/blob/develop/contracts/
+[lukso-network/lsp-smart-contracts]: https://github.com/lukso-network/lsp-smart-contracts/tree/develop/packages

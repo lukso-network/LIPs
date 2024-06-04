@@ -393,7 +393,7 @@ This reliance on a link-based approach, rather than content-based, means that th
 
 ## Implementation
 
-An implementation can be found in the [lukso-network/lsp-smart-contracts](https://github.com/lukso-network/lsp-smart-contracts/blob/develop/contracts/LSP4DigitalAssetMetadata/LSP4DigitalAssetMetadata.sol) repository where token contract can inherit the following contract to have access to the ERC725Y storage and have the asset information set automatically.
+An implementation can be found in the [lukso-network/lsp-smart-contracts](https://github.com/lukso-network/lsp-smart-contracts/blob/develop/packages/lsp4-contracts/contracts/LSP4DigitalAssetMetadataCore.sol) repository where token contract can inherit the following contract to have access to the ERC725Y storage and have the asset information set automatically.
 
 The below defines the JSON interface of the `LSP4DigitalAssetMetadata`.
 

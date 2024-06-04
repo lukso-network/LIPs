@@ -540,7 +540,7 @@ _Parameters:_
 
 ## Implementation
 
-An implementation can be found in the [lukso-network/lsp-smart-contracts](https://github.com/lukso-network/lsp-smart-contracts/blob/develop/contracts/LSP23LinkedContractsDeployment/LSP23LinkedContractsFactory.sol)
+An implementation can be found in the [lukso-network/lsp-smart-contracts](https://github.com/lukso-network/lsp-smart-contracts/blob/develop/packages/lsp23-contracts/contracts/LSP23LinkedContractsFactory.sol)
 
 ## Interface Cheat Sheet
 

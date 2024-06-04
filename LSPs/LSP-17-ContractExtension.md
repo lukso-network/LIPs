@@ -208,7 +208,7 @@ In addition to adding new functionalities, it is crucial to extend the interface
 
 ## Implementation
 
-An implementation can be found in the [lukso-network/lsp-smart-contracts](https://github.com/lukso-network/lsp-smart-contracts/blob/develop/contracts/LSP17ContractExtension/) repository.
+An implementation can be found in the [lukso-network/lsp-smart-contracts](https://github.com/lukso-network/lsp-smart-contracts/tree/develop/packages/lsp17-contracts/contracts) repository.
 
 ## Copyright
 
