@@ -408,7 +408,7 @@ _example:_
 
 ```js
 // Examples:
-MyKeyName:MyMapName:MySubMapName // 0x35e6950bc8d21a1699e58328a3c4066df5803bb0b570d0150cb3819288e764b2 + 0x75060e3cd7d40450e94d415fb5992ced9ad8f058649e805951f558364152f9ed + 0x221cba00b07da22c3775601ffea5d3406df100dbb7b1c86cb2fe3739f0fe79a1
+MyKeyName:MyMapName:MySubMapName // 0x35e6950bc8d21a1699e58328a3c4066df5803bb0b570d0150cb3819288e764b2 + 0x75060e3cd7d40450e94d415fb5992ced9ad8f058649e805951f558364152f9ed + 0000 + 0x221cba00b07da22c3775601ffea5d3406df100dbb7b1c86cb2fe3739f0fe79a1
 "0x35e6950bc8d275060e3c0000221cba00b07da22c3775601ffea5d3406df100db"
 
 MyKeyName:MyMapName:<address>
@@ -417,7 +417,7 @@ MyKeyName:MyMapName:<address>
 // For more examples static examples see the "Mapping" examples
 
 MyKeyName:<bytes2>:<uint32> // ffff 4081242941
-"0x35e6950bc8d20000ffff000000000000000000000000000000000000f342d33d"
+"0x35e6950bc8d2ffff0000000000000000000000000000000000000000f342d33d"
 
 MyKeyName:<address>:<address> // 0xabcdef11abcdef11abcdef11abcdef11ffffffff, 0xcafecafecafecafecafecafecafecafecafecafe
 "0x35e6950bc8d2abcdef110000cafecafecafecafecafecafecafecafecafecafe"
