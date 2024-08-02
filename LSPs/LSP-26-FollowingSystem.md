@@ -24,13 +24,13 @@ The arrays describe two lists of addresses, follows and followers, primarily [ER
 
 One can access the two distinctive lists of followers by using the functions [`getFollowsByIndex`](#getFollowsByIndex) & [`getFollowersByIndex`](#getFollowersByIndex). The two functions are built with pagination in mind.
 
-Indexing services are not required to create the lists of followers, but can be used ot ease the access to the information when huge amount of data is needed, e.g. to build up complex follower graphs.
+Indexing services are not required to create the lists of followers, but can be used to ease the access to the information when huge amount of data is needed, e.g. to build up complex follower graphs.
 
 ## Motivation
 
 With on chain profiles, there is a need for a simple follower system, that allows apps to curate home screens and content for profiles. While this follower relation can also be used for more complex social systems as basis.
 
-Storing the addresses that a profile, smart contract or EOA is intersted in keeps that information in the control of the user, or owner of the smart contract (should one exists) and allows apps to read that data.
+Storing the addresses that a profile, smart contract or EOA is interested in keeps that information in the control of the user, or owner of the smart contract (should one exists) and allows apps to read that data.
 
 ## Specification
 
@@ -42,7 +42,7 @@ Storing the addresses that a profile, smart contract or EOA is intersted in keep
 function follow(address addr) external;
 ```
 
-Follow an specific address.
+Follow a specific address.
 Emits [`Follow`](#follow-1) event when following an address.
 
 **LSP1 Hooks:**
@@ -50,7 +50,7 @@ Emits [`Follow`](#follow-1) event when following an address.
 - If the followed address supports [LSP1-UniversalReceiver] interface, SHOULD call the follower's [`universalReceiver(...)`] function with the default parameters below:
 
   - `typeId`: `keccak256('LSP26FollowerSystem_FollowNotification')` > `0x71e02f9f05bcd5816ec4f3134aa2e5a916669537ec6c77fe66ea595fabc2d51a`
-  - `data`: The data sent SHOULD be abi encode packed and contain the address that starts following.
+  - `data`: The data sent SHOULD be packed encoded and contain the address that starts following.
 
 #### followBatch
 
@@ -75,7 +75,7 @@ Emits [`Unfollow`](#Unfollow-1) event when unfollowing an address.
 - If the followed address supports [LSP1-UniversalReceiver] interface, SHOULD call the follower's [`universalReceiver(...)`] function with the default parameters below:
 
   - `typeId`: `keccak256('LSP26FollowerSystem_UnfollowNotification')` > `0x9d3c0b4012b69658977b099bdaa51eff0f0460f421fba96d15669506c00d1c4f`
-  - `data`: The data sent SHOULD be abi encode packed and contain the address that unfollows.
+  - `data`: The data sent SHOULD be packed encoded and contain the address that unfollows.
 
 #### unfollowBatch
 
@@ -148,7 +148,7 @@ MUST be emitted when unfollowing an address.
 
 Adding a list of addresses that are followed to a smart contract can be used in various ways to create more social and engaging user interfaces. This is especially relevant for universal profiles, but not limited to.
 
-This data key is mainly used as a means to allow your followers to be taken from one app to another. What experiences and results this will have depends on the respective apps and how they want to use that information.
+Storing followers in a single decentralized registry allows followers to be taken from one app to another. What experiences and results this will have depends on the respective apps and how they want to use that information.
 
 ## Usage
 
