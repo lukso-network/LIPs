@@ -1,6 +1,6 @@
 ---
 lip: 26
-title: Following System
+title: Follower System
 author: Fabian Vogelsteller <fabian@lukso.network>, Kat Banas <kat@universaleverything.io>
 discussions-to: https://discord.gg/E2rJPP4
 status: Draft
@@ -192,5 +192,5 @@ interface ILSP26 {
 
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
 
-[LSP1-UniversalReceiver]: ./LSP-1-UniversalReceiver.md
+[lsp1-universalreceiver]: ./LSP-1-UniversalReceiver.md
 [lukso-network/lsp-smart-contracts]: https://github.com/lukso-network/lsp-smart-contracts/tree/develop/packages/lsp26-contracts/contracts/LSP26FollowingSystem.sol
