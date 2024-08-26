@@ -31,6 +31,12 @@ One can access the two distinctive lists of followers by using the functions [`g
 
 Indexing services are not required to create the lists of followers, but can be used to ease the access to the information when huge amount of data is needed, e.g. to build up complex follower graphs.
 
+## Motivation
+
+With on chain profiles, there is a need for a simple follower system, that allows apps to curate home screens and content for profiles. While this follower relation can also be used for more complex social systems as basis.
+
+Storing the addresses that a profile, smart contract or EOA is interested in keeps that information in the control of the user, or owner of the smart contract (should one exists) and allows apps to read that data.
+
 ```mermaid
 sequenceDiagram
     participant User A
