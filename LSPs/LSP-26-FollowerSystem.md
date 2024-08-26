@@ -9,7 +9,7 @@ created: 2024-06-29
 requires: ERC165, LSP1
 ---
 
-**The official follower registry address on LUKSO is: [`0xf01103E5a9909Fc0DBe8166dA7085e0285daDDcA`](https://explorer.lukso.network/address/0xf01103E5a9909Fc0DBe8166dA7085e0285daDDcA).**
+**The official follower registry address on LUKSO is: [0xf01103E5a9909Fc0DBe8166dA7085e0285daDDcA](https://explorer.lukso.network/address/0xf01103E5a9909Fc0DBe8166dA7085e0285daDDcA).**
 
 To deploy this follower system on other chains please see the [deployment section](#deployment). 
 
