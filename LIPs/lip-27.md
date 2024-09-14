@@ -1,7 +1,7 @@
 ---
 lip: 27
 title: Token Bound Profile
-author: Valentine Orga <valentineorga@gmail.com>, Tanto Defi <tandodefi@proton.me>
+author: Valentine Orga <valentineorga@gmail.com>, Tanto Defi <tantodefi@proton.me>
 status: Draft
 type: LSP
 category: Core
@@ -11,39 +11,39 @@ requires: LSP0, LSP8
 
 ## Simple Summary
 
-LIP-27 introduces a standard for creating Token Bound Profiles (TBP) using LSP8 Identifiable Digital Assets and Universal Profiles (LSP0) on the Lukso blockchain. This proposal allows each LSP8 token to be associated with a Universal Profile, enabling token-based ownership and interactions.
+LIP-27 introduces a standard for creating Token Bound Profiles (TBP) using **LSP8 Identifiable Digital Assets** and **Universal Profiles (LSP0)** on the Lukso blockchain. This standard enables LSP8 tokens to be associated with a Universal Profile, facilitating token-based ownership and interaction.
 
 ## Abstract
 
-This proposal adapts the idea of EIP-6551 (Token Bound Profiles) for the Lukso ecosystem. Instead of using ERC721, LIP-27 leverages LSP8 tokens to bind each token to its own Universal Profile.
+This proposal adapts the idea of **EIP-6551 (Token Bound Accounts)** for the Lukso ecosystem. Instead of using ERC721 tokens, LIP-27 leverages **LSP8 tokens** to bind each token to its own Universal Profile.
 
-Key components of this proposal include:
+Key components include:
 
-- A Registry Contract that maps LSP8 token identifiers to their respective Universal Profiles.
-- A modified Universal Profile contract that limits execution rights to the owner of the token.
+- A **Registry Contract** that maps LSP8 token identifiers to their respective Universal Profiles.
+- A modified **Universal Profile** contract that restricts execution rights to the token owner.
 
 ## Motivation
 
-With the rise of NFTs and tokenized assets, there is a growing need for tokens to have autonomous profiles that can hold assets, execute contracts, and interact with decentralized applications. LIP-27 provides a flexible and secure way to achieve this within the Lukso ecosystem by using LSP8 tokens and Universal Profiles.
+As NFTs and tokenized assets proliferate, there is a need for tokens to have autonomous profiles capable of holding assets, executing contracts, and interacting with decentralized applications. **LIP-27** facilitates this functionality within the Lukso ecosystem using **LSP8 tokens** and **Universal Profiles**.
 
-This system enhances token utility by allowing each token to have its own programmable, self-sovereign profile while maintaining compatibility with Lukso's standards for identity (LSP0), and digital assets (LSP8).
+This approach enhances the utility of tokens by allowing each token to have its own programmable, self-sovereign profile, while maintaining compatibility with Lukso’s standards for identity (**LSP0**) and digital assets (**LSP8**).
 
 ## Specification
 
 ### Overview
 
-The system outlined in this proposal has two main components:
+The system consists of two primary components:
 
-- A singleton registry for token bound profiles
-- A common implementation for token bound profiles. This implementation will not change the interface of the `LSP0-ERC725Account` standard but will modify it's logic to support LSP8 ownership.
+1. A **singleton registry** for Token Bound Profiles.
+2. A common **Universal Profile implementation** modified to support LSP8 ownership, while adhering to the `LSP0-ERC725Account` interface.
 
-### Registry
+### Registry Contract
 
-A Registry Contract is used to map each LSP8 token to a unique Universal Profile. This registry ensures that for each LSP8 token, there is a corresponding Universal Profile.
+The **Registry Contract** maps each LSP8 token to a unique Universal Profile. This ensures that for each LSP8 token, there is a corresponding Universal Profile.
 
-The registry must implement the following interface:
+#### Registry Interface
 
-```typescript
+```solidity
 interface ILSP27Registry {
     /**
      * @dev The registry must emit the LSP27ProfileCreated event upon successful profile creation.
@@ -58,18 +58,17 @@ interface ILSP27Registry {
     );
 
     /**
-     * @dev The registry must revert with ProfileCreationFailed error if the create2 operation fails.
+     * @dev The registry must revert with ProfileCreationFailed error if the CREATE2 operation fails.
      */
     error ProfileCreationFailed();
 
     /**
-     * @dev Creates a token bound profile for a non-fungible token.
+     * @dev Creates a token-bound profile for a non-fungible token.
+     * If a profile already exists, returns the address without calling CREATE2.
      *
-     * If profile has already been created, returns the profile address without calling create2.
+     * Emits an LSP27ProfileCreated event.
      *
-     * Emits LSP27ProfileCreated event.
-     *
-     * @return profile The address of the token bound profile
+     * @return profile The address of the token-bound profile.
      */
     function createProfile(
         address implementation,
@@ -80,9 +79,9 @@ interface ILSP27Registry {
     ) external returns (address profile);
 
     /**
-     * @dev Returns the computed token bound profile address for a non-fungible token.
+     * @dev Returns the computed token-bound profile address for a non-fungible token.
      *
-     * @return profile The address of the token bound profile
+     * @return profile The address of the token-bound profile.
      */
     function profile(
         address implementation,
@@ -94,55 +93,62 @@ interface ILSP27Registry {
 }
 ```
 
-### Universal Profile
+### Universal Profile Modifications
 
-The existing implementation of the Universal Profile interface won't change but the logic of the `constructor` and `LSP14Ownable2Step` functions will have to be modified to support the LSP8 token ownership.
+The existing **Universal Profile (LSP0)** implementation will remain largely unchanged, but its logic will be modified to support LSP8 token ownership.
 
-#### Methods
+#### Constructor
 
-These are the functions and modifications on the Universal Profile contract to support the LSP27 standard.
-
-##### constructor
-
-```typescript
+```solidity
 constructor(address _tokenContract, bytes32 _id) payable;
 ```
 
-The constructor allows funding the profile during deployment and also sets the LSP8 token as the owner of the Universal Profile.
+- **Purpose**: Initializes the Universal Profile, allowing for funding upon deployment and setting the LSP8 token as the profile's owner.
 
-##### owner
+#### Owner Function
 
-```typescript
+```solidity
 function owner() public view virtual returns (address);
 ```
 
-The owner is read from the LSP8 contract by calling the `tokenOwnerOf()` function in the token contract. This ensures that ownership of the profile is transferred by mere transfer of the LSP8 token.
+- **Purpose**: The ownership of the Universal Profile is determined by calling the `tokenOwnerOf()` function from the LSP8 contract. Ownership is transferred along with the token transfer.
 
-##### transferOwnership
+#### Transfer Ownership
 
-```typescript
+```solidity
 function transferOwnership(address newOwner) public;
 ```
 
-To transfer ownership of the profile is to transfer the LSP8 token by calling the `transfer()` function in the token contract. We need not keep track of the current owner in state.
+- **Purpose**: Ownership of the Universal Profile is transferred by transferring the associated LSP8 token, instead of updating the state within the Universal Profile contract.
 
-##### renounceOwnership
+#### Renounce Ownership
 
-```typescript
+```solidity
 function renounceOwnership() public;
 ```
 
-This will delete the LSP8 token contract and id from storage which will leave the profile without an owner permanently.
+- **Purpose**; This function permanently deletes the token contract and ID from storage, leaving the profile without an owner.
 
 ## Rationale
 
 The rationale for this proposal stems from the increasing complexity of digital assets and the need for a flexible, token-bound profile system that enables more nuanced token ownership and interaction capabilities.
 
-By adapting LSP8 Identifiable Digital Assets and LSP0 Universal Profiles, we can create a framework for Token Bound Profiles that fits seamlessly within the Lukso ecosystem. Using LSP6 for access control ensures that the token owner is always in control of the associated Universal Profile, maintaining security and transparency.
+By leveraging **LSP8 Identifiable Digital Assets** and **LSP0 Universal Profiles**, we can create a framework for **Token Bound Profiles** that fits seamlessly within the Lukso ecosystem.
+
+This approach offers several advantages:
+
+- **Seamless Integration**: Token Bound Profiles build upon existing Lukso standards (LSP0 and LSP8), making them compatible with the ecosystem's existing infrastructure.
+- **Programmable Ownership**: By binding ownership to LSP8 tokens, profiles are automatically controlled by token holders without requiring manual intervention.
+- **Flexible Interactions**: This system allows tokens to interact with decentralized applications (dApps) and manage assets autonomously via their associated profiles.
 
 ## Backwards Compatibility
 
-LIP-27 is fully compatible with existing LSP0, LSP6, and LSP8 standards. It introduces no breaking changes to the Universal Profile or Identifiable Digital Asset contracts.
+LIP-27 is fully compatible with existing **LSP0** and **LSP8** standards. It introduces no breaking changes to the Universal Profile or Identifiable Digital Asset contracts.
+
+- **LSP0 (Universal Profile)**: The modifications to the Universal Profile contract under LIP-27 are backward compatible and do not alter the existing interface. The contract logic is adapted to incorporate LSP8 token ownership without disrupting the standard functionality.
+- **LSP8 (Identifiable Digital Assets)**: LIP-27 utilizes LSP8 tokens as the basis for token-bound profiles. The proposal aligns with the LSP8 standard and does not introduce any breaking changes to the existing token mechanics.
+
+Overall, LIP-27 extends the capabilities of existing standards while ensuring full compatibility and continuity within the Lukso ecosystem.
 
 ## Security Considerations
 
@@ -153,25 +159,25 @@ In order to enable trustless sales of token bound accounts, decentralized market
 Consider the following potential scam:
 
 - Alice owns an LSP8 token X, which owns token bound account Y.
-- Alice deposits 10ETH into account Y
-- Bob offers to purchase token X for 11ETH via a decentralized marketplace, assuming he will receive the 10ETH stored in account Y along with the token
-- Alice withdraws 10ETH from the token bound account, and immediately accepts Bob’s offer
-- Bob receives token X, but account Y is empty
-- To mitigate fraudulent behavior by malicious account owners, decentralized marketplaces should implement protection against these sorts of scams at the marketplace level. Contracts which implement this LIP may also implement certain protections against fraudulent behavior.
+- Alice deposits 10 ETH into account Y.
+- Bob offers to purchase token X for 11 ETH via a decentralized marketplace, assuming he will receive the 10 ETH stored in account Y along with the token.
+- Alice withdraws 10 ETH from the token bound account and immediately accepts Bob’s offer.
+- Bob receives token X, but account Y is empty.
 
-Here are a few mitigations strategies to be considered:
+To mitigate fraudulent behavior by malicious account owners, decentralized marketplaces should implement protection against these sorts of scams. Here are a few mitigation strategies to consider:
 
-- Attach the current token bound account state to the marketplace order. If the state of the account has changed since the order was placed, consider the offer void. This functionality would need to be supported at the marketplace level.
-- Attach a list of asset commitments to the marketplace order that are expected to remain in the token bound account when the order is fulfilled. If any of the committed assets have been removed from the account since the order was placed, consider the offer void. This would also need to be implemented by the marketplace.
-- Submit the order to the decentralized market via an external smart contract which performs the above logic before validating the order signature. This allows for safe transfers to be implemented without marketplace support.
-- Implement a locking mechanism on the token bound account implementation that prevents malicious owners from extracting assets from the account while locked
-  Preventing fraud is outside the scope of this proposal.
+- **Attach the current token bound account state to the marketplace order**: If the state of the account has changed since the order was placed, consider the offer void. This functionality would need to be supported at the marketplace level.
+- **Attach a list of asset commitments to the marketplace order**: This list should include assets expected to remain in the token bound account when the order is fulfilled. If any of the committed assets have been removed since the order was placed, consider the offer void. This would also need to be implemented by the marketplace.
+- **Submit the order to the decentralized market via an external smart contract**: This contract can perform the above checks before validating the order signature, allowing for safe transfers without marketplace support.
+- **Implement a locking mechanism on the token bound account**: Prevent malicious owners from extracting assets while the account is locked.
 
 Preventing fraud is outside the scope of this proposal.
 
 ### Ownership Cycles
 
-All assets held in a token bound account may be rendered inaccessible if an ownership cycle is created. The simplest example is the case of an LSP8 token being transferred to its own token bound account. If this occurs, both the LSP8 token and all of the assets stored in the token bound account would be permanently inaccessible, since the token bound account is incapable of executing a transaction which transfers the LSP8 token.
+All assets held in a token bound account may become inaccessible if an ownership cycle is created. For example:
+
+- An LSP8 token could be transferred to its own token bound account. If this occurs, both the LSP8 token and all assets stored in the token bound account would be permanently inaccessible, as the token bound account is incapable of executing a transaction that transfers the LSP8 token.
 
 Application clients and account implementations wishing to adopt this proposal are encouraged to implement measures that limit the possibility of ownership cycles.
 
