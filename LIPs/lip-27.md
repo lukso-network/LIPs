@@ -159,9 +159,9 @@ In order to enable trustless sales of token bound accounts, decentralized market
 Consider the following potential scam:
 
 - Alice owns an LSP8 token X, which owns token bound account Y.
-- Alice deposits 10 ETH into account Y.
-- Bob offers to purchase token X for 11 ETH via a decentralized marketplace, assuming he will receive the 10 ETH stored in account Y along with the token.
-- Alice withdraws 10 ETH from the token bound account and immediately accepts Bob’s offer.
+- Alice deposits 10 LYX into account Y.
+- Bob offers to purchase token X for 11 LYX via a decentralized marketplace, assuming he will receive the 10 ETH stored in account Y along with the token.
+- Alice withdraws 10 LYX from the token bound account and immediately accepts Bob’s offer.
 - Bob receives token X, but account Y is empty.
 
 To mitigate fraudulent behavior by malicious account owners, decentralized marketplaces should implement protection against these sorts of scams. Here are a few mitigation strategies to consider:
