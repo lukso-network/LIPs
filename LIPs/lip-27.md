@@ -1,8 +1,7 @@
 ---
 lip: 27
 title: Token Bound Profile
-author: Valentine Orga <valentineorga@gmail.com>, Tanto Defi <tantodefi@proton.me>, 
-SLEEPY SIGN <sign@sleepynft.com>
+author: Valentine Orga <valentineorga@gmail.com>, Tanto Defi <tantodefi@proton.me>, SLEEPY SIGN <sign@sleepynft.com>
 status: Draft
 type: LSP
 category: Core
