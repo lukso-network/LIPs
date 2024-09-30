@@ -210,7 +210,7 @@ interface ILSP26 {
 
 ## Deployment
 
-The `LSP26FollowerSystem` is deplpoyed at [`0xf01103E5a9909Fc0DBe8166dA7085e0285daDDcA`](https://explorer.lukso.network/address/0xf01103E5a9909Fc0DBe8166dA7085e0285daDDcA) on LUKSO using the [Nick Factory contract](https://github.com/Arachnid/deterministic-deployment-proxy/tree/master). The following explains how to deploy `LSP26FollowerSystem` at the same address on other EVM networks.
+The `LSP26FollowerSystem` is deployed at [`0xf01103E5a9909Fc0DBe8166dA7085e0285daDDcA`](https://explorer.lukso.network/address/0xf01103E5a9909Fc0DBe8166dA7085e0285daDDcA) on LUKSO using the [Nick Factory contract](https://github.com/Arachnid/deterministic-deployment-proxy/tree/master). The following explains how to deploy `LSP26FollowerSystem` at the same address on other EVM networks.
 
 ### LSP26FollowerSystem Deployment
 
