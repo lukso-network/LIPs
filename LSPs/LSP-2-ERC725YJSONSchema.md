@@ -470,6 +470,18 @@ The representation of these dynamic elements in a compacted bytes array would be
 
 `0x0004 aabbccdd 000e cafecafecafecafecafecafecafe 0001 ff` > `0x0004aabbccdd000ecafecafecafecafecafecafecafe0001ff`
 
+An example of a `bytes[CompactBytesArray]`, where the bytes are a tuple:
+```js
+{
+  "name": "AddressPermissions:AllowedCalls:<address>",
+  "key": "0x4b80742de2bf393a64c70000<address>",
+  "keyType": "MappingWithGrouping",
+  "valueType": "(bytes4,address,bytes4,bytes4)[CompactBytesArray]",
+  "valueContent": "(BitArray,Address,Bytes4,Bytes4)"
+}
+```
+
+
 ### bytesN[CompactBytesArray]
 
 Like a `bytes[CompactBytesArray]` a `bytesN[CompactBytesArray]` represents an array of `bytesN` values _encoded in a compact way_. The difference is that all the elements contained in the array have the same length `N`.
