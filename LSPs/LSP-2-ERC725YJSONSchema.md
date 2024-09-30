@@ -506,7 +506,7 @@ Where each byte `0x0008` in the final encoded value represents the length `N` of
 0x000811223344556677880008cafecafecafecafe0008beefbeefbeefbeef
 ```
 
-### Tuples of `valueType`
+### Tuples
 
 The `valueType` can also be a **tuple of types**. In this case, the value stored under the ERC725Y data key is a mixture of multiple values concatenated together (the values are just _"glued together"_).
 
