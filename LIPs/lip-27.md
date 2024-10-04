@@ -11,7 +11,7 @@ requires: LSP0, LSP8
 
 ## Simple Summary
 
-LIP-27 introduces a standard for creating Token Bound Profiles (TBP) using **LSP8 Identifiable Digital Assets** and **Universal Profiles (LSP0)** on the Lukso blockchain. This standard enables LSP8 tokens to be associated with a Universal Profile, facilitating token-based ownership and interaction.
+LIP-27 introduces a standard for creating Token Bound Profiles (TBP) using **LSP8 Identifiable Digital Assets** and **Universal Profiles (LSP0)**. This standard enables LSP8 tokens to be associated with a Universal Profile, facilitating token-based ownership and interaction.
 
 ## Abstract
 
