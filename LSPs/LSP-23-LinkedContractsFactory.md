@@ -345,7 +345,7 @@ interface IPostDeploymentModule {
 
 ## Deployment
 
-The `LSP23LinkedContractsFactory` is deplpoyed at [`0x2300000A84D25dF63081feAa37ba6b62C4c89a30`](https://explorer.lukso.network/address/0x2300000A84D25dF63081feAa37ba6b62C4c89a30) on LUKSO using the [Nick Factory contract](https://github.com/Arachnid/deterministic-deployment-proxy/tree/master). The following explains how to deploy `LSP23LinkedContractsFactory` at the same address on other EVM networks.
+The `LSP23LinkedContractsFactory` is deployed at [`0x2300000A84D25dF63081feAa37ba6b62C4c89a30`](https://explorer.lukso.network/address/0x2300000A84D25dF63081feAa37ba6b62C4c89a30) on LUKSO using the [Nick Factory contract](https://github.com/Arachnid/deterministic-deployment-proxy/tree/master). The following explains how to deploy `LSP23LinkedContractsFactory` at the same address on other EVM networks.
 
 ### LSP23LinkedContractsFactory Deployment
 
