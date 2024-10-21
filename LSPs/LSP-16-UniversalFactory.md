@@ -11,8 +11,6 @@ requires: EIP104, EIP155, EIP1167
 
 **The official LSP16 Universal Factory address on LUKSO is: [0x1600016e23e25D20CA8759338BfB8A8d11563C4e](https://explorer.lukso.network/address/0x1600016e23e25D20CA8759338BfB8A8d11563C4e).**
 
-To deploy this follower system on other chains please see the [deployment section](#deployment).
-
 ## Simple Summary
 
 This standard defines a universal factory smart contract, that will allow to deploy different types of smart contracts using [CREATE2] opcode after being deployed with [Nick Factory] in order to produce the same address on different chains.
@@ -279,7 +277,7 @@ The constructor parameters or/and initialization data SHOULD NOT include any net
 
 ## Deployment
 
-The `LSP16UniversalFactory` is deplpoyed at [`0x1600016e23e25D20CA8759338BfB8A8d11563C4e`](https://explorer.lukso.network/address/0x1600016e23e25D20CA8759338BfB8A8d11563C4e) on LUKSO using the [Nick Factory contract](https://github.com/Arachnid/deterministic-deployment-proxy/tree/master). The following explains how to deploy `LSP16UniversalFactory` at the same address on other EVM networks.
+The `LSP16UniversalFactory` is deployed at [`0x1600016e23e25D20CA8759338BfB8A8d11563C4e`](https://explorer.lukso.network/address/0x1600016e23e25D20CA8759338BfB8A8d11563C4e) on LUKSO using the [Nick Factory contract](https://github.com/Arachnid/deterministic-deployment-proxy/tree/master). The following explains how to deploy `LSP16UniversalFactory` at the same address on other EVM networks.
 
 ### LSP16UniversalFactory Deployment
 
