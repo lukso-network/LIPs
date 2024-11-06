@@ -6,16 +6,11 @@ A browsable version of all current and draft LIPs can be found on [the official 
 
 # Contributing
 
-1.  Review [LIP-1](LIPs/lip-1.md).
-2.  Fork the repository by clicking "Fork" in the top right.
-3.  Add your LIP to your fork of the repository. There is a [template LIP here](lip-X.md).
-4.  Submit a Pull Request to LUKSO's [LIPs repository](https://github.com/lukso-network/LIPs).
+Anyone is welcomed to make a PR to an existing LSP for fixes related to grammar or improvements related to the descriptions of an LSP specification.
 
-Your first PR should be a first draft of the final LIP. It must meet the formatting criteria enforced by the build (largely, correct metadata in the header). An editor will manually review the first PR for a new LIP and assign it a number before merging it. Make sure you include a `discussions-to` header with the URL to a discussion forum or open GitHub issue where people can discuss the LIP as a whole.
+For new LSP proposals, please refer to [**`CODE_OF_CONDUCT.md` > Proposing new LSPs**](./CODE_OF_CONDUCT.md#proposing-new-lsps).
 
-If your LIP requires images, the image files should be included in a subdirectory of the `assets` folder for that LIP as follow: `assets/lip-X` (for lip **X**). When linking to an image in the LIP, use relative links such as `../assets/lip-X/image.png`.
-
-When you believe your LIP is mature and ready to progress past the draft phase, you should do open a PR changing the state of your LIP to 'Final'. An editor will review your draft and ask if anyone objects to its being finalised. If the editor decides there is no rough consensus - for instance, because contributors point out significant issues with the LIP - they may close the PR and request that you fix the issues in the draft before trying again.
+Please note that this repository is for documenting standards and not for help implementing them. These types of inquiries should be directed to the **dev-chat** on the LUKSO Discord. For specific questions and concerns regarding EIPs, it's best to comment on the relevant discussion thread of the LSP denoted by the `discussions-to` tag in the LSP's preamble.
 
 # LIP Status Terms
 
