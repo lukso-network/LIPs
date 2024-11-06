@@ -2,13 +2,15 @@
 
 ## Proposing new LSPs
 
-This section provides guidelines for how to propose a new LSP standard **before opening a Pull Requests** to the LSP repository
+This section provides guidelines for how to propose a new LSP standard **before opening a Pull Requests** to the LSP repository.
+
+We recomment any new proposer to review the `LIPs/lip-1.md` document for further details on how to propose new standards, the review process and guidelines on how to propose new standards and the content it should include.
 
 ### 1. Gathering feedbacks for a LSP proposal idea
 
 > **Note:** this step is not mandatory but is recommended to improve engagement and feedbacks over a new LSP proposal.
 
-In order to gather feedbacks and suggestions over a new LSP idea, LSP proposers COULD create a document **outside of the official LSP repository**. This could be in any form, for instance:
+In order to gather feedbacks and suggestions over a new LSP idea, LSP proposers SHOULD create a document **outside of the official LSP repository**. This could be in any form, for instance:
 
 - a discussion on a forum.
 - a Word document on a shared drive.
@@ -35,7 +37,7 @@ Once the LSP proposer(s) judge their proposal clearer, reviewed and vetted, they
 
 Once consensus is reached in the issue discussion, thoroughly review the LIP template and open your PR in this repository. The next section provides guidelines
 
-### 2. Opening a PR for a new LSP proposal
+### 3. Opening a PR for a new LSP proposal
 
 1.  Review [LIP-1](LIPs/lip-1.md).
 2.  Fork the repository by clicking "Fork" in the top right.

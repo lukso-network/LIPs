@@ -8,7 +8,7 @@ A browsable version of all current and draft LIPs can be found on [the official 
 
 Anyone is welcomed to make a PR to an existing LSP for fixes related to grammar or improvements related to the descriptions of an LSP specification.
 
-For new LSP proposals, please refer to [**`CODE_OF_CONDUCT.md` > Proposing new LSPs**](./CODE_OF_CONDUCT.md#proposing-new-lsps).
+For new LSP proposals, please refer to [**`CONTRIBUTING.md` > Proposing new LSPs**](./CONTRIBUTING.md#proposing-new-lsps).
 
 Please note that this repository is for documenting standards and not for help implementing them. These types of inquiries should be directed to the **dev-chat** on the LUKSO Discord. For specific questions and concerns regarding EIPs, it's best to comment on the relevant discussion thread of the LSP denoted by the `discussions-to` tag in the LSP's preamble.
 
