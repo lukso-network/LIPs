@@ -182,7 +182,7 @@ _Requirements:_
 function selectNewController(address addressSelected) external
 ```
 
-Select an address to be a potentiel controller address if he reaches the guardian threshold and provide the correct plainSecret. MUST fire the [SelectedNewController](#selectednewcontroller) event.
+Select an address to be a potential controller address if he reaches the guardian threshold and provide the correct plainSecret. MUST fire the [SelectedNewController](#selectednewcontroller) event.
 
 _Parameters:_
 
@@ -252,7 +252,7 @@ MUST be emitted when changing the secret hash.
 event SelectedNewController(uint256 indexed currentRecoveryCounter, address indexed guardian, address indexed addressSelected);
 ```
 
-MUST be emitted when a guardian select a new potentiel controller address for the linked target.
+MUST be emitted when a guardian select a new potential controller address for the linked target.
 
 #### RecoveryProcessSuccessful
 

@@ -17,7 +17,7 @@ This standard describes a set of [ERC725Y](https://github.com/ethereum/EIPs/blob
 
 This standard defines a set of data key-value pairs. These pairs are standardized for storing metadata about a digital asset. The metadata can point to the asset's appearance, name, symbol, and other relevant information. The purpose is to provide a consistent and comprehensive method for representing digital assets.
 
-These data key-value pairs are defined according to the [LSP2-ERC725YJSONSchema](./LSP-2-ERC725YJSONSchema.md) standard and can be stored and retreived from any ERC725Y based contract.
+These data key-value pairs are defined according to the [LSP2-ERC725YJSONSchema](./LSP-2-ERC725YJSONSchema.md) standard and can be stored and retrieved from any ERC725Y based contract.
 
 ## Motivation
 
@@ -107,7 +107,7 @@ _Recommendations_
 
 A data key to store the description of the asset.
 
-For more informations on how to construct the VerifiableURI, see: [ERC725Y JSON Schema > `valueContent` > `VerifiableURI`](./LSP-2-ERC725YJSONSchema.md#VerifiableURI)
+For more information on how to construct the VerifiableURI, see: [ERC725Y JSON Schema > `valueContent` > `VerifiableURI`](./LSP-2-ERC725YJSONSchema.md#VerifiableURI)
 
 The linked JSON file SHOULD have the following format:
 
@@ -214,7 +214,7 @@ Example:
 ```js
 {
     LSP4Metadata: {
-        description: 'The first digial golden pig.',
+        description: 'The first digital golden pig.',
         links: [
             { title: 'Twitter', url: 'https://twitter.com/goldenpig123' },
             { title: 'goldenpig.org', url: 'https://goldenpig.org' }
@@ -296,9 +296,9 @@ _Result_:
 
 - `LSP4Metadata` data key represents the Token contract information.
 
-| Value | Type  | Description                                                                                                                                                                                                                                                                                                                                                                                                            |
-| :---: | :---: | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|  `1`  | `NFT` | Valid for [LSP7-DigitalAsset](./LSP-7-DigitalAsset.md), when the asset's decimals is equal to 0, meaning that each item cannot be divisble (e.g. 100 units of the same Handbag). <br> Valid for [LSP8-IdentifiableDigitalAsset](./LSP-8-IdentifiableDigitalAsset.md) when the representation (`LSP8TokenIdFormat`) of the tokenIds is different than **Addresses** (e.g. Piggy NFT contract with 50 different piggies) |
+| Value | Type  | Description                                                                                                                                                                                                                                                                                                                                                                                                             |
+| :---: | :---: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+|  `1`  | `NFT` | Valid for [LSP7-DigitalAsset](./LSP-7-DigitalAsset.md), when the asset's decimals is equal to 0, meaning that each item cannot be divisible (e.g. 100 units of the same Handbag). <br> Valid for [LSP8-IdentifiableDigitalAsset](./LSP-8-IdentifiableDigitalAsset.md) when the representation (`LSP8TokenIdFormat`) of the tokenIds is different than **Addresses** (e.g. Piggy NFT contract with 50 different piggies) |
 
 _Result_:
 
@@ -337,7 +337,7 @@ _Requirements_
 
 A data key to store the addresses of the creators of the digital asset.
 
-For more informations about how to access each index of the `LSP4Creators[]` array, see [ERC725Y JSON Schema > `keyType`: `Array`](./LSP-2-ERC725YJSONSchema.md#Array)
+For more information about how to access each index of the `LSP4Creators[]` array, see [ERC725Y JSON Schema > `keyType`: `Array`](./LSP-2-ERC725YJSONSchema.md#Array)
 
 #### LSP4CreatorsMap
 
@@ -377,7 +377,7 @@ In addition to this, since the ERC725Y storage can be updated after token deploy
 
 ### Creators
 
-Current popular token standards often ignore the representation of creators within the token contracts. This oversight is unfair to the creators who then have to depend on centralized entities and marketplaces for identity verification based on biased and defined criteria. Integrating creators' addresses directly into the contract enables on-chain verification of the creators' identity. Creators can then proove themselves in various way to authenticate within dApps.
+Current popular token standards often ignore the representation of creators within the token contracts. This oversight is unfair to the creators who then have to depend on centralized entities and marketplaces for identity verification based on biased and defined criteria. Integrating creators' addresses directly into the contract enables on-chain verification of the creators' identity. Creators can then prove themselves in various way to authenticate within dApps.
 
 Moreover, incorporating the creators' information can help in different ways, it can help with royalties integration, as well as enhancing the on-chain authenticity of the asset. With the [LSP12-IssuedAssets](./LSP-12-IssuedAssets.md) standard, assets can reference their creators using the `LSP4Creators` data key. Conversely, creators can reference their issued assets using the `LSP12IssuedAssets` data key. This dual-reference system provides on-chain proof of authenticity, a feature not available in current token standards.
 

@@ -65,7 +65,7 @@ Adopting smart contract accounts over traditional EOAs streamlines blockchain in
 
 - **Dynamic Information Storage**: Unlike EOAs, smart contract accounts can record static information, making them self-explanatory entities that can assist in identity verification for off-chain entities, and enable the decentralized tracking of any information stored such as assets, followers, etc. The information stored can also be standardized, for example [LSP3-Profile-Metadata] for storing profile information, [LSP5-ReceivedAssets] for storing the addresses of received assets, and [LSP10-ReceivedVaults] for storing addresses of received vaults, etc ..
 
-- **Upgradeable Security**: Owners can use a simple EOA for owning the account having basic level of security, or opt for an owner having a multisignature setup, or permissions access control contracts providing advanced layer of security in contorlling the account.
+- **Upgradeable Security**: Owners can use a simple EOA for owning the account having basic level of security, or opt for an owner having a multisignature setup, or permissions access control contracts providing advanced layer of security in controlling the account.
 
 - **Inclusive Control**: Users can decide to own the account with a permission based access control contract (e.g: the [LSP6-KeyManager]) which allows owners to assign specific rights to different actors, like granting a party the right to update profile information without providing full transactional authority.
 
@@ -109,7 +109,7 @@ However, in alignment with the [LSP20-CallVerification] standard, these owner-ex
 
 For example, if the caller address is not the owner, the function will call the `lsp20VerifyCall(..)` on the owner address function to validate the transaction before execution passing the following arguments:
 
-- `requestor`: The address calling the function to be executed.
+- `requester`: The address calling the function to be executed.
 - `target`: The address of the account.
 - `caller`: The address calling the function to be executed.
 - `value`: The value sent by the caller to the function called on the account.
@@ -117,7 +117,7 @@ For example, if the caller address is not the owner, the function will call the 
 
 The expected outcome is for the `bytes4` returned value to match the first `bytes3` of the function selector of `lsp20VerifyCall` for the operation to proceed. Specifically, if the fourth byte of the call is `0x01`, the function MUST call `lsp20VerifyCallResult` after execution of the function passing the following arguments:
 
-- `callHash`: The `keccak256` hash of the parameters of `lsp20VerifyCall(address,address,address,uint256,bytes)` parameters packed-encoded (concatened).
+- `callHash`: The `keccak256` hash of the parameters of `lsp20VerifyCall(address,address,address,uint256,bytes)` parameters packed-encoded (concatenated).
 
 - `callResult`: the result of the function being called on the account.
   - if the function being called returns some data, the `callResult` MUST be the value returned by the function being called as abi-encoded `bytes`.
@@ -131,7 +131,7 @@ The function designated to be called by the pending owner is:
 
 - `acceptOwnership()`
 
-The same logic applies to `acceptOwnership` function, expcet that it should be either called by the pending owner or an address allowed by the pending owner. In case the caller is not the pending owner, the verification should happen according to the [LSP20-CallVerification] on the address of the pending owner.
+The same logic applies to `acceptOwnership` function, except that it should be either called by the pending owner or an address allowed by the pending owner. In case the caller is not the pending owner, the verification should happen according to the [LSP20-CallVerification] on the address of the pending owner.
 
 > Read more about the [Rational behind using LSP20-CallVerifiaction](#lsp20-callverification-usage) in the LSP0-ERC725Account standard.
 

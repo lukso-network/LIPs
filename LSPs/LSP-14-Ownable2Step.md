@@ -93,7 +93,7 @@ MUST emit a [`OwnershipTransferredStarted`](#ownershiptransferstarted) event onc
   - `typeId`: `keccak256('LSP14OwnershipTransferStarted')` > `0xee9a7c0924f740a2ca33d59b7f0c2929821ea9837ce043ce91c1823e9c4e52c0`
   - `data`: The data sent SHOULD be abi encoded and contain the [current owner](#owner) (`address`) and the [pending owner](#pendingowner) (`address`) respectively.
 
-The Type ID associated with this hook COULD be altered in a contract that inherits from LSP14. This allows for more straightforward identification of the contract whose ownership is being transferred. Example where the LSP14 type ID is overriden can be found in [LSP0](LSP-0-ERC725Account.md#transferownership) and [LSP9](LSP-9-Vault.md#transferownership) standards.
+The Type ID associated with this hook COULD be altered in a contract that inherits from LSP14. This allows for more straightforward identification of the contract whose ownership is being transferred. Example where the LSP14 type ID is overridden can be found in [LSP0](LSP-0-ERC725Account.md#transferownership) and [LSP9](LSP-9-Vault.md#transferownership) standards.
 
 #### acceptOwnership
 
@@ -123,7 +123,7 @@ MUST emit a [`OwnershipTransferred`](https://eips.ethereum.org/EIPS/eip-173#spec
   - `typeId`: `keccak256('LSP14OwnershipTransferred_RecipientNotification')` > `0xe32c7debcb817925ba4883fdbfc52797187f28f73f860641dab1a68d9b32902c`
   - `data`: The data sent SHOULD be abi encoded and contain the [previous owner](#owner) (`address`) and the new owner (`address`) respectively.
 
-The Type IDs associated with these hooks can be altered in a contract that inherits from LSP14. This allows for more straightforward identification of the contract whose ownership is being transferred. Examples where the LSP14 type IDs are overriden can be found in the [LSP0](LSP-0-ERC725Account.md#acceptownerhsip) and [LSP9](LSP-9-Vault.md#acceptownership) standards.
+The Type IDs associated with these hooks can be altered in a contract that inherits from LSP14. This allows for more straightforward identification of the contract whose ownership is being transferred. Examples where the LSP14 type IDs are overridden can be found in the [LSP0](LSP-0-ERC725Account.md#acceptownerhsip) and [LSP9](LSP-9-Vault.md#acceptownership) standards.
 
 #### renounceOwnership
 
@@ -142,7 +142,7 @@ MUST emit [`OwnershipTransferred`](https://eips.ethereum.org/EIPS/eip-173#specif
 
 - MUST be called only by the `owner()` only.
 - The second call MUST happen AFTER the delay of 100 blocks and within the next 100 blocks from the first `renounceOwnership(..)` call.
-- If 200 blocks have passed, the `renounceOwnership(..)` call phase SHOULD reset the process, and a new one will be initated.
+- If 200 blocks have passed, the `renounceOwnership(..)` call phase SHOULD reset the process, and a new one will be initiated.
 
 **LSP1 Hooks:**
 

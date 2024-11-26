@@ -246,7 +246,7 @@ Firstly, the idea of meta transaction aims to simplify user transactions on the 
 
 Secondly, gasless Meta-Transactions can assist in minimizing the cost of utilizing the LUKSO network, which is especially essential for low-budget users. This enables protocols and dApps building on LUKSO to offer a better experience for their users or customers.
 
-Finally, by adopting a generic standard for meta transactions, any protocol or dApp can implement gas-less transactions by simply adopting the standard, without relying on custom built solution. This also improve inter-operability between contracts and protocols, since different contracts and different applications rely on the same standard and contract API/ABI to send execute relay calls (= meta transactions) between each others.
+Finally, by adopting a generic standard for meta transactions, any protocol or dApp can implement gas-less transactions by simply adopting the standard, without relying on custom built solution. This also improve interoperability between contracts and protocols, since different contracts and different applications rely on the same standard and contract API/ABI to send execute relay calls (= meta transactions) between each others.
 
 ## Design decision
 
@@ -259,7 +259,7 @@ In the LSP25 standard, the signature format does not require to include the supp
 
 However, not adding the gas parameter implies some considerations that applications that implement the LSP25 standard should be aware of:
 
-- Not including the `gas` parameter allows the relayer to deternine the gas amount for the transaction.
+- Not including the `gas` parameter allows the relayer to determine the gas amount for the transaction.
 - If the provided gas is insufficient, the entire transaction could revert, which is the expected behaviour.
 - Implementations should be aware of the impact if the contract being called behaves differently based on the gas supplied. A malicious relayer could effectively control that behaviour by adjusting the specified gas when submitting the transaction to the network.
 

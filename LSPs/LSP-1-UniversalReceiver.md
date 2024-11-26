@@ -78,7 +78,7 @@ _Returns:_ `bytes` which can be used to encode response values.
 event UniversalReceiver(address indexed from, uint256 indexed value, bytes32 indexed typeId, bytes receivedData, bytes returnedValue);
 ```
 
-This event MUST be emitted when the `universalReceiver` function is succesfully executed.
+This event MUST be emitted when the `universalReceiver` function is successfully executed.
 
 _Values:_
 
@@ -100,10 +100,10 @@ UniversalReceiver delegation allows to forward the `universalReceiver(..)` call 
 
 The ability to react to upcoming actions with a logic hardcoded within the `universalReceiver(..)` function comes with limitations, as only a fixed functionality can be coded or the [`UniversalReceiver`](#universalreceiver-1) event be fired.
 
-This section explains a way to forward the call to the `universalReceiver(..)` function to an external smart contract to extend and change funcitonality over time.
+This section explains a way to forward the call to the `universalReceiver(..)` function to an external smart contract to extend and change functionality over time.
 
 The delegation works by simply forwarding a call to the `universalReceiver(..)` function to a delegated smart contract calling the `universalReceiverDelegate(..)` function on the external smart contract.
-As the external smart contract doesn't know about the inital `msg.sender` and the `msg.value`, this specification proposes to add these values as arguments. This allows the external contract to know the full context of the initial `universalReceiver` call and react accordingly.
+As the external smart contract doesn't know about the initial `msg.sender` and the `msg.value`, this specification proposes to add these values as arguments. This allows the external contract to know the full context of the initial `universalReceiver` call and react accordingly.
 
 ### Specification
 
@@ -181,7 +181,7 @@ An implementation can be found in the [lukso-network/lsp-smart-contracts] reposi
 
 ### UniversalReceiver Example:
 
-After transfering token from `TokenABC` to `MyWallet`, the owner of `MyWallet` contract can know, by looking at the emitted UniversalReceiver event, that the `typeId` is `_TOKEN_RECEIVING_HASH`.
+After transferring token from `TokenABC` to `MyWallet`, the owner of `MyWallet` contract can know, by looking at the emitted UniversalReceiver event, that the `typeId` is `_TOKEN_RECEIVING_HASH`.
 
 Enabling the owner to know the token sender address and the amount sent by looking into the `data`.
 
@@ -300,8 +300,8 @@ contract UniversalReceiverDelegate is ERC165, ILSP1 {
 
     function universalReceiverDelegate(address caller, uint256 value, bytes32 typeId, bytes memory data) public returns (bytes memory) {
         // Any logic could be written here:
-        // - Interfact with DeFi protocol contract to sell the new tokens received automatically.
-        // - Register the token received on other registery contract.
+        // - Interact with DeFi protocol contract to sell the new tokens received automatically.
+        // - Register the token received on other registry contract.
         // - Allow only tokens with `_TOKEN_RECEIVING_HASH` hash and reject the others.
         // - revert; so in this way the wallet will have the option to reject any token.
     }

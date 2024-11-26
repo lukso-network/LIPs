@@ -27,7 +27,7 @@ The goal of this process is to iterate over the initial idea and refine:
 - what are the benefits of the LSP and what are the problems that it solves.
 - clarify limitations, security and areas of concerns related to the proposed standard.
 
-### 2. Creating an issue in the LIP reposity
+### 2. Creating an issue in the LIP repository
 
 **Before proposing an LSP on this repository via a PR, ideas MUST be thoroughly discussed through an issue.**
 
@@ -44,7 +44,7 @@ Once consensus is reached in the issue discussion, thoroughly review the LIP tem
 3.  Add your LIP to your fork of the repository. There is a [template LSP here](lsp-X.md).
 4.  Submit a Pull Request to LUKSO's [LSPs repository](https://github.com/lukso-network/LIPs).
 
-Your first PR should be a first draft of the final LSP. It must meet the following formatting criterias:
+Your first PR should be a first draft of the final LSP. It must meet the following formatting criteria:
 
 - Correct metadata in the header, as described in the [LSP template](lsp-x.md).
 - Make sure you include a `discussions-to` header with the URL to a discussion forum or open GitHub issue where people can discuss the LSP as a whole.
