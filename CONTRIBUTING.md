@@ -4,7 +4,7 @@
 
 This section provides guidelines for how to propose a new LSP standard **before opening a Pull Requests** to the LSP repository.
 
-We recomment any new proposer to review the `LIPs/lip-1.md` document for further details on how to propose new standards, the review process and guidelines on how to propose new standards and the content it should include.
+We recommend any new proposer to review the `LIPs/lip-1.md` document for further details on how to propose new standards, their review process and guidelines,and the content that a LSP proposal should include.
 
 ### 1. Gathering feedbacks for a LSP proposal idea
 
@@ -19,7 +19,7 @@ In order to gather feedbacks and suggestions over a new LSP idea, LSP proposers 
 
 LSP proposers can then use this initial document and share the link to anyone to gather feedbacks and suggestions over it. This includes developers, protocol builders, experts in the field related to the LSP, or community members.
 
-LSP proposers are also welcomed to open discussion channels (such as on Telegram) to be able to engage with the community over their proposals, as well as invite anyone (people or projects) that they could judge interested in implementing their proposal.
+LSP proposers are also welcome to open discussion channels (such as on Telegram) to be able to engage with the community over their proposals, as well as invite anyone (people or projects) that they could judge interested in implementing their proposal.
 
 The goal of this process is to iterate over the initial idea and refine:
 
@@ -52,4 +52,4 @@ Your first PR should be a first draft of the final LSP. It must meet the followi
 
 One or multiple editors will manually review the first PR for a new LSP and assign it a number before merging it.
 
-When you believe your LIP is mature and ready to progress past the draft phase, you should do open a PR changing the state of your LIP to 'Final'. An editor will review your draft and ask if anyone objects to its being finalised. If the editor decides there is no rough consensus - for instance, because contributors point out significant issues with the LIP - they may close the PR and request that you fix the issues in the draft before trying again.
+When you believe your LIP is mature and ready to progress past the draft phase, you should do open a PR changing the state of your LIP to 'Final'. An editor will review your draft and ask if anyone objects to it being finalised. If the editor decides there is no rough consensus - for instance, because contributors point out significant issues with the LIP - they may close the PR and request that you fix the issues in the draft before trying again.

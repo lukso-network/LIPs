@@ -56,7 +56,7 @@ Each status change is requested by the LIP author and reviewed by the LIP editor
 - **Draft** -- Once the first draft has been merged, you may submit follow-up pull requests with further changes to your draft until such point as you believe the LIP to be mature and ready to proceed to the next status. An LIP in draft status must be implemented to be considered for promotion to the next status (ignore this requirement for core LIPs).
   - :arrow_right: Last Call -- If agreeable, the LIP editor will assign Last Call status and set a review end date (`review-period-end`), normally 14 days later.
   - :x: Last Call -- A request for Last Call status will be denied if material changes are still expected to be made to the draft. We hope that LIPs only enter Last Call once, so as to avoid unnecessary noise on the RSS feed.
-- **Last Call** -- This LIP is listed and documented prominently on the https://docs.lukso.tech/ websiteå.
+- **Last Call** -- This LIP is listed and documented prominently on the https://docs.lukso.tech/ website.
   - :x: -- A Last Call which results in material changes or substantial unaddressed technical complaints will cause the LIP to revert to Draft.
   - :arrow_right: Accepted (Core LIPs only) -- A successful Last Call without material changes or unaddressed technical complaints will become Accepted.
   - :arrow_right: Final (Not core LIPs) -- A successful Last Call without material changes or unaddressed technical complaints will become Final.
