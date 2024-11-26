@@ -32,7 +32,7 @@ requires: ERC725Y
 - [ValueType](#valuetype)
   - [bytes\[CompactBytesArray\]](#bytescompactbytesarray)
   - [bytesN\[CompactBytesArray\]](#bytesncompactbytesarray)
-  - [Tuples of `valueType`](#tuples-of-valuetype)
+  - [Tuples](#tuples)
 - [ValueContent](#valuecontent)
   - [BitArray](#bitarray)
   - [VerifiableURI](#verifiableuri)
@@ -471,6 +471,7 @@ The representation of these dynamic elements in a compacted bytes array would be
 `0x0004 aabbccdd 000e cafecafecafecafecafecafecafe 0001 ff` > `0x0004aabbccdd000ecafecafecafecafecafecafecafe0001ff`
 
 An example of a `bytes[CompactBytesArray]`, where the bytes are a tuple:
+
 ```js
 {
   "name": "AddressPermissions:AllowedCalls:<address>",
@@ -480,7 +481,6 @@ An example of a `bytes[CompactBytesArray]`, where the bytes are a tuple:
   "valueContent": "(BitArray,Address,Bytes4,Bytes4)"
 }
 ```
-
 
 ### bytesN[CompactBytesArray]
 
@@ -727,7 +727,7 @@ const verificationMethod = web3.utils.keccak256('keccak256(utf8)').substr(0, 10)
 const verificationData = web3.utils.keccak256(json)
 > '0x820464ddfac1bec070cc14a8daf04129871d458f2ca94368aae8391311af6361'
 
-// Get the verification data length and padd it as 2 bytes
+// Get the verification data length and pad it as 2 bytes
 const verificationDataLength = web3.utils.padLeft(web3.utils.numberToHex((verificationData.substring(2).length) / 2), 4);
 > 0x0020
 

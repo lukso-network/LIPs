@@ -17,7 +17,7 @@ Please note that this repository is for documenting standards and not for help i
 - **Draft** - an LIP that is undergoing rapid iteration and changes.
 - **Review** - An LIP Author marks an LIP as ready for and requesting Peer Review.
 - **Last Call** - an LIP that is done with its initial iteration and ready for review by a wide audience.
-- **Accepted** - a core LIP that has been in Last Call for at least 2 weeks and any technical changes that were requested have been addressed by the author. The process for Core Devs to decide whether to encode an LIP into their clients as part of a hard fork is not part of the LIP process. If such a decision is made, the LIP wil move to final.
+- **Accepted** - a core LIP that has been in Last Call for at least 2 weeks and any technical changes that were requested have been addressed by the author. The process for Core Devs to decide whether to encode an LIP into their clients as part of a hard fork is not part of the LIP process. If such a decision is made, the LIP will move to final.
 - **Final (non-Core)** - an LIP that has been in Last Call for at least 2 weeks and any technical changes that were requested have been addressed by the author.
 - **Final (Core)** - an LIP that the Core Devs have decided to implement and release in a future hard fork or has already been released in a hard fork.
 - **Deferred** - an LIP that is not being considered for immediate adoption. May be reconsidered in the future for a subsequent hard fork.

@@ -35,12 +35,12 @@ The LSP20 Call Verification standard involves two key types of contracts, each w
 
 - **Contract Delegating Verification**: This contract receives the initial function call. It does not implement a specific interface pattern, but rather incorporates logic to delegate verification to a verifier contract. To highlight that this contract implement this type of logic, it MUST support `0x1a0eb6a5` interfaceId, calculated as the first 4 bytes of the keccak256 hash of the string `"LSP20CallVerification"`.
 
-- **Verfying Contract**: Following the **LSP20-CallVerifier** interface, this contract is dedicated to handling the verification process after being called by the contract delegating verification. It should support the **LSP20-CallVerifier** interfaceId: `0x0d6ecac7`, calculated as the XOR of specific functions detailed below.
+- **Verifying Contract**: Following the **LSP20-CallVerifier** interface, this contract is dedicated to handling the verification process after being called by the contract delegating verification. It should support the **LSP20-CallVerifier** interfaceId: `0x0d6ecac7`, calculated as the XOR of specific functions detailed below.
 
 ```mermaid
 sequenceDiagram
     participant I as Initiator<br/>(Any Address)
-    participant R as Verification Requestor
+    participant R as Verification Requester
     participant V as Verifying Contract
     participant T as Call Target
 
@@ -66,15 +66,15 @@ Smart contracts implementing the **LSP20-CallVerifier** interfaceId SHOULD imple
 #### lsp20VerifyCall
 
 ```solidity
-function lsp20VerifyCall(address initiator, address requestor, address caller, uint256 value, bytes memory callData) external returns (bytes4 returnedStatus);
+function lsp20VerifyCall(address initiator, address requester, address caller, uint256 value, bytes memory callData) external returns (bytes4 returnedStatus);
 ```
 
-Purpose: This function performs pre-verification, it can be used to run any form of verification mechanism **prior to** running the function being called on the requestor.
+Purpose: This function performs pre-verification, it can be used to run any form of verification mechanism **prior to** running the function being called on the requester.
 
 _Parameters:_
 
-- `initiator`: The address that requested to make the call to `requestor`.
-- `requestor`: The address of the contract asking for verification (that implements the logic of delegating the verification to a verifier contract).
+- `initiator`: The address that requested to make the call to `requester`.
+- `requester`: The address of the contract asking for verification (that implements the logic of delegating the verification to a verifier contract).
 - `caller`: The address who called the function on the contract delegating the verification logic.
 - `value`: The value sent by the caller to the function called on the contract delegating the verification mechanism.
 - `receivedCalldata`: The calldata sent by the caller to the contract delegating the verification mechanism.
@@ -96,11 +96,11 @@ _Requirements_
 function lsp20VerifyCallResult(bytes32 callHash, bytes memory callResult) external returns (bytes4 returnedStatus);
 ```
 
-This function is the **post-verification** function, it can be used to run any form of verification mechanism after having run the function being called on the requestor.
+This function is the **post-verification** function, it can be used to run any form of verification mechanism after having run the function being called on the requester.
 
 _Parameters:_
 
-- `callHash`: The keccak256 hash of the parameters of `lsp20VerifyCall(address,address,address,uint256,bytes)` parameters packed-encoded (concatened).
+- `callHash`: The keccak256 hash of the parameters of `lsp20VerifyCall(address,address,address,uint256,bytes)` parameters packed-encoded (concatenated).
 - `callResult`: the result of the function being called on the contract delegating the verification mechanism.
   - if the function being called returns some data, the `callResult` MUST be the value returned by the function being called as abi-encoded `bytes`.
   - if the function being called does not return any data, the `callResult` MUST be an empty `bytes`.
@@ -126,9 +126,9 @@ Both of these scenarios mean that the verification failed when calling the contr
 
 The `lsp20VerifyCall(..)` and `lsp20VerifyCallResult(..)` functions work in tandem to verify certain conditions before and after the execution of a function within the same transaction. To optimize gas costs and improve efficiency, the `callHash` parameter is introduced in the `lsp20VerifyCallResult(..)` function.
 
-`lsp20VerifyCall(..)` takes the `initiator`, `requestor`, `caller`, `value`, and `data` as parameters and is invoked before the execution of the targeted function. Based on the return value of this function, it is determined whether `lsp20VerifyCallResult(..)` will run.
+`lsp20VerifyCall(..)` takes the `initiator`, `requester`, `caller`, `value`, and `data` as parameters and is invoked before the execution of the targeted function. Based on the return value of this function, it is determined whether `lsp20VerifyCallResult(..)` will run.
 
-Instead of passing the same parameters (initiator, requestor, caller, value, data) along with the result of the executed function to `lsp20VerifyCallResult(..)`, the `callHash` parameter is used. The `callHash` is the keccak256 hash of the concatenated `lsp20VerifyCall(..)` parameters. Since both functions are invoked in the same transaction, a user can hash these parameters in `lsp20VerifyCall(..)` and store them under the hash. Later, the stored values can be retrieved using the `callHash` provided in `lsp20VerifyCallResult(..)`.
+Instead of passing the same parameters (initiator, requester, caller, value, data) along with the result of the executed function to `lsp20VerifyCallResult(..)`, the `callHash` parameter is used. The `callHash` is the keccak256 hash of the concatenated `lsp20VerifyCall(..)` parameters. Since both functions are invoked in the same transaction, a user can hash these parameters in `lsp20VerifyCall(..)` and store them under the hash. Later, the stored values can be retrieved using the `callHash` provided in `lsp20VerifyCallResult(..)`.
 
 This approach has been adopted because passing the same parameters again would be expensive in terms of gas costs, and it's not always necessary for the user to access these parameters in `lsp20VerifyCallResult(..)`. If a user needs to use these parameters, they should store them in the contract storage during the `lsp20VerifyCall(..)` invocation.
 
@@ -145,7 +145,7 @@ An implementation can be found in the [lukso-network/lsp-smart-contracts] reposi
 ```solidity
 interface ILSP20  /* is ERC165 */ {
 
-  function lsp20VerifyCall(address initiator, address requestor, address caller, uint256 value, bytes memory receivedCalldata) external returns (bytes4 returnedStatus);
+  function lsp20VerifyCall(address initiator, address requester, address caller, uint256 value, bytes memory receivedCalldata) external returns (bytes4 returnedStatus);
 
   function lsp20VerifyCallResult(bytes32 callHash, bytes memory callResult) external returns (bytes4);
 

@@ -53,7 +53,7 @@ The motivation for developing this new digital asset standard can be organized i
 
 - **Risk of asset loss**: A common issue with current assets is the risk of loss due to transfers to incorrect or uncontrolled addresses as these standards does not check whether the recipient is able to handle the asset or not.
 
-- **Limited Features**: The limitation of having only one operator and the absence of batch transfer capabilities or even the discoveribility of tokens a user own restricts and provide bad user experience. Users need to rely on centralized indexers to know which tokens they own, need to do several transactions to do a batch of transfers, and cannot have more than one operator.
+- **Limited Features**: The limitation of having only one operator and the absence of batch transfer capabilities or even the discoverability of tokens a user own restricts and provide bad user experience. Users need to rely on centralized indexers to know which tokens they own, need to do several transactions to do a batch of transfers, and cannot have more than one operator.
 
 ## Specification
 
@@ -273,7 +273,7 @@ function transferBatch(address[] memory from, address[] memory to, bytes32[] mem
 
 Transfers many tokens based on the list `from`, `to`, `tokenId`. If any transfer fails, the call will revert.
 
-MUST emit a [Transfer event](#transfer) for each transfered token.
+MUST emit a [Transfer event](#transfer) for each transferred token.
 MUST emit a [OperatorRevoked](#operatorrevoked) to clear the past operators for each transferred token.
 
 _Parameters:_
@@ -576,7 +576,7 @@ This JSON format includes an `"attributes"` field to describe unique properties 
 
 <!--The rationale fleshes out the specification by describing what motivated the design and why particular design decisions were made. It should describe alternate designs that were considered and related work, e.g. how the feature is supported in other languages. The rationale may also provide evidence of consensus within the community, and should discuss important objections or concerns raised during discussion.-->
 
-There should be a base token standard that allows tracking unique assets for the LSP ecosystem of contracts, which will allow common tooling and clients to be built. Existing tools and clients that expect [ERC721][erc721] can be made to work with this standard by using "compatability" contract extensions that match the desired interface.
+There should be a base token standard that allows tracking unique assets for the LSP ecosystem of contracts, which will allow common tooling and clients to be built. Existing tools and clients that expect [ERC721][erc721] can be made to work with this standard by using "compatibility" contract extensions that match the desired interface.
 
 ### Token Identifier
 
@@ -594,7 +594,7 @@ There is only one transfer function, which is aware of operators. This deviates 
 
 ### Usage of hooks
 
-When a token is changing owners (minting, transfering, burning) an attempt is made to notify the token sender and receiver using [LSP1 UniversalReceiver][lsp1] interface. The implementation uses `_notifyTokenSender` and `_notifyTokenReceiver` as the internal functions to process this.
+When a token is changing owners (minting, transferring, burning) an attempt is made to notify the token sender and receiver using [LSP1 UniversalReceiver][lsp1] interface. The implementation uses `_notifyTokenSender` and `_notifyTokenReceiver` as the internal functions to process this.
 
 The `force` parameter sent during `function transfer` SHOULD be used when notifying the token receiver, to determine if it must support [LSP1 UniversalReceiver][lsp1]. This is used to prevent accidental token transfers, which may results in lost tokens: non-contract addresses could be a copy paste issue, contracts not supporting [LSP1 UniversalReceiver][lsp1] might not be able to move tokens.
 
