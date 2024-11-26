@@ -37,7 +37,7 @@ An LIP must meet certain minimum criteria. It must be a clear and complete descr
 
 ## LIP Work Flow
 
-Parties involved in the process are you, the champion or *LIP author*, the [*LIP editors*](#eip-editors).
+Parties involved in the process are you, the champion or _LIP author_, the [_LIP editors_](#lip-editors).
 
 :warning: Before you begin, vet your idea, this will save you time. Ask the LUKSO and Ethereum community first if an idea is original to avoid wasting time on something that will be be rejected based on prior research (searching the Internet does not always do the trick). It also helps to make sure the idea is applicable to the entire community and not just the author. Just because an idea sounds good to the author does not mean it will work for most people in most areas where LUKSO is used. Examples of appropriate public forums to gauge interest around your LIP include [the LUKSO subreddit], [the Issues section of this repository], and [one of the LUKSO Gitter chat rooms]. In particular, [the Issues section of this repository] is an excellent place to discuss your proposal with the community and start creating more formalized language around your LIP.
 
@@ -49,36 +49,36 @@ Your role as the champion is to write the LIP using the style and format describ
 
 Each status change is requested by the LIP author and reviewed by the LIP editors. Use a pull request to update the status. Please include a link to where people should continue discussing your LIP. The LIP editors will process these requests as per the conditions below.
 
-* **Active** -- Some Informational and Process LIPs may also have a status of “Active” if they are never meant to be completed. E.g. LIP 1 (this LIP).
-* **Work in progress (WIP)** -- Once the champion has asked the LUKSO community whether an idea has any chance of support, they will write a draft LIP as a [pull request]. Consider including an implementation if this will aid people in studying the LIP.
-  * :arrow_right: Draft -- If agreeable, LIP editor will assign the LIP a number (generally the issue or PR number related to the LIP) and merge your pull request. The LIP editor will not unreasonably deny an LIP.
-  * :x: Draft -- Reasons for denying draft status include being too unfocused, too broad, duplication of effort, being technically unsound, not providing proper motivation or addressing backwards compatibility, or not in keeping with the [LUKSO philosophy](https://github.com/ethereum/wiki/wiki/White-Paper#philosophy).
-* **Draft** -- Once the first draft has been merged, you may submit follow-up pull requests with further changes to your draft until such point as you believe the LIP to be mature and ready to proceed to the next status. An LIP in draft status must be implemented to be considered for promotion to the next status (ignore this requirement for core LIPs).
-  * :arrow_right: Last Call -- If agreeable, the LIP editor will assign Last Call status and set a review end date (`review-period-end`), normally 14 days later.
-  * :x: Last Call -- A request for Last Call status will be denied if material changes are still expected to be made to the draft. We hope that LIPs only enter Last Call once, so as to avoid unnecessary noise on the RSS feed.
-* **Last Call** -- This LIP will listed prominently on the https://eips.ethereum.org/ website (subscribe via RSS at [last-call.xml](/last-call.xml)).
-  * :x: -- A Last Call which results in material changes or substantial unaddressed technical complaints will cause the LIP to revert to Draft.
-  * :arrow_right: Accepted (Core LIPs only) -- A successful Last Call without material changes or unaddressed technical complaints will become Accepted.
-  * :arrow_right: Final (Not core LIPs) -- A successful Last Call without material changes or unaddressed technical complaints will become Final.
-* **Accepted (Core LIPs only)** -- This LIP is in the hands of the LUKSO client developers.  Their process for deciding whether to encode it into their clients as part of a hard fork is not part of the LIP process.
-  * :arrow_right: Final -- Standards Track Core LIPs must be implemented in at least three viable LUKSO clients before it can be considered Final. When the implementation is complete and adopted by the community, the status will be changed to “Final”.
-* **Final** -- This LIP represents the current state-of-the-art. A Final LIP should only be updated to correct errata.
+- **Active** -- Some Informational and Process LIPs may also have a status of “Active” if they are never meant to be completed. E.g. LIP 1 (this LIP).
+- **Work in progress (WIP)** -- Once the champion has asked the LUKSO community whether an idea has any chance of support, they will write a draft LIP as a [pull request]. Consider including an implementation if this will aid people in studying the LIP.
+  - :arrow_right: Draft -- If agreeable, LIP editor will assign the LIP a number (generally the issue or PR number related to the LIP) and merge your pull request. The LIP editor will not unreasonably deny an LIP.
+  - :x: Draft -- Reasons for denying draft status include being too unfocused, too broad, duplication of effort, being technically unsound, not providing proper motivation or addressing backwards compatibility, or not in keeping with the [LUKSO philosophy](https://github.com/ethereum/wiki/wiki/White-Paper#philosophy).
+- **Draft** -- Once the first draft has been merged, you may submit follow-up pull requests with further changes to your draft until such point as you believe the LIP to be mature and ready to proceed to the next status. An LIP in draft status must be implemented to be considered for promotion to the next status (ignore this requirement for core LIPs).
+  - :arrow_right: Last Call -- If agreeable, the LIP editor will assign Last Call status and set a review end date (`review-period-end`), normally 14 days later.
+  - :x: Last Call -- A request for Last Call status will be denied if material changes are still expected to be made to the draft. We hope that LIPs only enter Last Call once, so as to avoid unnecessary noise on the RSS feed.
+- **Last Call** -- This LIP is listed and documented prominently on the https://docs.lukso.tech/ website.
+  - :x: -- A Last Call which results in material changes or substantial unaddressed technical complaints will cause the LIP to revert to Draft.
+  - :arrow_right: Accepted (Core LIPs only) -- A successful Last Call without material changes or unaddressed technical complaints will become Accepted.
+  - :arrow_right: Final (Not core LIPs) -- A successful Last Call without material changes or unaddressed technical complaints will become Final.
+- **Accepted (Core LIPs only)** -- This LIP is in the hands of the LUKSO client developers. Their process for deciding whether to encode it into their clients as part of a hard fork is not part of the LIP process.
+  - :arrow_right: Final -- Standards Track Core LIPs must be implemented in at least three viable LUKSO clients before it can be considered Final. When the implementation is complete and adopted by the community, the status will be changed to “Final”.
+- **Final** -- This LIP represents the current state-of-the-art. A Final LIP should only be updated to correct errata.
 
 Other exceptional statuses include:
 
-* **Deferred** -- This is for core LIPs that have been put off for a future hard fork.
-* **Rejected** -- An LIP that is fundamentally broken or a Core LIP that was rejected by the Core Devs and will not be implemented.
-* **Active** -- This is similar to Final, but denotes an LIP which may be updated without changing its LIP number.
-* **Superseded** -- An LIP which was previously final but is no longer considered state-of-the-art. Another LIP will be in Final status and reference the Superseded LIP.
+- **Deferred** -- This is for core LIPs that have been put off for a future hard fork.
+- **Rejected** -- An LIP that is fundamentally broken or a Core LIP that was rejected by the Core Devs and will not be implemented.
+- **Active** -- This is similar to Final, but denotes an LIP which may be updated without changing its LIP number.
+- **Superseded** -- An LIP which was previously final but is no longer considered state-of-the-art. Another LIP will be in Final status and reference the Superseded LIP.
 
 ## What belongs in a successful LIP?
 
 Each LIP should have the following parts:
 
-- Preamble - RFC 822 style headers containing metadata about the LIP, including the LIP number, a short descriptive title (limited to a maximum of 44 characters), and the author details. See [below](https://github.com/ethereum/LIPs/blob/master/LIPS/eip-1.md#eip-header-preamble) for details.
+- Preamble - RFC 822 style headers containing metadata about the LIP, including the LIP number, a short descriptive title (limited to a maximum of 44 characters), and the author details. See [below](#lip-header-preamble) for details.
 - Simple Summary - “If you can’t explain it simply, you don’t understand it well enough.” Provide a simplified and layman-accessible explanation of the LIP.
 - Abstract - a short (~200 word) description of the technical issue being addressed.
-- Motivation (*optional) - The motivation is critical for LIPs that want to change the LUKSO protocol. It should clearly explain why the existing protocol specification is inadequate to address the problem that the LIP solves. LIP submissions without sufficient motivation may be rejected outright.
+- Motivation (\*optional) - The motivation is critical for LIPs that want to change the LUKSO protocol. It should clearly explain why the existing protocol specification is inadequate to address the problem that the LIP solves. LIP submissions without sufficient motivation may be rejected outright.
 - Specification - The technical specification should describe the syntax and semantics of any new feature. The specification should be detailed enough to allow competing, interoperable implementations for any of the current LUKSO platforms (cpp-ethereum, go-ethereum, parity, ethereumJ, ethereumjs-lib, [and others](https://github.com/ethereum/wiki/wiki/Clients).
 - Rationale - The rationale fleshes out the specification by describing what motivated the design and why particular design decisions were made. It should describe alternate designs that were considered and related work, e.g. how the feature is supported in other languages. The rationale may also provide evidence of consensus within the community, and should discuss important objections or concerns raised during discussion.
 - Backwards Compatibility - All LIPs that introduce backwards incompatibilities must include a section describing these incompatibilities and their severity. The LIP must explain how the author proposes to deal with these incompatibilities. LIP submissions without a sufficient backwards compatibility treatise may be rejected outright.
@@ -88,13 +88,11 @@ Each LIP should have the following parts:
 
 ## LIP Formats and Templates
 
-LIPs should be written in [markdown] format.
-Image files should be included in a subdirectory of the `assets` folder for that LIP as follow: `assets/eip-X` (for eip **X**). When linking to an image in the LIP, use relative links such as `../assets/eip-X/image.png`.
+LIPs MUST be written in [markdown] format. Image files should be included in a subdirectory of the `assets` folder for that LIP as follow: `assets/lip-X` (for LIP-**X**). When linking to an image in the LIP, use relative links such as `../assets/lip-X/image.png`.
 
 ## LIP Header Preamble
 
-Each LIP must begin with an RFC 822 style header preamble, preceded and followed by three hyphens (`---`). The headers must appear in the following order. Headers marked with "*" are optional and are described below. All other headers are required.
-
+Each LIP must begin with an RFC 822 style header preamble, preceded and followed by three hyphens (`---`). The headers must appear in the following order. Headers marked with "\*" are optional and are described below. All other headers are required.
 
 ` lip:` <LIP number> (this is determined by the LIP editor)
 
@@ -108,7 +106,7 @@ Each LIP must begin with an RFC 822 style header preamble, preceded and followed
 
 `* review-period-end:` <date review period ends>
 
-` type:` <Standards Track (Core, Interface, LSP)  | Informational | Meta>
+` type:` <Standards Track (Core, Interface, LSP) | Informational | Meta>
 
 ` * category:` <Core | Interface | LSP>
 
@@ -190,7 +188,6 @@ It occasionally becomes necessary to transfer ownership of LIPs to a new champio
 
 If you are interested in assuming ownership of an LIP, send a message asking to take over, addressed to both the original author and the LIP editor. If the original author doesn't respond to email in a timely manner, the LIP editor will make a unilateral decision (it's not like such decisions can't be reversed :)).
 
-
 ## LIP Editors
 
 The current LIP editors are
@@ -198,6 +195,8 @@ The current LIP editors are
 ` * Fabian Vogelsteller (@frozeman)`
 
 ` * Leonard Schellenberg Detrio (@Leondroids)`
+
+` * Jean Cavallera (@CJ42)`
 
 ## LIP Editor Responsibilities
 
