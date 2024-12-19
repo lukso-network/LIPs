@@ -46,7 +46,17 @@ Meta transactions in web3 are used in many different context. From interacting w
 
 # Motivation
 
-By having a common smart contract interface, applications and protocols can implement the LSP25 Execute Relay Call standard to start implementing gas-less transaction. This can be beneficial for protocols and applications like Digital Marketplaces or Universal Profile that want to onboard new users without requiring users to hold native tokens.
+By having a common smart contract interface, applications and protocols can implement the LSP25 Execute Relay Call standard to start implementing gas-less transaction. This can be beneficial for protocols and applications like Digital Marketplaces or Universal Profile that want to onboard new users without requiring them to hold native tokens.
+
+Meta transactions (described in this standard as **relay calls**) can be useful for many web3 applications in many different contexts. This includes:
+
+- Voting (ask a third party to cast your vote on your behalf, paying the gas for the transaction). See the [Uniswap v3 protocol function `delegateBySig(...)`](https://docs.uniswap.org/contracts/v3/reference/governance/overview#delegate-by-signature) for example, or [proxy voting in real life](<(https://en.m.wikipedia.org/wiki/Proxy_voting#:~:text=Proxy%20voting%20is%20a%20form,enable%20a%20vote%20in%20absence)>) (_voting on behalf of someone else who cannot be present to cast a vote_).
+- NFT Marketplaces that want to be built to accept meta transactions natively, without having to put a [LSP6 Key Manager contract](./LSP-6-KeyManager.md) in front.
+- Building decentralised relayers.
+- Free NFTs mintied for frees or given as gifts (_e.g: Stickmen Toys: [https://stickmentoys.com](https://stickmentoys.com/), or Warners Records UK that gave free musical NFTs_). To give NFTs for free, one COULD create the NFT without a price. However, the transaction will always incurs a gas cost. Meta transaction can enable that, where a user signs a relay call and a relayer service dispatches the transaction (paying for the gas) to claim the free NFT on behalf of the user.
+- Any services that require a lot of transactions (streaming, microtransactions, gaming, defi, etc…).
+
+By putting Meta Transaction in its own standard as a new LSP, this offer a new separate small building block / component that devs can use to embed meta transactions in their own protocol / applications (instead to have to also opt for permissions management, which is not necessarely related and that theu might not want).
 
 # Specification
 
