@@ -31,10 +31,10 @@ The development of restrictive tokens experienced a considerable upswing through
 - [ERC-5753]: Lock and Unlock Operator
 - [ERC-6982]: Default Asset Lock Type
 
-This standardization aims to facilitate enhanced adoption and convenience by introducing a generic but versatile interface for assets of the expansive on-chain data economy. It tries to enhance the primitives of Soulbound Tokens and Locks to foster the extensive requirements of social environments without constraining previous use cases. Therefore, the following attributes are embedded into the specification:
+This standardization aims to facilitate enhanced adoption and convenience by introducing a generic but versatile interface for assets of the expansive on-chain data economy. It tries to improve the primitives of Soulbound Tokens and Locks to foster the extensive requirements of social environments without constraining previous use cases. Therefore, the following attributes are embedded into the specification:
 
-- **Interface Detection**: User interfaces cannot detect the restriction status of assets before calling their transfer function. In order to allow for seamless interactions, a unique interface ID MUST be retrievable so frontends can be adjusted based on their functionality.
-- **Hybrid Restriction Support**: Society brings various of asset lifecycles like temporary locking, strict binding, and advanced logic like time-based solutions or backups. A restriction type needs to be queryable to gain adoption across the landscape.
+- **Interface Detection**: User interfaces cannot detect the restriction status of assets before calling their transfer function. To allow for seamless interactions, a unique interface ID MUST be retrievable so frontends can be adjusted based on their functionality.
+- **Hybrid Restriction Support**: Society brings asset lifecycles like temporary locking, strict binding, and advanced logic like time-based solutions or backups. A restriction type needs to be queryable to gain adoption across the landscape.
 - **Fungibility Independence**: Digital assets reach across regular tokens, NFTs, and semi-fungible or mixed assets standards. Restriction MUST be implemented for any fungibility type to allow broad but unified usage.
 - **Consent during Handout**: Shared consent MUST be given whenever something can get locked. The receiver MUST approve the asset's content, restriction type, and operators. After approval, locked tokens and their transfer or removal rights MUST not be modified without re-approving or unlocking the asset.
 - **Shared Transfer Management**: Various operators MUST be allowed to perform transfers to allow shared and extended management possibilities, like backups or community revoking, that go beyond issuer and holder,
@@ -71,7 +71,7 @@ _These `bytes4` interface IDs are calculated as the XOR of the functions selecto
 
 #### RestrictionType
 
-The following enumerated type MUST be implemented to represent the different types of assets with respect to their locking behavior:
+The following enumerated type MUST be implemented to represent the different types of assets for their locking behavior:
 
 ```solidity
 // Enumeration to define the different types of restrictions that can be applied to tokens
@@ -85,7 +85,7 @@ enum RestrictionType {
 
 - `None`: No (additional) restriction was set, meaning it will fall back to the default lock type of the contract that MUST be set during the initialization of the smart contract.
 - `TempLock`: A dynamic locking mechanism where an asset can toggle between locked and unlocked states, governed by custom logic. The switching allows for asset recovery or community-based transfers while maintaining security. The lock status can be altered in response to particular events or conditions, ensuring adaptability and controlled access.
-- `SoftLock`: A condition in which an asset, post-acceptance by the owner, is locked to its assigned address with provisions for deletion or removal under specific circumstances. Only designated addresses, per the predefined `RestrictionPermission` criteria, have the authority to remove the asset, balancing security and flexibility.
+- `SoftLock`: A condition in which an asset, post-acceptance by the owner, is locked to its assigned address with provisions for deletion or removal under specific circumstances. Per the predefined `RestrictionPermission` criteria, only designated addresses can remove the asset, balancing security and flexibility.
 - `HardLock`: A status where an asset is irrevocably locked to its assigned address once accepted by the owner. Under this condition, the asset cannot be transferred or removed, ensuring permanent retention and immutability.
 
 A default restriction type of the asset MUST be predefined during the instantiation of the smart contract. However, each asset can be further restricted for addresses or token IDs individually.
@@ -105,7 +105,7 @@ enum RestrictionPermission {
 }
 ```
 
-- `None`: The default value of the enum indicates that the address has no privileges regarding the locking method of the asset.
+- `None`: The default value of the enum indicates that the address has no privileges regarding the asset's locking method.
 - `CanRemove`: Indicates that the address has the right to disassociate from the asset in case of expiration or particular condition. The allowed address can burn or transfer the asset to the zero address.
 - `isOperator`: Indicates that the asset can be transferred to another address regarding backups or shared community management when it is unlocked.
 
@@ -148,7 +148,7 @@ mapping(uint256 => RestrictionType) public tokenRestriction;
 
 #### tokenPermissions
 
-The following hierarchical `tokenPermissions` mapping MUST be implemented to associate each asset with a set of addresses and their respective `RestrictionPermission`. The addresses and restrictions are attached to a token ID or account, depending on the fungibility. The `tokenPermissions` of an asset are set within the `lock` function.
+The following hierarchical `tokenPermissions` mapping MUST be implemented to associate each asset with a set of addresses and their respective `RestrictionPermission`. Depending on the fungibility, the addresses and restrictions are attached to a token ID or account. The `tokenPermissions` of an asset are set within the `lock` function.
 
 ```solidity
 // For fungible assets, the key is the owner's address casted to uint256
@@ -216,7 +216,7 @@ These values are implemented within the [EIP-712 Consent](#eip-712-consent) sect
 
 #### lockAsset
 
-The `lockAsset` function MUST be implemented to lock an asset with a specified `RestrictionType` and an array of `AddressPermission`. In order to lock the asset, the [EIP-712] signature of the receiver MUST be included. The [EIP-712] typed structured data that will be signed MUST include:
+The `lockAsset` function MUST be implemented to lock an asset with a specified `RestrictionType` and an array of `AddressPermission`. To lock the asset, the [EIP-712] signature of the receiver MUST be included. The [EIP-712] typed structured data that will be signed MUST consist of:
 
 - the [LSP4] metadata of the asset
 - the `RestrictionType` of the asset
@@ -246,13 +246,13 @@ _Parameters_
 
 - `key`: The identifier of the asset. Based on the fungibility, the key will be the tokenID or the holder's account casted to uint256.
 - `owner`: The current or new owner after the asset is locked or transferred and locked. If transferable, equals the `key`.
-- `metadata`: The stringified [LSP4] metadata of the related digital asset.
+- `metadata`: The related digital asset's stringified [LSP4] metadata.
 - `type`: The RestrictionType that is applied to the asset.
 - `permissions`: An array of addresses and their respective permissions.
 - `v`, `r`, `s`: Off-chain signature parts of [EIP-712] generated using the private key of the `owner`.
 - `signer`: The address of the operator key of the smart contract that was used to generate the signature.
 
-> [EIP-712]: The hashed structured data consists of the `metadata`, `type`, and `permissions` parameters of the asset that will be locked. When the signature is sent to a smart contract function, the contract uses the `v`, `r`, and `s` values calculate the signer's address. If the calculated address matches the signing rights of the [LSP6], the `lockAsset` function can be further executed. An implementation can be found within [EIP-712 Consent](#eip-712-consent).
+> [EIP-712]: The hashed structured data consists of the `metadata`, `type`, and `permissions` parameters of the asset that will be locked. When the signature is sent to a smart contract function, the contract uses the `v`, `r`, and `s` values to calculate the signer's address. If the calculated address matches the signing rights of the [LSP6], the `lockAsset` function can be further executed. An implementation can be found within [EIP-712 Consent](#eip-712-consent).
 
 _Events_
 
@@ -298,12 +298,12 @@ The `redeemAsset` function MAY be implemented to allow owners of an asset to per
 - `SoftLock` MAY be updated to `HardLock`
 
 ```solidity
-redeemAsset(uint256 key, RestrictionType type, address finalOwner) external;
+function redeemAsset(uint256 key, RestrictionType type, address finalOwner) external;
 ```
 
 _Parameters_
 
-- `key`: The identifier of the asset. Based on the fungibility, the key will be the tokenID or the address of the holder casted to uint256.
+- `key`: The identifier of the asset. Based on the fungibility, the key will be the tokenID or the holder's address casted to uint256.
 - `type`: The RestrictionType that is applied to the asset.
 - `finalOwner`: The address of the current owner or an owned and allowlisted [LSP5]-based smart contract. If fungible, equals the `key`.
 
@@ -325,8 +325,8 @@ _Parameters_
 
 - `key`: The identifier of the asset. Based on the fungibility, the key will be the tokenID or the holder's address casted to uint256.
 - `type`: The type of restriction applied to the asset at the time of locking.
-- `owner`: The address of the smart contract that it was locked to. If fungible, equals the `key`.
-- `executor`: The address of the smart contract that executed the lock operation.
+- `owner`: The smart contract address it was locked to. If fungible, equals the `key`.
+- `executor`: The smart contract address that executed the lock operation.
 - `permissions`: An array listing all addresses with their respective permissions for this asset.
 
 #### AssetUnlocked
@@ -354,7 +354,7 @@ event AssetRemoved(uint256 indexed key, address indexed removedFrom, address ind
 _Parameters_
 
 - `key`: The identifier of the asset. Based on the fungibility, the key will be the tokenID or the holder's address casted to uint256.
-- `removedFrom`: The smart contract address that it was removed from.
+- `removedFrom`: The smart contract address from which it was removed.
 - `executor`: The smart contract address that executed the removal operation.
 
 #### AssetRedeemed
@@ -369,7 +369,7 @@ _Parameters_
 
 - `key`: The identifier of the asset. Based on the fungibility, the key will be the tokenID or the holder's address casted to uint256.
 - `newType`: The new RestrictionType applied to the asset after redemption.
-- `finalOwner`: The address of the smart contract the asset was redeemed on.
+- `finalOwner`: The smart contract address the asset was redeemed on.
 
 ## Rationale
 
@@ -377,7 +377,7 @@ The interface is designed to be flexible and adaptable to various assets such as
 
 By providing a generic functionality for the locking and the associated restriction types, the standard acts as a primitive for many different asset lifecycles without preventing unauthorized transfers or changes after locking. Additionally, regular asset transfers are preserved without requiring consent.
 
-The `lockAsset`, `unlockAsset`, `removeAsset`, and `redeemAsset` methods offer flexibility in defining transfer restrictions based on different permissions. By having public mappings for `tokenRestriction`, `tokenPermissions`, and `lockStatus`, all restriction data can constantly be retrieved directly from the asset.
+The `lockAsset`, `unlockAsset`, `removeAsset`, and `redeemAsset` methods offer flexibility in defining transfer restrictions based on different permissions. Public mappings for `tokenRestriction`, `tokenPermissions`, and `lockStatus` allow all restriction data to be retrieved directly from the asset.
 
 ## Compatibility
 
@@ -387,7 +387,7 @@ This standard is designed to be compatible with existing assets based on [LSP4] 
 
 ### LSP22 Setup
 
-A reference implementation of the full contract will be provided upon further development of the proposal.
+A reference implementation of the full contract will be provided upon further proposal development.
 
 ### EIP-712 Structure
 
