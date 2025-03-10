@@ -105,7 +105,7 @@ enum RestrictionPermission {
 }
 ```
 
-- `None`: The default value of the enum indicates that the address has no privileges regarding the asset's locking method.
+- `None`: The default value of the enum indicates that the address  no privileges regarding the asset's locking method.
 - `CanRemove`: Indicates that the address has the right to disassociate from the asset in case of expiration or particular condition. The allowed address can burn or transfer the asset to the zero address.
 - `isOperator`: Indicates that the asset can be transferred to another address regarding backups or shared community management when it is unlocked.
 
@@ -427,7 +427,7 @@ constructor() {
     domainSeparator = keccak256(abi.encode(
         DOMAIN_TYPEHASH,
         keccak256(bytes("<LockableAsset>")),        // hash of the asset's name
-        keccak256(bytes("<1>")),                    // has of the asset version
+        keccak256(bytes("<1>")),                    // hash of the asset version
         block.chainid,                              // chain ID
         address(this)                               // contract address
     ));
