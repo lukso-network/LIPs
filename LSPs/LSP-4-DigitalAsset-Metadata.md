@@ -286,42 +286,40 @@ Example:
 }
 ```
 
-A data key to store a number representing the type of token that the asset contract represents.
+A data key to store a number representing the type of token that the asset smart contract represents. This number should be used to determine how to display the token smart contract to users in an interface.
 
 | Value |  Type   | Description                                                                                                                                                    |
 | :---: | :-----: | :------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|  `0`  | `Token` | Only valid for [LSP7-DigitalAsset](./LSP-7-DigitalAsset.md), when the asset's decimals are higher than 0, meaning that its a fungible token (e.g. USDC, LYXe). |
+|  `0`  | `Token` | Only valid for [LSP7-DigitalAsset](./LSP-7-DigitalAsset.md) if asset's `decimals` is set greater than 0. Represents a fungible token (e.g. USDC, WLYX). |
 
-_Result_:
+_Expected behaviour_:
 
-- `LSP4Metadata` data key represents the Token contract information.
+- `LSP4Metadata` data key SHOULD represents the token information.
 
 | Value | Type  | Description                                                                                                                                                                                                                                                                                                                                                                                                             |
 | :---: | :---: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|  `1`  | `NFT` | Valid for [LSP7-DigitalAsset](./LSP-7-DigitalAsset.md), when the asset's decimals is equal to 0, meaning that each item cannot be divisible (e.g. 100 units of the same Handbag). <br> Valid for [LSP8-IdentifiableDigitalAsset](./LSP-8-IdentifiableDigitalAsset.md) when the representation (`LSP8TokenIdFormat`) of the tokenIds is different than **Addresses** (e.g. Piggy NFT contract with 50 different piggies) |
+|  `1`  | `NFT` | For [LSP7-DigitalAsset](./LSP-7-DigitalAsset.md), when the asset's `decimals` is equal to 0, meaning items are NOT divisible. For LSP7 and LSP8, the smart contract represents one item, with multiple ownable units (e.g. 100 units of the same digital sword). <br> For [LSP8-IdentifiableDigitalAsset](./LSP-8-IdentifiableDigitalAsset.md) each ownable unit has have its own unqie Id. |
 
-_Result_:
+_Expected behaviour_:
 
-- In case of [LSP7-DigitalAsset](./LSP-7-DigitalAsset.md): The `LSP4Metadata` data key represents the information of the same **single** NFT.
-- In case of [LSP8-IdentifiableDigitalAsset](./LSP-8-IdentifiableDigitalAsset.md): The `LSP4Metadata` data key represents the information of the NFT contract, and each single tokenId, if and only if, the tokenIds didn't have their own metadata.
+- In case of [LSP7-DigitalAsset](./LSP-7-DigitalAsset.md) and [LSP8-IdentifiableDigitalAsset](./LSP-8-IdentifiableDigitalAsset.md): The `LSP4Metadata` data key represents the meta data information of a **single** NFT (e.g. digital sword).
+- In case of [LSP8-IdentifiableDigitalAsset](./LSP-8-IdentifiableDigitalAsset.md): Each single tokenId, COULD have additional `LSP4Metadata` stored under each token id, via [`getDataForTokenId()`](./LSP-8-IdentifiableDigitalAsset.md#getdatafortokenid).
 
-  Metadata can be added to the tokenIds by either setting the `LSP4Metadata` data key for each tokenId or by setting the `LSP8TokenMetadataBaseURI` data key for the whole NFT contract. Check [LSP8-IdentifiableDigitalAsset] for more information.
 
 | Value |     Type     | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
 | :---: | :----------: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|  `2`  | `Collection` | Only valid for [LSP8-IdentifiableDigitalAsset](./LSP-8-IdentifiableDigitalAsset.md), when the representation (`LSP8TokenIdFormat`) of the tokenIds is an address signaling that the tokenId is either a [LSP7-DigitalAsset](./LSP-7-DigitalAsset.md) or [LSP8-IdentifiableDigitalAsset](./LSP-8-IdentifiableDigitalAsset.md) contract. (e.g. Brand 2024 Summer Collection NFT contract containing Watches, Sunglasses and Braceletes, where each has its own supply/tokenIds) |
+|  `2`  | `Collection` | Only valid for [LSP8-IdentifiableDigitalAsset](./LSP-8-IdentifiableDigitalAsset.md). The LSP8 smart contract represents a collection, where each tokenId represents a item within the collection. |
 
-_Result_:
+_Expected behaviour_:
 
-- `LSP4Metadata` data key represents the Collection contract information. The metadata of each LSP7 or LSP8 contract (Collection tokenId) needs to be fetched from the relevant contract.
+- `LSP4Metadata` data key represents the Collection information.
+- Each single tokenId, SHOULD have additional `LSP4Metadata` stored under each token id, via [`getDataForTokenId()`](./LSP-8-IdentifiableDigitalAsset.md#getdatafortokenid).
 
-> NOTE: More token types COULD be added later.
 
 _Requirements_
 
 - This MUST NOT be changeable, and set only during initialization of the token contract.
 
-<!-- - `LSP26NFT` -->
 
 #### LSP4Creators[]
 
