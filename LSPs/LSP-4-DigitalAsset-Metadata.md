@@ -298,7 +298,7 @@ _Expected behaviour_:
 
 | Value | Type  | Description                                                                                                                                                                                                                                                                                                                                                                                                             |
 | :---: | :---: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|  `1`  | `NFT` | For [LSP7-DigitalAsset](./LSP-7-DigitalAsset.md), when the asset's `decimals` is equal to 0, meaning items are NOT divisible. For LSP7 and LSP8, the smart contract represents one item, with multiple ownable units (e.g. 100 units of the same digital sword). <br> For [LSP8-IdentifiableDigitalAsset](./LSP-8-IdentifiableDigitalAsset.md) each ownable unit has have its own unqie Id. |
+|  `1`  | `NFT` | For [LSP7-DigitalAsset](./LSP-7-DigitalAsset.md), when the asset's `decimals` is equal to 0, meaning items are NOT divisible. For LSP7 and LSP8, the smart contract represents one item, with multiple ownable units (e.g. 100 units of the same digital sword). <br> For [LSP8-IdentifiableDigitalAsset](./LSP-8-IdentifiableDigitalAsset.md) each ownable unit has have its own unique Id. |
 
 _Expected behaviour_:
 
