@@ -580,8 +580,8 @@ For a schema that includes the following tuple as `valueType`.
 
 And the following values:
 
-- `bytes4` value = `0xca11ab1eca11ab1e`
-- `bytes8` value = `0x95222290DD7278Aa3Ddd389Cc1E1d165CC4BAfe5`
+- `bytes8` value = `0xca11ab1eca11ab1e`
+- `address` value = `0x95222290DD7278Aa3Ddd389Cc1E1d165CC4BAfe5`
 
 The tuple of `valueType` MUST be encoded as:
 
