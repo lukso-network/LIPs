@@ -64,7 +64,7 @@ The data value MUST be constructed as follows: `bytes4(standardInterfaceId) + ui
 - `standardInterfaceId` = the [ERC165 interface ID](https://eips.ethereum.org/EIPS/eip-165) of the standard that the token or asset smart contract implements (if the ERC165 interface ID is unknown, `standardInterfaceId = 0xffffffff`).
 - `indexNumber` = the index in the [`LSP12IssuedAssets[]` Array](#LSP12Issuedassets)
 
-Value example: `0x5fcaac27000000000000000c` (interfaceId: `0x5fcaac27` for a [LSP7](./LSP-7-DigitalAsset.md) token, index position `0x000000000000000c = 12`).
+Value example: `0x5fcaac270000000000000000000000000000000c` (interfaceId: `0x5fcaac27` for a [LSP7](./LSP-7-DigitalAsset.md) token, index position `0x0000000000000000000000000000000c = 12`).
 
 ```json
 {
