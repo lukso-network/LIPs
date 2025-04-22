@@ -486,7 +486,7 @@ An example of a `bytes[CompactBytesArray]`, where the bytes are a tuple:
 
 Like a `bytes[CompactBytesArray]` a `bytesN[CompactBytesArray]` represents an array of `bytesN` values _encoded in a compact way_. The difference is that all the elements contained in the array have the same length `N`.
 
-In a compact bytes array of `bytesN`, each element is prefixed with 1 byte that specifies the length `N`.
+In a compact bytes array of `bytesN`, each element is prefixed with two bytes that specifies the length `N`.
 
 For instance, in a `bytes8[CompactBytesArray]` an entry like `0x1122334455667788` is encoded as `0x00081122334455667788`, where:
 
@@ -500,7 +500,7 @@ _example:_
 If we want to have the following `bytes8` elements encoded as a `bytes8[CompactBytesArray]`:
 
 ```
-[
+elements = [
     0x1122334455667788,
     0xcafecafecafecafe,
     0xbeefbeefbeefbeef
@@ -509,9 +509,16 @@ If we want to have the following `bytes8` elements encoded as a `bytes8[CompactB
 
 We will obtain the following:
 
-`0x0008 1122334455667788 0008 cafecafecafecafe 0008 beefbeefbeefbeef` > `0x000811223344556677880008cafecafecafecafe0008beefbeefbeefbeef`.
+```
+// separated parts:
+elements[0].length + elements[0] + elements[1].length + elements[1] + elements[2].length + elements[2]
+0x0008 1122334455667788 0008 cafecafecafecafe 0008 beefbeefbeefbeef
 
-Where each byte `0x0008` in the final encoded value represents the length `N` of each element.
+// final encoded value as a full string
+0x000811223344556677880008cafecafecafecafe0008beefbeefbeefbeef
+```
+
+Where each `0x0008` prefix in the final encoded value represents the length (`N`) of each element. Since each element is 8 bytes long (as we are encoding a `bytes8[CompactBytesArray]`), each prefix will be `0x0008`.
 
 ```
   vvvv                vvvv                vvvv
