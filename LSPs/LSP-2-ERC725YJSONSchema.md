@@ -441,7 +441,7 @@ MyKeyName:<bytes32>:<bool> // 0xaaaabbbbccccddddeeeeffff111122223333444455556666
 
 ## ValueType
 
-### bytes[CompactBytesArray]
+### `bytes[CompactBytesArray]`
 
 A `bytes[CompactBytesArray]` represents an array of `bytes` values _encoded in a compact way_. The elements contained in the array are `bytes` values with different dynamic lengths.
 
@@ -472,7 +472,7 @@ The representation of these dynamic elements in a compacted bytes array would be
 
 An example of a `bytes[CompactBytesArray]`, where the bytes are a tuple:
 
-```js
+```json
 {
   "name": "AddressPermissions:AllowedCalls:<address>",
   "key": "0x4b80742de2bf393a64c70000<address>",
@@ -482,7 +482,7 @@ An example of a `bytes[CompactBytesArray]`, where the bytes are a tuple:
 }
 ```
 
-### bytesN[CompactBytesArray]
+### `bytesN[CompactBytesArray]`
 
 Like a `bytes[CompactBytesArray]` a `bytesN[CompactBytesArray]` represents an array of `bytesN` values _encoded in a compact way_. The difference is that all the elements contained in the array have the same length `N`.
 
@@ -499,9 +499,9 @@ _example:_
 
 If we want to have the following `bytes8` elements encoded as a `bytes8[CompactBytesArray]`:
 
-```
+```js
 elements = [
-    0x1122334455667788,
+    0xfacefacefaceface,
     0xcafecafecafecafe,
     0xbeefbeefbeefbeef
 ]
@@ -509,20 +509,20 @@ elements = [
 
 We will obtain the following:
 
-```
+```js
 // separated parts:
-elements[0].length + elements[0] + elements[1].length + elements[1] + elements[2].length + elements[2]
-0x0008 1122334455667788 0008 cafecafecafecafe 0008 beefbeefbeefbeef
+// elements[0].length + elements[0] + elements[1].length + elements[1] + elements[2].length + elements[2]
+0x0008 facefacefaceface 0008 cafecafecafecafe 0008 beefbeefbeefbeef
 
 // final encoded value as a full string
-0x000811223344556677880008cafecafecafecafe0008beefbeefbeefbeef
+0x0008facefacefaceface0008cafecafecafecafe0008beefbeefbeefbeef
 ```
 
 Where each `0x0008` prefix in the final encoded value represents the length (`N`) of each element. Since each element is 8 bytes long (as we are encoding a `bytes8[CompactBytesArray]`), each prefix will be `0x0008`.
 
-```
+```js
   vvvv                vvvv                vvvv
-0x000811223344556677880008cafecafecafecafe0008beefbeefbeefbeef
+0x0008facefacefaceface0008cafecafecafecafe0008beefbeefbeefbeef
 ```
 
 ### Tuples
