@@ -17,7 +17,7 @@ This standard describes a set of [ERC725Y](https://github.com/ethereum/EIPs/blob
 
 LSP18 is a metadata standard that defines two data keys that can be added to an [ERC725Y](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-725.md) smart contract to describe royalties:
 
-- `LSP18RoyaltiesRecipients` is a [LSP2 BytesCompactArray](./LSP-2-ERC725YJSONSchema.md#bytescompactbytesarray) of royalties recipient that contains:
+- `LSP18RoyaltiesRecipients` is a [LSP2 CompactBytesArray](./LSP-2-ERC725YJSONSchema.md#bytescompactbytesarray) of royalties recipient that contains:
   - a recipient's interface id
   - a recipient's address
   - a royalties share (percent)
