@@ -121,7 +121,7 @@ _Expected behaviour_:
 
 _Expected behaviour_:
 
-- In case of [LSP7-DigitalAsset](./LSP-7-DigitalAsset.md) and [LSP8-IdentifiableDigitalAsset](./LSP-8-IdentifiableDigitalAsset.md): The `LSP4Metadata` data key represents the meta data information of a **single** NFT/NDT.
+- For both [LSP7-DigitalAsset](./LSP-7-DigitalAsset.md) and [LSP8-IdentifiableDigitalAsset](./LSP-8-IdentifiableDigitalAsset.md): The `LSP4Metadata` data key represents the meta data information of a **single** NFT/NDT.
 - In case of [LSP8-IdentifiableDigitalAsset](./LSP-8-IdentifiableDigitalAsset.md): Each single tokenId, COULD have additional `LSP4Metadata` stored under each token id, via [`getDataForTokenId()`](./LSP-8-IdentifiableDigitalAsset.md#getdatafortokenid).
 
 
