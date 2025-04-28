@@ -93,6 +93,89 @@ _Recommendations_
 - Symbols SHOULD NOT contain any white spaces.
 - Symbols SHOULD contain only ASCII characters.
 
+#### LSP4TokenType
+
+```json
+{
+  "name": "LSP4TokenType",
+  "key": "0xe0261fa95db2eb3b5439bd033cda66d56b96f92f243a8228fd87550ed7bdfdb3",
+  "keyType": "Singleton",
+  "valueType": "uint256",
+  "valueContent": "Number"
+}
+```
+
+A data key to store a number representing the type of token that the asset smart contract represents. This number should be used to determine how to display the token smart contract to users in an interface.
+
+| Value |  Type   | Description                                                                                                                                                    |
+| :---: | :-----: | :------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+|  `0`  | `Token (LSP7)` | Only valid for [LSP7-DigitalAsset](./LSP-7-DigitalAsset.md) if asset's `decimals` is set greater than 0. Represents a fungible token (e.g. USDC, WLYX). |
+
+_Expected behaviour_:
+
+- `LSP4Metadata` data key MUST represents the token information.
+
+| Value | Type  | Description                                                                                                                                                                                                                                                                                                                                                                                                             |
+| :---: | :---: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+|  `1`  | `NDT (LSP7)` `NFT (LSP8)` | - If using [LSP7-DigitalAsset](./LSP-7-DigitalAsset.md) and setting asset's `decimals` is equal to 0, the asset becomes a **NDT** meaning its a Non-Divisible-Token, usful for Tickets and Badges. <br> - For both LSP7 and LSP8, the smart contract represents one item, with multiple ownable units (e.g. 100 units of the same badge in LSP7 and multiple ownable IDs for LSP8). <br> - If [LSP8-IdentifiableDigitalAsset](./LSP-8-IdentifiableDigitalAsset.md) each ownable unit has have its own unique Id and is usful for physical items with serial numbers, etc. |
+
+_Expected behaviour_:
+
+- In case of [LSP7-DigitalAsset](./LSP-7-DigitalAsset.md) and [LSP8-IdentifiableDigitalAsset](./LSP-8-IdentifiableDigitalAsset.md): The `LSP4Metadata` data key represents the meta data information of a **single** NFT/NDT.
+- In case of [LSP8-IdentifiableDigitalAsset](./LSP-8-IdentifiableDigitalAsset.md): Each single tokenId, COULD have additional `LSP4Metadata` stored under each token id, via [`getDataForTokenId()`](./LSP-8-IdentifiableDigitalAsset.md#getdatafortokenid).
+
+
+| Value |     Type     | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| :---: | :----------: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+|  `2`  | `NFT Collection (LSP8)` | Only valid for [LSP8-IdentifiableDigitalAsset](./LSP-8-IdentifiableDigitalAsset.md). The LSP8 smart contract represents a collection, where each tokenId represents an item within the collection like a PFP collection. |
+
+_Expected behaviour_:
+
+- `LSP4Metadata` data key represents the meta data information of the Collection.
+- Each single tokenId, SHOULD have additional `LSP4Metadata` stored under each token id, via [`getDataForTokenId()`](./LSP-8-IdentifiableDigitalAsset.md#getdatafortokenid).
+
+
+#### LSP4Creators[]
+
+```json
+{
+  "name": "LSP4Creators[]",
+  "key": "0x114bd03b3a46d48759680d81ebb2b414fda7d030a7105a851867accf1c2352e7",
+  "keyType": "Array",
+  "valueType": "address",
+  "valueContent": "Address"
+}
+```
+
+A data key to store the addresses of the creators of the digital asset.
+
+For more information about how to access each index of the `LSP4Creators[]` array, see [ERC725Y JSON Schema > `keyType`: `Array`](./LSP-2-ERC725YJSONSchema.md#Array)
+
+#### LSP4CreatorsMap
+
+```json
+{
+  "name": "LSP4CreatorsMap:<address>",
+  "key": "0x6de85eaf5d982b4e5da00000<address>",
+  "keyType": "Mapping",
+  "valueType": "(bytes4,uint128)",
+  "valueContent": "(Bytes4,Number)"
+}
+```
+
+A data key to store information about a specific creator of the digital asset. The information contains the interfaceId of the creator, and the index in the `LSP4Creators[]` array.
+
+This data key exists so that smart contracts can detect whether the address of a creator is present in the `LSP4Creators[]` array without looping all over it on-chain. Moreover, it helps to identify at which index in the `LSP4Creators[]` the creator address is located for easy access and to change or remove this specific creator from the array. Finally, it also allows the detection of the interface supported by the creator.
+
+The `valueContent` MUST be constructed as follows: `bytes4(standardInterfaceId) + uint128(indexNumber)`.
+Where:
+
+- `standardInterfaceId` = if the creator address is a smart contract, the [ERC165 interface ID](https://eips.ethereum.org/EIPS/eip-165) of the standard that the smart contract implements. Otherwise `0xffffffff` in the case where the creator address is:
+  - an Externally Owned Account, or
+  - a contract implementing no ERC165 interface ID.
+- `indexNumber` = the index in the [`LSP4Creators[]` Array](##lsp4creators)
+
+
 #### LSP4Metadata
 
 ```json
@@ -273,93 +356,6 @@ Example:
     }
 }
 ```
-
-#### LSP4TokenType
-
-```json
-{
-  "name": "LSP4TokenType",
-  "key": "0xe0261fa95db2eb3b5439bd033cda66d56b96f92f243a8228fd87550ed7bdfdb3",
-  "keyType": "Singleton",
-  "valueType": "uint256",
-  "valueContent": "Number"
-}
-```
-
-A data key to store a number representing the type of token that the asset smart contract represents. This number should be used to determine how to display the token smart contract to users in an interface.
-
-| Value |  Type   | Description                                                                                                                                                    |
-| :---: | :-----: | :------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|  `0`  | `Token` | Only valid for [LSP7-DigitalAsset](./LSP-7-DigitalAsset.md) if asset's `decimals` is set greater than 0. Represents a fungible token (e.g. USDC, WLYX). |
-
-_Expected behaviour_:
-
-- `LSP4Metadata` data key SHOULD represents the token information.
-
-| Value | Type  | Description                                                                                                                                                                                                                                                                                                                                                                                                             |
-| :---: | :---: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|  `1`  | `NFT` | For [LSP7-DigitalAsset](./LSP-7-DigitalAsset.md), when the asset's `decimals` is equal to 0, meaning items are NOT divisible. For LSP7 and LSP8, the smart contract represents one item, with multiple ownable units (e.g. 100 units of the same digital sword). <br> For [LSP8-IdentifiableDigitalAsset](./LSP-8-IdentifiableDigitalAsset.md) each ownable unit has have its own unique Id. |
-
-_Expected behaviour_:
-
-- In case of [LSP7-DigitalAsset](./LSP-7-DigitalAsset.md) and [LSP8-IdentifiableDigitalAsset](./LSP-8-IdentifiableDigitalAsset.md): The `LSP4Metadata` data key represents the meta data information of a **single** NFT (e.g. digital sword).
-- In case of [LSP8-IdentifiableDigitalAsset](./LSP-8-IdentifiableDigitalAsset.md): Each single tokenId, COULD have additional `LSP4Metadata` stored under each token id, via [`getDataForTokenId()`](./LSP-8-IdentifiableDigitalAsset.md#getdatafortokenid).
-
-
-| Value |     Type     | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
-| :---: | :----------: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|  `2`  | `Collection` | Only valid for [LSP8-IdentifiableDigitalAsset](./LSP-8-IdentifiableDigitalAsset.md). The LSP8 smart contract represents a collection, where each tokenId represents a item within the collection. |
-
-_Expected behaviour_:
-
-- `LSP4Metadata` data key represents the Collection information.
-- Each single tokenId, SHOULD have additional `LSP4Metadata` stored under each token id, via [`getDataForTokenId()`](./LSP-8-IdentifiableDigitalAsset.md#getdatafortokenid).
-
-
-_Requirements_
-
-- This MUST NOT be changeable, and set only during initialization of the token contract.
-
-
-#### LSP4Creators[]
-
-```json
-{
-  "name": "LSP4Creators[]",
-  "key": "0x114bd03b3a46d48759680d81ebb2b414fda7d030a7105a851867accf1c2352e7",
-  "keyType": "Array",
-  "valueType": "address",
-  "valueContent": "Address"
-}
-```
-
-A data key to store the addresses of the creators of the digital asset.
-
-For more information about how to access each index of the `LSP4Creators[]` array, see [ERC725Y JSON Schema > `keyType`: `Array`](./LSP-2-ERC725YJSONSchema.md#Array)
-
-#### LSP4CreatorsMap
-
-```json
-{
-  "name": "LSP4CreatorsMap:<address>",
-  "key": "0x6de85eaf5d982b4e5da00000<address>",
-  "keyType": "Mapping",
-  "valueType": "(bytes4,uint128)",
-  "valueContent": "(Bytes4,Number)"
-}
-```
-
-A data key to store information about a specific creator of the digital asset. The information contains the interfaceId of the creator, and the index in the `LSP4Creators[]` array.
-
-This data key exists so that smart contracts can detect whether the address of a creator is present in the `LSP4Creators[]` array without looping all over it on-chain. Moreover, it helps to identify at which index in the `LSP4Creators[]` the creator address is located for easy access and to change or remove this specific creator from the array. Finally, it also allows the detection of the interface supported by the creator.
-
-The `valueContent` MUST be constructed as follows: `bytes4(standardInterfaceId) + uint128(indexNumber)`.
-Where:
-
-- `standardInterfaceId` = if the creator address is a smart contract, the [ERC165 interface ID](https://eips.ethereum.org/EIPS/eip-165) of the standard that the smart contract implements. Otherwise `0xffffffff` in the case where the creator address is:
-  - an Externally Owned Account, or
-  - a contract implementing no ERC165 interface ID.
-- `indexNumber` = the index in the [`LSP4Creators[]` Array](##lsp4creators)
 
 ## Rationale
 
