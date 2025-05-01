@@ -386,7 +386,7 @@ _Returns:_ `results` , an array of bytes containing the return values of each ex
 function execute(uint256 operationType, address target, uint256 value, bytes memory data) external payable returns (bytes memory);
 ```
 
-This function is part of the [ERC725X] specification, with additional requirements as follows:
+Please read the [ERC725X execute()] specification for details on `operationType` and other parameters.
 
 - MUST adhere to the logic specified in [Exclusive Called Functions Behavior](#exclusive-called-functions-behavior) section.
 - MUST adhere to the logic specified in [Value Receive Notification and Reaction](#value-receive-notification-and-reaction) section.
@@ -795,6 +795,7 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 [ERC1271]: https://eips.ethereum.org/EIPS/eip-1271
 [ERC725]: https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md
 [ERC725X]: https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#erc725x
+[ERC725X execute()]: https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#execute
 [ERC725Y]: https://github.com/ERC725Alliance/ERC725/blob/develop/docs/ERC-725.md#erc725y
 [LSP1-UniversalReceiver]: ./LSP-1-UniversalReceiver.md
 [LSP2-ERC725YJSONSchema]: ./LSP-2-ERC725YJSONSchema.md
