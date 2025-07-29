@@ -45,92 +45,119 @@ A JSON file that describes a customizable grid layout for displaying content and
 
 For construction of the VerifiableURI value see: [ERC725Y VerifiableURI Schema](./LSP-2-ERC725YJSONSchema.md#VerifiableURI)
 
-**Main grid properties**
+##### Main grid properties
+
 - **title**: The name of the grid, for the interface to display.
 - **gridColumns**: The number of columns the grid should have, we recommend the numbers from `2`-`4`.
 - **grid**: The content of the grid. Each item is a box in the grid with sizes and content properties.
 
-**Grid element properties**
+##### Grid element properties
+
 - **width/height**: The size of the grid in a number of steps. It is up to the interface to determine the width and height of each step. We recommend numbers from `1`-`3`.
 - **type**: The type of the grid item, commonly `IFRAME` to load external content, but custom types can also be defined, as see in the JSON file below.
 - **properties**: The properties of the grid item, different based on the `type`.
 
 The linked JSON file SHOULD have the following format:
 
-```js
+```json
 {
-  "LSP28TheGrid": {
-    "title": "My Socials",
-    "gridColumns": 2,
-    "grid": [
-      {
-        "width": 1, // Numbers from 1-3
-        "height": 3, // Numbers from 1-3
-        "type": "IFRAME",
-        "properties": {
-          "src": "...",
-          "allow": "accelerometer; autoplay; clipboard-write", // OPTIONAL
-          "sandbox": "allow-forms;allow-pointer-lock;allow-popups;allow-same-orig;allow-scripts;allow-top-navigation",  // OPTIONAL
-          "allowfullscreen": true, // OPTIONAL
-          "referrerpolicy": "..." // OPTIONAL
-          ...
-        }
-      },
-      {
-        "width": 2,
-        "height": 2,
-        "type": "TEXT",
-        "properties": {
-          "title": "My title",  // OPTIONAL and MARKDOWN possible
-          "titleColor": "#000000",  // OPTIONAL, overwrites "text-color" for titles
-          "text": "My title",  // OPTIONAL and MARKDOWN possible
-          "textColor": "#000000",  // OPTIONAL
-          "backgroundColor": "#ffffff", // OPTIONAL
-          "link": "https://mylink.com", // OPTIONAL click on the box, opens link
-        }
-      },
-      {
-        "width": 2,
-        "height": 2,
-        "type": "IMAGES",
-        "properties": {
-          "type": "grid", // OPTIONAL "grid", "carousel", (grid is default)
-          "images": [
-            "<IMAGE_URL_1>",
-            "<IMAGE_URL_2>"
-          ]
-        }
-      },
+  "LSP28TheGrid": [
+    {
+      "title": "My Socials",
+      "gridColumns": 2,
+      "visibility": "private", // private/public OPTIONAL
+      "grid": [
+        // IFRAME
+        {
+          "width": 1,
+          "height": 3,
+          "type": "IFRAME",
+          "properties": {
+            "src": "...",
+            "allow": "accelerometer; autoplay; clipboard-write", // OPTIONAL
+            "sandbox": "allow-forms;allow-pointer-lock;allow-popups;allow-same-orig;allow-scripts;allow-top-navigation", // OPTIONAL
+            "allowfullscreen": true, // OPTIONAL
+            "referrerpolicy": "..." // OPTIONAL
+          }
+        },
 
-      // -------------------------------
-      // Custom items from web application
-  
-      // ELFSIGHT
-      {
-        "width": 2,
-        "height": 1,
-        "type": "ELFSIGHT",
-        "properties": {
-          "id": "8473218e-6c60-4958-a6a7-b8c6065e1528", // elfsight ID
-        }
-      },
+        // TEXT
+        {
+          "width": 2,
+          "height": 2,
+          "type": "TEXT",
+          "properties": {
+            "title": "My title", // OPTIONAL and MARKDOWN possible
+            "titleColor": "#000000", // OPTIONAL, overwrites "text-color" for titles
+            "text": "My title", // OPTIONAL and MARKDOWN possible
+            "textColor": "#000000", // OPTIONAL
+            "backgroundColor": "#ffffff", // OPTIONAL
+            "link": "https://mylink.com" // OPTIONAL click on the box, opens link
+          }
+        },
 
-      X POST
-      {
-        "width": 2,
-        "height": 1,
-        "type": "X",
-        "properties": {
-          "type": "timeline", // timeline | post
-          "username": "feindura", // INPUTPARSER should also allow "@feindura" and "https://x.com/feindura"
-          "id": "1804519711377436675" // OPTIONAL used when "post" type
-          "theme": "light", // OPTIONAL data-theme=dark
-          "language": "en", // OPTIONAL data-lang=en
-          "donottrack": true, // OPTIONAL data-dnt=true
+        // IMAGES
+        {
+          "width": 2,
+          "height": 2,
+          "type": "IMAGES",
+          "properties": {
+            "type": "grid", // OPTIONAL "grid", "carousel", (grid is default)
+            "images": ["<IMAGE_URL_1>", "<IMAGE_URL_2>"]
+          }
+        },
+
+        // -------------------------------
+        // Custom items from web application
+
+        // ELFSIGHT
+        {
+          "width": 2,
+          "height": 1,
+          "type": "ELFSIGHT",
+          "properties": {
+            "id": "..." // Elfsight ID
+          }
+        },
+
+        // X (post)
+        {
+          "width": 2,
+          "height": 1,
+          "type": "X",
+          "properties": {
+            "type": "post",
+            "username": "feindura", // INPUTPARSER should also allow "@feindura" and "https://x.com/feindura"
+            "id": "1804519711377436675", // OPTIONAL used when "post" type
+            "theme": "light", // OPTIONAL data-theme=dark
+            "language": "en", // OPTIONAL data-lang=en
+            "donottrack": true // OPTIONAL data-dnt=true
+          }
+        },
+
+        // INSTAGRAM
+        {
+          "width": 2,
+          "height": 2,
+          "type": "INSTAGRAM",
+          "properties": {
+            "type": "p",
+            "id": "..."
+          }
+        },
+
+        // QR CODE
+        {
+          "width": 2,
+          "height": 1,
+          "type": "QR_CODE",
+          "properties": {
+            "data": "..."
+          }
         }
-      }
-    ]
-  }
+      ]
+    }
+  ]
 }
 ```
 
@@ -143,6 +170,7 @@ The Grid standard addresses the need interactive UIs related to profiles and tok
 An implementation can be found in the [universaleverything.io)[https://universaleverything.io];
 
 Below is an example of an ERC725Y JSON Schema.
+
 ```json
 [
   {
