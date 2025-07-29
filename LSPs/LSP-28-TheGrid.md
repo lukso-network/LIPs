@@ -21,7 +21,7 @@ This standard defines a set of data key-value pairs that allow Universal Profile
 
 The Grid standard enables Universal Profiles to move beyond static metadata by providing a framework for creating dynamic, customizable layouts that can host both traditional content and web3 enabled mini-apps. This allows for additional content to be referenced from profiles and tokens.
 
-By using adding mini-apps with a [up-provider](https://github.com/lukso-network/tools-up-provider), parent pages can forward their connected accounts to mini-apps allowing for a seemless connection from the parent page.
+By using adding mini-apps with a [up-provider](https://github.com/lukso-network/tools-up-provider), parent pages can forward their connected accounts to mini-apps allowing for a seamless connection from the parent page.
 
 ## Specification
 
