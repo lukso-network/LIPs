@@ -50,6 +50,12 @@ For construction of the VerifiableURI value see: [ERC725Y VerifiableURI Schema](
 - **title**: The name of the grid, for the interface to display.
 - **gridColumns**: The number of columns the grid should have, we recommend the numbers from `2`-`4`.
 - **grid**: The content of the grid. Each item is a box in the grid with sizes and content properties.
+- **visibility**: The visibility type of the grid. Can be:
+
+  - `public` - visible to everyone
+  - `private` - visible to connected user
+
+  > Note that on-chain data can by viewed by everyone so `visibility` value is just for UI purposes.
 
 ##### Grid element properties
 
@@ -127,7 +133,7 @@ The linked JSON file SHOULD have the following format:
           "type": "X",
           "properties": {
             "type": "post",
-            "username": "feindura", // INPUTPARSER should also allow "@feindura" and "https://x.com/feindura"
+            "username": "feindura",
             "id": "1804519711377436675", // OPTIONAL used when "post" type
             "theme": "light", // OPTIONAL data-theme=dark
             "language": "en", // OPTIONAL data-lang=en
@@ -135,14 +141,14 @@ The linked JSON file SHOULD have the following format:
           }
         },
 
-        // INSTAGRAM
+        // INSTAGRAM (post)
         {
           "width": 2,
           "height": 2,
           "type": "INSTAGRAM",
           "properties": {
-            "type": "p",
-            "id": "..."
+            "type": "p", // The type of item, for example "p" for post
+            "id": "..." // Post ID
           }
         },
 
@@ -152,7 +158,7 @@ The linked JSON file SHOULD have the following format:
           "height": 1,
           "type": "QR_CODE",
           "properties": {
-            "data": "..."
+            "data": "..." // data displayed in QR code
           }
         }
       ]
