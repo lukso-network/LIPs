@@ -21,7 +21,7 @@ This standard defines a set of data key-value pairs that allow Universal Profile
 
 The Grid standard enables Universal Profiles to move beyond static metadata by providing a framework for creating dynamic, customizable layouts that can host both traditional content and web3 enabled mini-apps. This allows for additional content to be referenced from profiles and tokens.
 
-By using adding mini-apps with a [up-provider](https://github.com/lukso-network/tools-up-provider), parent pages can forward their connected accounts to mini-apps allowing for a seemless connection from the parent page.
+By using adding mini-apps with a [up-provider](https://github.com/lukso-network/tools-up-provider), parent pages can forward their connected accounts to mini-apps allowing for a seamless connection from the parent page.
 
 ## Specification
 
@@ -45,92 +45,126 @@ A JSON file that describes a customizable grid layout for displaying content and
 
 For construction of the VerifiableURI value see: [ERC725Y VerifiableURI Schema](./LSP-2-ERC725YJSONSchema.md#VerifiableURI)
 
-**Main grid properties**
+##### Main grid properties
+
 - **title**: The name of the grid, for the interface to display.
 - **gridColumns**: The number of columns the grid should have, we recommend the numbers from `2`-`4`.
+- **visibility**: Tells the user interface weather or not to show the grid to other users, or only to the grid owner. This IS NOT real private grid, as it is public on the blockchain and not encrypted.
 - **grid**: The content of the grid. Each item is a box in the grid with sizes and content properties.
+- **visibility**: The user preferred visibility of the grid as reference for interfaces displaying the grid. MUST be:
 
-**Grid element properties**
+  - `public` - visible to everyone
+  - `private` - visible only to the user owning the grid
+
+  > Note that on-chain data can by viewed by everyone so the `visibility` property doesn't enforce privacy. Interfaces should let their users know that this data is not fully private. 
+
+##### Grid element properties
+
 - **width/height**: The size of the grid in a number of steps. It is up to the interface to determine the width and height of each step. We recommend numbers from `1`-`3`.
-- **type**: The type of the grid item, commonly `IFRAME` to load external content, but custom types can also be defined, as see in the JSON file below.
+- **type**: The type of the grid item, commonly `IFRAME` to load external content, but custom types can also be defined, as seen in the JSON file below.
 - **properties**: The properties of the grid item, different based on the `type`.
 
 The linked JSON file SHOULD have the following format:
 
-```js
+```json
 {
-  "LSP28TheGrid": {
-    "title": "My Socials",
-    "gridColumns": 2,
-    "grid": [
-      {
-        "width": 1, // Numbers from 1-3
-        "height": 3, // Numbers from 1-3
-        "type": "IFRAME",
-        "properties": {
-          "src": "...",
-          "allow": "accelerometer; autoplay; clipboard-write", // OPTIONAL
-          "sandbox": "allow-forms;allow-pointer-lock;allow-popups;allow-same-orig;allow-scripts;allow-top-navigation",  // OPTIONAL
-          "allowfullscreen": true, // OPTIONAL
-          "referrerpolicy": "..." // OPTIONAL
-          ...
-        }
-      },
-      {
-        "width": 2,
-        "height": 2,
-        "type": "TEXT",
-        "properties": {
-          "title": "My title",  // OPTIONAL and MARKDOWN possible
-          "titleColor": "#000000",  // OPTIONAL, overwrites "text-color" for titles
-          "text": "My title",  // OPTIONAL and MARKDOWN possible
-          "textColor": "#000000",  // OPTIONAL
-          "backgroundColor": "#ffffff", // OPTIONAL
-          "link": "https://mylink.com", // OPTIONAL click on the box, opens link
-        }
-      },
-      {
-        "width": 2,
-        "height": 2,
-        "type": "IMAGES",
-        "properties": {
-          "type": "grid", // OPTIONAL "grid", "carousel", (grid is default)
-          "images": [
-            "<IMAGE_URL_1>",
-            "<IMAGE_URL_2>"
-          ]
-        }
-      },
+  "LSP28TheGrid": [
+    {
+      "title": "My Socials",
+      "gridColumns": 2, // Example value
+      "visibility": "private", // private/public OPTIONAL
+      "grid": [
+        // IFRAME
+        {
+          "width": 1,  // Example value
+          "height": 3,  // Example value
+          "type": "IFRAME",
+          "properties": {
+            "src": "...",
+            "allow": "accelerometer; autoplay; clipboard-write", // OPTIONAL
+            "sandbox": "allow-forms;allow-pointer-lock;allow-popups;allow-same-orig;allow-scripts;allow-top-navigation", // OPTIONAL
+            "allowfullscreen": true, // OPTIONAL
+            "referrerpolicy": "..." // OPTIONAL
+          }
+        },
 
-      // -------------------------------
-      // Custom items from web application
-  
-      // ELFSIGHT
-      {
-        "width": 2,
-        "height": 1,
-        "type": "ELFSIGHT",
-        "properties": {
-          "id": "8473218e-6c60-4958-a6a7-b8c6065e1528", // elfsight ID
-        }
-      },
+        // TEXT
+        {
+          "width": 2,
+          "height": 2,
+          "type": "TEXT",
+          "properties": {
+            "title": "My title", // OPTIONAL and MARKDOWN possible
+            "titleColor": "#000000", // OPTIONAL, overwrites "text-color" for titles
+            "text": "My title", // OPTIONAL and MARKDOWN possible
+            "textColor": "#000000", // OPTIONAL
+            "backgroundColor": "#ffffff", // OPTIONAL
+            "link": "https://mylink.com" // OPTIONAL click on the box, opens link
+          }
+        },
 
-      X POST
-      {
-        "width": 2,
-        "height": 1,
-        "type": "X",
-        "properties": {
-          "type": "timeline", // timeline | post
-          "username": "feindura", // INPUTPARSER should also allow "@feindura" and "https://x.com/feindura"
-          "id": "1804519711377436675" // OPTIONAL used when "post" type
-          "theme": "light", // OPTIONAL data-theme=dark
-          "language": "en", // OPTIONAL data-lang=en
-          "donottrack": true, // OPTIONAL data-dnt=true
+        // IMAGES
+        {
+          "width": 2,
+          "height": 2,
+          "type": "IMAGES",
+          "properties": {
+            "type": "grid", // OPTIONAL "grid", "carousel", (grid is default)
+            "images": ["<IMAGE_URL_1>", "<IMAGE_URL_2>"]
+          }
+        },
+
+        // -------------------------------
+        // Custom items from web application
+
+        // ELFSIGHT
+        {
+          "width": 2,
+          "height": 1,
+          "type": "ELFSIGHT",
+          "properties": {
+            "id": "..." // Elfsight ID
+          }
+        },
+
+        // X (post)
+        {
+          "width": 2,
+          "height": 1,
+          "type": "X",
+          "properties": {
+            "type": "post",
+            "username": "feindura",
+            "id": "1804519711377436675", // OPTIONAL used when "post" type
+            "theme": "light", // OPTIONAL data-theme=dark
+            "language": "en", // OPTIONAL data-lang=en
+            "donottrack": true // OPTIONAL data-dnt=true
+          }
+        },
+
+        // INSTAGRAM (post)
+        {
+          "width": 2,
+          "height": 2,
+          "type": "INSTAGRAM",
+          "properties": {
+            "type": "p", // The type of item, for example "p" for post
+            "id": "..." // Post ID
+          }
+        },
+
+        // QR CODE
+        {
+          "width": 2,
+          "height": 1,
+          "type": "QR_CODE",
+          "properties": {
+            "data": "..." // data displayed in QR code
+          }
         }
-      }
-    ]
-  }
+      ]
+    }
+  ]
 }
 ```
 
@@ -143,6 +177,7 @@ The Grid standard addresses the need interactive UIs related to profiles and tok
 An implementation can be found in the [universaleverything.io)[https://universaleverything.io];
 
 Below is an example of an ERC725Y JSON Schema.
+
 ```json
 [
   {

@@ -22,7 +22,7 @@ jobs:
           ignore_words_list: datas
 
       - name: Output Spellcheck Results 📝
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: Spellcheck Output
           path: spellcheck-output.txt
