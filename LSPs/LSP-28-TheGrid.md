@@ -49,6 +49,7 @@ For construction of the VerifiableURI value see: [ERC725Y VerifiableURI Schema](
 
 - **title**: The name of the grid, for the interface to display.
 - **gridColumns**: The number of columns the grid should have, we recommend the numbers from `2`-`4`.
+- **visibility**: Tells the user interface weather or not to show the grid to other users, or only to the grid owner. This IS NOT real private grid, as it is public on the blockchain and not encrypted.
 - **grid**: The content of the grid. Each item is a box in the grid with sizes and content properties.
 - **visibility**: The visibility type of the grid. Can be:
 
@@ -60,7 +61,7 @@ For construction of the VerifiableURI value see: [ERC725Y VerifiableURI Schema](
 ##### Grid element properties
 
 - **width/height**: The size of the grid in a number of steps. It is up to the interface to determine the width and height of each step. We recommend numbers from `1`-`3`.
-- **type**: The type of the grid item, commonly `IFRAME` to load external content, but custom types can also be defined, as see in the JSON file below.
+- **type**: The type of the grid item, commonly `IFRAME` to load external content, but custom types can also be defined, as seen in the JSON file below.
 - **properties**: The properties of the grid item, different based on the `type`.
 
 The linked JSON file SHOULD have the following format:
@@ -70,13 +71,13 @@ The linked JSON file SHOULD have the following format:
   "LSP28TheGrid": [
     {
       "title": "My Socials",
-      "gridColumns": 2,
+      "gridColumns": 2, // Example value
       "visibility": "private", // private/public OPTIONAL
       "grid": [
         // IFRAME
         {
-          "width": 1,
-          "height": 3,
+          "width": 1,  // Example value
+          "height": 3,  // Example value
           "type": "IFRAME",
           "properties": {
             "src": "...",
