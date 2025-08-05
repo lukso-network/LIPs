@@ -51,12 +51,12 @@ For construction of the VerifiableURI value see: [ERC725Y VerifiableURI Schema](
 - **gridColumns**: The number of columns the grid should have, we recommend the numbers from `2`-`4`.
 - **visibility**: Tells the user interface weather or not to show the grid to other users, or only to the grid owner. This IS NOT real private grid, as it is public on the blockchain and not encrypted.
 - **grid**: The content of the grid. Each item is a box in the grid with sizes and content properties.
-- **visibility**: The user prefered visibility of the grid as reference for interfaces displaying the grid. MUST be:
+- **visibility**: The user preferred visibility of the grid as reference for interfaces displaying the grid. MUST be:
 
   - `public` - visible to everyone
   - `private` - visible only to the user owning the grid
 
-  > Note that on-chain data can by viewed by everyone so the `visibility` property doesn't enforce pivacy. Interfaces should let their users know that this data is not fully private. 
+  > Note that on-chain data can by viewed by everyone so the `visibility` property doesn't enforce privacy. Interfaces should let their users know that this data is not fully private. 
 
 ##### Grid element properties
 
