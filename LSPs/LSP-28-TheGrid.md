@@ -66,7 +66,7 @@ For construction of the VerifiableURI value see: [ERC725Y VerifiableURI Schema](
 
 The linked JSON file SHOULD have the following format:
 
-```json
+```js
 {
   "LSP28TheGrid": [
     {
