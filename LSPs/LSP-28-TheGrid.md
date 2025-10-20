@@ -56,7 +56,7 @@ For construction of the VerifiableURI value see: [ERC725Y VerifiableURI Schema](
   - `public` - visible to everyone
   - `private` - visible only to the user owning the grid
 
-  > Note that on-chain data can by viewed by everyone so the `visibility` property doesn't enforce privacy. Interfaces should let their users know that this data is not fully private. 
+  > Note that on-chain data can by viewed by everyone so the `visibility` property doesn't enforce privacy. Interfaces should let their users know that this data is not fully private.
 
 ##### Grid element properties
 
@@ -99,6 +99,7 @@ The linked JSON file SHOULD have the following format:
             "text": "My title", // OPTIONAL and MARKDOWN possible
             "textColor": "#000000", // OPTIONAL
             "backgroundColor": "#ffffff", // OPTIONAL
+            "backgroundImage": "https://myimage.jpg", // OPTIONAL
             "link": "https://mylink.com" // OPTIONAL click on the box, opens link
           }
         },
