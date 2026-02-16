@@ -1,6 +1,6 @@
 ---
 lip: 30
-title: Multichain Recovery
+title: ERC725Account Backup File
 author: Fabian Vogelsteller <fabian@lukso.network>, Stephen Horvath (@asciiman)
 discussions-to: https://discord.gg/E2rJPP4
 status: Draft
