@@ -17,7 +17,7 @@ This standard defines a portable JSON format for exporting, backing up, and reco
 
 LSP-30 defines a standardized JSON export format that captures the full state needed to recover and restore a Universal Profile. This includes the profile's account metadata, per-network controller configurations, [LSP23](./LSP-23-LinkedContractsFactory.md) cross-chain deployment data for reproducing the profile on new chains, and secret material (private keys or seed phrases) in either plaintext or encrypted form.
 
-By standardizing this format, LSP-30 enables interoperability between wallets, browser extensions, and recovery tools. Any compliant application can import a backup file produced by another, ensuring users are never locked into a single tool for managing their identity. The standard complements [LSP-11 Basic Social Recovery](./LSP-11-BasicSocialRecovery.md), which handles on-chain guardian-based recovery, by providing the off-chain data portability layer.
+By standardizing this format, LSP-30 enables interoperability between wallets, browser extensions, and recovery tools. Any compliant application can import a backup file produced by another, ensuring users are never locked into a single tool for managing their identity.
 
 ## Motivation
 
