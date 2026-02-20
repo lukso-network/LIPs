@@ -9,28 +9,6 @@ created: 2026-02-16
 requires: LSP0, LSP6, LSP23
 ---
 
-## Table of Content
-
-- [Simple Summary](#simple-summary)
-- [Abstract](#abstract)
-- [Motivation](#motivation)
-- [Specification](#specification)
-  - [Format Version](#format-version)
-  - [Full Example](#full-example)
-  - [Root Object](#root-object)
-  - [Account Object](#account-object)
-  - [Network Object](#network-object)
-  - [Controller Object](#controller-object)
-  - [LSP23 Cross-Chain Deployment Object](#lsp23-cross-chain-deployment-object)
-  - [Initial Controller Object](#initial-controller-object)
-  - [Secrets Object](#secrets-object)
-    - [Unencrypted Secrets](#unencrypted-secrets)
-    - [Encrypted Secrets](#encrypted-secrets)
-  - [Encryption Specification](#encryption-specification)
-- [Rationale](#rationale)
-- [Security Considerations](#security-considerations)
-- [Copyright](#copyright)
-
 ## Simple Summary
 
 This standard defines a portable JSON format for exporting, backing up, and recovering [Universal Profiles](./LSP-0-ERC725Account.md) and their associated controller keys across multiple networks.
