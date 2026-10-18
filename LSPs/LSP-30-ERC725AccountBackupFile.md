@@ -179,6 +179,7 @@ The backup file SHOULD have the following format:
     "encrypted": true,
     "encryptionType": "Key from PBKDF2. Encrypted with AES-GCM.",
     "passwordHint": "Your Hint", // OPTIONAL, user-entered during export
+    "iterations": 600000, // PBKDF2 iteration count used to derive the key
     "data": {
       "secret": "YFBVYcOGN0fsrFtqfxDW0nkEetgTtDpVgmr1baTeYo2ao9u2D8jw...", // Base64
       "iv": "Cr5VIn/RCfn0Q5AbVm8uZQ==", // Base64
@@ -433,12 +434,13 @@ When `encrypted` is `false`, the `data` field is an array of secret entries in p
 
 When `encrypted` is `true`, the `data` field is an object containing the encrypted ciphertext and the cryptographic parameters needed for decryption. The plaintext, once decrypted, MUST be a valid JSON array of secret entries as defined in [Unencrypted Secrets](#unencrypted-secrets).
 
-| Field            | Type      | Required | Description                                                                                                      |
-| ---------------- | --------- | -------- | ---------------------------------------------------------------------------------------------------------------- |
-| `encrypted`      | `boolean` | REQUIRED | MUST be `true`.                                                                                                  |
-| `encryptionType` | `string`  | REQUIRED | A human-readable description of the encryption method used (e.g., `"Key from PBKDF2. Encrypted with AES-GCM."`). |
-| `passwordHint`   | `string`  | OPTIONAL | A hint to help the user recall the encryption password. MUST NOT contain the actual password.                    |
-| `data`           | `object`  | REQUIRED | The encrypted data envelope. See below.                                                                          |
+| Field            | Type      | Required | Description                                                                                                                                                                                                                       |
+| ---------------- | --------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `encrypted`      | `boolean` | REQUIRED | MUST be `true`.                                                                                                                                                                                                                   |
+| `encryptionType` | `string`  | REQUIRED | A human-readable description of the encryption method used (e.g., `"Key from PBKDF2. Encrypted with AES-GCM."`).                                                                                                                  |
+| `passwordHint`   | `string`  | OPTIONAL | A hint to help the user recall the encryption password. MUST NOT contain the actual password.                                                                                                                                     |
+| `iterations`     | `uint`    | REQUIRED | The PBKDF2 iteration count actually used to derive the key, as a positive integer (e.g., `600000`). If absent (legacy backups), the key MUST be derived with exactly `10000` iterations. See [Iteration Count](#iteration-count). |
+| `data`           | `object`  | REQUIRED | The encrypted data envelope. See below.                                                                                                                                                                                           |
 
 **Encrypted `data` object fields:**
 
@@ -455,6 +457,7 @@ When `encrypted` is `true`, the `data` field is an object containing the encrypt
   "encrypted": true,
   "encryptionType": "Key from PBKDF2. Encrypted with AES-GCM.",
   "passwordHint": "Your Hint", // User entered password during export process
+  "iterations": 600000,
   "data": {
     "secret": "Pah+MuluO/1DpDKLlnybfk...",
     "iv": "uupRYBHpJ8BUZgo8dGsexg==",
@@ -467,17 +470,31 @@ When `encrypted` is `true`, the `data` field is an object containing the encrypt
 
 Implementations that produce encrypted backups MUST use the following scheme:
 
-1. **Key Derivation**: Derive an encryption key from the user's password using [PBKDF2](https://datatracker.ietf.org/doc/html/rfc2898).
+1. **Key Derivation**: Derive an encryption key from the user's password using [PBKDF2](https://datatracker.ietf.org/doc/html/rfc2898), and record the iteration count used in the `iterations` field (see [Iteration Count](#iteration-count)).
 2. **Encryption**: Encrypt the JSON-serialized secret entries array using [AES-GCM](https://csrc.nist.gov/publications/detail/sp/800-38d/final).
 3. **Encoding**: Encode the resulting ciphertext, initialization vector, and salt as Base64 strings.
 
-Implementations SHOULD use a sufficient PBKDF2 iteration count (at least 600,000 iterations as recommended by [OWASP](https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html)) and a randomly generated salt of at least 32 bytes.
+Implementations SHOULD use a sufficient PBKDF2 iteration count (at least 600,000 iterations as recommended by [OWASP](https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html)) and a randomly generated salt of at least 32 bytes. The RECOMMENDED default iteration count for new encrypted backups is 600,000.
 
 The `encryptionType` field MUST accurately describe the key derivation and encryption algorithms used, to allow consuming tools to select the correct decryption procedure. The current standard value is:
 
 ```text
 "Key from PBKDF2. Encrypted with AES-GCM."
 ```
+
+#### Iteration Count
+
+The `iterations` field of an [encrypted secrets object](#encrypted-secrets) (`secrets.iterations`) states the actual PBKDF2 iteration count that was used to derive the encryption key, as a positive JSON integer. It is a member of the secrets object itself, next to `encryptionType`, `passwordHint`, and `data`; it is not part of the `data` object or of the root object. The `encryptionType` value is the same for every iteration count.
+
+- **Writing**: Implementations that produce encrypted backups MUST write the iteration count they used as `iterations`, without a fraction or exponent (e.g., `600000`). Because the count is recorded, exporting tools can use a count other than the recommended 600,000, such as a higher one, without changing the format.
+- **Absent field**: An encrypted secrets object without an `iterations` field is a legacy backup. Consumers MUST derive its key with exactly 10,000 iterations, not with 600,000 or any other count.
+- **Invalid value**: If the field is present, its value MUST be a positive JSON integer. Any other value, such as `null`, a string (e.g., `"600000"`), `0`, a negative number, or a fractional number (e.g., `600000.5`), is invalid. Consumers MUST report a backup with an invalid value as invalid without attempting key derivation, and MUST NOT treat the value as absent or replace it with 10,000, 600,000, or any other count.
+- **Exact count**: Consumers MUST derive the key with exactly the stated count, or with exactly 10,000 iterations if the field is absent. A failed AES-GCM authentication check indicates a wrong password, a damaged file, or an unsupported file; consumers MUST report it as such and MUST NOT retry key derivation with a different iteration count.
+- **Limits**: To bound the work an untrusted file can demand, consumers MAY refuse counts above an implementation-defined maximum, which SHOULD be well above 600,000. A consumer that refuses a count MUST fail with an error and MUST NOT decrypt the backup with a different count.
+
+The `iterations` field only applies to encrypted secrets; [Unencrypted Secrets](#unencrypted-secrets) do not use it.
+
+Backups with or without the `iterations` field use the same [format version](#format-version). A consumer that does not support the field and always derives the key with a fixed count, usually 10,000, cannot decrypt a backup that uses a different count, such as the recommended 600,000, and typically reports a wrong password. To be opened by such a consumer, a backup has to use its count; for 10,000 iterations, this means weaker protection (see [Encrypted backups](#encrypted-backups)).
 
 ## Rationale
 
@@ -509,7 +526,7 @@ An unencrypted backup file contains raw private keys and/or seed phrases in plai
 
 ### Encrypted backups
 
-Encrypted backups protect secret material with a user-chosen password. The security of the backup is directly tied to the strength of this password. Implementations SHOULD enforce minimum password complexity requirements and use a high PBKDF2 iteration count to resist brute-force attacks.
+Encrypted backups protect secret material with a user-chosen password. The security of the backup is directly tied to the strength of this password. Implementations SHOULD enforce minimum password complexity requirements and use a high PBKDF2 iteration count to resist brute-force attacks. A backup that uses 10,000 iterations, including any legacy backup without an `iterations` field, makes each password guess 60 times cheaper than with the recommended 600,000 iterations.
 
 ### Password hints
 
