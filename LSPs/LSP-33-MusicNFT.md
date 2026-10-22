@@ -68,9 +68,10 @@ The standard is intentionally agnostic about *which* ERC725Y contract carries th
 
 An [LSP7] contract is a natural carrier when a track or release is represented as fungible / non-divisible units (collectible editions, signed copies, semi-fungible assets).
 
-- SHOULD set `LSP4TokenType` = `1` (NFT/NDT) for a single track, or `2` (Collection) for a release.
-- For a non-divisible track collectible, SHOULD set `decimals()` = `0`.
-- All four LSP33 data keys live at the contract level.
+- SHOULD set `LSP4TokenType` = `1` (NFT/NDT), whether the contract represents a single track or a whole release. `LSP4TokenType` = `2` (Collection) is only valid for [LSP8] (see [LSP4]), so an LSP7 carrier does not use it.
+- Whether an LSP7 carrier describes a track or a release is expressed by its `LSP4Metadata` attributes (the track-level or release-level set in [LSP4Metadata Attributes](#lsp4metadata-attributes)), not by `LSP4TokenType`. For a release whose tracks each need their own metadata scope, see the [LSP8 collection](#example-carrier--lsp8-collection) carrier, which gives every track a per-tokenId scope.
+- For a non-divisible collectible (track or release), SHOULD set `decimals()` = `0`.
+- Both LSP33 data keys (`SupportedStandards:LSP33MusicNFT` and `LSP33Metadata`) live at the contract level, alongside `LSP4Metadata`.
 
 #### Example carrier — LSP8 collection
 
@@ -94,7 +95,7 @@ For LSP8 ↔ LSP7 entanglement (transparent metadata routing from a container to
 ```json
 {
   "name": "SupportedStandards:LSP33MusicNFT",
-  "key": "0xeafec4d89fa9619884b60000f43ae543d533ae7389b5791d7870aadfdcff2ca4",
+  "key": "0xeafec4d89fa9619884b600003cd4661761f237efa2fead11f43ae543d533ae73",
   "keyType": "Mapping",
   "valueType": "bytes4",
   "valueContent": "0x3cd46617"
@@ -102,6 +103,18 @@ For LSP8 ↔ LSP7 entanglement (transparent metadata routing from a container to
 ```
 
 MUST be set on any [ERC725Y] contract that carries LSP33 metadata, regardless of carrier type (LSP7, LSP8, profile, vault, or any other ERC725Y contract).
+
+The key follows the [LSP2] `Mapping` construction `bytes10(keccak256("SupportedStandards"))` + `bytes2(0)` + `bytes20(keccak256("LSP33MusicNFT"))`, where `bytes20(...)` keeps the **first** (left-most) 20 bytes of `keccak256("LSP33MusicNFT")` = `0x3cd4661761f237efa2fead11f43ae543d533ae7389b5791d7870aadfdcff2ca4`. The value `0x3cd46617` is `bytes4(keccak256("LSP33MusicNFT"))`.
+
+##### Legacy marker key
+
+Earlier drafts of this specification published the key `0xeafec4d89fa9619884b60000f43ae543d533ae7389b5791d7870aadfdcff2ca4`, which was mis-derived: it keeps the **last** 20 bytes of `keccak256("LSP33MusicNFT")` instead of the first 20 bytes required by [LSP2]. Contracts deployed against those drafts carry the marker under this legacy key.
+
+- Writers MUST set the marker under the key defined above and SHOULD NOT write the legacy key.
+- Readers (indexers, interfaces) SHOULD treat the legacy key holding the value `0x3cd46617` as equivalent to the marker, so that already-deployed carriers remain discoverable.
+- Because both keys exist on deployed contracts, readers SHOULD NOT treat a missing marker as proof that a scope has no LSP33 data, and MAY read `LSP33Metadata` directly.
+
+The legacy key is not part of the ERC725Y JSON Schema in the [Implementation](#implementation) section; it is listed here for backwards compatibility only.
 
 #### LSP33Metadata
 
@@ -513,7 +526,7 @@ ERC725Y JSON Schema `LSP33MusicNFT`:
 [
   {
     "name": "SupportedStandards:LSP33MusicNFT",
-    "key": "0xeafec4d89fa9619884b60000f43ae543d533ae7389b5791d7870aadfdcff2ca4",
+    "key": "0xeafec4d89fa9619884b600003cd4661761f237efa2fead11f43ae543d533ae73",
     "keyType": "Mapping",
     "valueType": "bytes4",
     "valueContent": "0x3cd46617"
