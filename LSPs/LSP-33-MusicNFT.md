@@ -518,7 +518,10 @@ A release with tracks naturally produces **four separate files** — one `LSP4Me
 
 ## Implementation
 
-Reference implementation: [lukso-network/lsp-smart-contracts#1088](https://github.com/lukso-network/lsp-smart-contracts/pull/1088).
+Reference implementations (introduced in [lukso-network/lsp-smart-contracts#1088](https://github.com/lukso-network/lsp-smart-contracts/pull/1088)):
+
+- [`LSP7MusicNDTAbstract`](https://github.com/emmet-bot/lsp-smart-contracts/blob/1da63956fd0c418e0766b3eeea864feaa18c7bb0/packages/lsp7-contracts/contracts/extensions/LSP7MusicNDT/LSP7MusicNDTAbstract.sol): an [LSP7] carrier for a Music NDT (Non-Divisible Token). One contract represents a track as multiple interchangeable units, each a whole, non-divisible token when deployed non-divisible (`decimals()` = `0`). It also implements [LSP34] minting delegation.
+- [`LSP8MusicNFTAbstract`](https://github.com/lukso-network/lsp-smart-contracts/blob/main/packages/lsp8-contracts/contracts/extensions/LSP8MusicNFT/LSP8MusicNFTAbstract.sol): an [LSP8] collection carrier, where every item is a unique `tokenId` with its own per-tokenId metadata scope.
 
 ERC725Y JSON Schema `LSP33MusicNFT`:
 
