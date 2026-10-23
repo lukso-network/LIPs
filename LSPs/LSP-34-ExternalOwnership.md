@@ -34,12 +34,12 @@ Some contracts need to let an external party mint tokens without giving up owner
   "name": "LSP34OwnershipSource",
   "key": "0xa8bc5aea0671308a0920eb016db4108c486ef117a7cd18bf3a9dfcadab6232e1",
   "keyType": "Singleton",
-  "valueType": "(address,bytes32)",
-  "valueContent": "(Address,bytes32)"
+  "valueType": "(bytes32,bytes32)",
+  "valueContent": "(Bytes32,Bytes32)"
 }
 ```
 
-**Value encoding:** `abi.encode(address sourceContract, bytes32 tokenId)`
+**Value encoding:** `abi.encode(address sourceContract, bytes32 tokenId)`, exactly 64 bytes: the first 32-byte word is `sourceContract` left-padded with 12 zero bytes, the second is `tokenId`. This is why the schema declares the LSP2 tuple `(bytes32,bytes32)`: the packed LSP2 tuple `(address,bytes32)` would be 52 bytes and is not a valid value. A value of any other length MUST be treated as unset.
 
 - `sourceContract` — the contract to query for the authorized minter.
 - `tokenId` — the tokenId to query on `sourceContract`. If `bytes32(0)`, query `owner()` on `sourceContract` instead of `tokenOwnerOf(tokenId)`.
@@ -89,8 +89,8 @@ ERC725Y JSON Schema `LSP34ExternalOwnership`:
     "name": "LSP34OwnershipSource",
     "key": "0xa8bc5aea0671308a0920eb016db4108c486ef117a7cd18bf3a9dfcadab6232e1",
     "keyType": "Singleton",
-    "valueType": "(address,bytes32)",
-    "valueContent": "(Address,bytes32)"
+    "valueType": "(bytes32,bytes32)",
+    "valueContent": "(Bytes32,Bytes32)"
   }
 ]
 ```
