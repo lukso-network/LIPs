@@ -35,11 +35,11 @@ Some contracts need to let an external party mint tokens without giving up owner
   "key": "0xa8bc5aea0671308a0920eb016db4108c486ef117a7cd18bf3a9dfcadab6232e1",
   "keyType": "Singleton",
   "valueType": "(address,bytes32)",
-  "valueContent": "(Address,bytes32)"
+  "valueContent": "(Address,Bytes32)"
 }
 ```
 
-**Value encoding:** `abi.encode(address sourceContract, bytes32 tokenId)`
+**Value encoding:** `abi.encodePacked(address sourceContract, bytes32 tokenId)`, exactly 52 bytes: the first 20 bytes are `sourceContract`, the next 32 bytes are `tokenId`. This is the standard packed [LSP2 tuple](./LSP-2-ERC725YJSONSchema.md#tuples) encoding of `(address,bytes32)`. A value of any other length (including the 64-byte `abi.encode` form) MUST be treated as unset.
 
 - `sourceContract` — the contract to query for the authorized minter.
 - `tokenId` — the tokenId to query on `sourceContract`. If `bytes32(0)`, query `owner()` on `sourceContract` instead of `tokenOwnerOf(tokenId)`.
@@ -79,7 +79,7 @@ By keeping ownership untouched, LSP34 ensures that artists never lose control ov
 
 ## Implementation
 
-Reference implementation: [lukso-network/lsp-smart-contracts#1088](https://github.com/lukso-network/lsp-smart-contracts/pull/1088).
+Reference implementation: [`LSP7MusicNDTAbstract`](https://github.com/emmet-bot/lsp-smart-contracts/blob/732a15ab6090ba56369d1552494f84df116e4165/packages/lsp7-contracts/contracts/extensions/LSP7MusicNDT/LSP7MusicNDTAbstract.sol) (introduced in [lukso-network/lsp-smart-contracts#1088](https://github.com/lukso-network/lsp-smart-contracts/pull/1088)). Its `mint()` is callable by the [ERC173] `owner()` or by the address resolved from `LSP34OwnershipSource`; ownership, renouncement and `setData` access control stay standard [LSP7].
 
 ERC725Y JSON Schema `LSP34ExternalOwnership`:
 
@@ -90,7 +90,7 @@ ERC725Y JSON Schema `LSP34ExternalOwnership`:
     "key": "0xa8bc5aea0671308a0920eb016db4108c486ef117a7cd18bf3a9dfcadab6232e1",
     "keyType": "Singleton",
     "valueType": "(address,bytes32)",
-    "valueContent": "(Address,bytes32)"
+    "valueContent": "(Address,Bytes32)"
   }
 ]
 ```
