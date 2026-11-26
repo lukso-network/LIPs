@@ -79,7 +79,7 @@ By keeping ownership untouched, LSP34 ensures that artists never lose control ov
 
 ## Implementation
 
-Reference implementation: [`LSP7MusicNDTAbstract`](https://github.com/emmet-bot/lsp-smart-contracts/blob/732a15ab6090ba56369d1552494f84df116e4165/packages/lsp7-contracts/contracts/extensions/LSP7MusicNDT/LSP7MusicNDTAbstract.sol) (introduced in [lukso-network/lsp-smart-contracts#1088](https://github.com/lukso-network/lsp-smart-contracts/pull/1088)). Its `mint()` is callable by the [ERC173] `owner()` or by the address resolved from `LSP34OwnershipSource`; ownership, renouncement and `setData` access control stay standard [LSP7].
+Reference implementation: [`LSP7MusicNDTAbstract`](https://github.com/lukso-network/lsp-smart-contracts/blob/main/packages/lsp7-contracts/contracts/extensions/LSP7MusicNDT/LSP7MusicNDTAbstract.sol) (introduced in [lukso-network/lsp-smart-contracts#1088](https://github.com/lukso-network/lsp-smart-contracts/pull/1088)). Its `mint()` is callable by the [ERC173] `owner()` or by the address resolved from `LSP34OwnershipSource`; ownership, renouncement and `setData` access control stay standard [LSP7].
 
 ERC725Y JSON Schema `LSP34ExternalOwnership`:
 
